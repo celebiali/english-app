@@ -1,0 +1,28 @@
+{
+  "name": "yds-vocabulary-spaced-repetition",
+  "version": "1.0.0",
+  "description": "YDS Vocabulary Spaced Repetition Mobile Application with SQLite and Leitner Box Engine",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "expo": "~51.0.0",
+    "expo-sqlite": "~14.0.0",
+    "lucide-react-native": "^1.32.0",
+    "react": "18.2.0",
+    "react-native": "0.74.5",
+    "react-native-svg": "^15.15.5",
+    "zustand": "^4.5.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@types/react": "~18.2.45",
+    "babel-preset-expo": "~11.0.0",
+    "typescript": "^5.1.3"
+  },
+  "private": true
+}

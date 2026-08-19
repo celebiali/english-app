@@ -69,8 +69,9 @@ export const BoxReviewScreen: React.FC<BoxReviewScreenProps> = ({
         {words.length === 0 ? (
           <View style={styles.emptyBoxInfo}>
             <Text style={styles.emptyBoxText}>
-              Bu kutuda henüz kelime yok. Günlük 25 kelimelik çalışmada doğru
-              bildikleriniz buraya aktarılır.
+              {isWeekly
+                ? 'Bu kutuda henüz kelime yok. Günlük 25 kelimelik çalışmada doğru bildikleriniz 7 günlük kalıcılık testine girmek üzere buraya aktarılır.'
+                : 'Bu kutuda henüz kelime yok. Haftalık görevini (Box 2) başarıyla tamamlayan kelimeler 30 günlük teste girmek üzere buraya aktarılır.'}
             </Text>
           </View>
         ) : isFullyLocked ? (

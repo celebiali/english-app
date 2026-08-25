@@ -19,6 +19,7 @@ import { YdsQuestionType } from '../types';
 export const DailyTasksScreen: React.FC = () => {
   const {
     streakCount,
+    dailyQuestionTarget,
     dailyTasksProgress,
     activeDailyQuestions,
     currentDailyIndex,
@@ -44,7 +45,7 @@ export const DailyTasksScreen: React.FC = () => {
   const skillsCompleted = dailyTasksProgress.skillsCompleted || 0;
 
   const totalCompleted = paragraphCompleted + clozeCompleted + sentenceCompleted + skillsCompleted;
-  const dailyGoalTotal = 35;
+  const dailyGoalTotal = dailyQuestionTarget || 35;
   const completionPercentage = Math.min(100, Math.round((totalCompleted / dailyGoalTotal) * 100));
 
   const tasksList = [

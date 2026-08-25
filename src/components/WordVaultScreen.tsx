@@ -114,14 +114,14 @@ export const WordVaultScreen: React.FC = () => {
               cardWord={currentCard}
               onAnswer={answerCurrentVocabCard}
               cardIndex={currentVocabIndex}
-              totalCards={sessionWords.length || 12}
+              totalCards={sessionWords.length || 25}
             />
           ) : (
             <View style={styles.sessionFinishedCard}>
               <CheckCircle2 size={44} color="#10B981" />
               <Text style={styles.finishedTitle}>Tebrikler! Günlük Kelime Seti Bitti</Text>
               <Text style={styles.finishedSubtitle}>
-                Bugün {completedTodayCount || 12} kelimeyi gözden geçirdin.
+                Bugün {completedTodayCount} kelimeyi başarıyla gözden geçirdin.
               </Text>
               <TouchableOpacity
                 style={styles.restartSessionBtn}

@@ -38,6 +38,7 @@ interface LearningState {
   streakCount: number;
 
   // Daily Tasks State
+  dailyQuestionTarget: number;
   dailyTasksProgress: DailyTaskProgress;
   activeDailyQuestions: QuestionItem[];
   currentDailyIndex: number;
@@ -72,6 +73,7 @@ interface LearningState {
   initStore: () => Promise<void>;
   setActiveTab: (tab: AppTab) => void;
   setUserProfile: (profile: UserProfile | null) => void;
+  setDailyQuestionTarget: (target: number) => void;
 
   // Daily Tasks Actions
   loadDailyTasks: () => Promise<void>;
@@ -113,6 +115,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   streakCount: 1,
 
   // Daily Tasks
+  dailyQuestionTarget: 35,
   dailyTasksProgress: {
     paragraphCompleted: 0,
     clozeCompleted: 0,
@@ -155,6 +158,9 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   completedTodayCount: 0,
   userProfile: null,
 
+  // ==========================================
+  // STORE INITIALIZATION
+  // ==========================================
   initStore: async () => {
     set({ isLoading: true });
     try {
@@ -193,6 +199,10 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     set({ userProfile: profile });
   },
 
+  setDailyQuestionTarget: (target: number) => {
+    set({ dailyQuestionTarget: target });
+  },
+
   // ==========================================
   // DAILY TASKS & DYNAMIC POOL
   // ==========================================
@@ -211,6 +221,9 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     // Record in DB: correct -> 'SOLVED_CORRECT' (graduates/disappears), wrong -> 'MISTAKE' (moves to mistake vault)
     await dbService.completeQuestion(question.id, selectedOption, isCorrect);
 
+    // Update real consecutive day streak
+    const updatedStreak = await dbService.checkAndUpdateDailyStreak();
+
     // Update daily task progress counter
     set((state) => {
       const prog = { ...state.dailyTasksProgress };
@@ -227,6 +240,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       return {
         dailyTasksProgress: prog,
         activeDailyQuestions: remainingQuestions,
+        streakCount: updatedStreak,
       };
     });
 

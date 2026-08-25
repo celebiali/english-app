@@ -27,6 +27,7 @@ import {
 import { useLearningStore } from '../store/useLearningStore';
 import { SupabaseService } from '../services/SupabaseService';
 import { dbService } from '../database/DatabaseService';
+import { NotificationService } from '../services/NotificationService';
 
 interface Props {
   onBack: () => void;
@@ -34,10 +35,48 @@ interface Props {
 }
 
 export const SettingsScreen: React.FC<Props> = ({ onBack, onOpenAuth }) => {
-  const { userProfile, setUserProfile, loadVocabSession, loadDailyTasks } = useLearningStore();
+  const {
+    userProfile,
+    setUserProfile,
+    dailyQuestionTarget,
+    setDailyQuestionTarget,
+    streakCount,
+    loadVocabSession,
+    loadDailyTasks,
+  } = useLearningStore();
 
-  const [dailyTarget, setDailyTarget] = useState<number>(35);
+  const [dailyTarget, setDailyTarget] = useState<number>(dailyQuestionTarget || 35);
   const [notificationsEnabled, setNotificationsEnabled] = useState<boolean>(true);
+
+  const handleSelectTarget = async (count: number) => {
+    setDailyTarget(count);
+    setDailyQuestionTarget(count);
+    if (notificationsEnabled) {
+      await NotificationService.scheduleDailyReminder(20, 0, count, streakCount);
+    }
+  };
+
+  const handleToggleNotifications = async (enabled: boolean) => {
+    setNotificationsEnabled(enabled);
+    if (enabled) {
+      const id = await NotificationService.scheduleDailyReminder(20, 0, dailyTarget, streakCount);
+      if (id) {
+        Alert.alert(
+          'Bildirimler Aktif Edildi',
+          `Her akşam 20:00'de günlük ${dailyTarget} soruluk hedefiniz ve ${streakCount} günlük seriniz için hatırlatıcı gönderilecek.`,
+          [
+            { text: 'Tamam' },
+            {
+              text: 'Test Bildirimi Gönder',
+              onPress: () => NotificationService.sendTestNotification(),
+            },
+          ]
+        );
+      }
+    } else {
+      await NotificationService.cancelAll();
+    }
+  };
 
   const handleLogout = async () => {
     Alert.alert('Çıkış Yap', 'Hesabınızdan çıkış yapmak istediğinize emin misiniz?', [
@@ -174,7 +213,7 @@ export const SettingsScreen: React.FC<Props> = ({ onBack, onOpenAuth }) => {
                 <TouchableOpacity
                   key={count}
                   style={[styles.targetChip, isSelected && styles.targetChipActive]}
-                  onPress={() => setDailyTarget(count)}
+                  onPress={() => handleSelectTarget(count)}
                   activeOpacity={0.7}
                 >
                   <Text
@@ -199,7 +238,7 @@ export const SettingsScreen: React.FC<Props> = ({ onBack, onOpenAuth }) => {
             </View>
             <Switch
               value={notificationsEnabled}
-              onValueChange={setNotificationsEnabled}
+              onValueChange={handleToggleNotifications}
               trackColor={{ false: '#E2E8F0', true: '#C7D2FE' }}
               thumbColor={notificationsEnabled ? '#4F46E5' : '#94A3B8'}
             />

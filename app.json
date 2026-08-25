@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "YDS Master: Sınav & Kelime",
-    "slug": "yds-master-app",
+    "name": "YDSMaster",
+    "slug": "ydsmaster",
+    "scheme": "ydsmaster",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

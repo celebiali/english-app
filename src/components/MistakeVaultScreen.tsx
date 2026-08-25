@@ -38,23 +38,27 @@ export const MistakeVaultScreen: React.FC = () => {
       >
         <View style={styles.topline} />
 
-        {/* SCREEN 4: MV-HEADER IN HTML */}
+        {/* SCREEN 4: MV-HEADER */}
         <View style={styles.mvHeader}>
           <View style={styles.mvCount}>
-            <Text style={styles.mvCountText}>{mistakes.length || 18}</Text>
+            <Text style={styles.mvCountText}>{mistakes.length}</Text>
           </View>
           <View>
             <Text style={styles.mvTitle}>Hata Kasan</Text>
-            <Text style={styles.mvSubtitle}>Çözülmemiş hatalar</Text>
+            <Text style={styles.mvSubtitle}>
+              {mistakes.length > 0 ? `${mistakes.length} çözülmemiş hata` : 'Tüm hatalar temizlendi'}
+            </Text>
           </View>
         </View>
 
-        {/* INSIGHT BANNER */}
-        <View style={styles.mvInsight}>
-          <Text style={styles.mvInsightText}>
-            🎯 Zayıflıklarını güçlü yönlere çevir — bugün 3 hatanı "mezun et".
-          </Text>
-        </View>
+        {/* INSIGHT BANNER (ONLY SHOWN IF MISTAKES EXIST) */}
+        {mistakes.length > 0 && (
+          <View style={styles.mvInsight}>
+            <Text style={styles.mvInsightText}>
+              🎯 Zayıflıklarını güçlü yönlere çevir — bugün {Math.min(3, mistakes.length)} hatanı "mezun et".
+            </Text>
+          </View>
+        )}
 
         {/* MISTAKE CARDS LIST */}
         {mistakes.length > 0 ? (

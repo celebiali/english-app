@@ -8,14 +8,14 @@ import {
   StatusBar,
   TouchableOpacity,
 } from 'react-native';
-import { User, Settings } from 'lucide-react-native';
+import { User, Settings, Sparkles } from 'lucide-react-native';
 import { useLearningStore } from './src/store/useLearningStore';
 import { BottomTabBar } from './src/components/BottomTabBar';
 import { DailyTasksScreen } from './src/components/DailyTasksScreen';
 import { MockExamScreen } from './src/components/MockExamScreen';
 import { MistakeVaultScreen } from './src/components/MistakeVaultScreen';
 import { WordVaultScreen } from './src/components/WordVaultScreen';
-import { AuthModal } from './src/components/AuthModal';
+import { AuthScreen } from './src/components/AuthScreen';
 import { SettingsScreen } from './src/components/SettingsScreen';
 
 export default function App() {
@@ -23,6 +23,7 @@ export default function App() {
     activeTab,
     mistakes,
     userProfile,
+    setUserProfile,
     isLoading,
     isInitialized,
     initStore,
@@ -49,6 +50,11 @@ export default function App() {
     );
   }
 
+  // MANDATORY AUTH GATE: Show full AuthScreen if not logged in
+  if (!userProfile) {
+    return <AuthScreen />;
+  }
+
   // DEDICATED FULL-PAGE SETTINGS SCREEN
   if (isSettingsPageOpen) {
     return (
@@ -56,11 +62,7 @@ export default function App() {
         <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
         <SettingsScreen
           onBack={() => setIsSettingsPageOpen(false)}
-          onOpenAuth={() => setIsAuthModalOpen(true)}
-        />
-        <AuthModal
-          visible={isAuthModalOpen}
-          onClose={() => setIsAuthModalOpen(false)}
+          onOpenAuth={() => setUserProfile(null)}
         />
       </View>
     );
@@ -73,6 +75,9 @@ export default function App() {
       {/* Top App Header Bar with Profile & Settings Access */}
       <View style={styles.topAppBar}>
         <View style={styles.brandRow}>
+          <View style={styles.brandLogoBox}>
+            <Sparkles size={14} color="#FBBF24" />
+          </View>
           <View style={styles.brandBadge}>
             <Text style={styles.brandBadgeText}>YDS</Text>
           </View>
@@ -116,12 +121,6 @@ export default function App() {
         onTabChange={setActiveTab}
         mistakesCount={mistakes.length}
       />
-
-      {/* Auth Modal (Login / Register) */}
-      <AuthModal
-        visible={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-      />
     </SafeAreaView>
   );
 }
@@ -143,6 +142,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
+  },
+  brandLogoBox: {
+    width: 28,
+    height: 28,
+    borderRadius: 9,
+    backgroundColor: '#312E81',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#4F46E5',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 2,
   },
   brandBadge: {
     backgroundColor: '#4F46E5',

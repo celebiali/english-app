@@ -258,111 +258,8 @@ class DatabaseService {
   // ==========================================
 
   async getMistakeItems(): Promise<MistakeItem[]> {
-    const starterMistakes: MistakeItem[] = [
-      {
-        id: 101,
-        user_selected_option: 'B',
-        is_reviewed: false,
-        created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
-        ai_analysis: {
-          summary: 'Zaman uyumu ve Past Perfect mantığı',
-          grammar_rule: 'Past Perfect Tense (had + V3)',
-          why_correct:
-            '"Had" + past participle (past perfect) yapısı, "before" bağlacıyla kurulan iki geçmiş olay arasındaki önceliği doğru şekilde ifade eder.',
-          why_distractor_failed:
-            "B seçeneğindeki simple past, iki eylem arasındaki zaman farkını göstermiyor — bu, YDS'de sık görülen bir zaman uyumu tuzağıdır.",
-          key_vocabulary: ['negotiation', 'compromise', 'precedent'],
-        },
-        question: {
-          id: 991,
-          type: 'CLOZE_TEST',
-          title: 'Diplomatic Relations',
-          question_text: 'The negotiations ______ before either side reached a compromise.',
-          options: {
-            A: 'had broken down',
-            B: 'broke down',
-            C: 'breaks down',
-            D: 'are breaking down',
-            E: 'break down',
-          },
-          correct_option: 'A',
-          explanation: 'Before ile bağlanan geçmiş cümlelerde öncelik past perfect ile verilir.',
-          subtopic: 'Zaman Uyumu Tuzağı',
-          status: 'ACTIVE',
-        },
-      },
-      {
-        id: 102,
-        user_selected_option: 'D',
-        is_reviewed: false,
-        created_at: new Date(Date.now() - 5 * 86400000).toISOString(),
-        ai_analysis: {
-          summary: 'Diyalog akışı ve bağlamsal soru kökü',
-          grammar_rule: 'Contextual Discourse Analysis',
-          why_correct:
-            'Cevapta "Because..." ile gerekçe açıklandığı için, karşı tarafın neden öyle düşündüğünü soran C seçeneği tek tutarlıdır.',
-          why_distractor_failed:
-            'D seçeneği gerekçe istemek yerine alternatif üretmeye yönelerek konuşmanın akışını bozmaktadır.',
-          key_vocabulary: ['constraint', 'overlook', 'proposal'],
-        },
-        question: {
-          id: 992,
-          type: 'SKILL_DIALOGUE',
-          question_text:
-            '— I completely disagree with that proposal.\n— ______\n— Because it overlooks key economic constraints.',
-          options: {
-            A: 'Why do you say so?',
-            B: 'I agree with you completely.',
-            C: 'What makes you feel that way?',
-            D: 'Have you considered alternatives?',
-            E: "Let's discuss it tomorrow.",
-          },
-          correct_option: 'C',
-          explanation: 'Diyalogda gerekçe isteyen soru kalıbı aranmalıdır.',
-          subtopic: 'Diyalog Çeldirici Tuzağı',
-          status: 'ACTIVE',
-        },
-      },
-      {
-        id: 103,
-        user_selected_option: 'E',
-        is_reviewed: false,
-        created_at: new Date(Date.now() - 7 * 86400000).toISOString(),
-        ai_analysis: {
-          summary: 'Paragrafta ana fikir ve çıkarım',
-          grammar_rule: 'Reading Comprehension & Inference',
-          why_correct:
-            "Metin, third places'ı 'ev ve iş yerinden ayrı, topluluk yaşamının şekillendiği alanlar' olarak tanımlıyor ve civic engagement üzerindeki rolünü vurguluyor.",
-          why_distractor_failed:
-            'E seçeneği metindeki şehir (urban) vurgusunun tam aksine kırsal genellemesi yaparak çeldirici tuzak oluşturmuştur.',
-          key_vocabulary: ['civic engagement', 'sustain', 'erosion'],
-        },
-        question: {
-          id: 993,
-          type: 'PARAGRAPH',
-          title: 'Urban Sociology & Third Places',
-          passage:
-            'Over the past decade, urban sociologists have increasingly turned their attention to the phenomenon of "third places" — social settings distinct from home and work where community life unfolds. Cafés, libraries, and public parks, once regarded as incidental backdrops to city life, are now understood to play a decisive role in sustaining civic engagement. Researchers argue that the erosion of such spaces correlates with a measurable decline in neighbourly trust.',
-          question_text:
-            'Paragrafa göre, "third places" kavramının şehir sosyolojisi için önemi aşağıdakilerden hangisidir?',
-          options: {
-            A: 'Ev ve iş yerinden bağımsız, toplumsal etkileşimi mümkün kılan alanlardır.',
-            B: 'Şehir planlamasında yalnızca estetik amaçla kullanılmaktadır.',
-            C: 'Yalnızca ekonomik açıdan değerlendirilen kamusal alanlardır.',
-            D: 'Komşuluk güveniyle hiçbir ilişkisi bulunmayan yapılardır.',
-            E: 'Sadece kırsal bölgelerde gözlemlenen bir toplumsal örüntüdür.',
-          },
-          correct_option: 'A',
-          explanation: 'Metinde third places kavramının doğrudan tanımı ve rolü aktarılmıştır.',
-          subtopic: 'Distractor Tuzağı: Aşırı Genelleme',
-          status: 'ACTIVE',
-        },
-      },
-    ];
-
     if (!this.isNative) {
-      const existing = Array.from(this.memoryDb.mistakes.values()).filter((m) => !m.is_reviewed);
-      return existing.length > 0 ? existing : starterMistakes;
+      return Array.from(this.memoryDb.mistakes.values()).filter((m) => !m.is_reviewed);
     }
 
     const rows = await this.dbInstance.getAllAsync(
@@ -375,7 +272,7 @@ class DatabaseService {
     );
 
     if (!rows || rows.length === 0) {
-      return starterMistakes;
+      return [];
     }
 
     return rows.map((r: any) => ({
@@ -902,6 +799,47 @@ class DatabaseService {
     if (!this.isNative) return this.memoryDb.streak.count;
     const res = await this.dbInstance.getFirstAsync(`SELECT streak_count FROM user_settings WHERE id = 1`);
     return res?.streak_count || 1;
+  }
+
+  async checkAndUpdateDailyStreak(): Promise<number> {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const yesterday = new Date(Date.now() - 86400000);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+    if (!this.isNative) {
+      const lastDate = this.memoryDb.streak.lastDate;
+      if (lastDate === todayStr) {
+        return this.memoryDb.streak.count;
+      } else if (lastDate === yesterdayStr) {
+        this.memoryDb.streak.count += 1;
+        this.memoryDb.streak.lastDate = todayStr;
+      } else {
+        this.memoryDb.streak.count = 1;
+        this.memoryDb.streak.lastDate = todayStr;
+      }
+      return this.memoryDb.streak.count;
+    }
+
+    const row = await this.dbInstance.getFirstAsync(
+      `SELECT last_active_date, streak_count FROM user_settings WHERE id = 1`
+    );
+    let count = row?.streak_count || 1;
+    const lastActive = row?.last_active_date;
+
+    if (lastActive === todayStr) {
+      return count;
+    } else if (lastActive === yesterdayStr) {
+      count += 1;
+    } else {
+      count = 1;
+    }
+
+    await this.dbInstance.runAsync(
+      `UPDATE user_settings SET last_active_date = ?, streak_count = ? WHERE id = 1`,
+      [todayStr, count]
+    );
+
+    return count;
   }
 
   private mapRowToQuestion(r: any): QuestionItem {

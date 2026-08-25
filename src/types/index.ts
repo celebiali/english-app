@@ -109,7 +109,7 @@ export interface QuestionItem {
   explanation: string;       // Detailed solution explanation
   subtopic?: string;         // e.g. "Contrast Connectors", "Medical Reading", "Phrasal Verbs"
   difficulty?: 'MEDIUM' | 'HARD' | 'YDS_EXAM';
-  source?: string;           // "ÖSYM 2023 YDS", "ELS Issue 12", "AI Generated"
+  source?: string;           // "Master Deneme 1", "AI Generated"
   status: QuestionStatus;
   created_at?: string;
 }
@@ -215,5 +215,32 @@ export interface UserProfile {
   fullName: string;
   targetScore: number; // e.g. 70, 80, 90+
   isGuest: boolean;
+  isPro?: boolean;
+  proExpiresAt?: string;
+  appliedPromoCode?: string;
   createdAt: string;
+}
+
+// ==========================================
+// AFFILIATE / PROMO CODE & MONETIZATION
+// ==========================================
+
+export interface PromoCodeInfo {
+  code: string;
+  discountPercent: number; // e.g. 20 for 20%
+  teacherName: string;
+  channelName?: string;
+  commissionPercent: number; // e.g. 20 for 20%
+  isValid: boolean;
+}
+
+export interface SubscriptionPlan {
+  id: string;
+  title: string;
+  durationMonths: number;
+  originalPrice: number;
+  discountedPrice?: number;
+  badge?: string;
+  isPopular?: boolean;
+  features: string[];
 }

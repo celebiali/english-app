@@ -40,7 +40,7 @@ export const MockExamScreen: React.FC = () => {
 
   const [isGridModalOpen, setIsGridModalOpen] = useState(false);
   const [isAIGeneratorOpen, setIsAIGeneratorOpen] = useState(false);
-  const [catalogFilter, setCatalogFilter] = useState<'ALL' | 'OSYM' | 'ELS' | 'AI'>('ALL');
+  const [catalogFilter, setCatalogFilter] = useState<'ALL' | 'MASTER' | 'ADVANCED' | 'AI'>('ALL');
   const [selectedResultToView, setSelectedResultToView] = useState<any>(null);
 
   // Timer interval for active exam
@@ -84,9 +84,9 @@ export const MockExamScreen: React.FC = () => {
   };
 
   const filteredExams = EXAM_CATALOG.filter((exam) => {
-    if (catalogFilter === 'OSYM') return exam.tag === 'ÖSYM Çıkmış';
-    if (catalogFilter === 'ELS') return exam.tag === 'ELS Dergi Serisi';
-    if (catalogFilter === 'AI') return exam.tag === 'Yapay Zeka Özel';
+    if (catalogFilter === 'MASTER') return exam.tag === 'Master Deneme';
+    if (catalogFilter === 'ADVANCED') return exam.tag === 'İleri Düzey' || exam.tag === 'Akademik Odak';
+    if (catalogFilter === 'AI') return exam.tag === 'AI Özel';
     return true;
   });
 
@@ -406,20 +406,20 @@ export const MockExamScreen: React.FC = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.chip, catalogFilter === 'OSYM' && styles.chipOn]}
-          onPress={() => setCatalogFilter('OSYM')}
+          style={[styles.chip, catalogFilter === 'MASTER' && styles.chipOn]}
+          onPress={() => setCatalogFilter('MASTER')}
         >
-          <Text style={[styles.chipText, catalogFilter === 'OSYM' && styles.chipTextOn]}>
-            ÖSYM Çıkmış
+          <Text style={[styles.chipText, catalogFilter === 'MASTER' && styles.chipTextOn]}>
+            Master Denemeler
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.chip, catalogFilter === 'ELS' && styles.chipOn]}
-          onPress={() => setCatalogFilter('ELS')}
+          style={[styles.chip, catalogFilter === 'ADVANCED' && styles.chipOn]}
+          onPress={() => setCatalogFilter('ADVANCED')}
         >
-          <Text style={[styles.chipText, catalogFilter === 'ELS' && styles.chipTextOn]}>
-            ELS Dergisi
+          <Text style={[styles.chipText, catalogFilter === 'ADVANCED' && styles.chipTextOn]}>
+            İleri Düzey & Odak
           </Text>
         </TouchableOpacity>
 
@@ -428,7 +428,7 @@ export const MockExamScreen: React.FC = () => {
           onPress={() => setCatalogFilter('AI')}
         >
           <Text style={[styles.chipText, catalogFilter === 'AI' && styles.chipTextOn]}>
-            AI Adaptif
+            AI Özel Denemeler
           </Text>
         </TouchableOpacity>
       </ScrollView>
@@ -436,8 +436,8 @@ export const MockExamScreen: React.FC = () => {
       {/* EXAM CARDS LIST */}
       <View style={styles.examCardsList}>
         {filteredExams.map((exam, index) => {
-          const isAI = exam.tag === 'Yapay Zeka Özel';
-          const isELS = exam.tag === 'ELS Dergi Serisi';
+          const isAI = exam.tag === 'AI Özel';
+          const isMaster = exam.tag === 'Master Deneme';
 
           let yearBg = '#EEF2FF';
           let yearColor = '#4F46E5';
@@ -445,7 +445,7 @@ export const MockExamScreen: React.FC = () => {
           if (isAI) {
             yearBg = '#EDE9FE';
             yearColor = '#7C3AED';
-          } else if (isELS) {
+          } else if (isMaster) {
             yearBg = '#FEF3C7';
             yearColor = '#D97706';
           }

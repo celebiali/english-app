@@ -22,11 +22,15 @@ import {
   ChevronRight,
   ExternalLink,
   RotateCcw,
+  Crown,
+  Sparkles,
+  Tag,
 } from 'lucide-react-native';
 import { useLearningStore } from '../store/useLearningStore';
 import { SupabaseService } from '../services/SupabaseService';
 import { SmoothBottomSheet } from './SmoothBottomSheet';
 import { dbService } from '../database/DatabaseService';
+import { SubscriptionModal } from './SubscriptionModal';
 
 interface Props {
   visible: boolean;
@@ -41,6 +45,7 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
   const [notificationsEnabled, setNotificationsEnabled] = useState<boolean>(true);
   const [showPrivacyModal, setShowPrivacyModal] = useState<boolean>(false);
   const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
+  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState<boolean>(false);
 
   const handleLogout = async () => {
     Alert.alert('Çıkış Yap', 'Hesabınızdan çıkış yapmak istediğinize emin misiniz?', [
@@ -161,6 +166,36 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
               </TouchableOpacity>
             </View>
           )}
+
+          {/* PRO MEMBERSHIP BANNER (ALİ20 PROMO & VIP PASS) */}
+          <TouchableOpacity
+            style={styles.proUpgradeBanner}
+            onPress={() => setIsSubscriptionModalOpen(true)}
+            activeOpacity={0.85}
+          >
+            <View style={styles.proUpgradeLeft}>
+              <View style={styles.proUpgradeIconWrap}>
+                <Crown size={20} color="#FFFFFF" />
+              </View>
+              <View style={{ flex: 1 }}>
+                <View style={styles.proTitleRow}>
+                  <Text style={styles.proUpgradeTitle}>
+                    {userProfile?.isPro ? '👑 YDS Master Pro Aktif' : '💎 YDS Master Pro Üyelik'}
+                  </Text>
+                  <View style={styles.proPromoBadge}>
+                    <Tag size={10} color="#7C3AED" />
+                    <Text style={styles.proPromoBadgeText}>%20 HOCA İNDİRİMİ</Text>
+                  </View>
+                </View>
+                <Text style={styles.proUpgradeSub}>
+                  {userProfile?.isPro
+                    ? 'Sınav gününe kadar sınırsız AI ve Master deneme erişimi'
+                    : 'AI tuzak analizi ve 80 soruluk denemeler · ALİ20 ile 470 TL'}
+                </Text>
+              </View>
+            </View>
+            <ChevronRight size={18} color="#94A3B8" />
+          </TouchableOpacity>
 
           {/* SECTION 1: HEDEF VE ÇALIŞMA */}
           <Text style={styles.sectionHeading}>🎯 Hedef ve Çalışma Düzeni</Text>
@@ -330,6 +365,12 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
           )}
         </ScrollView>
       </View>
+
+      {/* SUBSCRIPTION & PROMO CODE MODAL */}
+      <SubscriptionModal
+        visible={isSubscriptionModalOpen}
+        onClose={() => setIsSubscriptionModalOpen(false)}
+      />
     </SmoothBottomSheet>
   );
 };
@@ -576,5 +617,66 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     color: '#0F172A',
+  },
+  proUpgradeBanner: {
+    backgroundColor: '#FAF5FF',
+    borderWidth: 1.5,
+    borderColor: '#E9D5FF',
+    borderRadius: 18,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+    shadowColor: '#7C3AED',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  proUpgradeLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    flex: 1,
+  },
+  proUpgradeIconWrap: {
+    width: 42,
+    height: 42,
+    borderRadius: 14,
+    backgroundColor: '#7C3AED',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  proTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    flexWrap: 'wrap',
+  },
+  proUpgradeTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: '#581C87',
+  },
+  proPromoBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: '#EDE9FE',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  proPromoBadgeText: {
+    fontSize: 9.5,
+    fontWeight: '800',
+    color: '#7C3AED',
+  },
+  proUpgradeSub: {
+    fontSize: 11.5,
+    color: '#7E22CE',
+    lineHeight: 16,
+    marginTop: 2,
   },
 });

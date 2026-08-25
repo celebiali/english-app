@@ -18,14 +18,14 @@ interface Props {
 }
 
 export const ExamCardItem: React.FC<Props> = ({ exam, pastResult, onSelect }) => {
-  const isAI = exam.season === 'AI Özel';
-  const isELS = exam.season === 'ELS Dergisi';
+  const isAI = exam.tag === 'AI Özel';
+  const isMaster = exam.tag === 'Master Deneme';
 
   const getTagBadge = () => {
     if (isAI) {
       return { bg: '#F5F3FF', text: '#7C3AED', border: '#DDD6FE' };
     }
-    if (isELS) {
+    if (isMaster) {
       return { bg: '#FFFBEB', text: '#D97706', border: '#FDE68A' };
     }
     return { bg: '#EFF6FF', text: '#2563EB', border: '#BFDBFE' };
@@ -48,7 +48,7 @@ export const ExamCardItem: React.FC<Props> = ({ exam, pastResult, onSelect }) =>
         >
           {isAI ? (
             <Sparkles size={12} color={tagStyle.text} />
-          ) : isELS ? (
+          ) : isMaster ? (
             <BookOpen size={12} color={tagStyle.text} />
           ) : (
             <FileSpreadsheet size={12} color={tagStyle.text} />

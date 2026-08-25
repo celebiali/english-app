@@ -93,14 +93,17 @@ export const QuestionCard: React.FC<Props> = ({
             </Text>
           )}
 
-          <TouchableOpacity
-            style={styles.addWordQuickBtn}
-            onPress={() => setIsAddWordModalOpen(true)}
-            activeOpacity={0.7}
-          >
-            <BookmarkPlus size={15} color="#7C3AED" />
-            <Text style={styles.addWordQuickText}>+ Kelime</Text>
-          </TouchableOpacity>
+          {/* Only allow custom word addition outside strict exam mode */}
+          {mode !== 'EXAM' && (
+            <TouchableOpacity
+              style={styles.addWordQuickBtn}
+              onPress={() => setIsAddWordModalOpen(true)}
+              activeOpacity={0.7}
+            >
+              <BookmarkPlus size={15} color="#7C3AED" />
+              <Text style={styles.addWordQuickText}>+ Kelime</Text>
+            </TouchableOpacity>
+          )}
 
           <TouchableOpacity
             style={[styles.flagBtn, isFlagged && styles.flagBtnActive]}
@@ -119,7 +122,7 @@ export const QuestionCard: React.FC<Props> = ({
             <View style={styles.kicker}>
               <Text style={styles.kickerText}>A</Text>
             </View>
-            <Text style={styles.src}>Academic Passage · Sociology</Text>
+            <Text style={styles.src}>Akademik Okuma Metni</Text>
           </View>
 
           <View style={!isPassageExpanded ? styles.passageFade : undefined}>
@@ -201,29 +204,54 @@ export const QuestionCard: React.FC<Props> = ({
         })}
       </View>
 
-      {/* SOLUTION DRAWER (AI Çözüm Analizi) */}
+      {/* SOLUTION & AI DIAGNOSTIC DRAWER (Pratik & Sınav Sonrası İnceleme) */}
       {isAnsweredInPractice && (
         <View style={styles.solutionDrawer}>
           <View style={styles.sdHead}>
-            <Text style={styles.sdHeadText}>✨ AI Çözüm Analizi</Text>
+            <Text style={styles.sdHeadText}>✨ AI Sınav Koçu Analizi</Text>
           </View>
 
+          {/* CORRECT OPTION EXPLANATION */}
           <Text style={styles.sdParagraph}>
-            <Text style={styles.boldText}>Doğru cevap {question.correct_option}: </Text>
+            <Text style={styles.boldText}>Doğru cevap ({question.correct_option}): </Text>
             {question.explanation ||
-              'Metindeki zaman uyumu, bağlam ve bağlaç mantığı incelendiğinde bu seçenek tek tutarlı alternatiftir.'}
+              'Metindeki zaman uyumu (tense harmony), bağlaç mantığı ve akademik bağlam incelendiğinde bu seçenek tek tutarlı alternatiftir.'}
           </Text>
 
+          {/* TRAP BREAKDOWN IF USER WAS WRONG */}
           {localAnswered !== question.correct_option && (
-            <Text style={styles.sdParagraph}>
-              Seçtiğiniz <Text style={styles.boldText}>{localAnswered} seçeneği</Text>, ÖSYM'nin klasik kapsam daraltma veya özne-yüklem zaman uyuşmazlığı tuzağını içermektedir.
-            </Text>
+            <View style={styles.mistakeTrapBox}>
+              <Text style={styles.mistakeTrapTitle}>⚠ Düştüğün Çeldirici Tuzağı:</Text>
+              <Text style={styles.mistakeTrapDesc}>
+                Seçtiğin ({localAnswered}) seçeneği: ÖSYM'nin klasik çeldirici modellerinden biridir. Cümledeki zaman akışını veya bağlaç yönünü tersine çevirerek yanıltıcı bir bağlam sunmaktadır.
+              </Text>
+            </View>
           )}
 
           <View style={styles.trapTag}>
             <Text style={styles.trapTagText}>
-              ⚠ {question.subtopic || 'Distractor Tuzağı: Aşırı Genelleme'}
+              🎯 Test Edilen Kural: {question.subtopic || 'Akademik Bağlam & Gramer'}
             </Text>
+          </View>
+
+          {/* INTERACTIVE VOCABULARY CHIPS (POST-EXAM RETENTION) */}
+          <View style={styles.vocabSection}>
+            <Text style={styles.vocabSectionTitle}>📖 Sorudaki Önemli Akademik Kelimeler</Text>
+            <View style={styles.vocabChipsRow}>
+              {['deteriorate', 'mitigate', 'deplete', 'precedent'].map((word, idx) => (
+                <TouchableOpacity
+                  key={idx}
+                  style={styles.vocabChip}
+                  onPress={() => {
+                    setIsAddWordModalOpen(true);
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.vocabChipWord}>{word}</Text>
+                  <Text style={styles.vocabChipAdd}>+</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         </View>
       )}
@@ -478,15 +506,73 @@ const styles = StyleSheet.create({
   },
   trapTag: {
     alignSelf: 'flex-start',
-    backgroundColor: '#FEE2E2',
+    backgroundColor: '#EEF2FF',
     paddingHorizontal: 9,
     paddingVertical: 4,
     borderRadius: 8,
     marginTop: 4,
+    marginBottom: 10,
   },
   trapTagText: {
-    fontSize: 11,
+    fontSize: 11.5,
     fontWeight: '700',
+    color: '#4F46E5',
+  },
+  mistakeTrapBox: {
+    backgroundColor: '#FEF2F2',
+    borderLeftWidth: 3,
+    borderLeftColor: '#EF4444',
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  mistakeTrapTitle: {
+    fontSize: 12,
+    fontWeight: '800',
     color: '#DC2626',
+    marginBottom: 4,
+  },
+  mistakeTrapDesc: {
+    fontSize: 12,
+    color: '#991B1B',
+    lineHeight: 17,
+  },
+  vocabSection: {
+    marginTop: 10,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#E2E8F0',
+  },
+  vocabSectionTitle: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: '#334155',
+    marginBottom: 8,
+  },
+  vocabChipsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  vocabChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#F1F5F9',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+  },
+  vocabChipWord: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#1E293B',
+  },
+  vocabChipAdd: {
+    fontSize: 13,
+    fontWeight: '900',
+    color: '#7C3AED',
   },
 });

@@ -645,27 +645,36 @@ class DatabaseService {
       [box]
     );
 
-    return rows.map((r: any) => ({
-      id: r.id,
-      word: r.word,
-      meaning: r.meaning,
-      category: r.category,
-      subcategory: r.subcategory,
-      level: r.level,
-      synonyms: r.synonyms ? JSON.parse(r.synonyms) : [],
-      example_sentence: r.example_sentence,
-      example_translation: r.example_translation,
-      etymology_note: r.etymology_note,
-      is_custom: r.is_custom === 1,
-      isStudied: true,
-      box: r.box,
-      status: r.p_status,
-      correctCount: r.correct_count,
-      incorrectCount: r.incorrect_count,
-      nextReviewAt: r.next_review_at,
-      isUnlocked: true,
-      daysRemaining: 0,
-    }));
+    const now = new Date();
+
+    return rows.map((r: any) => {
+      const nextReviewDate = r.next_review_at ? new Date(r.next_review_at) : null;
+      const diffMs = nextReviewDate ? nextReviewDate.getTime() - now.getTime() : 0;
+      const daysRemaining = diffMs > 0 ? Math.ceil(diffMs / (1000 * 60 * 60 * 24)) : 0;
+      const isUnlocked = !nextReviewDate || diffMs <= 0;
+
+      return {
+        id: r.id,
+        word: r.word,
+        meaning: r.meaning,
+        category: r.category,
+        subcategory: r.subcategory,
+        level: r.level,
+        synonyms: r.synonyms ? JSON.parse(r.synonyms) : [],
+        example_sentence: r.example_sentence,
+        example_translation: r.example_translation,
+        etymology_note: r.etymology_note,
+        is_custom: r.is_custom === 1,
+        isStudied: true,
+        box: r.box,
+        status: r.p_status,
+        correctCount: r.correct_count,
+        incorrectCount: r.incorrect_count,
+        nextReviewAt: r.next_review_at,
+        isUnlocked: isUnlocked,
+        daysRemaining: daysRemaining,
+      };
+    });
   }
 
   async getAllWordsWithProgress(): Promise<WordWithProgress[]> {

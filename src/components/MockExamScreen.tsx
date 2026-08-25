@@ -450,9 +450,10 @@ export const MockExamScreen: React.FC = () => {
             yearColor = '#D97706';
           }
 
-          // Sample scores for realistic demonstration
-          const sampleScore = index === 0 ? '87.50' : index === 1 ? '71.25' : null;
-          const sampleGrade = index === 0 ? 'A' : index === 1 ? 'C' : null;
+          // Real scores from database examHistory
+          const realResult = examHistory.find((h) => h.examId === exam.id);
+          const scoreVal = realResult ? realResult.ydsScore.toFixed(2) : null;
+          const gradeVal = realResult ? realResult.levelGrade : null;
 
           return (
             <TouchableOpacity
@@ -479,12 +480,10 @@ export const MockExamScreen: React.FC = () => {
               </View>
 
               <View style={styles.examScorePill}>
-                {sampleScore ? (
+                {scoreVal ? (
                   <>
-                    <Text style={[styles.scorePillVal, index === 1 && { color: '#D97706' }]}>
-                      {sampleScore}
-                    </Text>
-                    <Text style={styles.scorePillGrade}>Not: {sampleGrade}</Text>
+                    <Text style={styles.scorePillVal}>{scoreVal}</Text>
+                    <Text style={styles.scorePillGrade}>Not: {gradeVal}</Text>
                   </>
                 ) : (
                   <>
@@ -498,34 +497,31 @@ export const MockExamScreen: React.FC = () => {
         })}
       </View>
 
-      {/* LAST RESULT PREVIEW CARD (SCREEN 3 BOTTOM CARD IN HTML) */}
-      <View style={styles.lastResultSection}>
-        <View style={styles.sectionTitleRow}>
-          <Text style={styles.sectionTitle}>Son Sınav Sonucun</Text>
-        </View>
-
-        <TouchableOpacity
-          style={styles.lastResultCard}
-          onPress={() =>
-            setSelectedResultToView({
-              title: '2024 YDS/1',
-              levelGrade: 'A',
-              ydsScore: '92.50',
-              correctCount: 74,
-              wrongCount: 4,
-              emptyCount: 2,
-            })
-          }
-          activeOpacity={0.8}
-        >
-          <View style={styles.scoreHeroInline}>
-            <View style={styles.gradeRingSmall}>
-              <Text style={styles.gradeLetterSmall}>A</Text>
-            </View>
-            <Text style={styles.scoreHeroText}>92.50 / 100 — Sonuç Kartını Gör</Text>
+      {/* LAST RESULT PREVIEW CARD (ONLY SHOWN IF USER ACTUALLY TOOK AN EXAM) */}
+      {examHistory.length > 0 && (
+        <View style={styles.lastResultSection}>
+          <View style={styles.sectionTitleRow}>
+            <Text style={styles.sectionTitle}>Son Sınav Sonucun</Text>
           </View>
-        </TouchableOpacity>
-      </View>
+
+          <TouchableOpacity
+            style={styles.lastResultCard}
+            onPress={() => setSelectedResultToView(examHistory[0])}
+            activeOpacity={0.8}
+          >
+            <View style={styles.scoreHeroInline}>
+              <View style={styles.gradeRingSmall}>
+                <Text style={styles.gradeLetterSmall}>
+                  {examHistory[0].levelGrade || 'A'}
+                </Text>
+              </View>
+              <Text style={styles.scoreHeroText}>
+                {examHistory[0].title} · {examHistory[0].ydsScore.toFixed(2)} / 100 — Sonuç Kartını Gör
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      )}
 
       <AITestGeneratorModal
         visible={isAIGeneratorOpen}

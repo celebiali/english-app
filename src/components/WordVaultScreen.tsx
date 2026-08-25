@@ -41,11 +41,31 @@ export const WordVaultScreen: React.FC = () => {
   const isSessionFinished = sessionWords.length > 0 && currentVocabIndex >= sessionWords.length;
 
   const subTabs = [
-    { key: 'DAILY_BOX' as VocabSubTab, label: '📦 Günlük', count: boxSummary.dailyBoxCount || 12 },
-    { key: 'WEEKLY_BOX' as VocabSubTab, label: '📦 Haftalık', count: boxSummary.weeklyBoxCount || 34 },
-    { key: 'MONTHLY_BOX' as VocabSubTab, label: '📦 Aylık', count: boxSummary.monthlyBoxCount || 58 },
-    { key: 'CUSTOM_WORDS' as VocabSubTab, label: '⭐ Özel', count: customWords.length || undefined },
-    { key: 'DICTIONARY' as VocabSubTab, label: '📚 Sözlük', count: undefined },
+    {
+      key: 'DAILY_BOX' as VocabSubTab,
+      label: '📦 Günlük',
+      count: sessionWords.length > 0 ? sessionWords.length : boxSummary.dailyBoxCount || 0,
+    },
+    {
+      key: 'WEEKLY_BOX' as VocabSubTab,
+      label: '📦 Haftalık',
+      count: weeklyWords.length || boxSummary.weeklyBoxCount || 0,
+    },
+    {
+      key: 'MONTHLY_BOX' as VocabSubTab,
+      label: '📦 Aylık',
+      count: monthlyWords.length || boxSummary.monthlyBoxCount || 0,
+    },
+    {
+      key: 'CUSTOM_WORDS' as VocabSubTab,
+      label: '⭐ Özel',
+      count: customWords.length,
+    },
+    {
+      key: 'DICTIONARY' as VocabSubTab,
+      label: '📚 Sözlük',
+      count: dictionaryWords.length,
+    },
   ];
 
   return (
@@ -125,15 +145,17 @@ export const WordVaultScreen: React.FC = () => {
                     {
                       width: `${
                         sessionWords.length > 0
-                          ? Math.min(100, Math.round((currentVocabIndex / sessionWords.length) * 100))
-                          : 34
+                          ? Math.min(100, Math.round(((currentVocabIndex + 1) / sessionWords.length) * 100))
+                          : 0
                       }%`,
                     },
                   ]}
                 />
               </View>
               <Text style={styles.progressCounter}>
-                {currentVocabIndex || 4} / {sessionWords.length || 12}
+                {sessionWords.length > 0
+                  ? `${Math.min(currentVocabIndex + 1, sessionWords.length)} / ${sessionWords.length}`
+                  : '0 / 25'}
               </Text>
             </View>
           </View>

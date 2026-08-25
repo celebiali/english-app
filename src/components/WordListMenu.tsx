@@ -399,17 +399,13 @@ export const WordListMenu: React.FC<WordListMenuProps> = ({ words }) => {
         </TouchableOpacity>
       </View>
 
-      <FlatList
-        data={categoryWords}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderWordItem}
-        contentContainerStyle={styles.listContent}
-        showsVerticalScrollIndicator={true}
-        initialNumToRender={20}
-        maxToRenderPerBatch={25}
-        windowSize={10}
-        removeClippedSubviews={true}
-      />
+      <View style={styles.listContent}>
+        {categoryWords.map((item) => (
+          <React.Fragment key={item.id}>
+            {renderWordItem({ item })}
+          </React.Fragment>
+        ))}
+      </View>
     </View>
   );
 };

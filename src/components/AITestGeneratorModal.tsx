@@ -82,7 +82,7 @@ export const AITestGeneratorModal: React.FC<Props> = ({
     },
   ];
 
-  const countOptions = [5, 10, 15, 20];
+  const countOptions = [10, 20, 40, 80];
 
   const handleGenerate = async () => {
     setIsGenerating(true);

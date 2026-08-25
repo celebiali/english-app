@@ -284,6 +284,78 @@ Requirements:
   }
 
   /**
+   * Universal helper for generating validated JSON from Gemini
+   */
+  static async generateCustomJSON<T = any>(prompt: string): Promise<T | null> {
+    const activeKey = this.getApiKey();
+    if (!activeKey) return null;
+
+    try {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${activeKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { responseMimeType: 'application/json' },
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (rawText) {
+          return JSON.parse(rawText) as T;
+        }
+      }
+    } catch (err) {
+      console.warn('generateCustomJSON failed:', err);
+    }
+    return null;
+  }
+
+  /**
+   * Generates a batch of authentic YDS academic words with Tureng definitions
+   */
+  static async generateDynamicAcademicWords(count: number = 25): Promise<Omit<WordItem, 'id'>[]> {
+    const prompt = `Generate a JSON list of ${count} high-frequency academic English words strictly used in YDS, YÖKDİL, and TOEFL examinations.
+Each word must include:
+- word: uppercase English word
+- meaning: Tureng academic Turkish meaning
+- level: "B2" or "C1"
+- category: "VOCABULARY"
+- subcategory: "AI Dynamic YDS Pool"
+- synonyms: array of 3 English synonyms
+- example_sentence: formal academic context sentence
+- example_translation: Turkish translation of sentence
+- etymology_note: root or part of speech (e.g. "fiil · /.../")
+
+Return JSON array:
+[
+  {
+    "word": "EXACERBATE",
+    "meaning": "daha da kötüleştirmek, şiddetlendirmek",
+    "level": "B2",
+    "category": "VOCABULARY",
+    "subcategory": "AI Dynamic YDS Pool",
+    "synonyms": ["worsen", "aggravate", "deteriorate"],
+    "example_sentence": "The economic sanctions will exacerbate existing supply shortages.",
+    "example_translation": "Ekonomik yaptırımlar mevcut tedarik kıtlığını daha da kötüleştirecektir.",
+    "etymology_note": "fiil · /ɪɡˈzæs.ə.beɪt/"
+  }
+]`;
+
+    const res = await this.generateCustomJSON<Omit<WordItem, 'id'>[]>(prompt);
+    if (res && Array.isArray(res) && res.length > 0) {
+      return res;
+    }
+
+    return [];
+  }
+
+  /**
    * Generates a custom quiz package (5, 10, 15, 20 questions) tailored to topic or weak areas
    */
   static async generateCustomQuizPackage(params: {
@@ -292,7 +364,7 @@ Requirements:
     topic?: string;
   }): Promise<QuestionItem[]> {
     const questions: QuestionItem[] = [];
-    const count = Math.min(20, Math.max(5, params.count));
+    const count = Math.min(80, Math.max(5, params.count));
 
     for (let i = 1; i <= count; i++) {
       let qType: YdsQuestionType = 'SENTENCE_COMPLETION';

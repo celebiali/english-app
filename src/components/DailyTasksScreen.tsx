@@ -8,9 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {
-  Sparkles,
   ChevronLeft,
-  ChevronRight,
   ArrowRight,
   CheckCircle2,
 } from 'lucide-react-native';
@@ -24,9 +22,7 @@ export const DailyTasksScreen: React.FC = () => {
     dailyTasksProgress,
     activeDailyQuestions,
     currentDailyIndex,
-    isGeneratingAI,
     answerDailyQuestion,
-    generateFreshAIQuestions,
     nextDailyQuestion,
     prevDailyQuestion,
   } = useLearningStore();
@@ -41,22 +37,22 @@ export const DailyTasksScreen: React.FC = () => {
 
   const currentQuestion = filteredQuestions[currentDailyIndex] || filteredQuestions[0];
 
-  // Daily target goals calculation
-  const totalCompleted =
-    dailyTasksProgress.paragraphCompleted +
-    dailyTasksProgress.clozeCompleted +
-    dailyTasksProgress.sentenceCompleted +
-    dailyTasksProgress.skillsCompleted;
+  // Dynamic Completed Counts
+  const paragraphCompleted = dailyTasksProgress.paragraphCompleted || 0;
+  const clozeCompleted = dailyTasksProgress.clozeCompleted || 0;
+  const sentenceCompleted = dailyTasksProgress.sentenceCompleted || 0;
+  const skillsCompleted = dailyTasksProgress.skillsCompleted || 0;
 
+  const totalCompleted = paragraphCompleted + clozeCompleted + sentenceCompleted + skillsCompleted;
   const dailyGoalTotal = 35;
-  const completionPercentage = Math.min(100, Math.round((totalCompleted / dailyGoalTotal) * 100)) || 65;
+  const completionPercentage = Math.min(100, Math.round((totalCompleted / dailyGoalTotal) * 100));
 
   const tasksList = [
     {
       type: 'PARAGRAPH' as YdsQuestionType,
       title: 'Paragraf\nSoruları',
       iconEmoji: '📖',
-      completed: dailyTasksProgress.paragraphCompleted || 3,
+      completed: paragraphCompleted,
       goal: 5,
       color: '#2563EB',
       bg: '#DBEAFE',
@@ -65,7 +61,7 @@ export const DailyTasksScreen: React.FC = () => {
       type: 'CLOZE_TEST' as YdsQuestionType,
       title: 'Cloze Test\nSoruları',
       iconEmoji: '🧩',
-      completed: dailyTasksProgress.clozeCompleted || 1,
+      completed: clozeCompleted,
       goal: 5,
       color: '#7C3AED',
       bg: '#EDE9FE',
@@ -74,7 +70,7 @@ export const DailyTasksScreen: React.FC = () => {
       type: 'SENTENCE_COMPLETION' as YdsQuestionType,
       title: 'Cümle\nTamamlama',
       iconEmoji: '🔗',
-      completed: dailyTasksProgress.sentenceCompleted || 7,
+      completed: sentenceCompleted,
       goal: 10,
       color: '#059669',
       bg: '#D1FAE5',
@@ -83,7 +79,7 @@ export const DailyTasksScreen: React.FC = () => {
       type: 'SKILL_DIALOGUE' as YdsQuestionType,
       title: 'Diyalog &\nDil Bilgisi',
       iconEmoji: '💬',
-      completed: dailyTasksProgress.skillsCompleted || 4,
+      completed: skillsCompleted,
       goal: 15,
       color: '#D97706',
       bg: '#FEF3C7',
@@ -91,7 +87,7 @@ export const DailyTasksScreen: React.FC = () => {
   ];
 
   // =========================================================================
-  // VIEW 2: DEDICATED QUESTION SOLVER VIEW (SCREEN 2 IN HTML)
+  // VIEW 2: DEDICATED QUESTION SOLVER VIEW (SCREEN 2)
   // =========================================================================
   if (isSolvingMode) {
     return (
@@ -104,28 +100,14 @@ export const DailyTasksScreen: React.FC = () => {
             activeOpacity={0.7}
           >
             <ChevronLeft size={20} color="#4F46E5" />
-            <Text style={styles.backBtnText}>Görevler</Text>
+            <Text style={styles.backBtnText}>Görevlere Dön</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.aiPillBtn}
-            onPress={() =>
-              generateFreshAIQuestions(
-                selectedFilter === 'ALL' ? 'PARAGRAPH' : selectedFilter
-              )
-            }
-            disabled={isGeneratingAI}
-            activeOpacity={0.8}
-          >
-            {isGeneratingAI ? (
-              <ActivityIndicator size="small" color="#7C3AED" />
-            ) : (
-              <>
-                <Sparkles size={13} color="#7C3AED" />
-                <Text style={styles.aiPillBtnText}>+ AI Taze Soru</Text>
-              </>
-            )}
-          </TouchableOpacity>
+          <View style={styles.solverCounterBadge}>
+            <Text style={styles.solverCounterText}>
+              {currentDailyIndex + 1} / {filteredQuestions.length || 1}
+            </Text>
+          </View>
         </View>
 
         {currentQuestion ? (
@@ -134,7 +116,7 @@ export const DailyTasksScreen: React.FC = () => {
               key={currentQuestion.id}
               question={currentQuestion}
               questionIndex={currentDailyIndex}
-              totalQuestions={filteredQuestions.length || 15}
+              totalQuestions={filteredQuestions.length || 1}
               mode="PRACTICE"
               onSelectOption={(opt) => answerDailyQuestion(currentQuestion, opt)}
             />
@@ -169,17 +151,16 @@ export const DailyTasksScreen: React.FC = () => {
         ) : (
           <View style={styles.emptySolverState}>
             <CheckCircle2 size={48} color="#10B981" />
-            <Text style={styles.emptySolverTitle}>Tebrikler! Bu Görev Tamamlandı</Text>
+            <Text style={styles.emptySolverTitle}>Tebrikler! Bugünkü Görevler Tamamlandı</Text>
             <Text style={styles.emptySolverSubtitle}>
-              Doğru bildiğin sorular aktif havuzdan düşürüldü.
+              Doğru bildiğin tüm sorular aktif havuzdan tamamlandı.
             </Text>
             <TouchableOpacity
-              style={styles.emptySolverAiBtn}
-              onPress={() => generateFreshAIQuestions('PARAGRAPH')}
+              style={styles.returnBtn}
+              onPress={() => setIsSolvingMode(false)}
               activeOpacity={0.8}
             >
-              <Sparkles size={16} color="#FFFFFF" />
-              <Text style={styles.emptySolverAiBtnText}>Yapay Zekadan Yeni Soru Getir</Text>
+              <Text style={styles.returnBtnText}>Ana Görevler Sayfasına Dön</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -188,7 +169,7 @@ export const DailyTasksScreen: React.FC = () => {
   }
 
   // =========================================================================
-  // VIEW 1: DASHBOARD VIEW (SCREEN 1 IN HTML)
+  // VIEW 1: DASHBOARD VIEW
   // =========================================================================
   return (
     <ScrollView
@@ -196,14 +177,14 @@ export const DailyTasksScreen: React.FC = () => {
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      <View style={styles.topline} />
-
-      {/* SCREEN 1: HERO BANNER */}
+      {/* COMPACT HERO GOAL BANNER */}
       <View style={styles.heroBanner}>
         <View style={styles.heroTop}>
           <View>
             <Text style={styles.heroGoalLabel}>🎯 Bugünkü Hedefin</Text>
-            <Text style={styles.heroGoalNum}>35 Soru</Text>
+            <Text style={styles.heroGoalNum}>
+              {totalCompleted} / {dailyGoalTotal} Soru
+            </Text>
           </View>
 
           {/* Dairesel İlerleme Halkası */}
@@ -214,13 +195,10 @@ export const DailyTasksScreen: React.FC = () => {
           </View>
         </View>
 
-        {/* Hero Rozetleri */}
+        {/* Hero Rozeti (XP removed) */}
         <View style={styles.heroPills}>
           <View style={styles.streakPill}>
-            <Text style={styles.streakPillText}>🔥 {streakCount || 5} Günlük Seri</Text>
-          </View>
-          <View style={styles.xpPill}>
-            <Text style={styles.xpPillText}>⚡ +350 XP</Text>
+            <Text style={styles.streakPillText}>🔥 {streakCount || 1} Günlük Seri</Text>
           </View>
         </View>
       </View>
@@ -260,7 +238,7 @@ export const DailyTasksScreen: React.FC = () => {
               <Text style={styles.mCount}>
                 {task.completed} / {task.goal} tamam
               </Text>
-              {/* Alt 4px İlerleme Çubuğu */}
+              {/* Alt İlerleme Çubuğu */}
               <View style={styles.mBar}>
                 <View
                   style={[
@@ -273,26 +251,6 @@ export const DailyTasksScreen: React.FC = () => {
           );
         })}
       </View>
-
-      {/* AI CTA KARTI */}
-      <TouchableOpacity
-        style={styles.aiCta}
-        onPress={() => {
-          setSelectedFilter('ALL');
-          setIsSolvingMode(true);
-        }}
-        activeOpacity={0.85}
-      >
-        <View style={styles.sparkleBox}>
-          <Text style={styles.sparkleText}>✨</Text>
-        </View>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.aiCtaTitle}>Yeni AI Sorusu Üret</Text>
-          <Text style={styles.aiCtaSubtitle}>
-            Havuzun tükendi mi? Anında yeni soru al
-          </Text>
-        </View>
-      </TouchableOpacity>
 
       {/* SECTION: AKTİF SORU ALANI */}
       <View style={styles.sectionTitleRow}>
@@ -307,13 +265,15 @@ export const DailyTasksScreen: React.FC = () => {
       >
         <View style={styles.arenaBadge}>
           <Text style={styles.arenaBadgeText}>
-            3/15
+            {activeDailyQuestions.length > 0 ? `${currentDailyIndex + 1}/${activeDailyQuestions.length}` : 'Hazır'}
           </Text>
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={styles.arenaTitle}>Paragraf sorusuna devam et</Text>
+          <Text style={styles.arenaTitle}>Soru Çözümüne Devam Et</Text>
           <Text style={styles.arenaSubtitle}>
-            Kaldığın yerden sürdür — 12 soru kaldı
+            {activeDailyQuestions.length > 0
+              ? `${activeDailyQuestions.length - currentDailyIndex} aktif soru bekliyor`
+              : 'Günlük havuzdaki tüm sorular çözüldü'}
           </Text>
         </View>
         <ArrowRight size={18} color="#94A3B8" />
@@ -329,101 +289,84 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 20,
-    paddingTop: 6,
-    paddingBottom: 40,
-  },
-  topline: {
-    height: 10,
+    paddingTop: 4,
+    paddingBottom: 36,
   },
   heroBanner: {
-    borderRadius: 28,
-    padding: 22,
+    borderRadius: 22,
+    padding: 16,
     backgroundColor: '#4338CA',
     shadowColor: '#4F46E5',
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.28,
-    shadowRadius: 24,
-    elevation: 6,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
+    elevation: 4,
+    marginVertical: 4,
   },
   heroTop: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   heroGoalLabel: {
-    fontSize: 12.5,
-    fontWeight: '600',
-    color: 'rgba(255, 255, 255, 0.78)',
+    fontSize: 12,
+    fontWeight: '700',
+    color: 'rgba(255, 255, 255, 0.8)',
   },
   heroGoalNum: {
-    fontSize: 26,
+    fontSize: 22,
     fontWeight: '900',
     color: '#FFFFFF',
     letterSpacing: -0.5,
     marginTop: 2,
   },
   ringWrap: {
-    width: 64,
-    height: 64,
+    width: 48,
+    height: 48,
     alignItems: 'center',
     justifyContent: 'center',
   },
   ringCircle: {
-    width: 58,
-    height: 58,
-    borderRadius: 29,
-    borderWidth: 5,
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    borderWidth: 4,
     borderColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,255,255,0.14)',
   },
   ringPct: {
     color: '#FFFFFF',
-    fontSize: 13,
+    fontSize: 11.5,
     fontWeight: '800',
   },
   heroPills: {
     flexDirection: 'row',
-    gap: 8,
-    marginTop: 16,
+    marginTop: 10,
   },
   streakPill: {
     backgroundColor: '#EA580C',
-    paddingHorizontal: 12,
-    paddingVertical: 7,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
     borderRadius: 999,
   },
   streakPillText: {
     color: '#FFFFFF',
-    fontSize: 12.5,
-    fontWeight: '700',
-  },
-  xpPill: {
-    backgroundColor: 'rgba(255, 255, 255, 0.16)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.22)',
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-    borderRadius: 999,
-  },
-  xpPillText: {
-    color: '#FFFFFF',
-    fontSize: 12.5,
+    fontSize: 11.5,
     fontWeight: '700',
   },
   sectionTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 22,
-    marginBottom: 12,
+    marginTop: 18,
+    marginBottom: 10,
   },
   sectionTitle: {
-    fontSize: 16.5,
+    fontSize: 16,
     fontWeight: '800',
     color: '#0F172A',
-    letterSpacing: -0.2,
   },
   seeAllText: {
     fontSize: 12.5,
@@ -439,7 +382,7 @@ const styles = StyleSheet.create({
     width: '48%',
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
-    padding: 15,
+    padding: 14,
     borderWidth: 1,
     borderColor: 'rgba(15,23,42,0.04)',
     shadowColor: '#0F172A',
@@ -451,78 +394,43 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   mIcon: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
+    width: 36,
+    height: 36,
+    borderRadius: 11,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 18,
+    marginBottom: 14,
   },
   mIconEmoji: {
-    fontSize: 18,
+    fontSize: 17,
   },
   mTitle: {
-    fontSize: 13.5,
+    fontSize: 13,
     fontWeight: '800',
     color: '#0F172A',
-    lineHeight: 17,
+    lineHeight: 16,
   },
   mCount: {
-    fontSize: 11.5,
+    fontSize: 11,
     color: '#475569',
     marginTop: 4,
-    fontWeight: '500',
+    fontWeight: '600',
   },
   mBar: {
     position: 'absolute',
     left: 0,
     right: 0,
     bottom: 0,
-    height: 4,
+    height: 3.5,
     backgroundColor: 'rgba(15,23,42,0.06)',
   },
   mBarFill: {
     height: '100%',
   },
-  aiCta: {
-    marginTop: 16,
-    borderRadius: 20,
-    padding: 16,
-    backgroundColor: '#7C3AED',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    shadowColor: '#7C3AED',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.35,
-    shadowRadius: 16,
-    elevation: 5,
-  },
-  sparkleBox: {
-    width: 40,
-    height: 40,
-    borderRadius: 14,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  sparkleText: {
-    fontSize: 19,
-  },
-  aiCtaTitle: {
-    fontSize: 14,
-    fontWeight: '800',
-    color: '#FFFFFF',
-  },
-  aiCtaSubtitle: {
-    fontSize: 11.5,
-    color: 'rgba(255, 255, 255, 0.82)',
-    marginTop: 1,
-  },
   arenaCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
-    padding: 16,
+    borderRadius: 22,
+    padding: 14,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
@@ -543,7 +451,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   arenaBadgeText: {
-    fontSize: 12.5,
+    fontSize: 11.5,
     fontWeight: '800',
     color: '#4F46E5',
   },
@@ -578,19 +486,16 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#4F46E5',
   },
-  aiPillBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: '#F5F3FF',
+  solverCounterBadge: {
+    backgroundColor: '#F1F4FA',
     paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 999,
+    paddingVertical: 4,
+    borderRadius: 8,
   },
-  aiPillBtnText: {
-    fontSize: 11.5,
+  solverCounterText: {
+    fontSize: 12,
     fontWeight: '800',
-    color: '#7C3AED',
+    color: '#475569',
   },
   bottomSolverNav: {
     flexDirection: 'row',
@@ -655,18 +560,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 18,
   },
-  emptySolverAiBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    backgroundColor: '#7C3AED',
+  returnBtn: {
+    backgroundColor: '#4F46E5',
     paddingHorizontal: 20,
-    paddingVertical: 14,
-    borderRadius: 16,
+    paddingVertical: 12,
+    borderRadius: 14,
   },
-  emptySolverAiBtnText: {
+  returnBtnText: {
     color: '#FFFFFF',
-    fontSize: 14,
+    fontSize: 13.5,
     fontWeight: '800',
   },
 });

@@ -459,7 +459,22 @@ export const useLearningStore = create<LearningState>((set, get) => ({
 
   loadVocabSession: async () => {
     const { dailyLimit } = get();
-    const words = await srEngine.loadDailyBatch(dailyLimit);
+    let words = await srEngine.loadDailyBatch(dailyLimit);
+
+    if (words.length === 0) {
+      try {
+        const freshWords = await AIService.generateDynamicAcademicWords(dailyLimit);
+        if (freshWords && freshWords.length > 0) {
+          for (const w of freshWords) {
+            await dbService.insertCustomWord(w);
+          }
+          words = await srEngine.loadDailyBatch(dailyLimit);
+        }
+      } catch (err) {
+        console.warn('Auto dynamic word generation error:', err);
+      }
+    }
+
     const summary = await srEngine.fetchBoxSummary();
     const weekly = await dbService.getWordsForBoxReview(2);
     const monthly = await dbService.getWordsForBoxReview(3);

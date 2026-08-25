@@ -16,7 +16,7 @@ import { MockExamScreen } from './src/components/MockExamScreen';
 import { MistakeVaultScreen } from './src/components/MistakeVaultScreen';
 import { WordVaultScreen } from './src/components/WordVaultScreen';
 import { AuthModal } from './src/components/AuthModal';
-import { SettingsModal } from './src/components/SettingsModal';
+import { SettingsScreen } from './src/components/SettingsScreen';
 
 export default function App() {
   const {
@@ -30,7 +30,7 @@ export default function App() {
   } = useLearningStore();
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isSettingsPageOpen, setIsSettingsPageOpen] = useState(false);
 
   useEffect(() => {
     initStore();
@@ -49,6 +49,23 @@ export default function App() {
     );
   }
 
+  // DEDICATED FULL-PAGE SETTINGS SCREEN
+  if (isSettingsPageOpen) {
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+        <SettingsScreen
+          onBack={() => setIsSettingsPageOpen(false)}
+          onOpenAuth={() => setIsAuthModalOpen(true)}
+        />
+        <AuthModal
+          visible={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+        />
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
@@ -64,7 +81,7 @@ export default function App() {
 
         <TouchableOpacity
           style={styles.profileChip}
-          onPress={() => setIsSettingsModalOpen(true)}
+          onPress={() => setIsSettingsPageOpen(true)}
           activeOpacity={0.75}
         >
           {userProfile ? (
@@ -104,13 +121,6 @@ export default function App() {
       <AuthModal
         visible={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
-      />
-
-      {/* Settings & Profile Modal */}
-      <SettingsModal
-        visible={isSettingsModalOpen}
-        onClose={() => setIsSettingsModalOpen(false)}
-        onOpenAuth={() => setIsAuthModalOpen(true)}
       />
     </SafeAreaView>
   );

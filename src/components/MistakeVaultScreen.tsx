@@ -8,11 +8,10 @@ import {
   Modal,
   ActivityIndicator,
 } from 'react-native';
-import {
-  CheckCircle2,
-} from 'lucide-react-native';
+import { CheckCircle2 } from 'lucide-react-native';
 import { useLearningStore } from '../store/useLearningStore';
 import { MistakeItem } from '../types';
+import { SmoothBottomSheet } from './SmoothBottomSheet';
 
 export const MistakeVaultScreen: React.FC = () => {
   const {
@@ -112,79 +111,81 @@ export const MistakeVaultScreen: React.FC = () => {
       </ScrollView>
 
       {/* SCREEN 4: BREAKDOWN MODAL IN HTML */}
-      <Modal visible={!!selectedMistake} animationType="slide" transparent>
-        <View style={styles.breakdownModal}>
-          <View style={styles.bmSheet}>
-            {selectedMistake && (
-              <>
-                <View style={styles.bmHeader}>
-                  <Text style={styles.eyebrow}>AI DERİN ANALİZ</Text>
-                  <TouchableOpacity
-                    style={styles.closeBtn}
-                    onPress={() => selectMistake(null)}
-                  >
-                    <Text style={styles.closeBtnText}>✕</Text>
-                  </TouchableOpacity>
-                </View>
+      <SmoothBottomSheet
+        visible={!!selectedMistake}
+        onClose={() => selectMistake(null)}
+        maxHeight="86%"
+      >
+        <View style={styles.bmSheetContent}>
+          {selectedMistake && (
+            <>
+              <View style={styles.bmHeader}>
+                <Text style={styles.eyebrow}>AI DERİN ANALİZ</Text>
+                <TouchableOpacity
+                  style={styles.closeBtn}
+                  onPress={() => selectMistake(null)}
+                >
+                  <Text style={styles.closeBtnText}>✕</Text>
+                </TouchableOpacity>
+              </View>
 
-                <ScrollView showsVerticalScrollIndicator={false}>
-                  {isAnalyzingMistake ? (
-                    <View style={styles.loadingBox}>
-                      <ActivityIndicator size="small" color="#7C3AED" />
-                      <Text style={styles.loadingText}>
-                        Yapay zeka çeldirici analizini hazırlıyor...
+              <ScrollView showsVerticalScrollIndicator={false}>
+                {isAnalyzingMistake ? (
+                  <View style={styles.loadingBox}>
+                    <ActivityIndicator size="small" color="#7C3AED" />
+                    <Text style={styles.loadingText}>
+                      Yapay zeka çeldirici analizini hazırlıyor...
+                    </Text>
+                  </View>
+                ) : selectedMistake.ai_analysis ? (
+                  <>
+                    {/* GOOD BOX (YEŞİL) */}
+                    <View style={[styles.bmBox, styles.bmBoxGood]}>
+                      <Text style={styles.bmHGood}>✅ Neden Doğru?</Text>
+                      <Text style={styles.bmBoxText}>
+                        {selectedMistake.ai_analysis.why_correct}
                       </Text>
                     </View>
-                  ) : selectedMistake.ai_analysis ? (
-                    <>
-                      {/* GOOD BOX (YEŞİL) */}
-                      <View style={[styles.bmBox, styles.bmBoxGood]}>
-                        <Text style={styles.bmHGood}>✅ Neden Doğru?</Text>
-                        <Text style={styles.bmBoxText}>
-                          {selectedMistake.ai_analysis.why_correct}
+
+                    {/* BAD BOX (KIRMIZI) */}
+                    <View style={[styles.bmBox, styles.bmBoxBad]}>
+                      <Text style={styles.bmHBad}>⚠️ Neden Tuzağa Düştün?</Text>
+                      <Text style={styles.bmBoxText}>
+                        {selectedMistake.ai_analysis.why_distractor_failed}
+                      </Text>
+                    </View>
+
+                    {/* KEY VOCABULARY */}
+                    {selectedMistake.ai_analysis.key_vocabulary?.length > 0 && (
+                      <>
+                        <Text style={[styles.eyebrow, { marginTop: 14, marginBottom: 8 }]}>
+                          ANAHTAR AKADEMİK KELİMELER
                         </Text>
-                      </View>
+                        <View style={styles.vocabChipRow}>
+                          {selectedMistake.ai_analysis.key_vocabulary.map((v, i) => (
+                            <View key={i} style={styles.vocabChip}>
+                              <Text style={styles.vocabChipText}>{v}</Text>
+                            </View>
+                          ))}
+                        </View>
+                      </>
+                    )}
+                  </>
+                ) : null}
+              </ScrollView>
 
-                      {/* BAD BOX (KIRMIZI) */}
-                      <View style={[styles.bmBox, styles.bmBoxBad]}>
-                        <Text style={styles.bmHBad}>⚠️ Neden Tuzağa Düştün?</Text>
-                        <Text style={styles.bmBoxText}>
-                          {selectedMistake.ai_analysis.why_distractor_failed}
-                        </Text>
-                      </View>
-
-                      {/* KEY VOCABULARY */}
-                      {selectedMistake.ai_analysis.key_vocabulary?.length > 0 && (
-                        <>
-                          <Text style={[styles.eyebrow, { marginTop: 14, marginBottom: 8 }]}>
-                            ANAHTAR AKADEMİK KELİMELER
-                          </Text>
-                          <View style={styles.vocabChipRow}>
-                            {selectedMistake.ai_analysis.key_vocabulary.map((v, i) => (
-                              <View key={i} style={styles.vocabChip}>
-                                <Text style={styles.vocabChipText}>{v}</Text>
-                              </View>
-                            ))}
-                          </View>
-                        </>
-                      )}
-                    </>
-                  ) : null}
-                </ScrollView>
-
-                {/* GRADUATE BUTTON */}
-                <TouchableOpacity
-                  style={styles.graduateBtn}
-                  onPress={() => archiveMistake(selectedMistake)}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.graduateBtnText}>🎓 Bu Soruyu Öğrendim</Text>
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
+              {/* GRADUATE BUTTON */}
+              <TouchableOpacity
+                style={styles.graduateBtn}
+                onPress={() => archiveMistake(selectedMistake)}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.graduateBtnText}>🎓 Bu Soruyu Öğrendim</Text>
+              </TouchableOpacity>
+            </>
+          )}
         </View>
-      </Modal>
+      </SmoothBottomSheet>
     </View>
   );
 };
@@ -332,18 +333,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 18,
   },
-  breakdownModal: {
-    flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.5)',
-    justifyContent: 'flex-end',
-  },
-  bmSheet: {
-    backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 26,
-    borderTopRightRadius: 26,
-    padding: 20,
-    paddingBottom: 30,
-    maxHeight: '86%',
+  bmSheetContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 28,
   },
   bmHeader: {
     flexDirection: 'row',

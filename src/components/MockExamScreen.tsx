@@ -14,6 +14,7 @@ import {
 import { useLearningStore } from '../store/useLearningStore';
 import { QuestionCard } from './QuestionCard';
 import { AITestGeneratorModal } from './AITestGeneratorModal';
+import { SmoothBottomSheet } from './SmoothBottomSheet';
 import {
   EXAM_CATALOG,
   CatalogExamInfo,
@@ -279,87 +280,89 @@ export const MockExamScreen: React.FC = () => {
           </View>
         )}
 
-        {/* OPTIC GRID MODAL (8-COLUMN GRID IN HTML) */}
-        <Modal visible={isGridModalOpen} animationType="slide" transparent>
-          <View style={styles.opticModal}>
-            <View style={styles.opticSheet}>
-              <View style={styles.opticHeaderRow}>
-                <View>
-                  <Text style={styles.opticSheetTitle}>Optik Form</Text>
-                  <Text style={styles.opticSheetSub}>
-                    {totalQ} sorudan {answeredCount}'i cevaplandı
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  style={styles.closeBtn}
-                  onPress={() => setIsGridModalOpen(false)}
-                >
-                  <Text style={styles.closeBtnText}>✕</Text>
-                </TouchableOpacity>
+        {/* OPTIC GRID BOTTOM SHEET (8-COLUMN GRID IN HTML) */}
+        <SmoothBottomSheet
+          visible={isGridModalOpen}
+          onClose={() => setIsGridModalOpen(false)}
+          maxHeight="82%"
+        >
+          <View style={styles.opticSheetContent}>
+            <View style={styles.opticHeaderRow}>
+              <View>
+                <Text style={styles.opticSheetTitle}>Optik Form</Text>
+                <Text style={styles.opticSheetSub}>
+                  {totalQ} sorudan {answeredCount}'i cevaplandı
+                </Text>
               </View>
-
-              {/* Legend */}
-              <View style={styles.opticLegend}>
-                <View style={styles.legendItem}>
-                  <View style={[styles.legendDot, { backgroundColor: '#D1FAE5' }]} />
-                  <Text style={styles.legendLbl}>Çözüldü</Text>
-                </View>
-                <View style={styles.legendItem}>
-                  <View style={[styles.legendDot, { backgroundColor: '#F1F4FA' }]} />
-                  <Text style={styles.legendLbl}>Boş</Text>
-                </View>
-                <View style={styles.legendItem}>
-                  <View style={[styles.legendDot, { backgroundColor: '#FEF3C7' }]} />
-                  <Text style={styles.legendLbl}>İşaretli</Text>
-                </View>
-              </View>
-
-              {/* 8-Column Grid */}
-              <ScrollView contentContainerStyle={styles.opticGrid}>
-                {Array.from({ length: totalQ }).map((_, idx) => {
-                  const isAnswered = !!examState.userAnswers[idx];
-                  const isFlagged = !!examState.flaggedQuestions[idx];
-                  const isCurrent = examState.currentQuestionIndex === idx;
-
-                  let cellStyle: any = styles.opticCell;
-                  let cellTextStyle: any = styles.opticCellText;
-
-                  if (isAnswered) {
-                    cellStyle = [styles.opticCell, styles.opticCellSolved];
-                    cellTextStyle = [styles.opticCellText, { color: '#059669' }];
-                  } else if (isFlagged) {
-                    cellStyle = [styles.opticCell, styles.opticCellFlagged];
-                    cellTextStyle = [styles.opticCellText, { color: '#B45309' }];
-                  } else {
-                    cellStyle = [styles.opticCell, styles.opticCellEmpty];
-                    cellTextStyle = [styles.opticCellText, { color: '#94A3B8' }];
-                  }
-
-                  if (isCurrent) {
-                    cellStyle.push(styles.opticCellCurrent);
-                  }
-
-                  return (
-                    <TouchableOpacity
-                      key={idx}
-                      style={cellStyle}
-                      onPress={() => {
-                        selectExamQuestion(idx);
-                        setIsGridModalOpen(false);
-                      }}
-                    >
-                      <Text style={cellTextStyle}>{idx + 1}</Text>
-                    </TouchableOpacity>
-                  );
-                })}
-              </ScrollView>
-
-              <TouchableOpacity style={styles.btnPrimary} onPress={handleFinishConfirm}>
-                <Text style={styles.btnPrimaryText}>Sınavı Tamamla ve Puanı Hesapla</Text>
+              <TouchableOpacity
+                style={styles.closeBtn}
+                onPress={() => setIsGridModalOpen(false)}
+              >
+                <Text style={styles.closeBtnText}>✕</Text>
               </TouchableOpacity>
             </View>
+
+            {/* Legend */}
+            <View style={styles.opticLegend}>
+              <View style={styles.legendItem}>
+                <View style={[styles.legendDot, { backgroundColor: '#D1FAE5' }]} />
+                <Text style={styles.legendLbl}>Çözüldü</Text>
+              </View>
+              <View style={styles.legendItem}>
+                <View style={[styles.legendDot, { backgroundColor: '#F1F4FA' }]} />
+                <Text style={styles.legendLbl}>Boş</Text>
+              </View>
+              <View style={styles.legendItem}>
+                <View style={[styles.legendDot, { backgroundColor: '#FEF3C7' }]} />
+                <Text style={styles.legendLbl}>İşaretli</Text>
+              </View>
+            </View>
+
+            {/* 8-Column Grid */}
+            <ScrollView contentContainerStyle={styles.opticGrid}>
+              {Array.from({ length: totalQ }).map((_, idx) => {
+                const isAnswered = !!examState.userAnswers[idx];
+                const isFlagged = !!examState.flaggedQuestions[idx];
+                const isCurrent = examState.currentQuestionIndex === idx;
+
+                let cellStyle: any = styles.opticCell;
+                let cellTextStyle: any = styles.opticCellText;
+
+                if (isAnswered) {
+                  cellStyle = [styles.opticCell, styles.opticCellSolved];
+                  cellTextStyle = [styles.opticCellText, { color: '#059669' }];
+                } else if (isFlagged) {
+                  cellStyle = [styles.opticCell, styles.opticCellFlagged];
+                  cellTextStyle = [styles.opticCellText, { color: '#B45309' }];
+                } else {
+                  cellStyle = [styles.opticCell, styles.opticCellEmpty];
+                  cellTextStyle = [styles.opticCellText, { color: '#94A3B8' }];
+                }
+
+                if (isCurrent) {
+                  cellStyle.push(styles.opticCellCurrent);
+                }
+
+                return (
+                  <TouchableOpacity
+                    key={idx}
+                    style={cellStyle}
+                    onPress={() => {
+                      selectExamQuestion(idx);
+                      setIsGridModalOpen(false);
+                    }}
+                  >
+                    <Text style={cellTextStyle}>{idx + 1}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+
+            <TouchableOpacity style={styles.btnPrimary} onPress={handleFinishConfirm}>
+              <Text style={styles.btnPrimaryText}>Sınavı Tamamla ve Puanı Hesapla</Text>
+            </TouchableOpacity>
           </View>
-        </Modal>
+        </SmoothBottomSheet>
       </View>
     );
   }
@@ -808,18 +811,9 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   // Optic Sheet Styles
-  opticModal: {
-    flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.5)',
-    justifyContent: 'flex-end',
-  },
-  opticSheet: {
-    backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 26,
-    borderTopRightRadius: 26,
-    padding: 20,
-    paddingBottom: 30,
-    maxHeight: '80%',
+  opticSheetContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 28,
   },
   opticHeaderRow: {
     flexDirection: 'row',

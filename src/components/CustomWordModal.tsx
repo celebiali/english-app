@@ -5,7 +5,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Modal,
   ActivityIndicator,
   Alert,
   ScrollView,
@@ -14,6 +13,7 @@ import { Sparkles, Check, BookmarkPlus } from 'lucide-react-native';
 import { useLearningStore } from '../store/useLearningStore';
 import { AIService } from '../services/AIService';
 import { dbService } from '../database/DatabaseService';
+import { SmoothBottomSheet } from './SmoothBottomSheet';
 
 interface Props {
   visible: boolean;
@@ -48,7 +48,7 @@ export const CustomWordModal: React.FC<Props> = ({ visible, onClose, initialWord
       }
     } catch (err) {
       console.error('AI autofill failed:', err);
-      Alert.alert('Bilgi', 'Kelime analiz edildi, lütfen kontrol ediniz.');
+      Alert.alert('Bilgi', 'Kelime analiz edildi, lütfen alanları kontrol ediniz.');
     } finally {
       setIsLoadingAI(false);
     }
@@ -93,123 +93,112 @@ export const CustomWordModal: React.FC<Props> = ({ visible, onClose, initialWord
   };
 
   return (
-    <Modal visible={visible} animationType="slide" transparent>
-      <View style={styles.overlay}>
-        <View style={styles.content}>
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.headerTitleRow}>
-              <View style={styles.iconBox}>
-                <BookmarkPlus size={18} color="#4F46E5" />
-              </View>
-              <div>
-                <Text style={styles.title}>Özel Kelime Defterine Ekle</Text>
-                <Text style={styles.subtitle}>
-                  Metinlerden veya günlük hayattan bilmediğin kelimeleri kaydet
-                </Text>
-              </div>
+    <SmoothBottomSheet visible={visible} onClose={onClose} maxHeight="88%">
+      <View style={styles.content}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.headerTitleRow}>
+            <View style={styles.iconBox}>
+              <BookmarkPlus size={18} color="#4F46E5" />
             </View>
-            <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-              <Text style={styles.closeBtnText}>✕</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.title}>Özel Kelime Defterine Ekle</Text>
+              <Text style={styles.subtitle}>
+                Metinlerden veya günlük hayattan bilmediğin kelimeleri kaydet
+              </Text>
+            </View>
+          </View>
+          <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
+            <Text style={styles.closeBtnText}>✕</Text>
+          </TouchableOpacity>
+        </View>
+
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
+          {/* Word Input & AI Autofill Button */}
+          <Text style={styles.inputLabel}>İngilizce Kelime / Kalıp</Text>
+          <View style={styles.wordInputRow}>
+            <TextInput
+              style={styles.wordInput}
+              placeholder="Örn: exacerbate, plausible, deteriorate..."
+              placeholderTextColor="#94A3B8"
+              value={wordText}
+              onChangeText={setWordText}
+              autoCapitalize="none"
+            />
+            <TouchableOpacity
+              style={styles.aiFillBtn}
+              onPress={handleAutoFillAI}
+              disabled={isLoadingAI}
+              activeOpacity={0.8}
+            >
+              {isLoadingAI ? (
+                <ActivityIndicator size="small" color="#FFFFFF" />
+              ) : (
+                <>
+                  <Sparkles size={14} color="#FFFFFF" />
+                  <Text style={styles.aiFillBtnText}>AI Doldur</Text>
+                </>
+              )}
             </TouchableOpacity>
           </View>
 
-          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
-            {/* Word Input & AI Autofill Button */}
-            <Text style={styles.inputLabel}>İngilizce Kelime / Kalıp</Text>
-            <View style={styles.wordInputRow}>
-              <TextInput
-                style={styles.wordInput}
-                placeholder="Örn: exacerbate, plausible, deteriorate..."
-                placeholderTextColor="#94A3B8"
-                value={wordText}
-                onChangeText={setWordText}
-                autoCapitalize="none"
-              />
-              <TouchableOpacity
-                style={styles.aiFillBtn}
-                onPress={handleAutoFillAI}
-                disabled={isLoadingAI}
-                activeOpacity={0.8}
-              >
-                {isLoadingAI ? (
-                  <ActivityIndicator size="small" color="#FFFFFF" />
-                ) : (
-                  <>
-                    <Sparkles size={14} color="#FFFFFF" />
-                    <Text style={styles.aiFillBtnText}>AI Doldur</Text>
-                  </>
-                )}
-              </TouchableOpacity>
-            </View>
+          {/* Meaning Input */}
+          <Text style={styles.inputLabel}>Türkçe Karşılığı</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Örn: daha da kötüleştirmek, şiddetlendirmek"
+            placeholderTextColor="#94A3B8"
+            value={meaning}
+            onChangeText={setMeaning}
+          />
 
-            {/* Meaning Input */}
-            <Text style={styles.inputLabel}>Türkçe Karşılığı</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Örn: daha da kötüleştirmek, şiddetlendirmek"
-              placeholderTextColor="#94A3B8"
-              value={meaning}
-              onChangeText={setMeaning}
-            />
+          {/* Example Sentence */}
+          <Text style={styles.inputLabel}>Akademik / YDS Örnek Cümle (İngilizce)</Text>
+          <TextInput
+            style={[styles.input, styles.multilineInput]}
+            placeholder="Örn: Economic instability will only exacerbate current hardships."
+            placeholderTextColor="#94A3B8"
+            value={exampleSentence}
+            onChangeText={setExampleSentence}
+            multiline
+          />
 
-            {/* Example Sentence */}
-            <Text style={styles.inputLabel}>Akademik / YDS Örnek Cümle (İngilizce)</Text>
-            <TextInput
-              style={[styles.input, styles.multilineInput]}
-              placeholder="Örn: Economic instability will only exacerbate current hardships."
-              placeholderTextColor="#94A3B8"
-              value={exampleSentence}
-              onChangeText={setExampleSentence}
-              multiline
-            />
+          {/* Example Translation */}
+          <Text style={styles.inputLabel}>Cümlenin Türkçe Çevirisi</Text>
+          <TextInput
+            style={[styles.input, styles.multilineInput]}
+            placeholder="Örn: Ekonomik istikrarsızlık mevcut zorlukları sadece daha da kötüleştirecektir."
+            placeholderTextColor="#94A3B8"
+            value={exampleTranslation}
+            onChangeText={setExampleTranslation}
+            multiline
+          />
 
-            {/* Example Translation */}
-            <Text style={styles.inputLabel}>Cümlenin Türkçe Çevirisi</Text>
-            <TextInput
-              style={[styles.input, styles.multilineInput]}
-              placeholder="Örn: Ekonomik istikrarsızlık mevcut zorlukları sadece daha da kötüleştirecektir."
-              placeholderTextColor="#94A3B8"
-              value={exampleTranslation}
-              onChangeText={setExampleTranslation}
-              multiline
-            />
+          {/* Synonyms */}
+          <Text style={styles.inputLabel}>Eş Anlamlıları (Virgülle ayırın)</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Örn: worsen, aggravate, impair"
+            placeholderTextColor="#94A3B8"
+            value={synonymsText}
+            onChangeText={setSynonymsText}
+          />
+        </ScrollView>
 
-            {/* Synonyms */}
-            <Text style={styles.inputLabel}>Eş Anlamlıları (Virgülle ayırın)</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Örn: worsen, aggravate, impair"
-              placeholderTextColor="#94A3B8"
-              value={synonymsText}
-              onChangeText={setSynonymsText}
-            />
-          </ScrollView>
-
-          {/* Submit Button */}
-          <TouchableOpacity style={styles.saveBtn} onPress={handleSave} activeOpacity={0.8}>
-            <Check size={18} color="#FFFFFF" strokeWidth={2.5} />
-            <Text style={styles.saveBtnText}>Özel Kelimelerime Kaydet</Text>
-          </TouchableOpacity>
-        </View>
+        {/* Submit Button */}
+        <TouchableOpacity style={styles.saveBtn} onPress={handleSave} activeOpacity={0.8}>
+          <Check size={18} color="#FFFFFF" strokeWidth={2.5} />
+          <Text style={styles.saveBtnText}>Özel Kelimelerime Kaydet</Text>
+        </TouchableOpacity>
       </View>
-    </Modal>
+    </SmoothBottomSheet>
   );
 };
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.5)',
-    justifyContent: 'flex-end',
-  },
   content: {
-    backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 26,
-    borderTopRightRadius: 26,
-    maxHeight: '88%',
-    padding: 20,
-    paddingBottom: 30,
+    paddingHorizontal: 20,
+    paddingBottom: 28,
   },
   header: {
     flexDirection: 'row',
@@ -218,7 +207,7 @@ const styles = StyleSheet.create({
     paddingBottom: 14,
     borderBottomWidth: 1,
     borderBottomColor: '#E7EAF3',
-    marginBottom: 12,
+    marginBottom: 10,
   },
   headerTitleRow: {
     flexDirection: 'row',

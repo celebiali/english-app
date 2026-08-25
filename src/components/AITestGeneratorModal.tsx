@@ -23,6 +23,7 @@ import {
 import { YdsQuestionType } from '../types';
 import { AIService } from '../services/AIService';
 import { useLearningStore } from '../store/useLearningStore';
+import { SmoothBottomSheet } from './SmoothBottomSheet';
 
 interface Props {
   visible: boolean;
@@ -108,19 +109,18 @@ export const AITestGeneratorModal: React.FC<Props> = ({
   };
 
   return (
-    <Modal visible={visible} animationType="slide" transparent>
-      <View style={styles.overlay}>
-        <View style={styles.content}>
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.headerTitleRow}>
-              <Sparkles size={20} color="#7C3AED" />
-              <Text style={styles.title}>AI ile Özel Test Oluştur</Text>
-            </View>
-            <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-              <X size={20} color="#64748B" />
-            </TouchableOpacity>
+    <SmoothBottomSheet visible={visible} onClose={onClose} maxHeight="88%">
+      <View style={styles.sheetContent}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.headerTitleRow}>
+            <Sparkles size={20} color="#7C3AED" />
+            <Text style={styles.title}>AI ile Özel Test Oluştur</Text>
           </View>
+          <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
+            <Text style={styles.closeBtnText}>✕</Text>
+          </TouchableOpacity>
+        </View>
 
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
             {/* Question Type Selection */}
@@ -211,23 +211,14 @@ export const AITestGeneratorModal: React.FC<Props> = ({
             )}
           </TouchableOpacity>
         </View>
-      </View>
-    </Modal>
+    </SmoothBottomSheet>
   );
 };
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.6)',
-    justifyContent: 'flex-end',
-  },
-  content: {
-    backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    maxHeight: '85%',
-    padding: 18,
+  sheetContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 28,
   },
   header: {
     flexDirection: 'row',
@@ -249,7 +240,17 @@ const styles = StyleSheet.create({
     color: '#0F172A',
   },
   closeBtn: {
-    padding: 4,
+    width: 32,
+    height: 32,
+    borderRadius: 11,
+    backgroundColor: '#F1F4FA',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  closeBtnText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#475569',
   },
   scroll: {
     paddingBottom: 16,

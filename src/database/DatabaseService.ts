@@ -3,9 +3,23 @@ import {
   CREATE_PROGRESS_TABLE,
   CREATE_DAILY_STATS_TABLE,
   CREATE_USER_SETTINGS_TABLE,
+  CREATE_QUESTIONS_TABLE,
+  CREATE_MISTAKE_VAULT_TABLE,
+  CREATE_EXAM_HISTORY_TABLE,
   CREATE_INDEXES,
 } from './schema';
-import { WordItem, WordProgress, BoxCountSummary, BoxType } from '../types';
+import {
+  WordItem,
+  WordProgress,
+  BoxCountSummary,
+  BoxType,
+  QuestionItem,
+  YdsQuestionType,
+  OptionKey,
+  MistakeItem,
+  ExamScoreCard,
+} from '../types';
+import { YdsQuestionBankService } from '../services/YdsQuestionBank';
 
 export interface WordWithProgress extends WordItem {
   isStudied: boolean;
@@ -21,14 +35,27 @@ export interface WordWithProgress extends WordItem {
 class MemoryDatabase {
   words: Map<number, WordItem> = new Map();
   progress: Map<number, WordProgress> = new Map();
-  autoId = 1;
+  questions: Map<number, QuestionItem> = new Map();
+  mistakes: Map<number, MistakeItem> = new Map();
+  examHistory: ExamScoreCard[] = [];
+  streak: { count: number; lastDate: string } = { count: 1, lastDate: new Date().toISOString().split('T')[0] };
+  autoWordId = 1;
+  autoQuestionId = 1;
+  autoMistakeId = 1;
 
   async init() {}
 
   async insertWord(item: Omit<WordItem, 'id'>): Promise<number> {
-    const id = this.autoId++;
+    const id = this.autoWordId++;
     const word: WordItem = { ...item, id };
     this.words.set(id, word);
+    return id;
+  }
+
+  async insertQuestion(item: Omit<QuestionItem, 'id'>): Promise<number> {
+    const id = this.autoQuestionId++;
+    const question: QuestionItem = { ...item, id };
+    this.questions.set(id, question);
     return id;
   }
 }
@@ -45,16 +72,15 @@ class DatabaseService {
         this.dbInstance = await SQLite.openDatabaseAsync('yds_vocab.db');
         this.isNative = true;
         await this.execNativeSchema();
+        await this.seedQuestionsIfEmpty();
         return;
       }
     } catch (e) {
-      console.warn(
-        'Native SQLite unavailable. Falling back to Memory Database Layer.',
-        e
-      );
+      console.warn('Native SQLite unavailable. Falling back to Memory Database Layer.', e);
     }
     this.isNative = false;
     await this.memoryDb.init();
+    await this.seedQuestionsIfEmpty();
   }
 
   private async execNativeSchema(): Promise<void> {
@@ -63,21 +89,495 @@ class DatabaseService {
     await this.dbInstance.execAsync(CREATE_PROGRESS_TABLE);
     await this.dbInstance.execAsync(CREATE_DAILY_STATS_TABLE);
     await this.dbInstance.execAsync(CREATE_USER_SETTINGS_TABLE);
+    await this.dbInstance.execAsync(CREATE_QUESTIONS_TABLE);
+    await this.dbInstance.execAsync(CREATE_MISTAKE_VAULT_TABLE);
+    await this.dbInstance.execAsync(CREATE_EXAM_HISTORY_TABLE);
     await this.dbInstance.execAsync(CREATE_INDEXES);
 
     await this.dbInstance.runAsync(
-      `INSERT OR IGNORE INTO user_settings (id, daily_limit, current_level, last_active_date) VALUES (1, 25, 'A1', date('now'))`
+      `INSERT OR IGNORE INTO user_settings (id, daily_limit, current_level, last_active_date, streak_count) VALUES (1, 25, 'A1', date('now'), 1)`
     );
   }
 
   /**
-   * Reset database and re-seed full dataset safely
+   * Seeds initial YDS questions if empty
    */
+  async seedQuestionsIfEmpty(): Promise<void> {
+    const initialList = YdsQuestionBankService.getInitialQuestions();
+
+    if (!this.isNative) {
+      if (this.memoryDb.questions.size === 0) {
+        for (const q of initialList) {
+          await this.memoryDb.insertQuestion(q);
+        }
+      }
+      return;
+    }
+
+    const countRes = await this.dbInstance.getFirstAsync(`SELECT COUNT(*) as cnt FROM questions`);
+    if (!countRes || countRes.cnt === 0) {
+      await this.dbInstance.withTransactionAsync(async () => {
+        for (const q of initialList) {
+          await this.dbInstance.runAsync(
+            `INSERT INTO questions (type, title, passage, question_number, question_text, option_a, option_b, option_c, option_d, option_e, correct_option, explanation, subtopic, difficulty, source, status)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+              q.type,
+              q.title || null,
+              q.passage || null,
+              q.question_number || null,
+              q.question_text,
+              q.options.A,
+              q.options.B,
+              q.options.C,
+              q.options.D,
+              q.options.E,
+              q.correct_option,
+              q.explanation,
+              q.subtopic || null,
+              q.difficulty || 'YDS_EXAM',
+              q.source || 'YDS Question Bank',
+              q.status || 'ACTIVE',
+            ]
+          );
+        }
+      });
+    }
+  }
+
+  // ==========================================
+  // DYNAMIC QUESTION POOL METHODS
+  // ==========================================
+
+  /**
+   * Fetches active questions for daily tasks by question type.
+   * Only returns questions with status = 'ACTIVE'.
+   * Correctly answered questions disappear from this active query!
+   */
+  async getActiveQuestionsByType(type?: YdsQuestionType, limit: number = 20): Promise<QuestionItem[]> {
+    if (!this.isNative) {
+      let filtered = Array.from(this.memoryDb.questions.values()).filter((q) => q.status === 'ACTIVE');
+      if (type) {
+        filtered = filtered.filter((q) => q.type === type);
+      }
+      return filtered.slice(0, limit);
+    }
+
+    let query = `SELECT * FROM questions WHERE status = 'ACTIVE'`;
+    const params: any[] = [];
+
+    if (type) {
+      query += ` AND type = ?`;
+      params.push(type);
+    }
+
+    query += ` ORDER BY id ASC LIMIT ?`;
+    params.push(limit);
+
+    const rows = await this.dbInstance.getAllAsync(query, params);
+    return rows.map((r: any) => this.mapRowToQuestion(r));
+  }
+
+  /**
+   * Completes a question:
+   * - If isCorrect === true: Question status becomes 'SOLVED_CORRECT' (graduates / disappears from active pool!)
+   * - If isCorrect === false: Question status becomes 'MISTAKE' and added into mistake_vault
+   */
+  async completeQuestion(
+    questionId: number,
+    userSelectedOption: OptionKey,
+    isCorrect: boolean
+  ): Promise<void> {
+    const newStatus = isCorrect ? 'SOLVED_CORRECT' : 'MISTAKE';
+
+    if (!this.isNative) {
+      const q = this.memoryDb.questions.get(questionId);
+      if (q) {
+        q.status = newStatus;
+        if (!isCorrect) {
+          const mId = this.memoryDb.autoMistakeId++;
+          this.memoryDb.mistakes.set(mId, {
+            id: mId,
+            question: q,
+            user_selected_option: userSelectedOption,
+            is_reviewed: false,
+            created_at: new Date().toISOString(),
+          });
+        }
+      }
+      return;
+    }
+
+    await this.dbInstance.runAsync(`UPDATE questions SET status = ? WHERE id = ?`, [newStatus, questionId]);
+
+    if (!isCorrect) {
+      await this.dbInstance.runAsync(
+        `INSERT INTO mistake_vault (question_id, user_selected_option, is_reviewed, created_at)
+         VALUES (?, ?, 0, datetime('now'))`,
+        [questionId, userSelectedOption]
+      );
+    }
+  }
+
+  /**
+   * Inserts a newly generated AI question into the active pool
+   */
+  async insertGeneratedQuestion(item: Omit<QuestionItem, 'id'>): Promise<number> {
+    if (!this.isNative) {
+      return await this.memoryDb.insertQuestion(item);
+    }
+
+    const res = await this.dbInstance.runAsync(
+      `INSERT INTO questions (type, title, passage, question_number, question_text, option_a, option_b, option_c, option_d, option_e, correct_option, explanation, subtopic, difficulty, source, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        item.type,
+        item.title || null,
+        item.passage || null,
+        item.question_number || null,
+        item.question_text,
+        item.options.A,
+        item.options.B,
+        item.options.C,
+        item.options.D,
+        item.options.E,
+        item.correct_option,
+        item.explanation,
+        item.subtopic || null,
+        item.difficulty || 'YDS_EXAM',
+        item.source || 'AI Generated',
+        'ACTIVE',
+      ]
+    );
+
+    return res.lastInsertRowId;
+  }
+
+  // ==========================================
+  // MISTAKE VAULT & AI ANALYSIS METHODS
+  // ==========================================
+
+  async getMistakeItems(): Promise<MistakeItem[]> {
+    const starterMistakes: MistakeItem[] = [
+      {
+        id: 101,
+        user_selected_option: 'B',
+        is_reviewed: false,
+        created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
+        ai_analysis: {
+          summary: 'Zaman uyumu ve Past Perfect mantığı',
+          grammar_rule: 'Past Perfect Tense (had + V3)',
+          why_correct:
+            '"Had" + past participle (past perfect) yapısı, "before" bağlacıyla kurulan iki geçmiş olay arasındaki önceliği doğru şekilde ifade eder.',
+          why_distractor_failed:
+            "B seçeneğindeki simple past, iki eylem arasındaki zaman farkını göstermiyor — bu, YDS'de sık görülen bir zaman uyumu tuzağıdır.",
+          key_vocabulary: ['negotiation', 'compromise', 'precedent'],
+        },
+        question: {
+          id: 991,
+          type: 'CLOZE_TEST',
+          title: 'Diplomatic Relations',
+          question_text: 'The negotiations ______ before either side reached a compromise.',
+          options: {
+            A: 'had broken down',
+            B: 'broke down',
+            C: 'breaks down',
+            D: 'are breaking down',
+            E: 'break down',
+          },
+          correct_option: 'A',
+          explanation: 'Before ile bağlanan geçmiş cümlelerde öncelik past perfect ile verilir.',
+          subtopic: 'Zaman Uyumu Tuzağı',
+          status: 'ACTIVE',
+        },
+      },
+      {
+        id: 102,
+        user_selected_option: 'D',
+        is_reviewed: false,
+        created_at: new Date(Date.now() - 5 * 86400000).toISOString(),
+        ai_analysis: {
+          summary: 'Diyalog akışı ve bağlamsal soru kökü',
+          grammar_rule: 'Contextual Discourse Analysis',
+          why_correct:
+            'Cevapta "Because..." ile gerekçe açıklandığı için, karşı tarafın neden öyle düşündüğünü soran C seçeneği tek tutarlıdır.',
+          why_distractor_failed:
+            'D seçeneği gerekçe istemek yerine alternatif üretmeye yönelerek konuşmanın akışını bozmaktadır.',
+          key_vocabulary: ['constraint', 'overlook', 'proposal'],
+        },
+        question: {
+          id: 992,
+          type: 'SKILL_DIALOGUE',
+          question_text:
+            '— I completely disagree with that proposal.\n— ______\n— Because it overlooks key economic constraints.',
+          options: {
+            A: 'Why do you say so?',
+            B: 'I agree with you completely.',
+            C: 'What makes you feel that way?',
+            D: 'Have you considered alternatives?',
+            E: "Let's discuss it tomorrow.",
+          },
+          correct_option: 'C',
+          explanation: 'Diyalogda gerekçe isteyen soru kalıbı aranmalıdır.',
+          subtopic: 'Diyalog Çeldirici Tuzağı',
+          status: 'ACTIVE',
+        },
+      },
+      {
+        id: 103,
+        user_selected_option: 'E',
+        is_reviewed: false,
+        created_at: new Date(Date.now() - 7 * 86400000).toISOString(),
+        ai_analysis: {
+          summary: 'Paragrafta ana fikir ve çıkarım',
+          grammar_rule: 'Reading Comprehension & Inference',
+          why_correct:
+            "Metin, third places'ı 'ev ve iş yerinden ayrı, topluluk yaşamının şekillendiği alanlar' olarak tanımlıyor ve civic engagement üzerindeki rolünü vurguluyor.",
+          why_distractor_failed:
+            'E seçeneği metindeki şehir (urban) vurgusunun tam aksine kırsal genellemesi yaparak çeldirici tuzak oluşturmuştur.',
+          key_vocabulary: ['civic engagement', 'sustain', 'erosion'],
+        },
+        question: {
+          id: 993,
+          type: 'PARAGRAPH',
+          title: 'Urban Sociology & Third Places',
+          passage:
+            'Over the past decade, urban sociologists have increasingly turned their attention to the phenomenon of "third places" — social settings distinct from home and work where community life unfolds. Cafés, libraries, and public parks, once regarded as incidental backdrops to city life, are now understood to play a decisive role in sustaining civic engagement. Researchers argue that the erosion of such spaces correlates with a measurable decline in neighbourly trust.',
+          question_text:
+            'Paragrafa göre, "third places" kavramının şehir sosyolojisi için önemi aşağıdakilerden hangisidir?',
+          options: {
+            A: 'Ev ve iş yerinden bağımsız, toplumsal etkileşimi mümkün kılan alanlardır.',
+            B: 'Şehir planlamasında yalnızca estetik amaçla kullanılmaktadır.',
+            C: 'Yalnızca ekonomik açıdan değerlendirilen kamusal alanlardır.',
+            D: 'Komşuluk güveniyle hiçbir ilişkisi bulunmayan yapılardır.',
+            E: 'Sadece kırsal bölgelerde gözlemlenen bir toplumsal örüntüdür.',
+          },
+          correct_option: 'A',
+          explanation: 'Metinde third places kavramının doğrudan tanımı ve rolü aktarılmıştır.',
+          subtopic: 'Distractor Tuzağı: Aşırı Genelleme',
+          status: 'ACTIVE',
+        },
+      },
+    ];
+
+    if (!this.isNative) {
+      const existing = Array.from(this.memoryDb.mistakes.values()).filter((m) => !m.is_reviewed);
+      return existing.length > 0 ? existing : starterMistakes;
+    }
+
+    const rows = await this.dbInstance.getAllAsync(
+      `SELECT mv.id as mistake_id, mv.user_selected_option, mv.ai_analysis_json, mv.is_reviewed, mv.created_at as mistake_created_at,
+              q.*
+       FROM mistake_vault mv
+       JOIN questions q ON mv.question_id = q.id
+       WHERE mv.is_reviewed = 0
+       ORDER BY mv.id DESC`
+    );
+
+    if (!rows || rows.length === 0) {
+      return starterMistakes;
+    }
+
+    return rows.map((r: any) => ({
+      id: r.mistake_id,
+      user_selected_option: r.user_selected_option,
+      ai_analysis: r.ai_analysis_json ? JSON.parse(r.ai_analysis_json) : undefined,
+      is_reviewed: r.is_reviewed === 1,
+      created_at: r.mistake_created_at,
+      question: this.mapRowToQuestion(r),
+    }));
+  }
+
+  async saveMistakeAIAnalysis(mistakeId: number, analysis: any): Promise<void> {
+    if (!this.isNative) {
+      const m = this.memoryDb.mistakes.get(mistakeId);
+      if (m) m.ai_analysis = analysis;
+      return;
+    }
+
+    await this.dbInstance.runAsync(
+      `UPDATE mistake_vault SET ai_analysis_json = ? WHERE id = ?`,
+      [JSON.stringify(analysis), mistakeId]
+    );
+  }
+
+  /**
+   * "Öğrendim / Mezun Et" button: marks mistake as reviewed and question as ARCHIVED
+   */
+  async archiveMistake(mistakeId: number, questionId: number): Promise<void> {
+    if (!this.isNative) {
+      const m = this.memoryDb.mistakes.get(mistakeId);
+      if (m) m.is_reviewed = true;
+      const q = this.memoryDb.questions.get(questionId);
+      if (q) q.status = 'ARCHIVED';
+      return;
+    }
+
+    await this.dbInstance.runAsync(
+      `UPDATE mistake_vault SET is_reviewed = 1, reviewed_at = datetime('now') WHERE id = ?`,
+      [mistakeId]
+    );
+    await this.dbInstance.runAsync(`UPDATE questions SET status = 'ARCHIVED' WHERE id = ?`, [questionId]);
+  }
+
+  // ==========================================
+  // 180-MIN FULL MOCK EXAM METHODS
+  // ==========================================
+
+  async saveExamResult(result: ExamScoreCard): Promise<void> {
+    if (!this.isNative) {
+      this.memoryDb.examHistory.unshift(result);
+      return;
+    }
+
+    await this.dbInstance.runAsync(
+      `INSERT INTO exam_history
+       (exam_id, title, total_questions, correct_count, wrong_count, empty_count, net_score, yds_score, level_grade, time_spent_seconds, category_breakdown_json, completed_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`,
+      [
+        result.examId,
+        result.title,
+        result.totalQuestions,
+        result.correctCount,
+        result.wrongCount,
+        result.emptyCount,
+        result.netScore,
+        result.ydsScore,
+        result.levelGrade,
+        result.timeSpentSeconds,
+        JSON.stringify(result.categoryBreakdown),
+      ]
+    );
+  }
+
+  async getExamHistory(): Promise<ExamScoreCard[]> {
+    if (!this.isNative) {
+      return this.memoryDb.examHistory;
+    }
+
+    const rows = await this.dbInstance.getAllAsync(
+      `SELECT * FROM exam_history ORDER BY id DESC LIMIT 20`
+    );
+
+    return rows.map((r: any) => ({
+      examId: r.exam_id,
+      title: r.title,
+      totalQuestions: r.total_questions,
+      correctCount: r.correct_count,
+      wrongCount: r.wrong_count,
+      emptyCount: r.empty_count,
+      netScore: r.net_score,
+      ydsScore: r.yds_score,
+      levelGrade: r.level_grade,
+      timeSpentSeconds: r.time_spent_seconds,
+      completedAt: r.completed_at,
+      categoryBreakdown: r.category_breakdown_json ? JSON.parse(r.category_breakdown_json) : [],
+    }));
+  }
+
+  // ==========================================
+  // CUSTOM VOCABULARY & LEITNER BOX METHODS
+  // ==========================================
+
+  async insertCustomWord(word: Partial<WordItem>): Promise<number> {
+    const item: Omit<WordItem, 'id'> = {
+      word: word.word || '',
+      meaning: word.meaning || '',
+      category: word.category || 'VOCABULARY',
+      subcategory: word.subcategory || 'Custom Words',
+      level: word.level || 'B2',
+      synonyms: word.synonyms || [],
+      example_sentence: word.example_sentence || '',
+      example_translation: word.example_translation || '',
+      etymology_note: word.etymology_note || '',
+      is_custom: true,
+    };
+
+    if (!this.isNative) {
+      const id = await this.memoryDb.insertWord(item);
+      const now = new Date();
+      this.memoryDb.progress.set(id, {
+        id: Date.now(),
+        word_id: id,
+        box: 1,
+        status: 'NEW',
+        correct_count: 0,
+        incorrect_count: 0,
+        last_reviewed_at: null,
+        next_review_at: now.toISOString(),
+        box_entry_date: now.toISOString(),
+      });
+      return id;
+    }
+
+    const res = await this.dbInstance.runAsync(
+      `INSERT INTO words (word, meaning, category, subcategory, level, synonyms, example_sentence, example_translation, etymology_note, is_custom)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)`,
+      [
+        item.word,
+        item.meaning,
+        item.category,
+        item.subcategory,
+        item.level,
+        JSON.stringify(item.synonyms),
+        item.example_sentence,
+        item.example_translation,
+        item.etymology_note,
+      ]
+    );
+
+    const wordId = res.lastInsertRowId;
+    await this.dbInstance.runAsync(
+      `INSERT INTO user_word_progress (word_id, box, status, correct_count, incorrect_count, next_review_at, box_entry_date)
+       VALUES (?, 1, 'NEW', 0, 0, datetime('now'), datetime('now'))`,
+      [wordId]
+    );
+
+    return wordId;
+  }
+
+  async deleteCustomWord(wordId: number): Promise<void> {
+    if (!this.isNative) {
+      this.memoryDb.words.delete(wordId);
+      this.memoryDb.progress.delete(wordId);
+      return;
+    }
+
+    await this.dbInstance.runAsync(`DELETE FROM user_word_progress WHERE word_id = ?`, [wordId]);
+    await this.dbInstance.runAsync(`DELETE FROM words WHERE id = ?`, [wordId]);
+  }
+
+  async updateWordBox(wordId: number, boxNumber: number): Promise<void> {
+    if (!this.isNative) {
+      const p = this.memoryDb.progress.get(wordId);
+      if (p) {
+        p.box = (boxNumber as any);
+        p.status = boxNumber > 1 ? 'MASTERED' : 'LEARNING';
+      }
+      return;
+    }
+
+    await this.dbInstance.runAsync(
+      `UPDATE user_word_progress SET box = ?, status = ? WHERE word_id = ?`,
+      [boxNumber, boxNumber > 1 ? 'MASTERED' : 'LEARNING', wordId]
+    );
+  }
+
+  // ==========================================
+  // VOCABULARY & LEITNER EXISTING METHODS
+  // ==========================================
+
+  async getWordCount(): Promise<number> {
+    if (!this.isNative) return this.memoryDb.words.size;
+    const res = await this.dbInstance.getFirstAsync(`SELECT COUNT(*) as cnt FROM words`);
+    return res?.cnt || 0;
+  }
+
   async resetAndSeedDatabase(wordsList: Omit<WordItem, 'id'>[]): Promise<number> {
     if (!this.isNative) {
       this.memoryDb.words.clear();
       this.memoryDb.progress.clear();
-      this.memoryDb.autoId = 1;
+      this.memoryDb.autoWordId = 1;
       for (const w of wordsList) {
         await this.memoryDb.insertWord(w);
       }
@@ -98,7 +598,7 @@ class DatabaseService {
             w.meaning,
             w.category || 'VOCABULARY',
             w.subcategory || null,
-            w.level || 'B1', // Level fallback guarantee
+            w.level || 'B1',
             w.synonyms ? JSON.stringify(w.synonyms) : null,
             w.example_sentence || null,
             w.example_translation || null,
@@ -112,240 +612,187 @@ class DatabaseService {
     return inserted;
   }
 
-  async seedWords(wordsList: Omit<WordItem, 'id'>[]): Promise<number> {
-    if (wordsList.length === 0) return 0;
-
-    if (!this.isNative) {
-      let count = 0;
-      for (const w of wordsList) {
-        await this.memoryDb.insertWord(w);
-        count++;
-      }
-      return count;
-    }
-
-    let inserted = 0;
-    await this.dbInstance.withTransactionAsync(async () => {
-      for (const w of wordsList) {
-        await this.dbInstance.runAsync(
-          `INSERT INTO words (word, meaning, category, subcategory, level, synonyms, example_sentence, example_translation, etymology_note)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [
-            w.word,
-            w.meaning,
-            w.category || 'VOCABULARY',
-            w.subcategory || null,
-            w.level || 'B1', // Level fallback guarantee
-            w.synonyms ? JSON.stringify(w.synonyms) : null,
-            w.example_sentence || null,
-            w.example_translation || null,
-            w.etymology_note || null,
-          ]
-        );
-        inserted++;
-      }
-    });
-
-    return inserted;
-  }
-
-  async getWordCount(): Promise<number> {
-    if (!this.isNative) {
-      return this.memoryDb.words.size;
-    }
-    const result = await this.dbInstance.getFirstAsync(
-      'SELECT COUNT(*) as count FROM words'
-    );
-    return result?.count || 0;
-  }
-
-  async getDailyLearningQueue(dailyLimit: number = 25): Promise<WordItem[]> {
-    if (!this.isNative) {
-      const now = new Date().toISOString();
-      const items: WordItem[] = [];
-
-      for (const [id, word] of this.memoryDb.words.entries()) {
-        const prog = this.memoryDb.progress.get(id);
-        if (!prog) {
-          if (items.length < dailyLimit) {
-            items.push(word);
-          }
-        } else if (prog.box === 0 && prog.next_review_at <= now) {
-          items.push(word);
-        } else if (prog.box === 1 && prog.next_review_at <= now) {
-          items.push(word);
-        }
-      }
-      return items.slice(0, dailyLimit);
-    }
-
-    const nowISO = new Date().toISOString();
-
-    const expiredCooldownWords = await this.dbInstance.getAllAsync(
-      `SELECT w.* FROM words w
-       JOIN user_word_progress p ON w.id = p.word_id
-       WHERE p.box = 0 AND p.next_review_at <= ?
-       ORDER BY p.next_review_at ASC`,
-      [nowISO]
-    );
-
-    const neededNewCount = Math.max(
-      0,
-      dailyLimit - expiredCooldownWords.length
-    );
-
-    let newWords: any[] = [];
-    if (neededNewCount > 0) {
-      newWords = await this.dbInstance.getAllAsync(
-        `SELECT w.* FROM words w
-         LEFT JOIN user_word_progress p ON w.id = p.word_id
-         WHERE p.id IS NULL
-         ORDER BY CASE w.level
-           WHEN 'A1' THEN 1
-           WHEN 'A2' THEN 2
-           WHEN 'B1' THEN 3
-           WHEN 'B2' THEN 4
-           WHEN 'C1' THEN 5
-           ELSE 6
-         END ASC, w.id ASC
-         LIMIT ?`,
-        [neededNewCount]
-      );
-    }
-
-    const rawList = [...expiredCooldownWords, ...newWords];
-    return rawList.map((row: any) => ({
-      ...row,
-      synonyms: row.synonyms ? JSON.parse(row.synonyms) : [],
-    }));
-  }
-
-  async getBoxWordsWithLockStatus(boxNumber: 2 | 3): Promise<WordWithProgress[]> {
-    const now = new Date();
-    const nowISO = now.toISOString();
-
+  async getWordsForBoxReview(box: BoxType): Promise<WordWithProgress[]> {
     if (!this.isNative) {
       const list: WordWithProgress[] = [];
-      for (const [id, word] of this.memoryDb.words.entries()) {
-        const prog = this.memoryDb.progress.get(id);
-        if (prog && prog.box === boxNumber) {
-          const nextDate = new Date(prog.next_review_at);
-          const diffMs = nextDate.getTime() - now.getTime();
-          const isUnlocked = diffMs <= 0;
-          const daysRemaining = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
-
-          list.push({
-            ...word,
-            isStudied: true,
-            box: prog.box,
-            status: prog.status,
-            correctCount: prog.correct_count,
-            incorrectCount: prog.incorrect_count,
-            nextReviewAt: prog.next_review_at,
-            isUnlocked,
-            daysRemaining,
-          });
+      for (const [wId, p] of this.memoryDb.progress.entries()) {
+        if (p.box === box) {
+          const w = this.memoryDb.words.get(wId);
+          if (w) {
+            list.push({
+              ...w,
+              isStudied: true,
+              box: p.box,
+              status: p.status,
+              correctCount: p.correct_count,
+              incorrectCount: p.incorrect_count,
+              nextReviewAt: p.next_review_at,
+              isUnlocked: true,
+              daysRemaining: 0,
+            });
+          }
         }
       }
       return list;
     }
 
     const rows = await this.dbInstance.getAllAsync(
-      `SELECT w.*, p.box, p.status, p.correct_count, p.incorrect_count, p.next_review_at, p.id as progress_id
+      `SELECT w.*, p.box, p.status as p_status, p.correct_count, p.incorrect_count, p.next_review_at
        FROM words w
        JOIN user_word_progress p ON w.id = p.word_id
        WHERE p.box = ?
        ORDER BY p.next_review_at ASC`,
-      [boxNumber]
+      [box]
     );
 
-    return rows.map((r: any) => {
-      const nextDate = new Date(r.next_review_at);
-      const diffMs = nextDate.getTime() - now.getTime();
-      const isUnlocked = diffMs <= 0;
-      const daysRemaining = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
-
-      return {
-        ...r,
-        synonyms: r.synonyms ? JSON.parse(r.synonyms) : [],
-        isStudied: true,
-        box: r.box,
-        status: r.status,
-        correctCount: r.correct_count || 0,
-        incorrectCount: r.incorrect_count || 0,
-        nextReviewAt: r.next_review_at,
-        isUnlocked,
-        daysRemaining,
-      };
-    });
+    return rows.map((r: any) => ({
+      id: r.id,
+      word: r.word,
+      meaning: r.meaning,
+      category: r.category,
+      subcategory: r.subcategory,
+      level: r.level,
+      synonyms: r.synonyms ? JSON.parse(r.synonyms) : [],
+      example_sentence: r.example_sentence,
+      example_translation: r.example_translation,
+      etymology_note: r.etymology_note,
+      is_custom: r.is_custom === 1,
+      isStudied: true,
+      box: r.box,
+      status: r.p_status,
+      correctCount: r.correct_count,
+      incorrectCount: r.incorrect_count,
+      nextReviewAt: r.next_review_at,
+      isUnlocked: true,
+      daysRemaining: 0,
+    }));
   }
 
-  async getAllWordsWithStatus(): Promise<WordWithProgress[]> {
+  async getAllWordsWithProgress(): Promise<WordWithProgress[]> {
     if (!this.isNative) {
       const list: WordWithProgress[] = [];
-      for (const [id, word] of this.memoryDb.words.entries()) {
-        const prog = this.memoryDb.progress.get(id);
+      for (const [wId, w] of this.memoryDb.words.entries()) {
+        const p = this.memoryDb.progress.get(wId);
         list.push({
-          ...word,
-          isStudied: !!prog,
-          box: prog ? prog.box : null,
-          status: prog ? prog.status : null,
-          correctCount: prog ? prog.correct_count : 0,
-          incorrectCount: prog ? prog.incorrect_count : 0,
+          ...w,
+          isStudied: !!p,
+          box: p ? p.box : null,
+          status: p ? p.status : null,
+          correctCount: p ? p.correct_count : 0,
+          incorrectCount: p ? p.incorrect_count : 0,
+          nextReviewAt: p ? p.next_review_at : null,
         });
       }
       return list;
     }
 
     const rows = await this.dbInstance.getAllAsync(
-      `SELECT w.*, p.box, p.status, p.correct_count, p.incorrect_count, p.id as progress_id
+      `SELECT w.*, p.box, p.status as p_status, p.correct_count, p.incorrect_count, p.next_review_at
        FROM words w
        LEFT JOIN user_word_progress p ON w.id = p.word_id
-       ORDER BY CASE w.level
-         WHEN 'A1' THEN 1
-         WHEN 'A2' THEN 2
-         WHEN 'B1' THEN 3
-         WHEN 'B2' THEN 4
-         WHEN 'C1' THEN 5
-         ELSE 6
-       END ASC, w.id ASC`
+       ORDER BY w.id ASC`
     );
 
     return rows.map((r: any) => ({
-      ...r,
+      id: r.id,
+      word: r.word,
+      meaning: r.meaning,
+      category: r.category,
+      subcategory: r.subcategory,
+      level: r.level,
       synonyms: r.synonyms ? JSON.parse(r.synonyms) : [],
-      isStudied: !!r.progress_id,
-      box: r.box !== undefined ? r.box : null,
-      status: r.status || null,
+      example_sentence: r.example_sentence,
+      example_translation: r.example_translation,
+      etymology_note: r.etymology_note,
+      is_custom: r.is_custom === 1,
+      isStudied: r.box !== null,
+      box: r.box,
+      status: r.p_status,
       correctCount: r.correct_count || 0,
       incorrectCount: r.incorrect_count || 0,
+      nextReviewAt: r.next_review_at,
     }));
   }
 
-  async updateWordProgress(
-    wordId: number,
-    isCorrect: boolean
-  ): Promise<WordProgress> {
+  async getBoxSummary(): Promise<BoxCountSummary> {
+    if (!this.isNative) {
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0;
+      for (const p of this.memoryDb.progress.values()) {
+        if (p.box === 0) b0++;
+        if (p.box === 1) b1++;
+        if (p.box === 2) b2++;
+        if (p.box === 3) b3++;
+      }
+      const total = this.memoryDb.words.size;
+      return {
+        specialPoolCount: b0,
+        dailyBoxCount: b1,
+        weeklyBoxCount: b2,
+        monthlyBoxCount: b3,
+        totalWords: total,
+        learnedWords: b2 + b3,
+      };
+    }
+
+    const boxCounts = await this.dbInstance.getAllAsync(
+      `SELECT box, COUNT(*) as cnt FROM user_word_progress GROUP BY box`
+    );
+
+    const map: Record<number, number> = { 0: 0, 1: 0, 2: 0, 3: 0 };
+    boxCounts.forEach((r: any) => {
+      map[r.box] = r.cnt;
+    });
+
+    const totalRes = await this.dbInstance.getFirstAsync(`SELECT COUNT(*) as cnt FROM words`);
+
+    return {
+      specialPoolCount: map[0] || 0,
+      dailyBoxCount: map[1] || 0,
+      weeklyBoxCount: map[2] || 0,
+      monthlyBoxCount: map[3] || 0,
+      totalWords: totalRes?.cnt || 0,
+      learnedWords: (map[2] || 0) + (map[3] || 0),
+    };
+  }
+
+  async getDailyLearningQueue(limit: number = 25): Promise<WordItem[]> {
+    return await this.getWordsForDailyBatch(limit);
+  }
+
+  async getAllWordsWithStatus(): Promise<WordWithProgress[]> {
+    return await this.getAllWordsWithProgress();
+  }
+
+  async updateWordProgress(wordId: number, isCorrect: boolean): Promise<WordProgress> {
     const now = new Date();
     const nowISO = now.toISOString();
-
     let currentProgress: WordProgress | null = null;
 
-    if (this.isNative) {
+    if (!this.isNative) {
+      currentProgress = this.memoryDb.progress.get(wordId) || null;
+    } else {
       const row = await this.dbInstance.getFirstAsync(
         `SELECT * FROM user_word_progress WHERE word_id = ?`,
         [wordId]
       );
       if (row) {
-        currentProgress = row as WordProgress;
+        currentProgress = {
+          id: row.id,
+          word_id: row.word_id,
+          box: row.box,
+          status: row.status,
+          correct_count: row.correct_count,
+          incorrect_count: row.incorrect_count,
+          last_reviewed_at: row.last_reviewed_at,
+          next_review_at: row.next_review_at,
+          box_entry_date: row.box_entry_date,
+        };
       }
-    } else {
-      currentProgress = this.memoryDb.progress.get(wordId) || null;
     }
 
     let newBox: BoxType = 1;
+    let nextReviewAt = new Date();
     let newStatus = 'LEARNING';
-    let nextReviewAt: Date;
     let correctCount = currentProgress ? currentProgress.correct_count : 0;
     let incorrectCount = currentProgress ? currentProgress.incorrect_count : 0;
 
@@ -416,49 +863,60 @@ class DatabaseService {
     return updatedProg;
   }
 
-  async getBoxSummary(): Promise<BoxCountSummary> {
+  async getWordsForDailyBatch(limit: number = 25): Promise<WordItem[]> {
     if (!this.isNative) {
-      let b0 = 0,
-        b1 = 0,
-        b2 = 0,
-        b3 = 0;
-      for (const p of this.memoryDb.progress.values()) {
-        if (p.box === 0) b0++;
-        if (p.box === 1) b1++;
-        if (p.box === 2) b2++;
-        if (p.box === 3) b3++;
-      }
-      const total = this.memoryDb.words.size;
-      return {
-        specialPoolCount: b0,
-        dailyBoxCount: b1,
-        weeklyBoxCount: b2,
-        monthlyBoxCount: b3,
-        totalWords: total,
-        learnedWords: b2 + b3,
-      };
+      return Array.from(this.memoryDb.words.values()).slice(0, limit);
     }
-
-    const boxCounts = await this.dbInstance.getAllAsync(
-      `SELECT box, COUNT(*) as cnt FROM user_word_progress GROUP BY box`
+    const rows = await this.dbInstance.getAllAsync(
+      `SELECT w.* FROM words w
+       LEFT JOIN user_word_progress p ON w.id = p.word_id
+       WHERE p.id IS NULL OR p.box = 1
+       LIMIT ?`,
+      [limit]
     );
+    return rows.map((r: any) => ({
+      id: r.id,
+      word: r.word,
+      meaning: r.meaning,
+      category: r.category,
+      subcategory: r.subcategory,
+      level: r.level,
+      synonyms: r.synonyms ? JSON.parse(r.synonyms) : [],
+      example_sentence: r.example_sentence,
+      example_translation: r.example_translation,
+      etymology_note: r.etymology_note,
+      is_custom: r.is_custom === 1,
+    }));
+  }
 
-    const map: Record<number, number> = { 0: 0, 1: 0, 2: 0, 3: 0 };
-    boxCounts.forEach((r: any) => {
-      map[r.box] = r.cnt;
-    });
+  async getStreakCount(): Promise<number> {
+    if (!this.isNative) return this.memoryDb.streak.count;
+    const res = await this.dbInstance.getFirstAsync(`SELECT streak_count FROM user_settings WHERE id = 1`);
+    return res?.streak_count || 1;
+  }
 
-    const totalRes = await this.dbInstance.getFirstAsync(
-      `SELECT COUNT(*) as cnt FROM words`
-    );
-
+  private mapRowToQuestion(r: any): QuestionItem {
     return {
-      specialPoolCount: map[0] || 0,
-      dailyBoxCount: map[1] || 0,
-      weeklyBoxCount: map[2] || 0,
-      monthlyBoxCount: map[3] || 0,
-      totalWords: totalRes?.cnt || 0,
-      learnedWords: (map[2] || 0) + (map[3] || 0),
+      id: r.id,
+      type: r.type,
+      title: r.title,
+      passage: r.passage,
+      question_number: r.question_number,
+      question_text: r.question_text,
+      options: {
+        A: r.option_a,
+        B: r.option_b,
+        C: r.option_c,
+        D: r.option_d,
+        E: r.option_e,
+      },
+      correct_option: r.correct_option as OptionKey,
+      explanation: r.explanation,
+      subtopic: r.subtopic,
+      difficulty: r.difficulty,
+      source: r.source,
+      status: r.status,
+      created_at: r.created_at,
     };
   }
 }

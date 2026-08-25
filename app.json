@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "YDS Vocabulary Spaced Repetition",
-    "slug": "yds-vocabulary-spaced-repetition",
+    "name": "YDS Master: Sınav & Kelime",
+    "slug": "yds-master-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,9 +12,13 @@
       "backgroundColor": "#FFFFFF"
     },
     "ios": {
+      "bundleIdentifier": "com.celebi.ydsmaster",
+      "buildNumber": "1",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.celebi.ydsmaster",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

@@ -24,6 +24,7 @@ export interface WordItem {
   example_sentence?: string;
   example_translation?: string;
   etymology_note?: string;
+  is_custom?: boolean;
   created_at?: string;
 }
 
@@ -39,9 +40,6 @@ export interface WordProgress {
   box_entry_date: string;
 }
 
-/**
- * Unified Card Data passed into CardComponent
- */
 export interface CardWord extends WordItem {
   progress?: WordProgress;
   isCooldown?: boolean;
@@ -68,4 +66,154 @@ export interface UserSettings {
   daily_limit: number;      // Default 25
   current_level: WordLevel;
   last_active_date: string;
+}
+
+// ==========================================
+// YDS QUESTION & EXAM MODELS
+// ==========================================
+
+export type YdsQuestionType =
+  | 'PARAGRAPH'             // Reading Comprehension (4 questions per text or standalone)
+  | 'CLOZE_TEST'            // 5 questions in 1 academic text
+  | 'SENTENCE_COMPLETION'   // Cümle Tamamlama
+  | 'VOCABULARY_GRAMMAR'    // Kelime, Preposition, Phrasal Verb, Tense
+  | 'SKILL_DIALOGUE'        // Diyalog Tamamlama
+  | 'RESTATEMENT'           // Anlamca En Yakın Cümle
+  | 'TRANSLATION'           // TR-EN / EN-TR Çeviri
+  | 'PARAGRAPH_COMPLETION'  // Paragraf Tamamlama
+  | 'IRRELEVANT_SENTENCE';  // Anlamı Bozan Cümle
+
+export type QuestionStatus =
+  | 'ACTIVE'          // In active question pool (unsolved)
+  | 'SOLVED_CORRECT'  // Correctly answered -> disappears from daily pool
+  | 'MISTAKE'         // Wrongly answered -> moved to mistake vault
+  | 'ARCHIVED';       // Permanently mastered / hidden from active queue
+
+export type OptionKey = 'A' | 'B' | 'C' | 'D' | 'E';
+
+export interface QuestionItem {
+  id: number;
+  type: YdsQuestionType;
+  title?: string;
+  passage?: string;          // Academic passage for Reading or Cloze test
+  question_number?: number;  // e.g. 1 to 80 or 1 to 5
+  question_text: string;     // The stem or blank
+  options: {
+    A: string;
+    B: string;
+    C: string;
+    D: string;
+    E: string;
+  };
+  correct_option: OptionKey;
+  explanation: string;       // Detailed solution explanation
+  subtopic?: string;         // e.g. "Contrast Connectors", "Medical Reading", "Phrasal Verbs"
+  difficulty?: 'MEDIUM' | 'HARD' | 'YDS_EXAM';
+  source?: string;           // "ÖSYM 2023 YDS", "ELS Issue 12", "AI Generated"
+  status: QuestionStatus;
+  created_at?: string;
+}
+
+export interface UserQuestionProgress {
+  id: number;
+  question_id: number;
+  selected_option: OptionKey | null;
+  is_correct: boolean;
+  time_spent_seconds?: number;
+  answered_at: string;
+}
+
+export interface MistakeItem {
+  id: number;
+  question: QuestionItem;
+  user_selected_option: OptionKey;
+  ai_analysis?: {
+    summary: string;
+    why_correct: string;
+    why_distractor_failed: string;
+    key_vocabulary: string[];
+    grammar_rule: string;
+  };
+  is_reviewed: boolean;
+  reviewed_at?: string;
+  created_at: string;
+}
+
+// ==========================================
+// 180-MIN FULL MOCK EXAM MODELS
+// ==========================================
+
+export interface MockExam {
+  id: string;
+  title: string;
+  duration_minutes: number; // 180 for standard YDS
+  total_questions: number;  // 80 for standard YDS
+  questions: QuestionItem[];
+  source_year?: string;
+  description?: string;
+}
+
+export interface ExamSessionState {
+  examId: string;
+  title: string;
+  timeRemainingSeconds: number; // Starts at 180 * 60 = 10800
+  isPaused: boolean;
+  currentQuestionIndex: number;
+  userAnswers: Record<number, OptionKey>; // questionIndex -> selected Option
+  flaggedQuestions: Record<number, boolean>; // questionIndex -> isFlagged
+  isFinished: boolean;
+}
+
+export interface ExamScoreCard {
+  examId: string;
+  title: string;
+  totalQuestions: number;
+  correctCount: number;
+  wrongCount: number;
+  emptyCount: number;
+  netScore: number;
+  ydsScore: number; // correctCount * 1.25 (100-point scale)
+  levelGrade: 'A' | 'B' | 'C' | 'D' | 'E';
+  timeSpentSeconds: number;
+  completedAt: string;
+  categoryBreakdown: {
+    type: YdsQuestionType;
+    total: number;
+    correct: number;
+    wrong: number;
+  }[];
+}
+
+// ==========================================
+// DAILY TO-DO TASK MODELS
+// ==========================================
+
+export interface DailyTaskGoal {
+  id: string;
+  type: YdsQuestionType | 'VOCAB_REVIEW';
+  title: string;
+  targetCount: number;
+  completedCount: number;
+  iconName: string;
+  color: string;
+}
+
+export interface DailyTasksState {
+  date: string;
+  isAllCompleted: boolean;
+  streakCount: number;
+  tasks: DailyTaskGoal[];
+}
+
+// ==========================================
+// USER AUTH & PROFILE (APP STORE COMPLIANT)
+// ==========================================
+
+export interface UserProfile {
+  id: string;
+  email: string;
+  fullName: string;
+  targetScore: number; // e.g. 70, 80, 90+
+  isGuest: boolean;
+  createdAt: string;
 }

@@ -3,14 +3,11 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   Pressable,
-  Animated,
   Dimensions,
 } from 'react-native';
 import { CardWord } from '../types';
-import { checkAnswerCorrectness } from '../utils/textMatcher';
 
 export interface CardComponentProps {
   cardWord: CardWord;
@@ -26,249 +23,83 @@ export const CardComponent: React.FC<CardComponentProps> = ({
   onAnswer,
   cardIndex,
   totalCards,
-}: CardComponentProps) => {
-  const [userInput, setUserInput] = useState<string>('');
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [isCorrectResult, setIsCorrectResult] = useState<boolean | null>(null);
+}) => {
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
-  const [flipAnimation] = useState(new Animated.Value(0));
 
-  // Reset input and state when card changes
   useEffect(() => {
-    setUserInput('');
-    setIsSubmitted(false);
-    setIsCorrectResult(null);
     setIsFlipped(false);
-    flipAnimation.setValue(0);
   }, [cardWord.id]);
-
-  const flipCard = (toFlipped: boolean) => {
-    if (toFlipped) {
-      Animated.timing(flipAnimation, {
-        toValue: 180,
-        duration: 250,
-        useNativeDriver: true,
-      }).start(() => setIsFlipped(true));
-    } else {
-      Animated.timing(flipAnimation, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: true,
-      }).start(() => setIsFlipped(false));
-    }
-  };
-
-  const frontInterpolate = flipAnimation.interpolate({
-    inputRange: [0, 180],
-    outputRange: ['0deg', '180deg'],
-  });
-
-  const backInterpolate = flipAnimation.interpolate({
-    inputRange: [0, 180],
-    outputRange: ['180deg', '360deg'],
-  });
-
-  const frontAnimatedStyle = {
-    transform: [{ rotateY: frontInterpolate }],
-  };
-
-  const backAnimatedStyle = {
-    transform: [{ rotateY: backInterpolate }],
-  };
-
-  // Evaluate typed answer
-  const handleSubmitAnswer = () => {
-    if (isSubmitted) return;
-
-    const isMatch = checkAnswerCorrectness(
-      userInput,
-      cardWord.meaning,
-      cardWord.synonyms
-    );
-
-    setIsCorrectResult(isMatch);
-    setIsSubmitted(true);
-    flipCard(true); // Automatically reveal meaning & details on back of card
-  };
-
-  // Skip / I don't know
-  const handleSkip = () => {
-    if (isSubmitted) return;
-
-    setIsCorrectResult(false);
-    setIsSubmitted(true);
-    flipCard(true);
-  };
-
-  // Move to next card
-  const handleProceedNext = () => {
-    if (isCorrectResult !== null) {
-      onAnswer(isCorrectResult);
-    }
-  };
 
   return (
     <View style={styles.container}>
-      {/* Header Info */}
-      <View style={styles.cardHeader}>
-        <View style={styles.levelBadge}>
-          <Text style={styles.levelBadgeText}>{cardWord.level}</Text>
-        </View>
-        <View style={styles.categoryBadge}>
-          <Text style={styles.categoryBadgeText}>{cardWord.category}</Text>
-        </View>
-        <Text style={styles.counterText}>
-          {cardIndex + 1} / {totalCards}
-        </Text>
-      </View>
-
-      {/* Flip Card Deck */}
-      <View style={styles.cardWrapper}>
-        {/* FRONT SIDE */}
-        <Animated.View
-          style={[
-            styles.cardFace,
-            styles.cardFront,
-            frontAnimatedStyle,
-            isFlipped ? styles.hiddenFace : null,
-          ]}
+      {/* SCREEN 5: FLASH WRAP */}
+      <View style={styles.flashWrap}>
+        <Pressable
+          style={styles.flashCard}
+          onPress={() => setIsFlipped(!isFlipped)}
         >
-          <Text style={styles.subcategoryText}>
-            {cardWord.subcategory || 'YDS KELİME KARTI'}
-          </Text>
-
-          <Text style={styles.wordTitle}>{cardWord.word}</Text>
-
-          {cardWord.etymology_note && (
-            <View style={styles.etymologyChip}>
-              <Text style={styles.etymologyText}>
-                {cardWord.etymology_note}
-              </Text>
-            </View>
-          )}
-
-          {/* User Input Section */}
-          {!isSubmitted ? (
-            <View style={styles.inputSection}>
-              <TextInput
-                style={styles.textInput}
-                placeholder="Türkçe karşılığını yazın..."
-                placeholderTextColor="#94A3B8"
-                value={userInput}
-                onChangeText={setUserInput}
-                onSubmitEditing={handleSubmitAnswer}
-                autoCapitalize="none"
-                autoCorrect={false}
-                returnKeyType="done"
-              />
-
-              <View style={styles.inputButtonsRow}>
-                <TouchableOpacity
-                  style={styles.skipButton}
-                  onPress={handleSkip}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.skipButtonText}>Bilemiyorum</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={[
-                    styles.submitButton,
-                    !userInput.trim() && styles.disabledButton,
-                  ]}
-                  onPress={handleSubmitAnswer}
-                  disabled={!userInput.trim()}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.submitButtonText}>Kontrol Et</Text>
-                </TouchableOpacity>
+          {!isFlipped ? (
+            /* FRONT FACE */
+            <View style={styles.flashFront}>
+              <View style={styles.levelBadge}>
+                <Text style={styles.levelBadgeText}>{cardWord.level || 'B2 / C1'}</Text>
               </View>
-            </View>
-          ) : null}
-        </Animated.View>
 
-        {/* BACK SIDE (Result & Details) */}
-        <Animated.View
-          style={[
-            styles.cardFace,
-            styles.cardBack,
-            backAnimatedStyle,
-            !isFlipped ? styles.hiddenFace : null,
-            isCorrectResult === true
-              ? styles.correctCardBorder
-              : styles.wrongCardBorder,
-          ]}
-        >
-          {/* Answer Feedback Header */}
-          <View
-            style={[
-              styles.feedbackBanner,
-              isCorrectResult === true
-                ? styles.correctBanner
-                : styles.wrongBanner,
-            ]}
-          >
-            <Text
-              style={[
-                styles.feedbackText,
-                isCorrectResult === true
-                  ? styles.correctFeedbackText
-                  : styles.wrongFeedbackText,
-              ]}
-            >
-              {isCorrectResult === true
-                ? 'Tebrikler! Doğru Bildiniz'
-                : 'Yanlış / Bilemediniz'}
-            </Text>
-          </View>
+              <Text style={styles.flashWord}>{cardWord.word}</Text>
 
-          <Text style={styles.meaningTitle}>{cardWord.meaning}</Text>
-
-          {cardWord.synonyms && cardWord.synonyms.length > 0 && (
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionHeader}>Eş Anlamlılar</Text>
-              <View style={styles.synonymChipsRow}>
-                {cardWord.synonyms.map((syn: string, idx: number) => (
-                  <View key={idx} style={styles.synonymChip}>
-                    <Text style={styles.synonymText}>{syn}</Text>
-                  </View>
-                ))}
-              </View>
-            </View>
-          )}
-
-          {cardWord.example_sentence && (
-            <View style={styles.exampleContainer}>
-              <Text style={styles.sectionHeader}>YDS Örnek Cümle</Text>
-              <Text style={styles.exampleSentence}>
-                "{cardWord.example_sentence}"
+              <Text style={styles.flashPhon}>
+                {cardWord.etymology_note || 'akademik kelime'}
               </Text>
-              {cardWord.example_translation && (
-                <Text style={styles.exampleTranslation}>
-                  {cardWord.example_translation}
-                </Text>
+
+              <Text style={styles.tapHint}>↺ Anlamı görmek için dokun</Text>
+            </View>
+          ) : (
+            /* BACK FACE */
+            <View style={styles.flashBack}>
+              <Text style={styles.fbTr}>{cardWord.meaning}</Text>
+
+              {cardWord.synonyms && cardWord.synonyms.length > 0 && (
+                <View style={styles.fbSynRow}>
+                  {cardWord.synonyms.map((syn, idx) => (
+                    <View key={idx} style={styles.fbSyn}>
+                      <Text style={styles.fbSynText}>{syn}</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+
+              {cardWord.example_sentence && (
+                <View style={styles.fbEx}>
+                  <Text style={styles.fbExEn}>"{cardWord.example_sentence}"</Text>
+                  {cardWord.example_translation && (
+                    <Text style={styles.fbExTr}>{cardWord.example_translation}</Text>
+                  )}
+                </View>
               )}
             </View>
           )}
+        </Pressable>
+      </View>
 
-          {/* Next Word Button */}
-          <TouchableOpacity
-            style={[
-              styles.nextWordButton,
-              isCorrectResult === true
-                ? styles.correctNextButton
-                : styles.wrongNextButton,
-            ]}
-            onPress={handleProceedNext}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.nextWordButtonText}>
-              {isCorrectResult === true
-                ? 'Sıradaki Kelime (Haftalık Kutuya Taşı)'
-                : 'Sıradaki Kelime (24h Tekrar Havuzuna Al)'}
-            </Text>
-          </TouchableOpacity>
-        </Animated.View>
+      {/* LEITNER ACTIONS ROW */}
+      <View style={styles.leitnerActions}>
+        <TouchableOpacity
+          style={[styles.lact, styles.lactRepeat]}
+          onPress={() => onAnswer(false)}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.lactRepeatText}>❌ Tekrar Et</Text>
+          <Text style={styles.lactRepeatSub}>Kutu 1'de kalır</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.lact, styles.lactAdvance]}
+          onPress={() => onAnswer(true)}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.lactAdvanceText}>✅ Biliyorum</Text>
+          <Text style={styles.lactAdvanceSub}>Kutu 2'ye ilerler</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -276,262 +107,165 @@ export const CardComponent: React.FC<CardComponentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: width * 0.9,
-    alignSelf: 'center',
-    marginVertical: 10,
+    width: '100%',
   },
-  cardHeader: {
-    flexDirection: 'row',
+  flashWrap: {
+    height: 380,
+    marginVertical: 8,
+  },
+  flashCard: {
+    flex: 1,
+    borderRadius: 26,
+    overflow: 'hidden',
+    shadowColor: '#4F46E5',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.22,
+    shadowRadius: 24,
+    elevation: 6,
+  },
+  flashFront: {
+    flex: 1,
+    backgroundColor: '#3730A3',
+    borderRadius: 26,
+    padding: 24,
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-    paddingHorizontal: 4,
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.15)',
   },
   levelBadge: {
-    backgroundColor: '#2563EB',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 6,
+    backgroundColor: 'rgba(255, 255, 255, 0.16)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.28)',
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 999,
+    marginBottom: 20,
   },
   levelBadgeText: {
     color: '#FFFFFF',
-    fontWeight: '700',
-    fontSize: 12,
-  },
-  categoryBadge: {
-    backgroundColor: '#F1F5F9',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-  },
-  categoryBadgeText: {
-    color: '#475569',
-    fontWeight: '600',
     fontSize: 11,
-  },
-  counterText: {
-    color: '#64748B',
-    fontWeight: '600',
-    fontSize: 13,
-  },
-  cardWrapper: {
-    height: 380,
-    width: '100%',
-  },
-  cardFace: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    borderRadius: 16,
-    padding: 20,
-    justifyContent: 'space-between',
-    backfaceVisibility: 'hidden',
-    shadowColor: '#64748B',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 4,
-  },
-  hiddenFace: {
-    backfaceVisibility: 'hidden',
-  },
-  cardFront: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    alignItems: 'center',
-  },
-  cardBack: {
-    backgroundColor: '#FAFAFA',
-    borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-  },
-  correctCardBorder: {
-    borderColor: '#86EFAC',
-  },
-  wrongCardBorder: {
-    borderColor: '#FCA5A5',
-  },
-  subcategoryText: {
-    color: '#64748B',
-    fontSize: 12,
-    fontWeight: '600',
-    letterSpacing: 0.8,
-  },
-  wordTitle: {
-    color: '#0F172A',
-    fontSize: 32,
     fontWeight: '800',
-    textAlign: 'center',
-    marginVertical: 12,
-    letterSpacing: -0.5,
   },
-  etymologyChip: {
-    backgroundColor: '#F8FAFC',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    maxWidth: '92%',
-    marginBottom: 8,
-  },
-  etymologyText: {
-    color: '#334155',
-    fontSize: 12,
-    fontWeight: '500',
-    textAlign: 'center',
-  },
-  inputSection: {
-    width: '100%',
-    marginTop: 8,
-  },
-  textInput: {
-    backgroundColor: '#F8FAFC',
-    borderWidth: 1.5,
-    borderColor: '#CBD5E1',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    fontSize: 15,
-    color: '#0F172A',
-    fontWeight: '600',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  inputButtonsRow: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  skipButton: {
-    flex: 1,
-    backgroundColor: '#F1F5F9',
-    borderWidth: 1,
-    borderColor: '#CBD5E1',
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  skipButtonText: {
-    color: '#64748B',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  submitButton: {
-    flex: 1.2,
-    backgroundColor: '#2563EB',
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  disabledButton: {
-    backgroundColor: '#94A3B8',
-  },
-  submitButtonText: {
+  flashWord: {
+    fontSize: 34,
+    fontWeight: '900',
     color: '#FFFFFF',
-    fontSize: 14,
+    letterSpacing: -0.5,
+    textAlign: 'center',
+    lineHeight: 40,
+  },
+  flashPhon: {
+    fontSize: 13,
+    color: 'rgba(255, 255, 255, 0.72)',
+    marginTop: 10,
+    fontWeight: '600',
+  },
+  tapHint: {
+    marginTop: 26,
+    fontSize: 11.5,
+    color: 'rgba(255, 255, 255, 0.65)',
     fontWeight: '700',
   },
-  feedbackBanner: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    alignSelf: 'flex-start',
+  flashBack: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 26,
+    padding: 24,
+    justifyContent: 'flex-start',
+    borderWidth: 1,
+    borderColor: '#E7EAF3',
+  },
+  fbTr: {
+    fontSize: 25,
+    fontWeight: '900',
+    color: '#0F172A',
     marginBottom: 8,
   },
-  correctBanner: {
-    backgroundColor: '#F0FDF4',
-    borderWidth: 1,
-    borderColor: '#86EFAC',
-  },
-  wrongBanner: {
-    backgroundColor: '#FEF2F2',
-    borderWidth: 1,
-    borderColor: '#FCA5A5',
-  },
-  feedbackText: {
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  correctFeedbackText: {
-    color: '#16A34A',
-  },
-  wrongFeedbackText: {
-    color: '#DC2626',
-  },
-  meaningTitle: {
-    color: '#0F172A',
-    fontSize: 22,
-    fontWeight: '700',
-    marginBottom: 10,
-  },
-  sectionContainer: {
-    marginBottom: 10,
-  },
-  sectionHeader: {
-    color: '#64748B',
-    fontSize: 11,
-    fontWeight: '700',
-    marginBottom: 4,
-    textTransform: 'uppercase',
-  },
-  synonymChipsRow: {
+  fbSynRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 6,
+    marginBottom: 16,
   },
-  synonymChip: {
-    backgroundColor: '#EFF6FF',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: '#BFDBFE',
-  },
-  synonymText: {
-    color: '#1E40AF',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  exampleContainer: {
-    backgroundColor: '#FFFFFF',
-    padding: 10,
+  fbSyn: {
+    backgroundColor: '#F5F3FF',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
     borderRadius: 8,
-    borderLeftWidth: 3,
-    borderLeftColor: '#2563EB',
+  },
+  fbSynText: {
+    fontSize: 11.5,
+    fontWeight: '800',
+    color: '#7C3AED',
+  },
+  fbEx: {
+    backgroundColor: '#F8FAFC',
+    borderRadius: 14,
+    padding: 14,
+    marginTop: 'auto',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#E7EAF3',
   },
-  exampleSentence: {
-    color: '#1E293B',
-    fontSize: 12,
-    fontStyle: 'italic',
-    marginBottom: 2,
-  },
-  exampleTranslation: {
-    color: '#64748B',
-    fontSize: 11,
-    fontWeight: '500',
-  },
-  nextWordButton: {
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  correctNextButton: {
-    backgroundColor: '#16A34A',
-  },
-  wrongNextButton: {
-    backgroundColor: '#DC2626',
-  },
-  nextWordButtonText: {
-    color: '#FFFFFF',
+  fbExEn: {
     fontSize: 13,
+    lineHeight: 19,
+    color: '#0F172A',
+    fontWeight: '500',
+    fontStyle: 'italic',
+  },
+  fbExTr: {
+    fontSize: 12,
+    lineHeight: 18,
+    color: '#475569',
+    marginTop: 6,
+    paddingTop: 6,
+    borderTopWidth: 1,
+    borderTopColor: '#E7EAF3',
+  },
+  leitnerActions: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 12,
+  },
+  lact: {
+    flex: 1,
+    borderRadius: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    borderWidth: 1.6,
+  },
+  lactRepeat: {
+    backgroundColor: '#FEF2F2',
+    borderColor: '#FECACA',
+  },
+  lactRepeatText: {
+    fontSize: 13.5,
+    fontWeight: '800',
+    color: '#DC2626',
+  },
+  lactRepeatSub: {
+    fontSize: 10,
     fontWeight: '700',
+    color: '#EF4444',
+    marginTop: 2,
+    opacity: 0.8,
+  },
+  lactAdvance: {
+    backgroundColor: '#ECFDF5',
+    borderColor: '#A7F3D0',
+  },
+  lactAdvanceText: {
+    fontSize: 13.5,
+    fontWeight: '800',
+    color: '#059669',
+  },
+  lactAdvanceSub: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#10B981',
+    marginTop: 2,
+    opacity: 0.8,
   },
 });

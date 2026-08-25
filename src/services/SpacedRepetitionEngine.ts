@@ -36,6 +36,10 @@ export class SpacedRepetitionEngine {
     return updatedProgress;
   }
 
+  async processAnswer(wordId: number, isCorrect: boolean) {
+    return await this.handleAnswer(wordId, isCorrect);
+  }
+
   /**
    * Fetch retention statistics across Spaced Repetition Boxes
    */

@@ -69,7 +69,6 @@ export class NotificationService {
           data: { screen: 'TASKS' },
         },
         trigger: {
-          type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
           hour: hour,
           minute: minute,
           repeats: true,

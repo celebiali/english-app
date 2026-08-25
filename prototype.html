@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YDS Master — UI Tasarımı</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800;900&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#4F46E5; --blue:#2563EB;
+    --amber:#FF6B00; --coral:#EA580C;
+    --mint:#10B981; --emerald:#059669;
+    --iris:#7C3AED; --violet:#8B5CF6;
+    --crimson:#EF4444; --red:#DC2626;
+    --surface:#FFFFFF; --bg:#F8FAFC; --ink:#0F172A;
+    --ink-soft:#475569; --ink-faint:#94A3B8;
+    --line:#E7EAF3;
+    --r-lg:24px; --r-md:18px; --r-sm:12px;
+    --shadow-1: 0 1px 2px rgba(15,23,42,0.04), 0 8px 20px -12px rgba(15,23,42,0.10);
+    --shadow-2: 0 2px 8px rgba(15,23,42,0.06), 0 22px 44px -20px rgba(79,70,229,0.30);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 20% -10%, #EEF0FF 0%, transparent 55%),
+      #EEF1F8;
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    display:flex; align-items:flex-start; justify-content:center;
+    min-height:100vh; padding:40px 16px 80px;
+  }
+  h1,h2,h3,.display{font-family:'Manrope',sans-serif;}
+  .mono, .num{font-family:'Space Grotesk',monospace;}
+  .ico{display:inline-flex; flex:none;}
+  .ico svg{width:100%; height:100%; display:block;}
+
+  /* ---- studio chrome ---- */
+  .studio-wrap{display:flex; flex-direction:column; align-items:center; gap:22px;}
+  .studio-label{
+    font-family:'Manrope',sans-serif; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+    font-size:11.5px; color:var(--ink-faint); display:flex; align-items:center; gap:10px;
+  }
+  .studio-label .dot{width:6px;height:6px;border-radius:50%;background:var(--indigo);}
+
+  /* ---- phone frame ---- */
+  .phone{
+    width:390px; height:844px;
+    background:var(--bg);
+    border-radius:56px;
+    border:10px solid #0B1120;
+    box-shadow: var(--shadow-2), inset 0 0 0 2px rgba(255,255,255,0.5);
+    position:relative; overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .notch{
+    position:absolute; top:10px; left:50%; transform:translateX(-50%);
+    width:120px; height:28px; background:#0B1120; border-radius:20px; z-index:120;
+  }
+  .statusbar{
+    height:52px; flex:none; display:flex; align-items:flex-end; justify-content:space-between;
+    padding:0 26px 8px; font-family:'Space Grotesk',monospace; font-weight:600; font-size:14px; color:var(--ink);
+    position:relative; z-index:60;
+  }
+  .statusbar.on-dark{color:#fff;}
+  .statusbar .icons{display:flex; gap:5px; align-items:center;}
+
+  .screen{
+    flex:1; overflow-y:auto; position:relative;
+    scrollbar-width:none;
+  }
+  .screen::-webkit-scrollbar{display:none;}
+  .screen-inner{padding:2px 20px 110px;}
+
+  .optic-watermark{
+    position:absolute; inset:0; pointer-events:none; z-index:0; opacity:.5;
+    background-image: radial-gradient(circle, rgba(79,70,229,0.07) 1.6px, transparent 1.6px);
+    background-size: 16px 16px;
+    mask-image: linear-gradient(180deg, black, transparent 70%);
+  }
+
+  /* ---- logo mark: an homage to the optic answer-sheet bubble, correctly filled ---- */
+  .logo-mark{
+    position:relative; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#4338CA,#4F46E5 55%,#2563EB);
+    border-radius:26%; overflow:hidden; flex:none;
+  }
+  .logo-mark svg{width:60%; height:60%;}
+
+  /* ---- app header ---- */
+  .app-header{display:flex; align-items:center; justify-content:space-between; padding:14px 0 18px; position:relative; z-index:1;}
+  .app-header .ah-left{display:flex; align-items:center; gap:10px;}
+  .app-header .ah-logo{width:38px; height:38px;}
+  .app-header .ah-greet-a{font-size:11px; color:var(--ink-faint); font-weight:600;}
+  .app-header .ah-greet-b{font-family:'Manrope'; font-weight:800; font-size:14.5px; margin-top:1px; letter-spacing:-0.01em;}
+  .ah-bell{width:38px; height:38px; border-radius:12px; background:#fff; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--ink-soft); position:relative; box-shadow:var(--shadow-1); cursor:pointer;}
+  .ah-bell .ico{width:18px; height:18px;}
+  .ah-bell .dot{position:absolute; top:7px; right:8px; width:6px; height:6px; border-radius:50%; background:var(--crimson); border:1.5px solid #fff;}
+
+  /* ---- tab bar ---- */
+  .tabbar{
+    flex:none; height:82px; background:rgba(255,255,255,0.86); backdrop-filter:blur(20px);
+    border-top:1px solid var(--line);
+    display:flex; align-items:flex-start; justify-content:space-around; padding-top:10px;
+    position:relative; z-index:40;
+  }
+  .tab{
+    display:flex; flex-direction:column; align-items:center; gap:5px; width:64px;
+    background:none; border:none; cursor:pointer; padding:4px 0;
+    color:var(--ink-faint); font-family:'Manrope',sans-serif; font-weight:700; font-size:10.5px;
+  }
+  .tab .ico{width:22px; height:22px; color:var(--ink-faint);}
+  .tab.active{color:var(--indigo);}
+  .tab.active .ico{color:var(--indigo);}
+  .tab .pip{width:5px;height:5px;border-radius:50%; background:transparent; margin-top:1px;}
+  .tab.active .pip{background:var(--indigo);}
+
+  /* ---- generic bits ---- */
+  .eyebrow{
+    font-family:'Manrope',sans-serif; font-weight:800; font-size:11px; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  .card{
+    background:var(--surface); border-radius:var(--r-lg); box-shadow:var(--shadow-1);
+    border:1px solid rgba(15,23,42,0.03);
+  }
+  .pill{
+    display:inline-flex; align-items:center; gap:6px; border-radius:999px; font-weight:700; font-size:12.5px;
+    padding:7px 12px 7px 10px; font-family:'Manrope',sans-serif;
+  }
+  .pill .ico{width:14px; height:14px;}
+  .btn-primary{
+    background:linear-gradient(135deg, var(--indigo), var(--blue));
+    color:#fff; border:none; border-radius:16px; font-family:'Manrope',sans-serif; font-weight:800;
+    font-size:14.5px; padding:15px 18px; box-shadow:0 12px 24px -10px rgba(79,70,229,0.55);
+    display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; width:100%;
+  }
+
+  /* ============ ONBOARDING / SPLASH ============ */
+  .onboarding-layer{
+    position:absolute; inset:0; z-index:90; display:flex; flex-direction:column; background:#fff;
+    opacity:1; transition:opacity .5s ease, transform .5s ease;
+  }
+  .onboarding-layer.hidden{opacity:0; transform:scale(1.03); pointer-events:none;}
+
+  .splash{
+    position:absolute; inset:0; z-index:10; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    background:
+      radial-gradient(160px 120px at 82% 8%, rgba(255,255,255,0.16), transparent 60%),
+      linear-gradient(160deg,#1E1B4B 0%,#4338CA 55%,#4F46E5 100%);
+    color:#fff; transition:opacity .5s ease, visibility .5s;
+  }
+  .splash::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.10) 1.5px, transparent 1.5px);
+    background-size:16px 16px; mask-image:radial-gradient(circle at 50% 40%, black, transparent 70%);
+  }
+  .splash.hidden{opacity:0; visibility:hidden; pointer-events:none;}
+  .splash .logo-mark{width:78px; height:78px; box-shadow:0 18px 36px -12px rgba(0,0,0,0.45); margin-bottom:18px;}
+  .splash .wordmark{font-family:'Manrope'; font-weight:900; font-size:21px; letter-spacing:-0.01em; position:relative; z-index:1;}
+  .splash .tagline{font-size:12px; color:rgba(255,255,255,0.68); font-weight:600; margin-top:4px; position:relative; z-index:1;}
+  .splash .load-dots{display:flex; gap:6px; margin-top:30px; position:relative; z-index:1;}
+  .splash .load-dots span{width:6px;height:6px;border-radius:50%; background:rgba(255,255,255,0.5); animation:dot-pulse 1.2s infinite ease-in-out;}
+  .splash .load-dots span:nth-child(2){animation-delay:.15s;}
+  .splash .load-dots span:nth-child(3){animation-delay:.3s;}
+  @keyframes dot-pulse{0%,80%,100%{opacity:.35; transform:scale(.75);} 40%{opacity:1; transform:scale(1);}}
+
+  .onb-skip{position:absolute; top:20px; right:22px; z-index:15; font-family:'Manrope'; font-weight:700; font-size:12.5px; color:var(--ink-faint); cursor:pointer; padding:6px;}
+  .onb-slides{flex:1; position:relative; overflow:hidden; margin-top:38px;}
+  .onb-slide{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:0 32px; opacity:0; transform:translateX(28px); transition:opacity .4s ease, transform .4s ease; pointer-events:none;
+  }
+  .onb-slide.active{opacity:1; transform:translateX(0); pointer-events:auto;}
+  .onb-illustration{width:100%; height:216px; display:flex; align-items:center; justify-content:center; margin-bottom:26px; position:relative;}
+  .onb-title{font-family:'Manrope'; font-weight:900; font-size:21px; text-align:center; letter-spacing:-0.015em; line-height:1.28; margin-bottom:10px;}
+  .onb-desc{font-size:13.5px; text-align:center; color:var(--ink-soft); line-height:1.65; max-width:280px;}
+  .onb-footer{flex:none; padding:18px 24px 32px; position:relative; z-index:1;}
+  .onb-dots{display:flex; justify-content:center; gap:7px; margin-bottom:18px;}
+  .onb-dots span{width:7px;height:7px;border-radius:50%; background:#E2E5F5; transition:width .25s, background .25s;}
+  .onb-dots span.on{width:20px; border-radius:4px; background:var(--indigo);}
+
+  /* illustration 1: stacked question cards */
+  .ill-stack{position:relative; width:172px; height:150px;}
+  .ill-stack .sc{position:absolute; left:50%; width:150px; height:96px; border-radius:16px; background:#fff; box-shadow:var(--shadow-1); border:1px solid var(--line);}
+  .ill-stack .sc1{top:44px; transform:translateX(-50%) rotate(-7deg) scale(.94); opacity:.7;}
+  .ill-stack .sc2{top:22px; transform:translateX(-50%) rotate(4deg) scale(.98); opacity:.9;}
+  .ill-stack .sc3{top:0; transform:translateX(-50%); display:flex; flex-direction:column; gap:7px; padding:14px 16px; box-shadow:0 16px 30px -14px rgba(79,70,229,0.35);}
+  .ill-stack .sc3 .ln{height:7px; border-radius:4px; background:#EEF1F8;}
+  .ill-stack .sc3 .ln.w1{width:70%;} .ill-stack .sc3 .ln.w2{width:92%;} .ill-stack .sc3 .ln.w3{width:50%; background:#DCE1F5;}
+  .ill-stack .burst{position:absolute; top:-14px; right:26px; width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg, var(--mint), var(--emerald)); display:flex; align-items:center; justify-content:center; color:#fff; box-shadow:0 10px 20px -8px rgba(16,185,129,0.6); z-index:2;}
+  .ill-stack .burst .ico{width:19px; height:19px;}
+  .ill-stack .spark{position:absolute; color:var(--iris);}
+
+  /* illustration 2: exam timer + optic swatch */
+  .ill-exam{display:flex; align-items:center; gap:18px;}
+  .ill-ring{width:132px; height:132px; position:relative;}
+  .ill-ring .rc{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+  .ill-ring .rc b{font-family:'Space Grotesk'; font-weight:700; font-size:15px; color:var(--ink);}
+  .ill-ring .rc span{font-size:9.5px; color:var(--ink-faint); font-weight:700; margin-top:1px;}
+  .ill-optic-mini{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; background:#fff; padding:12px; border-radius:16px; box-shadow:var(--shadow-1); border:1px solid var(--line);}
+  .ill-optic-mini div{width:15px; height:15px; border-radius:5px; background:#EEF1F8;}
+  .ill-optic-mini div.f1{background:#D1FAE5;} .ill-optic-mini div.f2{background:var(--indigo);} .ill-optic-mini div.f3{background:#FEF3C7;}
+
+  /* illustration 3: flashcard + leitner boxes */
+  .ill-word{display:flex; flex-direction:column; align-items:center; gap:16px;}
+  .ill-fc{width:168px; height:104px; border-radius:18px; background:linear-gradient(150deg,#1E1B4B,#4338CA 55%,#4F46E5); display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:var(--shadow-2); position:relative; overflow:hidden;}
+  .ill-fc::after{content:""; position:absolute; inset:0; background-image:radial-gradient(circle, rgba(255,255,255,0.12) 1.4px, transparent 1.4px); background-size:13px 13px;}
+  .ill-fc b{color:#fff; font-family:'Manrope'; font-weight:900; font-size:16px; position:relative; letter-spacing:.02em;}
+  .ill-fc span{color:rgba(255,255,255,0.65); font-size:10px; font-family:'Space Grotesk'; margin-top:5px; position:relative;}
+  .ill-boxes{display:flex; gap:10px;}
+  .ill-boxes .bx{width:44px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; color:#fff; box-shadow:var(--shadow-1);}
+  .ill-boxes .bx .ico{width:18px; height:18px;}
+  .ill-boxes .bx1{background:linear-gradient(135deg,#FCA5A5,var(--crimson));}
+  .ill-boxes .bx2{background:linear-gradient(135deg,#FCD34D,var(--amber));}
+  .ill-boxes .bx3{background:linear-gradient(135deg,#6EE7B7,var(--emerald));}
+
+  /* ============ SCREEN 1 — DASHBOARD ============ */
+  .hero-banner{
+    border-radius:28px; padding:22px 20px 20px;
+    background:
+      radial-gradient(120px 90px at 88% -10%, rgba(255,255,255,0.18), transparent 60%),
+      linear-gradient(135deg, #4338CA 0%, #4F46E5 46%, #2563EB 100%);
+    color:#fff; position:relative; overflow:hidden; box-shadow:var(--shadow-2);
+  }
+  .hero-banner::after{
+    content:""; position:absolute; inset:0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.14) 1.4px, transparent 1.4px);
+    background-size:14px 14px; mask-image:linear-gradient(120deg, black, transparent 65%);
+  }
+  .hero-top{display:flex; justify-content:space-between; align-items:flex-start; position:relative; z-index:1;}
+  .hero-goal-label{font-size:12.5px; font-weight:600; color:rgba(255,255,255,0.78); display:flex; align-items:center; gap:6px;}
+  .hero-goal-label .ico{width:14px; height:14px;}
+  .hero-goal-num{font-family:'Manrope'; font-weight:900; font-size:26px; letter-spacing:-0.02em; margin-top:4px;}
+  .ring-wrap{width:64px; height:64px; position:relative;}
+  .ring-wrap svg{transform:rotate(-90deg);}
+  .ring-pct{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk'; font-weight:700; font-size:13px;}
+  .hero-pills{display:flex; gap:8px; margin-top:16px; position:relative; z-index:1;}
+  .hero-pills .pill{background:rgba(255,255,255,0.16); color:#fff; border:1px solid rgba(255,255,255,0.22);}
+  .hero-pills .pill.streak{background:linear-gradient(135deg, #FF6B00, #EA580C); border:none;}
+
+  .section-title{display:flex; align-items:center; justify-content:space-between; margin:22px 0 12px;}
+  .section-title h2{font-size:16.5px; font-weight:800; margin:0; letter-spacing:-0.01em;}
+  .section-title .see-all{font-size:12.5px; font-weight:700; color:var(--indigo); font-family:'Manrope';}
+
+  .module-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .module-card{
+    border-radius:20px; padding:15px; position:relative; overflow:hidden; cursor:pointer;
+    box-shadow:var(--shadow-1); border:1px solid rgba(15,23,42,0.04);
+  }
+  .module-card .m-icon{
+    width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    margin-bottom:22px;
+  }
+  .module-card .m-icon .ico{width:19px; height:19px;}
+  .module-card .m-title{font-family:'Manrope'; font-weight:800; font-size:13.5px; line-height:1.25;}
+  .module-card .m-count{font-family:'Space Grotesk'; font-size:11.5px; color:var(--ink-soft); margin-top:3px;}
+  .module-card .m-bar{position:absolute; left:0; right:0; bottom:0; height:4px; background:rgba(15,23,42,0.06);}
+  .module-card .m-bar i{display:block; height:100%;}
+
+  .ai-cta{
+    margin-top:16px; border-radius:20px; padding:16px 16px;
+    background:linear-gradient(120deg, #7C3AED, #8B5CF6 60%, #6366F1);
+    color:#fff; display:flex; align-items:center; gap:12px; cursor:pointer;
+    box-shadow:0 14px 28px -14px rgba(124,58,237,0.6);
+  }
+  .ai-cta .sparkle{
+    width:40px;height:40px;border-radius:14px;background:rgba(255,255,255,0.18);
+    display:flex; align-items:center; justify-content:center; flex:none;
+    animation: pulse-glow 2.4s ease-in-out infinite;
+  }
+  .ai-cta .sparkle .ico{width:19px; height:19px;}
+  @keyframes pulse-glow{ 0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,0.25);} 50%{box-shadow:0 0 0 8px rgba(255,255,255,0);} }
+  .ai-cta .t1{font-family:'Manrope'; font-weight:800; font-size:14px;}
+  .ai-cta .t2{font-size:11.5px; color:rgba(255,255,255,0.82); margin-top:1px;}
+
+  .arena-card{margin-top:16px; padding:16px; display:flex; gap:12px; align-items:center;}
+  .arena-badge{
+    width:44px; height:44px; border-radius:13px; background:#EEF2FF; color:var(--indigo);
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-family:'Manrope'; flex:none; font-size:12.5px;
+  }
+  .arena-card .t1{font-family:'Manrope'; font-weight:800; font-size:13.5px;}
+  .arena-card .t2{font-size:11.5px; color:var(--ink-soft); margin-top:2px;}
+  .arena-arrow{margin-left:auto; color:var(--ink-faint); width:16px; height:16px;}
+
+  /* ============ SCREEN 2 — QUESTION SOLVER ============ */
+  .q-meta{display:flex; align-items:center; justify-content:space-between; padding:16px 0 14px;}
+  .q-topic-badge{background:#EEF2FF; color:var(--indigo); font-family:'Manrope'; font-weight:800; font-size:11.5px; padding:6px 11px; border-radius:999px;}
+  .q-counter{font-family:'Space Grotesk'; font-weight:600; color:var(--ink-soft); font-size:13px;}
+  .flag-btn{width:34px;height:34px;border-radius:11px; background:#fff; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--ink-faint); cursor:pointer;}
+  .flag-btn .ico{width:16px; height:16px;}
+  .flag-btn.active{background:#FFF7ED; border-color:#FED7AA; color:var(--coral);}
+
+  .passage-card{padding:16px 16px 14px; margin-bottom:14px;}
+  .passage-head{display:flex; align-items:center; gap:8px; margin-bottom:10px;}
+  .passage-head .kicker{width:26px;height:26px;border-radius:8px;background:#0F172A; color:#fff; display:flex;align-items:center;justify-content:center; font-size:12px; font-family:'Manrope'; font-weight:800;}
+  .passage-head .src{font-family:'Manrope'; font-weight:800; font-size:12px; letter-spacing:.03em; color:var(--ink-soft); text-transform:uppercase;}
+  .passage-text{font-size:14.5px; line-height:1.72; color:#1E293B; font-weight:400;}
+  .passage-fade{max-height:98px; overflow:hidden; position:relative; transition:max-height .3s ease;}
+  .passage-fade::after{content:""; position:absolute; left:0; right:0; bottom:0; height:44px; background:linear-gradient(180deg, transparent, #fff); transition:opacity .2s;}
+  .passage-fade.open-full::after{opacity:0;}
+  .expand-toggle{margin-top:8px; font-family:'Manrope'; font-weight:800; font-size:12.5px; color:var(--indigo); display:flex; align-items:center; gap:4px; cursor:pointer;}
+  .expand-toggle .ico{width:12px; height:12px; transition:transform .2s;}
+
+  .q-stem{font-family:'Manrope'; font-weight:800; font-size:15.5px; line-height:1.5; margin:6px 2px 16px; letter-spacing:-0.005em;}
+
+  .opt{
+    display:flex; align-items:center; gap:12px; padding:13px 14px; border-radius:16px;
+    background:#fff; border:1.6px solid var(--line); margin-bottom:10px; cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .opt .bub{
+    width:30px; height:30px; border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center;
+    font-family:'Manrope'; font-weight:800; font-size:13px; color:var(--ink-soft); background:#F1F4FA; border:1.6px solid var(--line);
+  }
+  .opt .txt{font-size:13.8px; font-weight:500; color:var(--ink);}
+  .opt.selected{border-color:var(--indigo); background:#F5F5FF;}
+  .opt.selected .bub{background:var(--indigo); border-color:var(--indigo); color:#fff;}
+  .opt.correct{border-color:var(--mint); background:#ECFDF5;}
+  .opt.correct .bub{background:var(--mint); border-color:var(--mint); color:#fff;}
+  .opt.wrong{border-color:var(--crimson); background:#FEF2F2;}
+  .opt.wrong .bub{background:var(--crimson); border-color:var(--crimson); color:#fff;}
+  .opt .mark{margin-left:auto; width:17px; height:17px; flex:none;}
+  .opt.correct .mark{color:var(--mint);} .opt.wrong .mark{color:var(--crimson);}
+
+  .solution-drawer{
+    margin-top:6px; border-radius:20px; padding:16px; background:#F8FAFC; border:1.4px dashed #C7D2FE;
+    display:none;
+  }
+  .solution-drawer.open{display:block;}
+  .solution-drawer .sd-head{display:flex; align-items:center; gap:8px; font-family:'Manrope'; font-weight:800; font-size:12.5px; color:var(--iris); margin-bottom:8px;}
+  .solution-drawer .sd-head .ico{width:15px; height:15px;}
+  .solution-drawer p{font-size:13px; line-height:1.65; color:var(--ink-soft); margin:0 0 8px;}
+  .trap-tag{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; font-family:'Manrope'; color:var(--red); background:#FEE2E2; padding:4px 9px 4px 7px; border-radius:8px; margin-top:2px;}
+  .trap-tag .ico{width:12px; height:12px;}
+
+  /* ============ SCREEN 3 — MOCK EXAM ============ */
+  .filter-row{display:flex; gap:8px; overflow-x:auto; padding:4px 0 16px; scrollbar-width:none;}
+  .filter-row::-webkit-scrollbar{display:none;}
+  .chip{flex:none; font-family:'Manrope'; font-weight:700; font-size:12.5px; padding:9px 14px; border-radius:999px; background:#fff; border:1.4px solid var(--line); color:var(--ink-soft); cursor:pointer;}
+  .chip.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+
+  .exam-card{padding:15px 16px; margin-bottom:12px; display:flex; align-items:center; gap:13px;}
+  .exam-year{width:52px; height:52px; border-radius:15px; background:#EEF2FF; color:var(--indigo); flex:none; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'Space Grotesk';}
+  .exam-year b{font-size:14px; line-height:1;}
+  .exam-year span{font-size:9px; font-weight:600; margin-top:2px;}
+  .exam-meta-title{font-family:'Manrope'; font-weight:800; font-size:13.5px;}
+  .exam-meta-sub{font-size:11.5px; color:var(--ink-soft); margin-top:4px; display:flex; gap:12px; align-items:center;}
+  .exam-meta-sub span{display:flex; align-items:center; gap:4px;}
+  .exam-meta-sub .ico{width:12px; height:12px;}
+  .exam-score-pill{margin-left:auto; text-align:right; flex:none;}
+  .exam-score-pill b{font-family:'Space Grotesk'; font-size:14px; color:var(--emerald); display:block;}
+  .exam-score-pill span{font-size:10px; color:var(--ink-faint); font-weight:600;}
+
+  .live-bar{
+    position:sticky; top:0; z-index:20; margin:0 -20px; padding:12px 20px 12px;
+    background:rgba(248,250,252,0.92); backdrop-filter:blur(10px);
+    display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--line);
+  }
+  .timer-pill{
+    display:flex; align-items:center; gap:7px; background:#0F172A; color:#fff; padding:8px 12px; border-radius:12px;
+    font-family:'Space Grotesk'; font-weight:700; font-size:14.5px;
+  }
+  .timer-pill .dot-red{width:7px;height:7px;border-radius:50%; background:var(--crimson); animation:blink 1.1s infinite;}
+  @keyframes blink{50%{opacity:.25;}}
+  .grid-btn{
+    display:flex; align-items:center; gap:6px; background:#fff; border:1.4px solid var(--line); padding:8px 12px; border-radius:12px;
+    font-family:'Manrope'; font-weight:800; font-size:12px; color:var(--ink); cursor:pointer;
+  }
+  .grid-btn .ico{width:14px; height:14px; color:var(--ink-soft);}
+  .grid-btn b{color:var(--indigo);}
+  .finish-btn{margin-left:auto; background:var(--crimson); color:#fff; border:none; padding:9px 14px; border-radius:12px; font-family:'Manrope'; font-weight:800; font-size:12px; cursor:pointer;}
+
+  .optic-modal{
+    position:absolute; inset:0; z-index:60; background:rgba(15,23,42,0.5); display:none;
+    align-items:flex-end; justify-content:center;
+  }
+  .optic-modal.open{display:flex;}
+  .optic-sheet{
+    width:100%; background:#fff; border-radius:26px 26px 0 0; padding:18px 20px 26px; max-height:78%; overflow-y:auto;
+  }
+  .optic-sheet h3{font-size:15px; margin:0 0 4px;}
+  .optic-legend{display:flex; gap:14px; font-size:11px; color:var(--ink-soft); margin:8px 0 16px; font-weight:600;}
+  .optic-legend span{display:flex; align-items:center; gap:5px;}
+  .legend-dot{width:9px;height:9px;border-radius:3px;}
+  .optic-grid{display:grid; grid-template-columns:repeat(8, 1fr); gap:8px;}
+  .optic-cell{
+    aspect-ratio:1; border-radius:9px; display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk'; font-size:11px; font-weight:700; cursor:pointer;
+  }
+  .optic-cell.solved{background:#D1FAE5; color:var(--emerald);}
+  .optic-cell.empty{background:#F1F4FA; color:var(--ink-faint);}
+  .optic-cell.flagged{background:#FEF3C7; color:#B45309;}
+  .optic-cell.current{outline:2.5px solid var(--indigo); outline-offset:2px;}
+  .close-x{width:30px; height:30px; border-radius:50%; background:#F1F4FA; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink-soft);}
+  .close-x .ico{width:14px; height:14px;}
+
+  .score-hero{text-align:center; padding:26px 10px 6px;}
+  .grade-ring{width:150px; height:150px; margin:0 auto 14px; position:relative;}
+  .grade-ring svg{transform:rotate(-90deg);}
+  .grade-center{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+  .grade-center .grade-letter{font-family:'Manrope'; font-weight:900; font-size:34px; color:var(--emerald); line-height:1;}
+  .grade-center .grade-num{font-family:'Space Grotesk'; font-size:12.5px; color:var(--ink-soft); margin-top:2px;}
+  .stat-row{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:18px;}
+  .stat-box{padding:13px 6px; text-align:center; border-radius:16px;}
+  .stat-box b{display:block; font-family:'Space Grotesk'; font-size:19px;}
+  .stat-box span{font-size:10.5px; font-weight:700; color:var(--ink-soft); font-family:'Manrope';}
+
+  .breakdown-row{display:flex; align-items:center; gap:10px; padding:11px 4px;}
+  .breakdown-row .label{font-size:12.5px; font-weight:600; width:112px; flex:none; color:var(--ink-soft);}
+  .breakdown-track{flex:1; height:8px; border-radius:6px; background:#EEF1F8; overflow:hidden;}
+  .breakdown-track i{display:block; height:100%; border-radius:6px;}
+  .breakdown-row .val{font-family:'Space Grotesk'; font-size:12px; width:38px; text-align:right; flex:none;}
+
+  /* ============ SCREEN 4 — MISTAKE VAULT ============ */
+  .mv-header{display:flex; align-items:center; gap:12px; padding:16px 2px 4px;}
+  .mv-count{width:52px; height:52px; border-radius:16px; background:#FEE2E2; color:var(--red); display:flex; align-items:center; justify-content:center; font-family:'Manrope'; font-weight:900; font-size:19px; flex:none;}
+  .mv-insight{background:linear-gradient(120deg, #FFF7ED, #FEF3E2); border:1px solid #FED7AA; border-radius:16px; padding:12px 14px; margin:14px 0 18px; font-size:12.5px; font-weight:600; color:#9A3412; display:flex; gap:9px; align-items:center;}
+  .mv-insight .ico{width:17px; height:17px; flex:none; color:var(--coral);}
+
+  .mistake-card{padding:14px 15px; margin-bottom:11px; cursor:pointer;}
+  .mistake-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
+  .mistake-topic{font-family:'Manrope'; font-weight:800; font-size:11.5px; color:var(--iris);}
+  .mistake-date{font-size:11px; color:var(--ink-faint); font-family:'Space Grotesk';}
+  .mistake-preview{font-size:13px; color:var(--ink); line-height:1.5; margin-bottom:10px;}
+  .compare-row{display:flex; align-items:center; gap:8px; font-family:'Space Grotesk'; font-size:12px; font-weight:700;}
+  .compare-pill{padding:5px 10px; border-radius:8px;}
+  .compare-pill.wrong{background:#FEE2E2; color:var(--red);}
+  .compare-pill.right{background:#D1FAE5; color:var(--emerald);}
+  .compare-arrow{color:var(--ink-faint); width:13px; height:13px;}
+
+  .breakdown-modal{position:absolute; inset:0; z-index:60; background:rgba(15,23,42,0.5); display:none; align-items:flex-end; justify-content:center;}
+  .breakdown-modal.open{display:flex;}
+  .bm-sheet{width:100%; background:#fff; border-radius:26px 26px 0 0; padding:20px 20px 26px; max-height:86%; overflow-y:auto;}
+  .bm-box{border-radius:16px; padding:14px; margin-bottom:12px;}
+  .bm-box.good{background:#ECFDF5; border:1px solid #A7F3D0;}
+  .bm-box.bad{background:#FEF2F2; border:1px solid #FECACA;}
+  .bm-box .bm-h{font-family:'Manrope'; font-weight:800; font-size:12.5px; margin-bottom:6px; display:flex; gap:7px; align-items:center;}
+  .bm-box .bm-h .ico{width:15px; height:15px;}
+  .bm-box.good .bm-h{color:var(--emerald);}
+  .bm-box.bad .bm-h{color:var(--red);}
+  .bm-box p{font-size:12.8px; line-height:1.6; color:#334155; margin:0;}
+  .vocab-chip-row{display:flex; flex-wrap:wrap; gap:7px; margin:10px 0 16px;}
+  .vocab-chip{background:#EEF2FF; color:var(--indigo); font-family:'Manrope'; font-weight:700; font-size:11.5px; padding:6px 11px; border-radius:999px;}
+  .graduate-btn{background:linear-gradient(135deg, var(--mint), var(--emerald)); box-shadow:0 12px 24px -10px rgba(16,185,129,0.55);}
+  .graduate-btn .ico{width:16px; height:16px;}
+
+  /* ============ SCREEN 5 — WORD VAULT ============ */
+  .box-nav{display:flex; gap:8px; overflow-x:auto; padding:16px 0 18px; scrollbar-width:none;}
+  .box-nav::-webkit-scrollbar{display:none;}
+  .box-chip{flex:none; display:flex; align-items:center; gap:7px; background:#fff; border:1.4px solid var(--line); padding:9px 13px; border-radius:14px; font-family:'Manrope'; font-weight:700; font-size:12px; cursor:pointer;}
+  .box-chip .ico{width:14px; height:14px; color:var(--ink-soft);}
+  .box-chip .n{background:#F1F4FA; border-radius:6px; padding:1px 6px; font-family:'Space Grotesk'; font-size:10.5px; color:var(--ink-soft);}
+  .box-chip.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .box-chip.on .ico{color:#fff;}
+  .box-chip.on .n{background:rgba(255,255,255,0.18); color:#fff;}
+
+  .flash-wrap{perspective:1400px; height:392px; margin:6px 0 18px;}
+  .flash-card{
+    width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform .55s cubic-bezier(.4,.2,.2,1); cursor:pointer;
+  }
+  .flash-card.flipped{transform:rotateY(180deg);}
+  .flash-face{
+    position:absolute; inset:0; backface-visibility:hidden; border-radius:26px; padding:24px;
+    display:flex; flex-direction:column; box-shadow:var(--shadow-2); overflow:hidden;
+  }
+  .flash-front{
+    background:linear-gradient(150deg, #1E1B4B 0%, #4338CA 55%, #4F46E5 100%); color:#fff;
+    align-items:center; justify-content:center; text-align:center;
+  }
+  .flash-front::after{
+    content:""; position:absolute; inset:0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.10) 1.5px, transparent 1.5px);
+    background-size:15px 15px;
+  }
+  .level-badge{position:relative; z-index:1; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.25); padding:5px 12px; border-radius:999px; font-family:'Space Grotesk'; font-size:11px; font-weight:700; margin-bottom:20px;}
+  .flash-word{position:relative; z-index:1; font-family:'Manrope'; font-weight:900; font-size:34px; letter-spacing:-0.01em; line-height:1.1;}
+  .flash-phon{position:relative; z-index:1; font-family:'Space Grotesk'; font-size:13px; color:rgba(255,255,255,0.7); margin-top:10px;}
+  .tap-hint{position:relative; z-index:1; margin-top:26px; font-size:11px; color:rgba(255,255,255,0.55); font-weight:600; display:flex; align-items:center; gap:6px;}
+  .tap-hint .ico{width:13px; height:13px;}
+
+  .flash-back{background:#fff; transform:rotateY(180deg); justify-content:flex-start;}
+  .fb-tr{font-family:'Manrope'; font-weight:900; font-size:25px; color:var(--ink);}
+  .fb-syn-row{display:flex; flex-wrap:wrap; gap:6px; margin:12px 0 16px;}
+  .fb-syn{background:#F5F3FF; color:var(--iris); font-size:11px; font-weight:700; padding:5px 10px; border-radius:8px; font-family:'Manrope';}
+  .fb-ex{background:#F8FAFC; border-radius:14px; padding:12px 13px; margin-top:auto;}
+  .fb-ex .en{font-size:12.8px; line-height:1.55; color:var(--ink);}
+  .fb-ex .tr{font-size:12px; line-height:1.5; color:var(--ink-soft); margin-top:6px; padding-top:6px; border-top:1px dashed var(--line);}
+
+  .leitner-actions{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .lact{
+    border-radius:16px; padding:14px 10px; text-align:center; font-family:'Manrope'; font-weight:800; font-size:13px;
+    border:1.6px solid; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:6px;
+  }
+  .lact .ico{width:18px; height:18px;}
+  .lact span{font-size:10px; font-weight:700; opacity:.75;}
+  .lact.repeat{border-color:#FECACA; color:var(--red); background:#FEF2F2;}
+  .lact.advance{border-color:#A7F3D0; color:var(--emerald); background:#ECFDF5;}
+</style>
+</head>
+<body>
+
+<div class="studio-wrap">
+  <div class="studio-label"><span class="dot"></span>YDS MASTER — MOBİL UI TASARIMI</div>
+
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="statusbar" id="statusbar">
+      <span>9:41</span>
+      <div class="icons">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><rect x="0" y="7" width="3" height="5" rx="0.5" fill="currentColor"/><rect x="5" y="4" width="3" height="8" rx="0.5" fill="currentColor"/><rect x="10" y="1" width="3" height="11" rx="0.5" fill="currentColor"/></svg>
+        <svg width="20" height="12" viewBox="0 0 20 12" fill="none"><rect x="0.5" y="0.5" width="17" height="11" rx="2.5" stroke="currentColor"/><rect x="2" y="2" width="12" height="8" rx="1" fill="currentColor"/><rect x="18.5" y="3.5" width="1.5" height="5" rx="0.75" fill="currentColor"/></svg>
+      </div>
+    </div>
+
+    <!-- ============ ONBOARDING + SPLASH ============ -->
+    <div class="onboarding-layer" id="onboardingLayer">
+
+      <div class="splash" id="splash">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24"><g fill="#fff"><circle cx="6" cy="6" r="2.1" opacity=".45"/><circle cx="12" cy="6" r="2.1" opacity=".45"/><circle cx="18" cy="6" r="2.1" opacity=".45"/><circle cx="6" cy="12" r="2.1" opacity=".45"/><circle cx="12" cy="12" r="2.6" fill="#FF6B00" opacity="1"/><circle cx="18" cy="12" r="2.1" opacity=".45"/><circle cx="6" cy="18" r="2.1" opacity=".45"/><circle cx="12" cy="18" r="2.1" opacity=".45"/><circle cx="18" cy="18" r="2.1" opacity=".45"/></g></svg>
+        </div>
+        <div class="wordmark">YDS Master</div>
+        <div class="tagline">Akademik İngilizce'de ustalık</div>
+        <div class="load-dots"><span></span><span></span><span></span></div>
+      </div>
+
+      <div class="onb-skip" onclick="finishOnboarding()">Atla</div>
+
+      <div class="onb-slides">
+        <div class="onb-slide active" data-slide="0">
+          <div class="onb-illustration">
+            <div class="ill-stack">
+              <div class="sc sc1"></div>
+              <div class="sc sc2"></div>
+              <div class="sc sc3">
+                <div class="ln w1"></div><div class="ln w2"></div><div class="ln w3"></div>
+              </div>
+              <div class="burst"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span></div>
+            </div>
+          </div>
+          <div class="onb-title">Hiç Bitmeyen,<br>Akıllı Soru Havuzu</div>
+          <div class="onb-desc">Çözdüğün sorular havuzdan kalıcı olarak çıkar — AI senin için anında yeni, taze sorular üretir.</div>
+        </div>
+
+        <div class="onb-slide" data-slide="1">
+          <div class="onb-illustration">
+            <div class="ill-exam">
+              <div class="ill-ring">
+                <svg width="132" height="132">
+                  <circle cx="66" cy="66" r="56" stroke="#EEF1F8" stroke-width="11" fill="none"/>
+                  <circle cx="66" cy="66" r="56" stroke="url(#g1)" stroke-width="11" fill="none" stroke-linecap="round" stroke-dasharray="352" stroke-dashoffset="90" transform="rotate(-90 66 66)"/>
+                  <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4F46E5"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs>
+                </svg>
+                <div class="rc"><b>02:59:45</b><span>180 DAKİKA</span></div>
+              </div>
+              <div class="ill-optic-mini">
+                <div class="f1"></div><div></div><div class="f2"></div>
+                <div></div><div class="f1"></div><div></div>
+                <div class="f3"></div><div></div><div class="f1"></div>
+              </div>
+            </div>
+          </div>
+          <div class="onb-title">180 Dakikalık<br>Gerçek Sınav Deneyimi</div>
+          <div class="onb-desc">ÖSYM formatında 80 soru, canlı sayaç ve optik cevap formuyla birebir sınav simülasyonu.</div>
+        </div>
+
+        <div class="onb-slide" data-slide="2">
+          <div class="onb-illustration">
+            <div class="ill-word">
+              <div class="ill-fc"><b>DETERIORATE</b><span>B2 / C1 · kötüleşmek</span></div>
+              <div class="ill-boxes">
+                <div class="bx bx1"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8 12 4l9 4-9 4-9-4Z"/><path d="M3 8v8l9 4 9-4V8"/></svg></span></div>
+                <div class="bx bx2"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8 12 4l9 4-9 4-9-4Z"/><path d="M3 8v8l9 4 9-4V8"/></svg></span></div>
+                <div class="bx bx3"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8 12 4l9 4-9 4-9-4Z"/><path d="M3 8v8l9 4 9-4V8"/></svg></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="onb-title">Hatandan Öğren,<br>Kelimeni Kalıcı Kıl</div>
+          <div class="onb-desc">AI, tuzağa neden düştüğünü açıklar; Leitner kutu sistemi kelimeni uzun vadeli hafızana taşır.</div>
+        </div>
+      </div>
+
+      <div class="onb-footer">
+        <div class="onb-dots"><span class="on" data-dot="0"></span><span data-dot="1"></span><span data-dot="2"></span></div>
+        <button class="btn-primary" id="onbCta" onclick="onbNext()">Devam Et →</button>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 1 ============ -->
+    <div class="screen" id="screen-dashboard">
+      <div class="optic-watermark"></div>
+      <div class="screen-inner">
+        <div class="app-header">
+          <div class="ah-left">
+            <div class="logo-mark ah-logo">
+              <svg viewBox="0 0 24 24"><g fill="#fff"><circle cx="6" cy="6" r="2.1" opacity=".45"/><circle cx="12" cy="6" r="2.1" opacity=".45"/><circle cx="18" cy="6" r="2.1" opacity=".45"/><circle cx="6" cy="12" r="2.1" opacity=".45"/><circle cx="12" cy="12" r="2.6" fill="#FF6B00" opacity="1"/><circle cx="18" cy="12" r="2.1" opacity=".45"/><circle cx="6" cy="18" r="2.1" opacity=".45"/><circle cx="12" cy="18" r="2.1" opacity=".45"/><circle cx="18" cy="18" r="2.1" opacity=".45"/></g></svg>
+            </div>
+            <div>
+              <div class="ah-greet-a">Merhaba,</div>
+              <div class="ah-greet-b">Ayşe Yılmaz</div>
+            </div>
+          </div>
+          <div class="ah-bell"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></span><span class="dot"></span></div>
+        </div>
+
+        <div class="hero-banner">
+          <div class="hero-top">
+            <div>
+              <div class="hero-goal-label"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9"><circle cx="12" cy="12" r="8.3"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="1" fill="#fff" stroke="none"/></svg></span>Bugünkü Hedefin</div>
+              <div class="hero-goal-num">35 Soru</div>
+            </div>
+            <div class="ring-wrap">
+              <svg width="64" height="64">
+                <circle cx="32" cy="32" r="27" stroke="rgba(255,255,255,0.22)" stroke-width="6" fill="none"/>
+                <circle cx="32" cy="32" r="27" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="59.4"/>
+              </svg>
+              <div class="ring-pct">65%</div>
+            </div>
+          </div>
+          <div class="hero-pills">
+            <span class="pill streak"><span class="ico"><svg viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M12 22c4.6 0 7.4-2.9 7.4-7 0-3.6-2.2-5.7-3.3-8.4-.5 1.7-1.6 2.7-1.6 2.7.4-2.7-1-5-2.9-6.8-.2 2.5-1 3.8-2.7 5.6C7 10.4 4.9 12.2 4.9 15.5c0 3.9 2.8 6.5 7.1 6.5Z"/></svg></span>5 Günlük Seri</span>
+            <span class="pill"><span class="ico"><svg viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg></span>+350 XP</span>
+          </div>
+        </div>
+
+        <div class="section-title"><h2>Günlük Görevler</h2><span class="see-all">Tümü</span></div>
+        <div class="module-grid">
+          <div class="module-card">
+            <div class="m-icon" style="background:#DBEAFE; color:#2563EB;"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5c.8 0 1.5-.7 1.5-1.5v-13Z"/></svg></span></div>
+            <div class="m-title">Paragraf<br>Soruları</div>
+            <div class="m-count">3 / 5 tamam</div>
+            <div class="m-bar"><i style="width:60%; background:#2563EB;"></i></div>
+          </div>
+          <div class="module-card">
+            <div class="m-icon" style="background:#EDE9FE; color:#7C3AED;"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/><path d="M11 7.5h2M7.5 11v2M16.5 11v2M11 16.5h2"/></svg></span></div>
+            <div class="m-title">Cloze Test<br>Soruları</div>
+            <div class="m-count">1 / 5 tamam</div>
+            <div class="m-bar"><i style="width:20%; background:#7C3AED;"></i></div>
+          </div>
+          <div class="module-card">
+            <div class="m-icon" style="background:#D1FAE5; color:#059669;"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 15l6-6"/><path d="M11 5.5 12.5 4A4 4 0 1 1 18 9.5L16.5 11"/><path d="M13 18.5 11.5 20A4 4 0 1 1 6 14.5L7.5 13"/></svg></span></div>
+            <div class="m-title">Cümle<br>Tamamlama</div>
+            <div class="m-count">7 / 10 tamam</div>
+            <div class="m-bar"><i style="width:70%; background:#059669;"></i></div>
+          </div>
+          <div class="module-card">
+            <div class="m-icon" style="background:#FEF3C7; color:#D97706;"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 1 3.5 6.6L4 20l1.4-3.6A7.96 7.96 0 0 1 4 12Z"/></svg></span></div>
+            <div class="m-title">Diyalog &<br>Dil Bilgisi</div>
+            <div class="m-count">4 / 15 tamam</div>
+            <div class="m-bar"><i style="width:27%; background:#D97706;"></i></div>
+          </div>
+        </div>
+
+        <div class="ai-cta" onclick="showScreen('solver')">
+          <div class="sparkle"><span class="ico"><svg viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M12 2c.6 3.6 1.4 5.8 3 7.4S18.8 11.4 22 12c-3.6.6-5.8 1.4-7.4 3S12.6 18.8 12 22c-.6-3.6-1.4-5.8-3-7.4S5.2 12.6 2 12c3.6-.6 5.8-1.4 7.4-3S11.4 5.2 12 2Z"/></svg></span></div>
+          <div>
+            <div class="t1">Yeni AI Sorusu Üret</div>
+            <div class="t2">Havuzun tükendi mi? Anında yeni soru al</div>
+          </div>
+        </div>
+
+        <div class="section-title"><h2>Aktif Soru Alanı</h2></div>
+        <div class="card arena-card" onclick="showScreen('solver')">
+          <div class="arena-badge">3/15</div>
+          <div>
+            <div class="t1">Paragraf sorusuna devam et</div>
+            <div class="t2">Kaldığın yerden sürdür — 12 soru kaldı</div>
+          </div>
+          <span class="ico arena-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 2 ============ -->
+    <div class="screen" id="screen-solver" style="display:none;">
+      <div class="screen-inner">
+        <div class="q-meta">
+          <span class="q-topic-badge">Paragraf (Reading)</span>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span class="q-counter">Soru 3 / 15</span>
+            <div class="flag-btn" id="flagBtn" onclick="this.classList.toggle('active')"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18"/><path d="M6 4h11l-2.5 4L17 12H6"/></svg></span></div>
+          </div>
+        </div>
+
+        <div class="card passage-card">
+          <div class="passage-head">
+            <div class="kicker">A</div>
+            <div class="src">Academic Passage · Sociology</div>
+          </div>
+          <div class="passage-fade" id="passageFade">
+            <div class="passage-text">Over the past decade, urban sociologists have increasingly turned their attention to the phenomenon of "third places" — social settings distinct from home and work where community life unfolds. Cafés, libraries, and public parks, once regarded as incidental backdrops to city life, are now understood to play a decisive role in sustaining civic engagement. Researchers argue that the erosion of such spaces correlates with a measurable decline in neighbourly trust.</div>
+          </div>
+          <div class="expand-toggle" onclick="togglePassage()"><span id="expandLabel">Metnin tamamını göster</span> <span class="ico" id="expandArrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+        </div>
+
+        <div class="q-stem">Paragrafa göre, "third places" kavramının şehir sosyolojisi için önemi aşağıdakilerden hangisidir?</div>
+
+        <div id="optList">
+          <div class="opt" data-i="A" onclick="selectOpt(this)"><div class="bub">A</div><div class="txt">Ev ve iş yerinden bağımsız, toplumsal etkileşimi mümkün kılan alanlardır.</div></div>
+          <div class="opt" data-i="B" onclick="selectOpt(this)"><div class="bub">B</div><div class="txt">Şehir planlamasında yalnızca estetik amaçla kullanılmaktadır.</div></div>
+          <div class="opt" data-i="C" onclick="selectOpt(this)"><div class="bub">C</div><div class="txt">Yalnızca ekonomik açıdan değerlendirilen kamusal alanlardır.</div></div>
+          <div class="opt" data-i="D" onclick="selectOpt(this)"><div class="bub">D</div><div class="txt">Komşuluk güveniyle hiçbir ilişkisi bulunmayan yapılardır.</div></div>
+          <div class="opt" data-i="E" onclick="selectOpt(this)"><div class="bub">E</div><div class="txt">Sadece kırsal bölgelerde gözlemlenen bir toplumsal örüntüdür.</div></div>
+        </div>
+
+        <div class="solution-drawer" id="solutionDrawer">
+          <div class="sd-head"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2c.6 3.6 1.4 5.8 3 7.4S18.8 11.4 22 12c-3.6.6-5.8 1.4-7.4 3S12.6 18.8 12 22c-.6-3.6-1.4-5.8-3-7.4S5.2 12.6 2 12c3.6-.6 5.8-1.4 7.4-3S11.4 5.2 12 2Z"/></svg></span>AI Çözüm Analizi</div>
+          <p><b>Doğru cevap A:</b> Metin, third places'ı "ev ve iş yerinden ayrı, topluluk yaşamının şekillendiği alanlar" olarak tanımlıyor ve bunların civic engagement üzerindeki rolüne vurgu yapıyor.</p>
+          <p>Seçtiğin <b>B seçeneği</b>, metinde geçmeyen bir "yalnızca estetik amaç" iddiası uydurarak klasik bir <i>kapsam daraltma tuzağı</i> kuruyor.</p>
+          <div class="trap-tag"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 21 19H3L12 3.5Z"/><path d="M12 9.5v4"/><circle cx="12" cy="16.5" r="0.6" fill="currentColor" stroke="none"/></svg></span>Distractor Tuzağı: Aşırı Genelleme</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 3 ============ -->
+    <div class="screen" id="screen-exam" style="display:none; position:relative;">
+      <div class="screen-inner" id="examCatalogView">
+        <h2 style="font-size:19px; margin:16px 0 14px;">Deneme Sınavları</h2>
+        <div class="filter-row">
+          <div class="chip on">Tümü</div>
+          <div class="chip">ÖSYM Çıkmış</div>
+          <div class="chip">ELS Dergisi</div>
+          <div class="chip">AI Adaptif</div>
+        </div>
+
+        <div class="card exam-card" onclick="document.getElementById('examCatalogView').style.display='none'; document.getElementById('examLiveView').style.display='block';">
+          <div class="exam-year"><b>2024</b><span>YDS/1</span></div>
+          <div style="flex:1;">
+            <div class="exam-meta-title">2024 YDS İlkbahar Dönemi</div>
+            <div class="exam-meta-sub">
+              <span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>180 dk</span>
+              <span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3h9l3 3v15H6z"/><path d="M9 10h6M9 14h6M9 18h3"/></svg></span>80 soru</span>
+            </div>
+          </div>
+          <div class="exam-score-pill"><b>87.50</b><span>Not: A</span></div>
+        </div>
+        <div class="card exam-card">
+          <div class="exam-year" style="background:#FEF3C7; color:#D97706;"><b>2023</b><span>YDS/2</span></div>
+          <div style="flex:1;">
+            <div class="exam-meta-title">2023 YDS Sonbahar Dönemi</div>
+            <div class="exam-meta-sub">
+              <span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>180 dk</span>
+              <span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3h9l3 3v15H6z"/><path d="M9 10h6M9 14h6M9 18h3"/></svg></span>80 soru</span>
+            </div>
+          </div>
+          <div class="exam-score-pill"><b style="color:#D97706;">71.25</b><span>Not: C</span></div>
+        </div>
+        <div class="card exam-card">
+          <div class="exam-year" style="background:#EDE9FE; color:#7C3AED;"><b>AI</b><span>Adaptif</span></div>
+          <div style="flex:1;">
+            <div class="exam-meta-title">Zayıf Konular Denemesi #4</div>
+            <div class="exam-meta-sub">
+              <span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>180 dk</span>
+              <span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3h9l3 3v15H6z"/><path d="M9 10h6M9 14h6M9 18h3"/></svg></span>80 soru</span>
+            </div>
+          </div>
+          <div class="exam-score-pill"><b style="color:var(--ink-faint);">—</b><span>Çözülmedi</span></div>
+        </div>
+
+        <div class="section-title"><h2>Son Sınav Sonucun</h2></div>
+        <div class="card" style="padding:4px 4px 10px; cursor:pointer;" onclick="document.getElementById('examCatalogView').style.display='none'; document.getElementById('examScoreView').style.display='block';">
+          <div class="score-hero" style="padding-top:16px;">
+            <div class="grade-ring" style="width:110px;height:110px;">
+              <svg width="110" height="110">
+                <circle cx="55" cy="55" r="46" stroke="#EEF1F8" stroke-width="10" fill="none"/>
+                <circle cx="55" cy="55" r="46" stroke="#059669" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="26" transform="rotate(-90 55 55)"/>
+              </svg>
+              <div class="grade-center"><div class="grade-letter" style="font-size:26px;">A</div></div>
+            </div>
+            <div style="font-family:'Space Grotesk'; font-weight:700; margin-top:8px; color:var(--ink-soft); font-size:12.5px;">92.50 / 100 — Sonuç Kartını Gör</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIVE EXAM -->
+      <div id="examLiveView" style="display:none;">
+        <div class="live-bar">
+          <div class="timer-pill"><span class="dot-red"></span> 02:59:45</div>
+          <div class="grid-btn" onclick="document.getElementById('opticModal').classList.add('open')"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>Optik <b>45/80</b></div>
+          <button class="finish-btn" onclick="document.getElementById('examLiveView').style.display='none'; document.getElementById('examScoreView').style.display='block';">Bitir</button>
+        </div>
+        <div class="screen-inner" style="padding-top:16px;">
+          <div class="q-meta" style="padding-top:0;">
+            <span class="q-topic-badge" style="background:#FEF3C7; color:#D97706;">Dilbilgisi</span>
+            <span class="q-counter">Soru 46 / 80</span>
+          </div>
+          <div class="q-stem">Despite the committee's repeated objections, the proposal ______ without any further revisions.</div>
+          <div id="optListExam">
+            <div class="opt"><div class="bub">A</div><div class="txt">was approved</div></div>
+            <div class="opt selected"><div class="bub">B</div><div class="txt">approved</div></div>
+            <div class="opt"><div class="bub">C</div><div class="txt">has approved</div></div>
+            <div class="opt"><div class="bub">D</div><div class="txt">approving</div></div>
+            <div class="opt"><div class="bub">E</div><div class="txt">to approve</div></div>
+          </div>
+          <div style="display:flex; gap:10px; margin-top:8px;">
+            <button class="btn-primary" style="background:#fff; color:var(--ink); border:1.6px solid var(--line); box-shadow:none;">← Önceki</button>
+            <button class="btn-primary">Sonraki →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPTIC GRID MODAL -->
+      <div class="optic-modal" id="opticModal">
+        <div class="optic-sheet">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3>Optik Form</h3>
+            <div class="close-x" onclick="document.getElementById('opticModal').classList.remove('open')"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+          </div>
+          <div style="font-size:12px; color:var(--ink-soft);">80 sorudan 45'i cevaplandı</div>
+          <div class="optic-legend">
+            <span><i class="legend-dot" style="background:#D1FAE5;"></i>Çözüldü</span>
+            <span><i class="legend-dot" style="background:#F1F4FA;"></i>Boş</span>
+            <span><i class="legend-dot" style="background:#FEF3C7;"></i>İşaretli</span>
+          </div>
+          <div class="optic-grid" id="opticGrid"></div>
+        </div>
+      </div>
+
+      <!-- SCORE CARD -->
+      <div id="examScoreView" style="display:none;">
+        <div class="screen-inner">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding-top:16px;">
+            <span class="eyebrow">2024 YDS/1 · Sonuç</span>
+            <div class="close-x" onclick="document.getElementById('examScoreView').style.display='none'; document.getElementById('examCatalogView').style.display='block';"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+          </div>
+          <div class="score-hero">
+            <div class="grade-ring">
+              <svg width="150" height="150">
+                <circle cx="75" cy="75" r="64" stroke="#EEF1F8" stroke-width="13" fill="none"/>
+                <circle cx="75" cy="75" r="64" stroke="#059669" stroke-width="13" fill="none" stroke-linecap="round" stroke-dasharray="402" stroke-dashoffset="34" transform="rotate(-90 75 75)"/>
+              </svg>
+              <div class="grade-center"><div class="grade-letter">A</div><div class="grade-num">92.50 / 100</div></div>
+            </div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-box" style="background:#ECFDF5;"><b style="color:var(--emerald);">74</b><span>DOĞRU</span></div>
+            <div class="stat-box" style="background:#FEF2F2;"><b style="color:var(--red);">4</b><span>YANLIŞ</span></div>
+            <div class="stat-box" style="background:#F1F4FA;"><b style="color:var(--ink-soft);">2</b><span>BOŞ</span></div>
+          </div>
+          <div class="section-title"><h2>Konu Bazlı Dağılım</h2></div>
+          <div class="card" style="padding:14px 16px;">
+            <div class="breakdown-row"><span class="label">Paragraf</span><div class="breakdown-track"><i style="width:92%; background:var(--blue);"></i></div><span class="val">23/25</span></div>
+            <div class="breakdown-row"><span class="label">Cloze Test</span><div class="breakdown-track"><i style="width:80%; background:var(--iris);"></i></div><span class="val">16/20</span></div>
+            <div class="breakdown-row"><span class="label">Cümle Tam.</span><div class="breakdown-track"><i style="width:95%; background:var(--emerald);"></i></div><span class="val">19/20</span></div>
+            <div class="breakdown-row"><span class="label">Diyalog</span><div class="breakdown-track"><i style="width:88%; background:#D97706;"></i></div><span class="val">16/18</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 4 ============ -->
+    <div class="screen" id="screen-mistakes" style="display:none;">
+      <div class="screen-inner">
+        <div class="mv-header">
+          <div class="mv-count">18</div>
+          <div>
+            <h2 style="font-size:18px; margin:0;">Hata Kasan</h2>
+            <div style="font-size:12px; color:var(--ink-soft);">Çözülmemiş hatalar</div>
+          </div>
+        </div>
+        <div class="mv-insight"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="8.3"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg></span>Zayıflıklarını güçlü yönlere çevir — bugün 3 hatanı "mezun et".</div>
+
+        <div class="card mistake-card" onclick="document.getElementById('breakdownModal').classList.add('open')">
+          <div class="mistake-top"><span class="mistake-topic">CLOZE TEST</span><span class="mistake-date">3 gün önce</span></div>
+          <div class="mistake-preview">"The negotiations ______ before either side reached a compromise."</div>
+          <div class="compare-row">
+            <span class="compare-pill wrong">Seçimin: B</span>
+            <span class="ico compare-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            <span class="compare-pill right">Doğru: A</span>
+          </div>
+        </div>
+        <div class="card mistake-card">
+          <div class="mistake-top"><span class="mistake-topic">DİYALOG</span><span class="mistake-date">5 gün önce</span></div>
+          <div class="mistake-preview">"— I completely disagree with that proposal. — ______"</div>
+          <div class="compare-row">
+            <span class="compare-pill wrong">Seçimin: D</span>
+            <span class="ico compare-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            <span class="compare-pill right">Doğru: C</span>
+          </div>
+        </div>
+        <div class="card mistake-card">
+          <div class="mistake-top"><span class="mistake-topic">PARAGRAF</span><span class="mistake-date">1 hafta önce</span></div>
+          <div class="mistake-preview">Yazarın ana argümanı ile ilgili çıkarım sorusu...</div>
+          <div class="compare-row">
+            <span class="compare-pill wrong">Seçimin: E</span>
+            <span class="ico compare-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            <span class="compare-pill right">Doğru: B</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="breakdown-modal" id="breakdownModal">
+        <div class="bm-sheet">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <span class="eyebrow">AI Derin Analiz</span>
+            <div class="close-x" onclick="document.getElementById('breakdownModal').classList.remove('open')"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+          </div>
+          <div class="bm-box good">
+            <div class="bm-h"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg></span>Neden Doğru?</div>
+            <p>"Had" + past participle (past perfect) yapısı, "before" bağlacıyla kurulan iki geçmiş olay arasındaki önceliği doğru şekilde ifade eder.</p>
+          </div>
+          <div class="bm-box bad">
+            <div class="bm-h"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 21 19H3L12 3.5Z"/><path d="M12 9.5v4"/><circle cx="12" cy="16.5" r="0.6" fill="currentColor" stroke="none"/></svg></span>Neden Tuzağa Düştün?</div>
+            <p>B seçeneğindeki simple past, iki eylem arasındaki zaman farkını göstermiyor — bu, YDS'de sık görülen bir <b>zaman uyumu tuzağı</b>dır.</p>
+          </div>
+          <div class="eyebrow" style="margin:14px 0 8px;">Anahtar Akademik Kelimeler</div>
+          <div class="vocab-chip-row">
+            <span class="vocab-chip">negotiation</span>
+            <span class="vocab-chip">compromise</span>
+            <span class="vocab-chip">precedent</span>
+          </div>
+          <button class="btn-primary graduate-btn" onclick="document.getElementById('breakdownModal').classList.remove('open')"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9 12 4l10 5-10 5-10-5Z"/><path d="M6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5"/></svg></span>Bu Soruyu Öğrendim</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 5 ============ -->
+    <div class="screen" id="screen-words" style="display:none;">
+      <div class="screen-inner">
+        <div class="box-nav">
+          <div class="box-chip on"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8 12 4l9 4-9 4-9-4Z"/><path d="M3 8v8l9 4 9-4V8"/></svg></span>Günlük <span class="n">12</span></div>
+          <div class="box-chip"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8 12 4l9 4-9 4-9-4Z"/><path d="M3 8v8l9 4 9-4V8"/></svg></span>Haftalık <span class="n">34</span></div>
+          <div class="box-chip"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8 12 4l9 4-9 4-9-4Z"/><path d="M3 8v8l9 4 9-4V8"/></svg></span>Aylık <span class="n">58</span></div>
+          <div class="box-chip"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 14.6 9l6 .8-4.3 4.1 1 6-5.3-2.9L6.7 20l1-6-4.3-4.1 6-.8L12 3.5Z"/></svg></span>Özel</div>
+          <div class="box-chip"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h3v16H4z"/><path d="M9 4h3v16H9z"/><path d="M15.2 4.4 18 4.9l-2.4 15.8-2.8-.5L15.2 4.4Z"/></svg></span>Sözlük</div>
+        </div>
+
+        <div class="flash-wrap">
+          <div class="flash-card" id="flashCard" onclick="this.classList.toggle('flipped')">
+            <div class="flash-face flash-front">
+              <div class="level-badge">B2 / C1</div>
+              <div class="flash-word">DETERIORATE</div>
+              <div class="flash-phon">/dɪˈtɪəriəreɪt/ · fiil</div>
+              <div class="tap-hint"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3L20 9"/><path d="M20 4v5h-5"/><path d="M20 12a8 8 0 0 1-14 5.3L4 15"/><path d="M4 20v-5h5"/></svg></span>Anlamı görmek için dokun</div>
+            </div>
+            <div class="flash-face flash-back">
+              <div class="fb-tr">kötüleşmek, bozulmak</div>
+              <div class="fb-syn-row">
+                <span class="fb-syn">worsen</span>
+                <span class="fb-syn">decline</span>
+                <span class="fb-syn">degrade</span>
+              </div>
+              <div class="fb-ex">
+                <div class="en">"Relations between the two countries began to deteriorate rapidly."</div>
+                <div class="tr">İki ülke arasındaki ilişkiler hızla kötüleşmeye başladı.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="leitner-actions">
+          <div class="lact repeat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg></span>Tekrar Et <span>Kutu 1'de kalır</span></div>
+          <div class="lact advance"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg></span>Biliyorum <span>Kutu 2'ye ilerler</span></div>
+        </div>
+
+        <div class="section-title"><h2>Bugünkü İlerleme</h2></div>
+        <div class="card" style="padding:14px 16px; display:flex; align-items:center; gap:12px;">
+          <div class="breakdown-track" style="flex:1;"><i style="width:34%; background:linear-gradient(90deg, var(--indigo), var(--violet));"></i></div>
+          <span style="font-family:'Space Grotesk'; font-weight:700; font-size:13px;">4 / 12</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabbar" id="tabbar" style="display:none;">
+      <button class="tab active" data-t="dashboard" onclick="showScreen('dashboard')">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></span>
+        Görevler<span class="pip"></span>
+      </button>
+      <button class="tab" data-t="exam" onclick="showScreen('exam')">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+        Sınav<span class="pip"></span>
+      </button>
+      <button class="tab" data-t="mistakes" onclick="showScreen('mistakes')">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4"/><circle cx="12" cy="17" r="0.6" fill="currentColor" stroke="none"/></svg></span>
+        Hatalar<span class="pip"></span>
+      </button>
+      <button class="tab" data-t="words" onclick="showScreen('words')">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5"/></svg></span>
+        Kelime<span class="pip"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showScreen(name){
+    document.querySelectorAll('.screen').forEach(s=>s.style.display='none');
+    document.getElementById('screen-'+ (name==='solver'?'solver':name)).style.display='block';
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    const map = {dashboard:'dashboard', solver:'dashboard', exam:'exam', mistakes:'mistakes', words:'words'};
+    const tab = document.querySelector('.tab[data-t="'+map[name]+'"]');
+    if(tab) tab.classList.add('active');
+    document.getElementById('screen-'+ (name==='solver'?'solver':name)).scrollTop = 0;
+  }
+
+  function togglePassage(){
+    const el = document.getElementById('passageFade');
+    const label = document.getElementById('expandLabel');
+    const arrow = document.getElementById('expandArrow');
+    const open = el.classList.contains('open-full');
+    if(open){ el.classList.remove('open-full'); el.style.maxHeight='98px'; label.textContent='Metnin tamamını göster'; arrow.style.transform='rotate(0deg)'; }
+    else { el.classList.add('open-full'); el.style.maxHeight='1000px'; label.textContent='Metni daralt'; arrow.style.transform='rotate(180deg)'; }
+  }
+
+  function selectOpt(el){
+    const list = document.getElementById('optList').children;
+    for(const o of list){ o.classList.remove('selected','correct','wrong'); const m=o.querySelector('.mark'); if(m) m.remove(); }
+    const isCorrect = el.dataset.i === 'A';
+    el.classList.add(isCorrect ? 'correct' : 'wrong');
+    const mark = document.createElement('span');
+    mark.className='mark ico';
+    mark.innerHTML = isCorrect
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+    el.appendChild(mark);
+    if(!isCorrect){
+      const correctEl = [...list].find(o=>o.dataset.i==='A');
+      correctEl.classList.add('correct');
+      const m2 = document.createElement('span'); m2.className='mark ico';
+      m2.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
+      correctEl.appendChild(m2);
+    }
+    document.getElementById('solutionDrawer').classList.add('open');
+  }
+
+  // build optic grid
+  const grid = document.getElementById('opticGrid');
+  for(let i=1;i<=80;i++){
+    const c = document.createElement('div');
+    let cls = 'empty';
+    if(i<=45) cls='solved';
+    if([12,27,44].includes(i)) cls='flagged';
+    c.className = 'optic-cell '+cls + (i===46?' current':'');
+    c.textContent = i;
+    grid.appendChild(c);
+  }
+
+  // ---- onboarding logic ----
+  let onbIndex = 0;
+  const onbTotal = 3;
+  function renderOnb(){
+    document.querySelectorAll('.onb-slide').forEach(s=>s.classList.toggle('active', Number(s.dataset.slide)===onbIndex));
+    document.querySelectorAll('.onb-dots span').forEach(d=>d.classList.toggle('on', Number(d.dataset.dot)===onbIndex));
+    document.getElementById('onbCta').textContent = onbIndex === onbTotal-1 ? 'Hemen Başla' : 'Devam Et →';
+  }
+  function onbNext(){
+    if(onbIndex < onbTotal-1){ onbIndex++; renderOnb(); }
+    else { finishOnboarding(); }
+  }
+  function finishOnboarding(){
+    document.getElementById('onboardingLayer').classList.add('hidden');
+    document.getElementById('tabbar').style.display='flex';
+    setTimeout(()=>{ document.getElementById('onboardingLayer').style.display='none'; }, 500);
+  }
+  setTimeout(()=>{ document.getElementById('splash').classList.add('hidden'); }, 2200);
+  document.getElementById('splash').addEventListener('click', ()=>{ document.getElementById('splash').classList.add('hidden'); });
+</script>
+</body>
+</html>

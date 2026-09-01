@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <!-- Background gradient with our brand blue (#2563EB) -->
+    <linearGradient id="splashBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E40AF"/>
+      <stop offset="50%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+
+    <!-- Subtle top gloss --> 
+    <linearGradient id="gloss" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.18"/>
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Book page gradient -->
+    <linearGradient id="pageLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#EFF6FF"/>
+    </linearGradient>
+    <linearGradient id="pageRight" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#DBEAFE"/>
+    </linearGradient>
+
+    <!-- Check badge gradient -->
+    <linearGradient id="badge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#172554" flood-opacity="0.38"/>
+    </filter>
+
+    <filter id="badgeShadow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#064E3B" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- Background fill -->
+  <rect width="1024" height="1024" fill="url(#splashBg)"/>
+  <rect width="1024" height="1024" fill="url(#gloss)"/>
+
+  <!-- Scaled & Centered Book Logo -->
+  <g transform="translate(0, -60)">
+    <!-- Open book -->
+    <g filter="url(#softShadow)">
+      <!-- Left page -->
+      <path d="M512 372 C 452 336, 350 320, 268 336 C 256 338, 248 348, 248 360 L 248 636 C 248 648, 258 658, 270 656 C 348 644, 448 660, 512 696 Z" fill="url(#pageLeft)"/>
+      <!-- Right page -->
+      <path d="M512 372 C 572 336, 674 320, 756 336 C 768 338, 776 348, 776 360 L 776 636 C 776 648, 766 658, 754 656 C 676 644, 576 660, 512 696 Z" fill="url(#pageRight)"/>
+      <!-- Spine -->
+      <rect x="504" y="368" width="16" height="330" rx="8" fill="#BFDBFE"/>
+
+      <!-- Page lines, left -->
+      <path d="M300 400 C 356 392, 420 402, 468 424" stroke="#93C5FD" stroke-width="10" stroke-linecap="round" fill="none"/>
+      <path d="M300 448 C 356 440, 420 450, 468 472" stroke="#93C5FD" stroke-width="10" stroke-linecap="round" fill="none"/>
+      <path d="M300 496 C 356 488, 420 498, 468 520" stroke="#93C5FD" stroke-width="10" stroke-linecap="round" fill="none"/>
+
+      <!-- Page lines, right -->
+      <path d="M724 400 C 668 392, 604 402, 556 424" stroke="#93C5FD" stroke-width="10" stroke-linecap="round" fill="none"/>
+      <path d="M724 448 C 668 440, 604 450, 556 472" stroke="#93C5FD" stroke-width="10" stroke-linecap="round" fill="none"/>
+      <path d="M724 496 C 668 488, 604 498, 556 520" stroke="#93C5FD" stroke-width="10" stroke-linecap="round" fill="none"/>
+    </g>
+
+    <!-- Checkmark badge -->
+    <g filter="url(#badgeShadow)">
+      <circle cx="700" cy="330" r="96" fill="url(#badge)" stroke="#FFFFFF" stroke-width="14"/>
+      <path d="M656 332 L688 364 L748 300" stroke="#FFFFFF" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </g>
+  </g>
+
+  <!-- Typography -->
+  <text x="512" y="780" text-anchor="middle" font-family="-apple-system, system-ui, Helvetica Neue, Arial, sans-serif" font-weight="900" font-size="76" fill="#FFFFFF" letter-spacing="4">YDS PRATİK</text>
+  <text x="512" y="835" text-anchor="middle" font-family="-apple-system, system-ui, Helvetica Neue, Arial, sans-serif" font-weight="600" font-size="26" fill="#BFDBFE" letter-spacing="3">Akademik Kelime &amp; Soru Havuzu</text>
+</svg>

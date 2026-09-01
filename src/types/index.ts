@@ -13,12 +13,26 @@ export type BoxType = 0 | 1 | 2 | 3;
 
 export type WordStatus = 'NEW' | 'LEARNING' | 'REVIEWING' | 'MASTERED';
 
+export interface VocabFolder {
+  id: string;
+  name: string;
+  description?: string;
+  color: string;
+  icon: string;
+  is_system?: boolean;
+  category_type?: CategoryType;
+  word_count?: number;
+  learned_count?: number;
+  created_at?: string;
+}
+
 export interface WordItem {
   id: number;
   word: string;
   meaning: string;
   category: CategoryType;
   subcategory?: string;
+  folder_name?: string;
   level: WordLevel;
   synonyms?: string[];
   example_sentence?: string;
@@ -43,6 +57,8 @@ export interface WordProgress {
 export interface CardWord extends WordItem {
   progress?: WordProgress;
   isCooldown?: boolean;
+  cardType?: 'NEW' | 'REVIEW';
+  reviewBox?: number;
 }
 
 export interface DailyStats {
@@ -123,17 +139,54 @@ export interface UserQuestionProgress {
   answered_at: string;
 }
 
+export type YdsTrapType =
+  | 'Tense Uyuşmazlığı'
+  | 'Kapsam Aşımı'
+  | 'Ters Nedensellik'
+  | 'Anlamca Yakın Kelime Tuzağı'
+  | 'Bağlaç Hatası'
+  | 'Bağlaç/Bağlaç Anlamı Hatası'
+  | 'Referans Hatası'
+  | 'Referans (Zamir) Hatası'
+  | 'Aşırı Genelleme'
+  | 'Diğer';
+
+export interface AIMistakeAnalysis {
+  no_mistake?: boolean;
+  trap_types?: YdsTrapType[];
+  trap_type?: YdsTrapType;
+  why_wrong?: string;
+  correct_evidence?: string;
+  evidence_source?: 'text_quote' | 'grammar_rule';
+  confidence?: 'high' | 'medium' | 'low';
+  summary?: string;
+  why_correct?: string;
+  why_distractor_failed?: string;
+  key_vocabulary?: string[];
+  grammar_rule?: string;
+}
+
+export interface AIWordMeaning {
+  part_of_speech: string;
+  turkish_meaning: string;
+  cefr_level: string;
+  formal_synonyms: { word: string; cefr_level: string }[];
+  example_sentence_en: string;
+  example_sentence_tr: string;
+  context_note?: string;
+}
+
+export interface AIWordAutocompleteResult {
+  word: string;
+  meanings: AIWordMeaning[];
+  frequency_note?: string;
+}
+
 export interface MistakeItem {
   id: number;
   question: QuestionItem;
   user_selected_option: OptionKey;
-  ai_analysis?: {
-    summary: string;
-    why_correct: string;
-    why_distractor_failed: string;
-    key_vocabulary: string[];
-    grammar_rule: string;
-  };
+  ai_analysis?: AIMistakeAnalysis;
   is_reviewed: boolean;
   reviewed_at?: string;
   created_at: string;
@@ -172,8 +225,8 @@ export interface ExamScoreCard {
   wrongCount: number;
   emptyCount: number;
   netScore: number;
-  ydsScore: number; // correctCount * 1.25 (100-point scale)
-  levelGrade: 'A' | 'B' | 'C' | 'D' | 'E';
+  ydsScore: number; // 100-point scale: (correctCount / totalQuestions) * 100
+  levelGrade: 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
   timeSpentSeconds: number;
   completedAt: string;
   categoryBreakdown: {
@@ -182,11 +235,20 @@ export interface ExamScoreCard {
     correct: number;
     wrong: number;
   }[];
+  userAnswers?: Record<number, OptionKey>;
+  questions?: QuestionItem[];
 }
 
 // ==========================================
 // DAILY TO-DO TASK MODELS
 // ==========================================
+
+export interface TaskGoalsConfig {
+  paragraph: number;
+  cloze: number;
+  sentence: number;
+  skills: number;
+}
 
 export interface DailyTaskGoal {
   id: string;

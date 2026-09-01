@@ -7,17 +7,22 @@ import {
   ActivityIndicator,
   StatusBar,
   TouchableOpacity,
+  Image,
 } from 'react-native';
-import { User, Settings, Sparkles, Crown } from 'lucide-react-native';
+
+import { User } from 'lucide-react-native';
 import { useLearningStore } from './src/store/useLearningStore';
+import { useThemeStore } from './src/store/useThemeStore';
 import { BottomTabBar } from './src/components/BottomTabBar';
 import { DailyTasksScreen } from './src/components/DailyTasksScreen';
 import { MockExamScreen } from './src/components/MockExamScreen';
 import { MistakeVaultScreen } from './src/components/MistakeVaultScreen';
 import { WordVaultScreen } from './src/components/WordVaultScreen';
+import { StatsScreen } from './src/components/StatsScreen';
 import { AuthScreen } from './src/components/AuthScreen';
 import { SettingsScreen } from './src/components/SettingsScreen';
 import { SubscriptionModal } from './src/components/SubscriptionModal';
+import { AuthModal } from './src/components/AuthModal';
 
 export default function App() {
   const {
@@ -31,6 +36,8 @@ export default function App() {
     setActiveTab,
   } = useLearningStore();
 
+  const { colors, theme } = useThemeStore();
+
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isSettingsPageOpen, setIsSettingsPageOpen] = useState(false);
   const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
@@ -41,11 +48,16 @@ export default function App() {
 
   if (isLoading || !isInitialized) {
     return (
-      <SafeAreaView style={styles.loadingContainer}>
-        <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
-        <ActivityIndicator size="large" color="#4F46E5" />
-        <Text style={styles.loadingTitle}>YDS Master</Text>
-        <Text style={styles.loadingSubtitle}>
+      <SafeAreaView style={[styles.loadingContainer, { backgroundColor: colors.background }]}>
+        <StatusBar barStyle={colors.isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
+        <Image
+          source={require('./assets/icon.png')}
+          style={{ width: 80, height: 80, borderRadius: 22, marginBottom: 16 }}
+          resizeMode="cover"
+        />
+        <ActivityIndicator size="large" color={colors.brand} />
+        <Text style={[styles.loadingTitle, { color: colors.text }]}>YDS Pratik</Text>
+        <Text style={[styles.loadingSubtitle, { color: colors.textSecondary }]}>
           Soru havuzu ve aralıklı tekrar motoru hazırlanıyor...
         </Text>
       </SafeAreaView>
@@ -60,8 +72,8 @@ export default function App() {
   // DEDICATED FULL-PAGE SETTINGS SCREEN
   if (isSettingsPageOpen) {
     return (
-      <View style={styles.container}>
-        <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <StatusBar barStyle={colors.isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
         <SettingsScreen
           onBack={() => setIsSettingsPageOpen(false)}
           onOpenAuth={() => setUserProfile(null)}
@@ -71,69 +83,76 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
+    <View style={[styles.rootContainer, { backgroundColor: colors.cardBackground }]}>
+      <StatusBar barStyle={colors.isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
 
-      {/* Top App Header Bar with Profile & Settings Access */}
-      <View style={styles.topAppBar}>
-        <View style={styles.brandRow}>
-          <View style={styles.brandLogoBox}>
-            <Sparkles size={14} color="#FBBF24" />
-          </View>
-          <View style={styles.brandBadge}>
-            <Text style={styles.brandBadgeText}>YDS</Text>
-          </View>
-          <Text style={styles.brandTitle}>Master</Text>
-        </View>
-
-        <View style={styles.topRightRow}>
-          {/* Quick Pro Upgrade Chip */}
-          <TouchableOpacity
-            style={styles.topProChip}
-            onPress={() => setIsSubscriptionModalOpen(true)}
-            activeOpacity={0.8}
-          >
-            <Crown size={12} color="#D97706" />
-            <Text style={styles.topProChipText}>
-              {userProfile?.isPro ? 'PRO' : 'PRO %20'}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.profileChip}
-            onPress={() => setIsSettingsPageOpen(true)}
-            activeOpacity={0.75}
-          >
+      {/* Top Safe Area Container for Header & Main Content */}
+      <SafeAreaView style={[styles.topSafeArea, { backgroundColor: colors.background }]}>
+        {/* Top App Header Bar (Clean Minimalist Header with User Profile) */}
+        <View style={styles.topAppBar}>
+          <View style={styles.topRightRow}>
+            {/* User Profile / Login Indicator */}
             {userProfile ? (
-              <View style={styles.avatarMini}>
-                <Text style={styles.avatarMiniText}>
-                  {userProfile.fullName ? userProfile.fullName.charAt(0).toUpperCase() : 'A'}
+              <TouchableOpacity
+                style={[
+                  styles.userProfileBtn,
+                  {
+                    backgroundColor: colors.cardBackground,
+                    borderColor: colors.border,
+                    shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
+                  },
+                ]}
+                onPress={() => setIsSettingsPageOpen(true)}
+                activeOpacity={0.7}
+              >
+                <View style={[styles.userAvatarInitialCircle, { backgroundColor: colors.brand }]}>
+                  <Text style={[styles.userAvatarInitialText, { color: colors.textOnBrand }]}>
+                    {userProfile.fullName ? userProfile.fullName.charAt(0).toUpperCase() : 'U'}
+                  </Text>
+                </View>
+                <Text style={[styles.userProfileNameText, { color: colors.text }]} numberOfLines={1}>
+                  {userProfile.fullName ? userProfile.fullName.split(' ')[0] : 'Öğrenci'}
                 </Text>
-              </View>
+              </TouchableOpacity>
             ) : (
-              <View style={styles.guestChip}>
-                <User size={13} color="#4F46E5" />
-                <Text style={styles.guestChipText}>Giriş Yap</Text>
-              </View>
+              <TouchableOpacity
+                style={[
+                  styles.loginHeaderBtn,
+                  {
+                    backgroundColor: colors.cardBackground,
+                    borderColor: colors.border,
+                    shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
+                  },
+                ]}
+                onPress={() => setIsAuthModalOpen(true)}
+                activeOpacity={0.75}
+              >
+                <User size={15} color={colors.brand} />
+                <Text style={[styles.loginHeaderBtnText, { color: colors.brand }]}>Giriş Yap</Text>
+              </TouchableOpacity>
             )}
-            <View style={styles.settingsIconBtn}>
-              <Settings size={15} color="#475569" />
-            </View>
-          </TouchableOpacity>
+          </View>
         </View>
-      </View>
 
-      {/* Main Screen Content */}
-      <View style={styles.mainContent}>
-        {activeTab === 'TASKS' && <DailyTasksScreen />}
-        {activeTab === 'EXAM' && <MockExamScreen />}
-        {activeTab === 'MISTAKES' && <MistakeVaultScreen />}
-        {activeTab === 'VOCAB' && <WordVaultScreen />}
-      </View>
+        {/* Main Screen Content */}
+        <View style={styles.mainContent}>
+          {activeTab === 'TASKS' && (
+            <DailyTasksScreen onOpenMistakes={() => setActiveTab('MISTAKES')} />
+          )}
+          {activeTab === 'EXAM' && <MockExamScreen />}
+          {activeTab === 'VOCAB' && <WordVaultScreen />}
+          {activeTab === 'STATS' && (
+            <StatsScreen onOpenMistakes={() => setActiveTab('MISTAKES')} />
+          )}
+          {activeTab === 'MISTAKES' && (
+            <MistakeVaultScreen onBack={() => setActiveTab('TASKS')} />
+          )}
+        </View>
+      </SafeAreaView>
 
-      {/* Bottom Navigation (4 Tabs) */}
+      {/* Bottom Navigation (4 Tabs: Görevler, Sınav, Kelime, İstatistik) */}
       <BottomTabBar
-        activeTab={activeTab}
+        activeTab={activeTab === 'MISTAKES' ? 'TASKS' : activeTab}
         onTabChange={setActiveTab}
         mistakesCount={mistakes.length}
       />
@@ -143,131 +162,92 @@ export default function App() {
         visible={isSubscriptionModalOpen}
         onClose={() => setIsSubscriptionModalOpen(false)}
       />
-    </SafeAreaView>
+
+      {/* Auth Modal for Quick Login/Register */}
+      <AuthModal
+        visible={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+  },
+  topSafeArea: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
   },
   topAppBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: '#F8FAFC',
-  },
-  brandRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  brandLogoBox: {
-    width: 28,
-    height: 28,
-    borderRadius: 9,
-    backgroundColor: '#312E81',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#4F46E5',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  brandBadge: {
-    backgroundColor: '#4F46E5',
-    paddingHorizontal: 7,
-    paddingVertical: 3,
-    borderRadius: 7,
-  },
-  brandBadgeText: {
-    fontSize: 11.5,
-    fontWeight: '900',
-    color: '#FFFFFF',
-    letterSpacing: 0.5,
-  },
-  brandTitle: {
-    fontSize: 16.5,
-    fontWeight: '900',
-    color: '#0F172A',
-    letterSpacing: -0.3,
+    paddingTop: 8,
+    paddingBottom: 6,
   },
   topRightRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
   },
-  topProChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: '#FEF3C7',
-    borderWidth: 1,
-    borderColor: '#FDE68A',
-    paddingHorizontal: 8,
-    paddingVertical: 5,
-    borderRadius: 8,
-  },
-  topProChipText: {
-    fontSize: 11,
-    fontWeight: '900',
-    color: '#B45309',
-    letterSpacing: 0.3,
-  },
-  profileChip: {
+  userProfileBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
+    paddingLeft: 4,
+    paddingRight: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+    borderWidth: 1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 6,
+    elevation: 2,
+    maxWidth: 140,
   },
-  avatarMini: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#4F46E5',
+  userAvatarInitialCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  avatarMiniText: {
-    color: '#FFFFFF',
+  userAvatarInitialText: {
     fontSize: 13,
-    fontWeight: '800',
+    fontWeight: '900',
   },
-  guestChip: {
+  userProfileNameText: {
+    fontSize: 12.5,
+    fontWeight: '800',
+    maxWidth: 80,
+  },
+  loginHeaderBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: '#EEF2FF',
     paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 999,
+    paddingVertical: 8,
+    borderRadius: 18,
     borderWidth: 1,
-    borderColor: '#C7D2FE',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 6,
+    elevation: 2,
   },
-  guestChipText: {
-    fontSize: 11.5,
+  loginHeaderBtnText: {
+    fontSize: 12,
     fontWeight: '800',
-    color: '#4F46E5',
-  },
-  settingsIconBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 11,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E7EAF3',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   mainContent: {
     flex: 1,
   },
   loadingContainer: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
@@ -275,12 +255,10 @@ const styles = StyleSheet.create({
   loadingTitle: {
     fontSize: 20,
     fontWeight: '900',
-    color: '#0F172A',
     marginTop: 16,
   },
   loadingSubtitle: {
     fontSize: 13,
-    color: '#64748B',
     marginTop: 6,
     textAlign: 'center',
   },

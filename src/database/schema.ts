@@ -37,7 +37,11 @@ CREATE TABLE IF NOT EXISTS daily_stats (
   new_words_learned INTEGER DEFAULT 0,
   words_reviewed INTEGER DEFAULT 0,
   correct_count INTEGER DEFAULT 0,
-  incorrect_count INTEGER DEFAULT 0
+  incorrect_count INTEGER DEFAULT 0,
+  paragraph_completed INTEGER DEFAULT 0,
+  cloze_completed INTEGER DEFAULT 0,
+  sentence_completed INTEGER DEFAULT 0,
+  skills_completed INTEGER DEFAULT 0
 );
 `;
 
@@ -48,7 +52,11 @@ CREATE TABLE IF NOT EXISTS user_settings (
   current_level TEXT DEFAULT 'B1',
   last_active_date DATE,
   streak_count INTEGER DEFAULT 1,
-  last_streak_date DATE
+  last_streak_date DATE,
+  paragraph_goal INTEGER DEFAULT 8,
+  cloze_goal INTEGER DEFAULT 5,
+  sentence_goal INTEGER DEFAULT 8,
+  skills_goal INTEGER DEFAULT 14
 );
 `;
 
@@ -106,12 +114,44 @@ CREATE TABLE IF NOT EXISTS exam_history (
 );
 `;
 
+export const CREATE_USER_SESSION_TABLE = `
+CREATE TABLE IF NOT EXISTS user_session (
+  id TEXT PRIMARY KEY,
+  email TEXT NOT NULL,
+  full_name TEXT NOT NULL,
+  target_score INTEGER DEFAULT 80,
+  is_guest INTEGER DEFAULT 0,
+  is_pro INTEGER DEFAULT 0,
+  pro_expires_at TEXT,
+  applied_promo_code TEXT,
+  provider TEXT DEFAULT 'email',
+  token TEXT,
+  created_at TEXT NOT NULL
+);
+`;
+
+export const CREATE_VOCAB_FOLDERS_TABLE = `
+CREATE TABLE IF NOT EXISTS vocab_folders (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT,
+  color TEXT NOT NULL,
+  icon TEXT NOT NULL,
+  is_system INTEGER DEFAULT 0,
+  category_type TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+`;
+
 export const CREATE_INDEXES = `
 CREATE INDEX IF NOT EXISTS idx_words_level ON words(level);
 CREATE INDEX IF NOT EXISTS idx_words_category ON words(category);
+CREATE INDEX IF NOT EXISTS idx_words_subcategory ON words(subcategory);
 CREATE INDEX IF NOT EXISTS idx_progress_box_next ON user_word_progress(box, next_review_at);
 CREATE INDEX IF NOT EXISTS idx_progress_word_id ON user_word_progress(word_id);
 CREATE INDEX IF NOT EXISTS idx_questions_type_status ON questions(type, status);
 CREATE INDEX IF NOT EXISTS idx_mistake_vault_reviewed ON mistake_vault(is_reviewed);
 CREATE INDEX IF NOT EXISTS idx_exam_history_completed ON exam_history(completed_at);
 `;
+
+

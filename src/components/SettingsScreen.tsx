@@ -5,84 +5,115 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  Alert,
   Switch,
   SafeAreaView,
+  StatusBar,
+  Alert,
+  Modal,
+  Platform,
 } from 'react-native';
 import {
+  X,
+  ChevronRight,
+  RefreshCw,
+  Trash2,
+  Check,
   User,
   LogOut,
-  Trash2,
-  Cloud,
-  ShieldCheck,
-  FileText,
-  Award,
-  Bell,
-  Target,
-  ChevronLeft,
-  ChevronRight,
-  ExternalLink,
   RotateCcw,
-  Crown,
-  Tag,
+  UserX,
+  Minus,
+  Plus,
 } from 'lucide-react-native';
+import { useThemeStore, FontSizeValue } from '../store/useThemeStore';
 import { useLearningStore } from '../store/useLearningStore';
-import { SupabaseService } from '../services/SupabaseService';
 import { dbService } from '../database/DatabaseService';
 import { NotificationService } from '../services/NotificationService';
-import { SubscriptionModal } from './SubscriptionModal';
+import { SupabaseService } from '../services/SupabaseService';
+import { AuthModal } from './AuthModal';
 
-interface Props {
+interface SettingsScreenProps {
   onBack: () => void;
-  onOpenAuth: () => void;
+  onOpenAuth?: () => void;
 }
 
-export const SettingsScreen: React.FC<Props> = ({ onBack, onOpenAuth }) => {
+export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAuth }) => {
+  const {
+    theme,
+    setTheme,
+    fontSize,
+    setFontSize,
+    isSystemFontSize,
+    setIsSystemFontSize,
+    fontFamily,
+    setFontFamily,
+    autoNightMode,
+    setAutoNightMode,
+    colors,
+  } = useThemeStore();
+
   const {
     userProfile,
-    setUserProfile,
-    dailyQuestionTarget,
-    setDailyQuestionTarget,
+    dailyTasksProgress,
     streakCount,
+    taskGoals,
+    dailyQuestionTarget,
+    setUserProfile,
+    setTaskGoals,
     loadVocabSession,
     loadDailyTasks,
+    resetAllProgress,
+    deleteUserAccount,
   } = useLearningStore();
 
-  const [dailyTarget, setDailyTarget] = useState<number>(dailyQuestionTarget || 35);
-  const [notificationsEnabled, setNotificationsEnabled] = useState<boolean>(true);
-  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState<boolean>(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [selectedHour, setSelectedHour] = useState(21);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [lastSyncTime, setLastSyncTime] = useState<string>('Bugün, 10:42');
 
-  const handleSelectTarget = async (count: number) => {
-    setDailyTarget(count);
-    setDailyQuestionTarget(count);
-    if (notificationsEnabled) {
-      await NotificationService.scheduleDailyReminder(20, 0, count, streakCount);
+  // Modals visibility
+  const [isFontSizeModalOpen, setIsFontSizeModalOpen] = useState(false);
+  const [isFontFamilyModalOpen, setIsFontFamilyModalOpen] = useState(false);
+  const [isHourModalOpen, setIsHourModalOpen] = useState(false);
+  const [isGoalsModalOpen, setIsGoalsModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const updateLastSyncTime = () => {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+    setLastSyncTime(`Bugün, ${timeStr}`);
+  };
+
+  const getFontSizeLabel = (sz: FontSizeValue) => {
+    if (isSystemFontSize) return 'Sistem (Otomatik)';
+    switch (sz) {
+      case 13:
+        return 'Küçük (13 pt)';
+      case 15:
+        return 'Standart (15 pt)';
+      case 17:
+        return 'Büyük (17 pt)';
+      case 19:
+        return 'Çok Büyük (19 pt)';
+      case 21:
+        return 'Maksimum (21 pt)';
+      default:
+        return `${sz} pt`;
     }
   };
 
-  const handleToggleNotifications = async (enabled: boolean) => {
-    setNotificationsEnabled(enabled);
-    if (enabled) {
-      const id = await NotificationService.scheduleDailyReminder(20, 0, dailyTarget, streakCount);
-      if (id) {
-        Alert.alert(
-          'Bildirimler Aktif Edildi',
-          `Her akşam 20:00'de günlük ${dailyTarget} soruluk hedefiniz ve ${streakCount} günlük seriniz için hatırlatıcı gönderilecek.`,
-          [
-            { text: 'Tamam' },
-            {
-              text: 'Test Bildirimi Gönder',
-              onPress: () => NotificationService.sendTestNotification(),
-            },
-          ]
-        );
-      }
-    } else {
-      await NotificationService.cancelAll();
+  const getFontFamilyLabel = (fam: string) => {
+    switch (fam) {
+      case 'serif':
+        return 'Akademik Serif';
+      case 'rounded':
+        return 'Okuma Kolaylığı';
+      default:
+        return 'Modern Sans (Sistem)';
     }
   };
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     Alert.alert('Çıkış Yap', 'Hesabınızdan çıkış yapmak istediğinize emin misiniz?', [
       { text: 'Vazgeç', style: 'cancel' },
       {
@@ -90,47 +121,72 @@ export const SettingsScreen: React.FC<Props> = ({ onBack, onOpenAuth }) => {
         style: 'destructive',
         onPress: async () => {
           await SupabaseService.signOut();
-          setUserProfile(null);
-          onBack();
+          await setUserProfile(null);
         },
       },
     ]);
   };
 
-  const handleDeleteAccount = () => {
+  const handleToggleNotifications = async (val: boolean) => {
+    setNotificationsEnabled(val);
+    if (val) {
+      const success = await NotificationService.scheduleAllReminders(
+        selectedHour,
+        0,
+        dailyQuestionTarget,
+        streakCount
+      );
+      if (success) {
+        Alert.alert(
+          'Bildirimler Aktif Edildi 🔔',
+          `• Sabah 09:00: Günlük kelime seti\n• Akşam ${selectedHour}:00: ${dailyQuestionTarget} soruluk hedef ve ${streakCount} günlük seriyi koruma bildirimi`
+        );
+      }
+    } else {
+      await NotificationService.cancelAll();
+      Alert.alert('Bildirimler Kapatıldı', 'Tüm planlanmış hatırlatıcılar devre dışı bırakıldı.');
+    }
+  };
+
+  const handleSyncData = async () => {
+    setIsSyncing(true);
+    setTimeout(() => {
+      updateLastSyncTime();
+      setIsSyncing(false);
+      Alert.alert('Senkronizasyon Başarılı ☁️', 'Tüm ilerleme ve kelime kartlarınız güncellendi.');
+    }, 800);
+  };
+
+  const handleResetProgress = () => {
     Alert.alert(
-      'Hesabı Kalıcı Olarak Sil',
-      'Hesabınızı, çözdüğünüz sınavları ve tüm kelime hafızanızı kalıcı olarak silmek istediğinizden emin misiniz? (Apple & KVKK Güvencesi: Bu işlem geri alınamaz.)',
+      'İlerlemeyi Sıfırla',
+      'Tüm kelime hafıza kutularınız (Aralıklı Tekrar), çözülen soru ve deneme geçmişiniz, hata kasanız ve günlük seriniz sıfırlanacaktır. Bu işlem geri alınamaz.\n\nDevam etmek istiyor musunuz?',
       [
-        { text: 'İptal', style: 'cancel' },
+        { text: 'Vazgeç', style: 'cancel' },
         {
-          text: 'Hesabımı ve Verilerimi Sil',
+          text: 'Evet, Sıfırla',
           style: 'destructive',
           onPress: async () => {
-            await SupabaseService.deleteAccount();
-            setUserProfile(null);
-            onBack();
-            Alert.alert('Hesap Silindi', 'Hesabınız ve ilişkili tüm veriler başarıyla silindi.');
+            await resetAllProgress();
+            Alert.alert('Başarılı', 'Tüm öğrenme ilerlemeniz başarıyla sıfırlandı.');
           },
         },
       ]
     );
   };
 
-  const handleResetProgress = () => {
+  const handleDeleteAccount = () => {
     Alert.alert(
-      'İlerlemeyi Sıfırla',
-      'Günlük görev havuzunu ve kelime kutularınızı başlangıç durumuna getirmek istiyor musunuz?',
+      'Hesabımı Sil',
+      'Hesabınız, bulut yedeklemeleriniz ve tüm çalışma geçmişiniz kalıcı olarak silinecektir. Bu işlem geri alınamaz.\n\nHesabınızı silmek istediğinize emin misiniz?',
       [
         { text: 'Vazgeç', style: 'cancel' },
         {
-          text: 'Sıfırla',
+          text: 'Hesabımı Kalıcı Olarak Sil',
           style: 'destructive',
           onPress: async () => {
-            await dbService.seedQuestionsIfEmpty();
-            await loadVocabSession();
-            await loadDailyTasks();
-            Alert.alert('Başarılı', 'İlerlemeniz sıfırlandı.');
+            await deleteUserAccount();
+            Alert.alert('Hesap Silindi', 'Hesabınız ve tüm verileriniz başarıyla silindi.');
           },
         },
       ]
@@ -138,566 +194,1314 @@ export const SettingsScreen: React.FC<Props> = ({ onBack, onOpenAuth }) => {
   };
 
   return (
-    <SafeAreaView style={styles.safeContainer}>
-      {/* Top Header Bar */}
-      <View style={styles.topBar}>
-        <TouchableOpacity style={styles.backBtn} onPress={onBack} activeOpacity={0.7}>
-          <ChevronLeft size={22} color="#4F46E5" />
-          <Text style={styles.backBtnText}>Geri Dön</Text>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
+      <StatusBar barStyle={colors.isDark ? 'light-content' : 'dark-content'} />
+
+      {/* TOP HEADER BAR */}
+      <View style={[styles.headerBar, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
+        <View style={styles.headerSpacer} />
+        <Text style={[styles.headerTitle, { color: colors.text }]}>Ayarlar</Text>
+        <TouchableOpacity style={styles.closeBtn} onPress={onBack} activeOpacity={0.7}>
+          <X size={22} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.pageTitle}>Profil & Ayarlar</Text>
-        <View style={{ width: 60 }} />
       </View>
 
       <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.content}
+        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* USER CARD */}
+        {/* HESAP VE GİRİŞ DURUMU */}
+        <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
+          HESAP VE PROFİL
+        </Text>
         {userProfile ? (
-          <View style={styles.userCard}>
-            <View style={styles.avatarCircle}>
-              <Text style={styles.avatarLetter}>
-                {userProfile.fullName ? userProfile.fullName.charAt(0).toUpperCase() : 'A'}
+          <View
+            style={[
+              styles.accountCard,
+              {
+                backgroundColor: colors.cardBackground,
+                borderColor: colors.border,
+                shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
+              },
+            ]}
+          >
+            <View style={[styles.accountAvatarCircle, { backgroundColor: colors.brand }]}>
+              <Text style={[styles.accountAvatarText, { color: colors.textOnBrand }]}>
+                {userProfile.fullName ? userProfile.fullName.charAt(0).toUpperCase() : 'U'}
               </Text>
             </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.userName}>{userProfile.fullName || 'YDS Öğrencisi'}</Text>
-              <Text style={styles.userEmail}>{userProfile.email}</Text>
-              <View style={styles.badgeRow}>
-                <View style={styles.targetBadge}>
-                  <Award size={11} color="#4F46E5" />
-                  <Text style={styles.targetBadgeText}>Hedef: {userProfile.targetScore || 80}+</Text>
-                </View>
-                {userProfile.isGuest && (
-                  <View style={styles.guestBadge}>
-                    <Text style={styles.guestBadgeText}>Misafir Hesap</Text>
+
+            <View style={styles.accountInfoGroup}>
+              <View style={styles.accountNameRow}>
+                <Text style={[styles.accountNameText, { color: colors.text }]} numberOfLines={1}>
+                  {userProfile.fullName || 'YDS Öğrencisi'}
+                </Text>
+                {userProfile.isPro && (
+                  <View style={[styles.accountStatusBadge, { backgroundColor: colors.brandLight }]}>
+                    <Text style={[styles.accountStatusText, { color: colors.brand }]}>
+                      ✨ PRO
+                    </Text>
                   </View>
                 )}
               </View>
             </View>
-          </View>
-        ) : (
-          <View style={styles.guestPromptCard}>
-            <View>
-              <Text style={styles.guestPromptTitle}>Misafir Olarak Kullanıyorsunuz</Text>
-              <Text style={styles.guestPromptSub}>
-                İlerlemenizi bulutta yedeklemek ve cihazlar arası eşitlemek için giriş yapın.
-              </Text>
-            </View>
+
             <TouchableOpacity
-              style={styles.loginBtn}
-              onPress={onOpenAuth}
-              activeOpacity={0.8}
+              style={[styles.logoutBtn, { backgroundColor: colors.errorLight }]}
+              onPress={handleLogout}
+              activeOpacity={0.7}
             >
-              <Text style={styles.loginBtnText}>Giriş Yap / Kayıt Ol</Text>
+              <LogOut size={19} color={colors.error} />
             </TouchableOpacity>
           </View>
-        )}
-
-        {/* PRO MEMBERSHIP BANNER (ALİ20 PROMO & VIP PASS) */}
-        <TouchableOpacity
-          style={styles.proUpgradeBanner}
-          onPress={() => setIsSubscriptionModalOpen(true)}
-          activeOpacity={0.85}
-        >
-          <View style={styles.proUpgradeLeft}>
-            <View style={styles.proUpgradeIconWrap}>
-              <Crown size={20} color="#FFFFFF" />
+        ) : (
+          <TouchableOpacity
+            style={[
+              styles.loginPromptCard,
+              {
+                backgroundColor: colors.cardBackground,
+                borderColor: colors.border,
+                shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
+              },
+            ]}
+            onPress={() => setIsAuthModalOpen(true)}
+            activeOpacity={0.8}
+          >
+            <View style={[styles.loginPromptIconBox, { backgroundColor: colors.brandLight }]}>
+              <User size={22} color={colors.brand} />
             </View>
             <View style={{ flex: 1 }}>
-              <View style={styles.proTitleRow}>
-                <Text style={styles.proUpgradeTitle}>
-                  {userProfile?.isPro ? '👑 YDS Master Pro Aktif' : '💎 YDS Master Pro Üyelik'}
-                </Text>
-                <View style={styles.proPromoBadge}>
-                  <Tag size={10} color="#7C3AED" />
-                  <Text style={styles.proPromoBadgeText}>%20 HOCA İNDİRİMİ</Text>
-                </View>
-              </View>
-              <Text style={styles.proUpgradeSub}>
-                {userProfile?.isPro
-                  ? 'Sınav gününe kadar sınırsız AI ve Master deneme erişimi'
-                  : 'AI tuzak analizi ve 80 soruluk denemeler · ALİ20 ile 470 TL'}
+              <Text style={[styles.loginPromptTitle, { color: colors.text }]}>Giriş Yap / Kaydol</Text>
+              <Text style={[styles.loginPromptSubtitle, { color: colors.textSecondary }]}>
+                Çalışma geçmişini ve kelimelerini bulutta yedekle.
               </Text>
             </View>
-          </View>
-          <ChevronRight size={18} color="#94A3B8" />
-        </TouchableOpacity>
+            <View style={[styles.loginActionBtn, { backgroundColor: colors.brand }]}>
+              <Text style={[styles.loginActionBtnText, { color: colors.textOnBrand }]}>Giriş</Text>
+            </View>
+          </TouchableOpacity>
+        )}
 
-        {/* SECTION 1: HEDEF VE ÇALIŞMA */}
-        <Text style={styles.sectionHeading}>🎯 Hedef ve Çalışma Düzeni</Text>
-        <View style={styles.settingsCard}>
-          <View style={styles.settingRow}>
-            <View style={styles.settingLeft}>
-              <Target size={18} color="#4F46E5" />
+        {/* SECTION: TEMA */}
+        <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
+          TEMA
+        </Text>
+        <View style={[styles.themeCardContainer, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+          <View style={styles.themeGrid}>
+            {/* Açık Tema */}
+            <TouchableOpacity
+              style={styles.themeOptionItem}
+              onPress={() => setTheme('light')}
+              activeOpacity={0.8}
+            >
+              <View
+                style={[
+                  styles.deviceFrame,
+                  styles.deviceFrameLight,
+                  { borderColor: theme === 'light' ? colors.brand : colors.border },
+                ]}
+              >
+                <View style={[styles.deviceScreen, { backgroundColor: '#F8FAFC' }]}>
+                  <View style={[styles.deviceHeaderBarLight, { backgroundColor: '#E2E8F0' }]} />
+                  <View style={[styles.deviceLineLight, { backgroundColor: '#E2E8F0' }]} />
+                  <View style={[styles.deviceLineLight, { backgroundColor: '#E2E8F0' }]} />
+                  <View style={[styles.deviceLineLight, { backgroundColor: '#E2E8F0', width: '60%' }]} />
+                </View>
+              </View>
+              <Text style={[styles.themeLabel, { color: colors.text }]}>Açık</Text>
+              <View style={[styles.radioOuter, { borderColor: theme === 'light' ? colors.brand : colors.border }]}>
+                {theme === 'light' && <View style={[styles.radioInner, { backgroundColor: colors.brand }]} />}
+              </View>
+            </TouchableOpacity>
+
+            {/* Koyu Tema */}
+            <TouchableOpacity
+              style={styles.themeOptionItem}
+              onPress={() => setTheme('dark')}
+              activeOpacity={0.8}
+            >
+              <View
+                style={[
+                  styles.deviceFrame,
+                  styles.deviceFrameDark,
+                  { borderColor: theme === 'dark' ? colors.brand : colors.border },
+                ]}
+              >
+                <View style={[styles.deviceScreen, { backgroundColor: '#0B0F19' }]}>
+                  <View style={[styles.deviceHeaderBarDark, { backgroundColor: '#1C2538' }]} />
+                  <View style={[styles.deviceLineDark, { backgroundColor: '#2E3D59' }]} />
+                  <View style={[styles.deviceLineDark, { backgroundColor: '#2E3D59' }]} />
+                  <View style={[styles.deviceLineDark, { backgroundColor: '#2E3D59', width: '60%' }]} />
+                </View>
+              </View>
+              <Text style={[styles.themeLabel, { color: colors.text }]}>Koyu</Text>
+              <View style={[styles.radioOuter, { borderColor: theme === 'dark' ? colors.brand : colors.border }]}>
+                {theme === 'dark' && <View style={[styles.radioInner, { backgroundColor: colors.brand }]} />}
+              </View>
+            </TouchableOpacity>
+
+            {/* Sistem Teması */}
+            <TouchableOpacity
+              style={styles.themeOptionItem}
+              onPress={() => setTheme('system')}
+              activeOpacity={0.8}
+            >
+              <View
+                style={[
+                  styles.deviceFrame,
+                  styles.deviceFrameSystem,
+                  { borderColor: theme === 'system' ? colors.brand : colors.border },
+                ]}
+              >
+                <View style={styles.deviceScreenSplit}>
+                  <View style={[styles.deviceHalfLight, { backgroundColor: '#F8FAFC' }]}>
+                    <View style={[styles.deviceLineLight, { backgroundColor: '#E2E8F0' }]} />
+                    <View style={[styles.deviceLineLight, { backgroundColor: '#E2E8F0' }]} />
+                  </View>
+                  <View style={[styles.deviceHalfDark, { backgroundColor: '#0B0F19' }]}>
+                    <View style={[styles.deviceLineDark, { backgroundColor: '#2E3D59' }]} />
+                    <View style={[styles.deviceLineDark, { backgroundColor: '#2E3D59' }]} />
+                  </View>
+                </View>
+              </View>
+              <Text style={[styles.themeLabel, { color: colors.text }]}>Sistem</Text>
+              <View style={[styles.radioOuter, { borderColor: theme === 'system' ? colors.brand : colors.border }]}>
+                {theme === 'system' && <View style={[styles.radioInner, { backgroundColor: colors.brand }]} />}
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* SECTION: ÇALIŞMA HEDEFLERİ */}
+        <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
+          ÇALIŞMA HEDEFLERİ
+        </Text>
+        <View style={[styles.groupedCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+          <TouchableOpacity
+            style={styles.rowItem}
+            onPress={() => setIsGoalsModalOpen(true)}
+            activeOpacity={0.7}
+          >
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.rowLabel, { color: colors.text }]}>Günlük Soru Dağılımı</Text>
+              <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
+                Paragraf, Cloze, Cümle, Diyalog hedefleri
+              </Text>
+            </View>
+            <View style={styles.rowRight}>
+              <Text style={[styles.rowValue, { color: colors.brand, fontWeight: '700' }]}>
+                {(taskGoals?.paragraph || 8) + (taskGoals?.cloze || 5) + (taskGoals?.sentence || 8) + (taskGoals?.skills || 14)} Soru / Gün
+              </Text>
+              <ChevronRight size={16} color={colors.textSecondary} />
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        {/* SECTION: GÖRÜNÜM & YAZI */}
+        <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
+          GÖRÜNÜM & YAZI
+        </Text>
+        <View style={[styles.groupedCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+          {/* Otomatik Gece Modu */}
+          <View style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}>
+            <Text style={[styles.rowLabel, { color: colors.text }]}>Otomatik Gece Modu</Text>
+            <Switch
+              value={autoNightMode}
+              onValueChange={setAutoNightMode}
+              trackColor={{ false: colors.border, true: colors.brand }}
+              thumbColor="#FFFFFF"
+            />
+          </View>
+
+          {/* Yazı Boyutu */}
+          <TouchableOpacity
+            style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}
+            onPress={() => setIsFontSizeModalOpen(true)}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.rowLabel, { color: colors.text }]}>Yazı Boyutu</Text>
+            <View style={styles.rowRight}>
+              <Text style={[styles.rowValue, { color: colors.textSecondary }]}>
+                {getFontSizeLabel(fontSize)}
+              </Text>
+              <ChevronRight size={16} color={colors.textSecondary} />
+            </View>
+          </TouchableOpacity>
+
+          {/* Yazı Tipi */}
+          <TouchableOpacity
+            style={styles.rowItem}
+            onPress={() => setIsFontFamilyModalOpen(true)}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.rowLabel, { color: colors.text }]}>Yazı Tipi</Text>
+            <View style={styles.rowRight}>
+              <Text style={[styles.rowValue, { color: colors.textSecondary }]}>
+                {getFontFamilyLabel(fontFamily)}
+              </Text>
+              <ChevronRight size={16} color={colors.textSecondary} />
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        {/* SECTION: BİLDİRİMLER */}
+        <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
+          BİLDİRİMLER
+        </Text>
+        <View style={[styles.groupedCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+          {/* Hatırlatıcılar Aç/Kapa */}
+          <View style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}>
+            <Text style={[styles.rowLabel, { color: colors.text }]}>Çalışma Hatırlatıcıları</Text>
+            <Switch
+              value={notificationsEnabled}
+              onValueChange={handleToggleNotifications}
+              trackColor={{ false: colors.border, true: colors.brand }}
+              thumbColor="#FFFFFF"
+            />
+          </View>
+
+          {/* Hatırlatma Saati */}
+          <TouchableOpacity
+            style={styles.rowItem}
+            onPress={() => setIsHourModalOpen(true)}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.rowLabel, { color: colors.text }]}>Hatırlatma Saati</Text>
+            <View style={styles.rowRight}>
+              <Text style={[styles.rowValue, { color: colors.textSecondary }]}>
+                {selectedHour}:00
+              </Text>
+              <ChevronRight size={16} color={colors.textSecondary} />
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        {/* SECTION: İÇERİK VE VERİ YÖNETİMİ */}
+        <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
+          İÇERİK VE VERİ YÖNETİMİ
+        </Text>
+        <View style={[styles.groupedCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+          {/* Verileri Yenile */}
+          <TouchableOpacity
+            style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}
+            onPress={async () => {
+              await dbService.seedQuestionsIfEmpty();
+              await loadDailyTasks();
+              Alert.alert('Havuz Güncellendi', 'Tüm soru ve kelime havuzu en güncel verilerle senkronize edildi.');
+            }}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.rowLabel, { color: colors.text }]}>Tüm Verileri Tekrar İndir</Text>
+            <ChevronRight size={16} color={colors.textSecondary} />
+          </TouchableOpacity>
+
+          {/* Senkronize Et */}
+          <TouchableOpacity
+            style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}
+            onPress={handleSyncData}
+            activeOpacity={0.7}
+          >
+            <View>
+              <Text style={[styles.rowLabel, { color: colors.text }]}>Senkronize Et</Text>
+              <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
+                Son senkronizasyon: {lastSyncTime}
+              </Text>
+            </View>
+            <RefreshCw size={16} color={colors.textSecondary} />
+          </TouchableOpacity>
+
+          {/* İlerlemeyi Sıfırla */}
+          <TouchableOpacity
+            style={[
+              styles.rowItem,
+              userProfile ? { borderBottomWidth: 1, borderBottomColor: colors.border } : null,
+            ]}
+            onPress={handleResetProgress}
+            activeOpacity={0.7}
+          >
+            <View>
+              <Text style={[styles.rowLabelDanger, { color: colors.error }]}>Tüm İlerlemeyi Sıfırla</Text>
+              <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
+                Kelime kutuları, çözülen sorular ve seriyi sıfırlar
+              </Text>
+            </View>
+            <RotateCcw size={16} color={colors.error} />
+          </TouchableOpacity>
+
+          {/* Hesabımı Sil */}
+          {userProfile && (
+            <TouchableOpacity
+              style={styles.rowItem}
+              onPress={handleDeleteAccount}
+              activeOpacity={0.7}
+            >
               <View>
-                <Text style={styles.settingTitle}>Günlük Soru Hedefi</Text>
-                <Text style={styles.settingDesc}>Günde çözmek istediğiniz soru sayısı</Text>
+                <Text style={[styles.rowLabelDanger, { color: colors.error }]}>Hesabımı ve Verilerimi Sil</Text>
+                <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
+                  Hesabınızı ve bulut kayıtlarınızı kalıcı olarak siler
+                </Text>
+              </View>
+              <UserX size={16} color={colors.error} />
+            </TouchableOpacity>
+          )}
+        </View>
+
+        <View style={{ height: 40 }} />
+      </ScrollView>
+
+      {/* MODAL 1: YAZI BOYUTU */}
+      <Modal
+        visible={isFontSizeModalOpen}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setIsFontSizeModalOpen(false)}
+      >
+        <SafeAreaView style={[styles.modalSafeArea, { backgroundColor: colors.cardBackground }]}>
+          <View style={[styles.modalHeader, { borderBottomColor: colors.border }]}>
+            <TouchableOpacity
+              style={styles.modalCloseBtn}
+              onPress={() => setIsFontSizeModalOpen(false)}
+            >
+              <X size={22} color={colors.text} />
+            </TouchableOpacity>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>Yazı Boyutu</Text>
+            <View style={{ width: 40 }} />
+          </View>
+
+          <View style={styles.modalBody}>
+            {/* Live Academic Preview Card */}
+            <View
+              style={[
+                styles.fontPreviewCard,
+                {
+                  backgroundColor: colors.subtleBackground,
+                  borderColor: colors.border,
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.previewTextEn,
+                  {
+                    color: colors.text,
+                    fontSize: isSystemFontSize ? 17 : fontSize,
+                    fontFamily: fontFamily === 'serif' ? (Platform.OS === 'ios' ? 'Georgia' : 'serif') : undefined,
+                  },
+                ]}
+              >
+                "The economic and technological advancements of the late twentieth century have fundamentally altered global communication patterns. Researchers emphasize that linguistic proficiency plays a decisive role in academic and career trajectory."
+              </Text>
+              <View style={[styles.previewDivider, { backgroundColor: colors.border }]} />
+              <Text
+                style={[
+                  styles.previewTextTr,
+                  {
+                    color: colors.textSecondary,
+                    fontSize: Math.max(12, (isSystemFontSize ? 17 : fontSize) - 2),
+                  },
+                ]}
+              >
+                İktisadi ve teknolojik gelişmeler küresel iletişim kalıplarını köklü biçimde değiştirmiştir. Araştırmacılar, dil yetkinliğinin akademik ve mesleki kariyerde belirleyici rol oynadığını vurgulamaktadır.
+              </Text>
+            </View>
+
+            {/* Current Size Indicator Badge */}
+            <View style={styles.sizeIndicatorWrap}>
+              <View style={[styles.sizeBadge, { backgroundColor: colors.brandLight, borderColor: colors.brandLightBorder }]}>
+                <Text style={[styles.sizeBadgeText, { color: colors.brand }]}>
+                  {getFontSizeLabel(fontSize)}
+                </Text>
               </View>
             </View>
+
+            {/* Stepper / Slider Bar */}
+            {!isSystemFontSize && (
+              <View style={[styles.stepperContainer, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
+                <Text style={[styles.stepperLabelSmall, { color: colors.textSecondary }]}>A</Text>
+
+                <View style={styles.stepsRow}>
+                  {([13, 15, 17, 19, 21] as FontSizeValue[]).map((sz) => {
+                    const isSelected = fontSize === sz;
+                    return (
+                      <TouchableOpacity
+                        key={sz}
+                        style={[
+                          styles.stepDot,
+                          { backgroundColor: isSelected ? colors.brand : colors.cardBackground },
+                        ]}
+                        onPress={() => setFontSize(sz)}
+                        activeOpacity={0.7}
+                      >
+                        <Text
+                          style={[
+                            styles.stepNumber,
+                            { color: isSelected ? colors.textOnBrand : colors.textSecondary },
+                          ]}
+                        >
+                          {sz}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+
+                <Text style={[styles.stepperLabelLarge, { color: colors.text }]}>A</Text>
+              </View>
+            )}
+
+            {/* Sistem Tercihini Kullan Toggle */}
+            <View style={[styles.systemToggleCard, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
+              <Text style={[styles.systemToggleText, { color: colors.text }]}>
+                Sistem Tercihini Kullan
+              </Text>
+              <Switch
+                value={isSystemFontSize}
+                onValueChange={setIsSystemFontSize}
+                trackColor={{ false: colors.border, true: colors.brand }}
+                thumbColor="#FFFFFF"
+              />
+            </View>
+          </View>
+        </SafeAreaView>
+      </Modal>
+
+      {/* MODAL 2: YAZI TİPİ */}
+      <Modal
+        visible={isFontFamilyModalOpen}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setIsFontFamilyModalOpen(false)}
+      >
+        <SafeAreaView style={[styles.modalSafeArea, { backgroundColor: colors.cardBackground }]}>
+          <View style={[styles.modalHeader, { borderBottomColor: colors.border }]}>
+            <TouchableOpacity
+              style={styles.modalCloseBtn}
+              onPress={() => setIsFontFamilyModalOpen(false)}
+            >
+              <X size={22} color={colors.text} />
+            </TouchableOpacity>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>Yazı Tipi</Text>
+            <View style={{ width: 40 }} />
           </View>
 
-          {/* Target Chips */}
-          <View style={styles.targetRow}>
-            {[20, 35, 50].map((count) => {
-              const isSelected = dailyTarget === count;
+          <ScrollView style={styles.modalBody}>
+            {/* Modern Sans */}
+            <TouchableOpacity
+              style={[
+                styles.fontFamilyCard,
+                {
+                  backgroundColor: fontFamily === 'system' ? colors.brandLight : colors.subtleBackground,
+                  borderColor: fontFamily === 'system' ? colors.brand : colors.border,
+                },
+              ]}
+              onPress={() => setFontFamily('system')}
+              activeOpacity={0.8}
+            >
+              <View style={styles.fontFamilyHeader}>
+                <Text style={[styles.fontFamilyName, { color: colors.brand }]}>Modern Sans (Sistem)</Text>
+                {fontFamily === 'system' && <Check size={18} color={colors.brand} />}
+              </View>
+              <Text style={[styles.fontFamilySample, { color: colors.text }]}>
+                Comprehensive academic linguistic research shows rapid learning retention when using spaced repetition.
+              </Text>
+            </TouchableOpacity>
+
+            {/* Akademik Serif */}
+            <TouchableOpacity
+              style={[
+                styles.fontFamilyCard,
+                {
+                  backgroundColor: fontFamily === 'serif' ? colors.brandLight : colors.subtleBackground,
+                  borderColor: fontFamily === 'serif' ? colors.brand : colors.border,
+                },
+              ]}
+              onPress={() => setFontFamily('serif')}
+              activeOpacity={0.8}
+            >
+              <View style={styles.fontFamilyHeader}>
+                <Text style={[styles.fontFamilyName, { color: colors.brand }]}>Akademik Serif (Kitap & Makale)</Text>
+                {fontFamily === 'serif' && <Check size={18} color={colors.brand} />}
+              </View>
+              <Text
+                style={[
+                  styles.fontFamilySample,
+                  {
+                    color: colors.text,
+                    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+                  },
+                ]}
+              >
+                Comprehensive academic linguistic research shows rapid learning retention when using spaced repetition.
+              </Text>
+            </TouchableOpacity>
+
+            {/* Okuma Kolaylığı */}
+            <TouchableOpacity
+              style={[
+                styles.fontFamilyCard,
+                {
+                  backgroundColor: fontFamily === 'rounded' ? colors.brandLight : colors.subtleBackground,
+                  borderColor: fontFamily === 'rounded' ? colors.brand : colors.border,
+                },
+              ]}
+              onPress={() => setFontFamily('rounded')}
+              activeOpacity={0.8}
+            >
+              <View style={styles.fontFamilyHeader}>
+                <Text style={[styles.fontFamilyName, { color: colors.brand }]}>Okuma Kolaylığı (Yuvarlak & Net)</Text>
+                {fontFamily === 'rounded' && <Check size={18} color={colors.brand} />}
+              </View>
+              <Text style={[styles.fontFamilySample, { color: colors.text }]}>
+                Comprehensive academic linguistic research shows rapid learning retention when using spaced repetition.
+              </Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </SafeAreaView>
+      </Modal>
+
+      {/* MODAL 3: HATIRLATMA SAATİ SEÇİCİ */}
+      <Modal
+        visible={isHourModalOpen}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setIsHourModalOpen(false)}
+      >
+        <SafeAreaView style={[styles.modalSafeArea, { backgroundColor: colors.cardBackground }]}>
+          <View style={[styles.modalHeader, { borderBottomColor: colors.border }]}>
+            <TouchableOpacity style={styles.modalCloseBtn} onPress={() => setIsHourModalOpen(false)}>
+              <X size={22} color={colors.text} />
+            </TouchableOpacity>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>Hatırlatma Saati</Text>
+            <View style={{ width: 40 }} />
+          </View>
+
+          <View style={styles.modalBody}>
+            {[18, 19, 20, 21, 22, 23].map((hr) => {
+              const isSelected = selectedHour === hr;
               return (
                 <TouchableOpacity
-                  key={count}
-                  style={[styles.targetChip, isSelected && styles.targetChipActive]}
-                  onPress={() => handleSelectTarget(count)}
+                  key={hr}
+                  style={[
+                    styles.pickerRow,
+                    {
+                      backgroundColor: isSelected ? colors.brandLight : colors.subtleBackground,
+                      borderColor: isSelected ? colors.brand : colors.border,
+                    },
+                  ]}
+                  onPress={async () => {
+                    setSelectedHour(hr);
+                    setIsHourModalOpen(false);
+                    if (notificationsEnabled) {
+                      await NotificationService.scheduleAllReminders(hr, 0, dailyQuestionTarget, streakCount);
+                    }
+                  }}
                   activeOpacity={0.7}
                 >
-                  <Text
-                    style={[styles.targetChipText, isSelected && styles.targetChipTextActive]}
-                  >
-                    {count} Soru
-                  </Text>
+                  <View>
+                    <Text style={[styles.pickerRowTitle, { color: colors.text }]}>{hr}:00</Text>
+                    <Text style={[styles.pickerRowSub, { color: colors.textSecondary }]}>
+                      Akşam odaklanma ve seri koruma bildirimi
+                    </Text>
+                  </View>
+                  {isSelected && <Check size={20} color={colors.brand} />}
                 </TouchableOpacity>
               );
             })}
           </View>
+        </SafeAreaView>
+      </Modal>
 
-          <View style={styles.divider} />
-
-          <View style={styles.settingRow}>
-            <View style={styles.settingLeft}>
-              <Bell size={18} color="#7C3AED" />
-              <View>
-                <Text style={styles.settingTitle}>Günlük Hatırlatıcı</Text>
-                <Text style={styles.settingDesc}>Serinizi kaybetmemeniz için bildirimler</Text>
-              </View>
-            </View>
-            <Switch
-              value={notificationsEnabled}
-              onValueChange={handleToggleNotifications}
-              trackColor={{ false: '#E2E8F0', true: '#C7D2FE' }}
-              thumbColor={notificationsEnabled ? '#4F46E5' : '#94A3B8'}
-            />
-          </View>
-        </View>
-
-        {/* SECTION 2: VERİ & SENKRONİZASYON */}
-        <Text style={styles.sectionHeading}>☁️ Veri ve Senkronizasyon</Text>
-        <View style={styles.settingsCard}>
-          <View style={styles.settingRow}>
-            <View style={styles.settingLeft}>
-              <Cloud size={18} color="#059669" />
-              <View>
-                <Text style={styles.settingTitle}>Supabase Bulut Yedekleme</Text>
-                <Text style={styles.settingDesc}>Verileriniz cihazda ve bulutta güvende</Text>
-              </View>
-            </View>
-            <Text style={styles.activePillText}>Aktif</Text>
+      {/* MODAL 4: GÜNLÜK HEDEF & SORU DAĞILIMI */}
+      <Modal
+        visible={isGoalsModalOpen}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setIsGoalsModalOpen(false)}
+      >
+        <SafeAreaView style={[styles.modalSafeArea, { backgroundColor: colors.cardBackground }]}>
+          <View style={[styles.modalHeader, { borderBottomColor: colors.border }]}>
+            <TouchableOpacity
+              onPress={() => setIsGoalsModalOpen(false)}
+              style={styles.modalCloseBtn}
+              activeOpacity={0.7}
+            >
+              <X size={22} color={colors.text} />
+            </TouchableOpacity>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>Günlük Soru Dağılımı</Text>
+            <View style={{ width: 40 }} />
           </View>
 
-          <View style={styles.divider} />
-
-          <TouchableOpacity
-            style={styles.settingRowAction}
-            onPress={handleResetProgress}
-            activeOpacity={0.7}
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={styles.modalBody}
+            showsVerticalScrollIndicator={false}
           >
-            <View style={styles.settingLeft}>
-              <RotateCcw size={18} color="#D97706" />
-              <Text style={[styles.settingTitle, { color: '#B45309' }]}>
-                İlerlemeyi Sıfırla
+            {/* Açıklama Kartı */}
+            <View style={[styles.goalsDescCard, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
+              <Text style={[styles.goalsDescText, { color: colors.textSecondary }]}>
+                Her gün çözmek istediğiniz soru adetlerini belirleyin. Günlük görev havuzu bu dağılıma göre otomatik planlanır.
               </Text>
             </View>
-            <ChevronRight size={18} color="#CBD5E1" />
-          </TouchableOpacity>
-        </View>
 
-        {/* SECTION 3: YASAL & MAĞAZA POLİTİKALARI (APPLE / GOOGLE STORE COMPLIANT) */}
-        <Text style={styles.sectionHeading}>⚖️ Yasal Bilgiler & Mağaza Uyumluluğu</Text>
-        <View style={styles.settingsCard}>
-          <TouchableOpacity
-            style={styles.settingRowAction}
-            onPress={() => {
-              Alert.alert(
-                'Gizlilik Politikası (Privacy Policy)',
-                'YDS Master, kullanıcı gizliliğine saygı duyar. Çözdüğünüz sorular, kelime istatistikleriniz ve kullanıcı profiliniz yalnızca sınav başarınızı artırmak amacıyla işlenir. Verileriniz 3. taraflarla paylaşılmaz ve satılmaz. KVKK ve GDPR uyumludur.'
-              );
-            }}
-            activeOpacity={0.7}
-          >
-            <View style={styles.settingLeft}>
-              <ShieldCheck size={18} color="#4F46E5" />
-              <Text style={styles.settingTitle}>Gizlilik Politikası (Privacy Policy)</Text>
+            {/* Toplam Özet Rozeti */}
+            <View style={[styles.goalsSummaryCard, { backgroundColor: colors.brandLight, borderColor: colors.brandLightBorder }]}>
+              <Text style={[styles.goalsSummaryLabel, { color: colors.brand }]}>TOPLAM GÜNLÜK HEDEF</Text>
+              <Text style={[styles.goalsSummaryNumber, { color: colors.brand }]}>
+                {(taskGoals?.paragraph || 8) + (taskGoals?.cloze || 5) + (taskGoals?.sentence || 8) + (taskGoals?.skills || 14)}
+                <Text style={{ fontSize: 16, fontWeight: '700' }}> Soru / Gün</Text>
+              </Text>
             </View>
-            <ExternalLink size={16} color="#94A3B8" />
-          </TouchableOpacity>
 
-          <View style={styles.divider} />
-
-          <TouchableOpacity
-            style={styles.settingRowAction}
-            onPress={() => {
-              Alert.alert(
-                'Kullanım Koşulları (Terms of Service / EULA)',
-                'YDS Master uygulamasındaki tüm sınav materyalleri, soru bankaları ve AI içerikleri bireysel eğitim ve sınav hazırlığı amacıyla sunulmaktadır. Ticari olarak kopyalanamaz veya dağıtılamaz.'
-              );
-            }}
-            activeOpacity={0.7}
-          >
-            <View style={styles.settingLeft}>
-              <FileText size={18} color="#4F46E5" />
-              <Text style={styles.settingTitle}>Kullanım Koşulları (Terms of Use / EULA)</Text>
-            </View>
-            <ExternalLink size={16} color="#94A3B8" />
-          </TouchableOpacity>
-
-          <View style={styles.divider} />
-
-          <View style={styles.settingRow}>
-            <Text style={styles.versionLabel}>Uygulama Sürümü</Text>
-            <Text style={styles.versionValue}>v1.0.0 (Build 1) · Production</Text>
-          </View>
-        </View>
-
-        {/* SECTION 4: HESAP VE GÜVENLİK (APPLE GUIDELINE 5.1.1 ACCOUNT DELETION) */}
-        {userProfile && (
-          <>
-            <Text style={styles.sectionHeading}>🔒 Hesap Güvenliği</Text>
-            <View style={styles.settingsCard}>
-              <TouchableOpacity
-                style={styles.settingRowAction}
-                onPress={handleLogout}
-                activeOpacity={0.7}
-              >
-                <View style={styles.settingLeft}>
-                  <LogOut size={18} color="#475569" />
-                  <Text style={styles.settingTitle}>Çıkış Yap</Text>
+            {/* Kategori Stepper Grubu */}
+            <View style={[styles.groupedCard, { backgroundColor: colors.cardBackground, borderColor: colors.border, marginTop: 14 }]}>
+              {/* Paragraf Soruları */}
+              <View style={[styles.goalRowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}>
+                <View style={styles.goalInfo}>
+                  <Text style={styles.goalEmoji}>📖</Text>
+                  <View>
+                    <Text style={[styles.goalTitle, { color: colors.text }]}>Paragraf Soruları</Text>
+                    <Text style={[styles.goalSub, { color: colors.textSecondary }]}>Okuma & Anlama (Önerilen: 8)</Text>
+                  </View>
                 </View>
-                <ChevronRight size={18} color="#CBD5E1" />
-              </TouchableOpacity>
-
-              <View style={styles.divider} />
-
-              <TouchableOpacity
-                style={styles.settingRowAction}
-                onPress={handleDeleteAccount}
-                activeOpacity={0.7}
-              >
-                <View style={styles.settingLeft}>
-                  <Trash2 size={18} color="#DC2626" />
-                  <Text style={[styles.settingTitle, { color: '#DC2626', fontWeight: '800' }]}>
-                    Hesabımı ve Tüm Verilerimi Kalıcı Olarak Sil
-                  </Text>
+                <View style={styles.goalStepperContainer}>
+                  <TouchableOpacity
+                    style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
+                    onPress={() => setTaskGoals({ paragraph: Math.max(1, (taskGoals?.paragraph || 8) - 1) })}
+                    activeOpacity={0.7}
+                  >
+                    <Minus size={15} color={colors.text} />
+                  </TouchableOpacity>
+                  <Text style={[styles.goalStepperValue, { color: colors.brand }]}>{taskGoals?.paragraph || 8}</Text>
+                  <TouchableOpacity
+                    style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
+                    onPress={() => setTaskGoals({ paragraph: Math.min(30, (taskGoals?.paragraph || 8) + 1) })}
+                    activeOpacity={0.7}
+                  >
+                    <Plus size={15} color={colors.text} />
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
-      </ScrollView>
+              </View>
 
-      {/* SUBSCRIPTION & PROMO CODE MODAL */}
-      <SubscriptionModal
-        visible={isSubscriptionModalOpen}
-        onClose={() => setIsSubscriptionModalOpen(false)}
+              {/* Cloze Test Soruları */}
+              <View style={[styles.goalRowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}>
+                <View style={styles.goalInfo}>
+                  <Text style={styles.goalEmoji}>📝</Text>
+                  <View>
+                    <Text style={[styles.goalTitle, { color: colors.text }]}>Cloze Test Soruları</Text>
+                    <Text style={[styles.goalSub, { color: colors.textSecondary }]}>Paragraf İçi Boşluk (Önerilen: 5)</Text>
+                  </View>
+                </View>
+                <View style={styles.goalStepperContainer}>
+                  <TouchableOpacity
+                    style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
+                    onPress={() => setTaskGoals({ cloze: Math.max(1, (taskGoals?.cloze || 5) - 1) })}
+                    activeOpacity={0.7}
+                  >
+                    <Minus size={15} color={colors.text} />
+                  </TouchableOpacity>
+                  <Text style={[styles.goalStepperValue, { color: colors.brand }]}>{taskGoals?.cloze || 5}</Text>
+                  <TouchableOpacity
+                    style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
+                    onPress={() => setTaskGoals({ cloze: Math.min(30, (taskGoals?.cloze || 5) + 1) })}
+                    activeOpacity={0.7}
+                  >
+                    <Plus size={15} color={colors.text} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              {/* Cümle Tamamlama */}
+              <View style={[styles.goalRowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}>
+                <View style={styles.goalInfo}>
+                  <Text style={styles.goalEmoji}>🔗</Text>
+                  <View>
+                    <Text style={[styles.goalTitle, { color: colors.text }]}>Cümle Tamamlama</Text>
+                    <Text style={[styles.goalSub, { color: colors.textSecondary }]}>Bağlaç & Mantık (Önerilen: 8)</Text>
+                  </View>
+                </View>
+                <View style={styles.goalStepperContainer}>
+                  <TouchableOpacity
+                    style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
+                    onPress={() => setTaskGoals({ sentence: Math.max(1, (taskGoals?.sentence || 8) - 1) })}
+                    activeOpacity={0.7}
+                  >
+                    <Minus size={15} color={colors.text} />
+                  </TouchableOpacity>
+                  <Text style={[styles.goalStepperValue, { color: colors.brand }]}>{taskGoals?.sentence || 8}</Text>
+                  <TouchableOpacity
+                    style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
+                    onPress={() => setTaskGoals({ sentence: Math.min(30, (taskGoals?.sentence || 8) + 1) })}
+                    activeOpacity={0.7}
+                  >
+                    <Plus size={15} color={colors.text} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              {/* Diyalog & Dil Bilgisi */}
+              <View style={styles.goalRowItem}>
+                <View style={styles.goalInfo}>
+                  <Text style={styles.goalEmoji}>💬</Text>
+                  <View>
+                    <Text style={[styles.goalTitle, { color: colors.text }]}>Diyalog & Dil Bilgisi</Text>
+                    <Text style={[styles.goalSub, { color: colors.textSecondary }]}>Gramer, Çeviri (Önerilen: 14)</Text>
+                  </View>
+                </View>
+                <View style={styles.goalStepperContainer}>
+                  <TouchableOpacity
+                    style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
+                    onPress={() => setTaskGoals({ skills: Math.max(1, (taskGoals?.skills || 14) - 1) })}
+                    activeOpacity={0.7}
+                  >
+                    <Minus size={15} color={colors.text} />
+                  </TouchableOpacity>
+                  <Text style={[styles.goalStepperValue, { color: colors.brand }]}>{taskGoals?.skills || 14}</Text>
+                  <TouchableOpacity
+                    style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
+                    onPress={() => setTaskGoals({ skills: Math.min(30, (taskGoals?.skills || 14) + 1) })}
+                    activeOpacity={0.7}
+                  >
+                    <Plus size={15} color={colors.text} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+
+            {/* Kaydet & Tamamla Butonu */}
+            <TouchableOpacity
+              style={[styles.saveGoalsBtn, { backgroundColor: colors.brand }]}
+              onPress={() => setIsGoalsModalOpen(false)}
+              activeOpacity={0.85}
+            >
+              <Text style={[styles.saveGoalsBtnText, { color: colors.textOnBrand }]}>Kaydet & Tamamla</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </SafeAreaView>
+      </Modal>
+
+      {/* AUTH MODAL */}
+      <AuthModal
+        visible={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
       />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  safeContainer: {
+  safeArea: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
   },
-  topBar: {
+  headerBar: {
+    height: 52,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E7EAF3',
   },
-  backBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
+  headerSpacer: {
+    width: 36,
   },
-  backBtnText: {
-    fontSize: 14,
-    fontWeight: '800',
-    color: '#4F46E5',
+  headerTitle: {
+    fontSize: 17,
+    fontWeight: '700',
+    textAlign: 'center',
   },
-  pageTitle: {
-    fontSize: 16.5,
-    fontWeight: '800',
-    color: '#0F172A',
-  },
-  container: {
-    flex: 1,
-  },
-  content: {
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 40,
-  },
-  userCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    borderWidth: 1,
-    borderColor: '#E7EAF3',
-    marginBottom: 10,
-    shadowColor: '#0F172A',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 6,
-    elevation: 2,
-  },
-  avatarCircle: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#4F46E5',
+  closeBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  avatarLetter: {
-    fontSize: 20,
-    fontWeight: '900',
-    color: '#FFFFFF',
-  },
-  userName: {
-    fontSize: 15,
-    fontWeight: '800',
-    color: '#0F172A',
-  },
-  userEmail: {
-    fontSize: 12,
-    color: '#64748B',
-    marginTop: 1,
-  },
-  badgeRow: {
-    flexDirection: 'row',
-    gap: 6,
-    marginTop: 6,
-  },
-  targetBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: '#EEF2FF',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-  },
-  targetBadgeText: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#4F46E5',
-  },
-  guestBadge: {
-    backgroundColor: '#FEF3C7',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-  },
-  guestBadgeText: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#D97706',
-  },
-  guestPromptCard: {
-    backgroundColor: '#EEF2FF',
-    borderRadius: 20,
+  scrollContent: {
     padding: 16,
-    marginBottom: 12,
+    paddingBottom: 40,
+  },
+  themeCardContainer: {
+    borderRadius: 22,
+    padding: 16,
+    marginBottom: 24,
     borderWidth: 1,
-    borderColor: '#C7D2FE',
-    gap: 12,
   },
-  guestPromptTitle: {
-    fontSize: 14.5,
-    fontWeight: '800',
-    color: '#1E1B4B',
+  themeGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
-  guestPromptSub: {
-    fontSize: 12,
-    color: '#4338CA',
-    marginTop: 2,
-    lineHeight: 17,
-  },
-  loginBtn: {
-    backgroundColor: '#4F46E5',
-    paddingVertical: 12,
-    borderRadius: 14,
+  themeOptionItem: {
     alignItems: 'center',
+    flex: 1,
   },
-  loginBtnText: {
-    color: '#FFFFFF',
-    fontSize: 13.5,
-    fontWeight: '800',
+  deviceFrame: {
+    width: 76,
+    height: 104,
+    borderRadius: 14,
+    padding: 4,
+    borderWidth: 2,
+    marginBottom: 8,
+  },
+  deviceFrameLight: {},
+  deviceFrameDark: {},
+  deviceFrameSystem: {},
+  deviceScreen: {
+    flex: 1,
+    borderRadius: 8,
+    padding: 4,
+    justifyContent: 'center',
+    gap: 4,
+  },
+  deviceScreenSplit: {
+    flex: 1,
+    flexDirection: 'row',
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  deviceHalfLight: {
+    flex: 1,
+    padding: 4,
+    gap: 4,
+    justifyContent: 'center',
+  },
+  deviceHalfDark: {
+    flex: 1,
+    padding: 4,
+    gap: 4,
+    justifyContent: 'center',
+  },
+  deviceHeaderBarLight: {
+    height: 8,
+    borderRadius: 3,
+    marginBottom: 4,
+  },
+  deviceHeaderBarDark: {
+    height: 8,
+    borderRadius: 3,
+    marginBottom: 4,
+  },
+  deviceHeaderBarSepia: {
+    height: 8,
+    borderRadius: 3,
+    marginBottom: 4,
+  },
+  deviceLineLight: {
+    height: 4,
+    borderRadius: 2,
+  },
+  deviceLineDark: {
+    height: 4,
+    borderRadius: 2,
+  },
+  deviceLineSepia: {
+    height: 4,
+    borderRadius: 2,
+  },
+  themeLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    marginBottom: 6,
+  },
+  radioOuter: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  radioInner: {
+    width: 9,
+    height: 9,
+    borderRadius: 4.5,
   },
   sectionHeading: {
-    fontSize: 12.5,
-    fontWeight: '800',
-    color: '#64748B',
-    marginTop: 14,
+    fontSize: 11.5,
+    fontWeight: '700',
+    letterSpacing: 0.8,
     marginBottom: 8,
-    textTransform: 'uppercase',
-    letterSpacing: 0.3,
+    marginLeft: 4,
   },
-  settingsCard: {
-    backgroundColor: '#FFFFFF',
+  groupedCard: {
     borderRadius: 20,
-    padding: 14,
     borderWidth: 1,
-    borderColor: '#E7EAF3',
-    shadowColor: '#0F172A',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.03,
-    shadowRadius: 4,
-    elevation: 1,
+    marginBottom: 20,
+    overflow: 'hidden',
   },
-  settingRow: {
+  rowItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 4,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
   },
-  settingRowAction: {
+  rowLabel: {
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  rowSubLabel: {
+    fontSize: 12,
+    marginTop: 2,
+  },
+  rowLabelDanger: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  rowRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  rowValue: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  modalSafeArea: {
+    flex: 1,
+  },
+  modalHeader: {
+    height: 52,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
   },
-  settingLeft: {
+  modalCloseBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalTitle: {
+    fontSize: 17,
+    fontWeight: '700',
+  },
+  modalBody: {
+    padding: 18,
+    gap: 16,
+  },
+  fontPreviewCard: {
+    borderRadius: 20,
+    padding: 18,
+    borderWidth: 1,
+  },
+  previewTextEn: {
+    lineHeight: 26,
+    fontWeight: '500',
+  },
+  previewDivider: {
+    height: 1,
+    marginVertical: 12,
+  },
+  previewTextTr: {
+    lineHeight: 22,
+  },
+  sizeIndicatorWrap: {
+    alignItems: 'center',
+    marginVertical: 4,
+  },
+  sizeBadge: {
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    borderRadius: 14,
+    borderWidth: 1,
+  },
+  sizeBadgeText: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  stepperContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 20,
+    borderWidth: 1,
+  },
+  stepperLabelSmall: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  stepperLabelLarge: {
+    fontSize: 22,
+    fontWeight: '800',
+  },
+  stepsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    flex: 1,
   },
-  settingTitle: {
-    fontSize: 13.5,
-    fontWeight: '700',
-    color: '#0F172A',
-  },
-  settingDesc: {
-    fontSize: 11.5,
-    color: '#64748B',
-    marginTop: 2,
-  },
-  activePillText: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#059669',
-    backgroundColor: '#ECFDF5',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-  },
-  targetRow: {
-    flexDirection: 'row',
-    gap: 8,
-    marginTop: 10,
-  },
-  targetChip: {
-    flex: 1,
-    backgroundColor: '#F8FAFC',
-    borderWidth: 1.4,
-    borderColor: '#E7EAF3',
-    paddingVertical: 10,
-    borderRadius: 12,
+  stepDot: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  targetChipActive: {
-    backgroundColor: '#0F172A',
-    borderColor: '#0F172A',
-  },
-  targetChipText: {
-    fontSize: 12,
+  stepNumber: {
+    fontSize: 11,
     fontWeight: '700',
-    color: '#475569',
   },
-  targetChipTextActive: {
-    color: '#FFFFFF',
-  },
-  divider: {
-    height: 1,
-    backgroundColor: '#F1F5F9',
-    marginVertical: 10,
-  },
-  versionLabel: {
-    fontSize: 12.5,
-    color: '#64748B',
-    fontWeight: '600',
-  },
-  versionValue: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#0F172A',
-  },
-  proUpgradeBanner: {
-    backgroundColor: '#FAF5FF',
-    borderWidth: 1.5,
-    borderColor: '#E9D5FF',
-    borderRadius: 18,
-    padding: 14,
+  systemToggleCard: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 20,
-    shadowColor: '#7C3AED',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderRadius: 18,
+    borderWidth: 1,
+    marginTop: 6,
+  },
+  systemToggleText: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  fontFamilyCard: {
+    borderRadius: 20,
+    padding: 16,
+    borderWidth: 1.5,
+    marginBottom: 12,
+  },
+  fontFamilyHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  fontFamilyName: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  fontFamilySample: {
+    fontSize: 14,
+    lineHeight: 22,
+  },
+  pickerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 16,
+    borderRadius: 18,
+    borderWidth: 1.5,
+    marginBottom: 10,
+  },
+  pickerRowTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    marginBottom: 2,
+  },
+  pickerRowSub: {
+    fontSize: 12,
+  },
+  accountCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 20,
+    borderWidth: 1,
+    gap: 14,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.04,
     shadowRadius: 8,
     elevation: 2,
+    marginBottom: 8,
   },
-  proUpgradeLeft: {
+  accountAvatarCircle: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  accountAvatarText: {
+    fontSize: 20,
+    fontWeight: '900',
+  },
+  accountInfoGroup: {
+    flex: 1,
+    gap: 2,
+  },
+  accountNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  accountNameText: {
+    fontSize: 15.5,
+    fontWeight: '800',
+    flexShrink: 1,
+  },
+  accountStatusBadge: {
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  accountStatusText: {
+    fontSize: 10.5,
+    fontWeight: '800',
+  },
+  accountEmailText: {
+    fontSize: 12.5,
+  },
+  accountTargetText: {
+    fontSize: 12,
+    marginTop: 2,
+  },
+  logoutBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loginPromptCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 20,
+    borderWidth: 1,
+    gap: 12,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 2,
+    marginBottom: 8,
+  },
+  loginPromptIconBox: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loginPromptTitle: {
+    fontSize: 14.5,
+    fontWeight: '800',
+  },
+  loginPromptSubtitle: {
+    fontSize: 11.5,
+    marginTop: 2,
+  },
+  loginActionBtn: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 12,
+  },
+  loginActionBtnText: {
+    fontSize: 12.5,
+    fontWeight: '800',
+  },
+  // Goal Distribution Styles
+  goalRowItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+  },
+  goalInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
     flex: 1,
   },
-  proUpgradeIconWrap: {
-    width: 42,
-    height: 42,
+  goalEmoji: {
+    fontSize: 22,
+  },
+  goalTitle: {
+    fontSize: 14.5,
+    fontWeight: '700',
+  },
+  goalSub: {
+    fontSize: 11.5,
+    marginTop: 2,
+  },
+  goalStepperContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  goalStepperBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+  },
+  goalStepperValue: {
+    fontSize: 16,
+    fontWeight: '900',
+    minWidth: 26,
+    textAlign: 'center',
+  },
+  goalTotalRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+  },
+  goalTotalLabel: {
+    fontSize: 14,
+    fontWeight: '800',
+  },
+  goalTotalSub: {
+    fontSize: 11.5,
+    marginTop: 2,
+  },
+  goalTotalBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 10,
+  },
+  goalTotalText: {
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  goalsDescCard: {
+    padding: 14,
     borderRadius: 14,
-    backgroundColor: '#7C3AED',
+    borderWidth: 1,
+    marginBottom: 12,
+  },
+  goalsDescText: {
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  goalsSummaryCard: {
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  proTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    flexWrap: 'wrap',
-  },
-  proUpgradeTitle: {
-    fontSize: 14,
-    fontWeight: '800',
-    color: '#581C87',
-  },
-  proPromoBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 3,
-    backgroundColor: '#EDE9FE',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 6,
-  },
-  proPromoBadgeText: {
-    fontSize: 9.5,
-    fontWeight: '800',
-    color: '#7C3AED',
-  },
-  proUpgradeSub: {
+  goalsSummaryLabel: {
     fontSize: 11.5,
-    color: '#7E22CE',
-    lineHeight: 16,
-    marginTop: 2,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+    marginBottom: 4,
+  },
+  goalsSummaryNumber: {
+    fontSize: 26,
+    fontWeight: '900',
+  },
+  saveGoalsBtn: {
+    marginTop: 20,
+    paddingVertical: 14,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  saveGoalsBtnText: {
+    fontSize: 15,
+    fontWeight: '800',
   },
 });

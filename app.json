@@ -1,28 +1,32 @@
 {
   "expo": {
-    "name": "YDSMaster",
-    "slug": "ydsmaster",
-    "scheme": "ydsmaster",
+    "name": "YDS Pratik",
+    "slug": "ydspratik",
+    "scheme": "ydspratik",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
+    "jsEngine": "hermes",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#FFFFFF"
+      "backgroundColor": "#1E40AF"
     },
     "ios": {
-      "bundleIdentifier": "com.celebi.ydsmaster",
+      "bundleIdentifier": "com.celebi.ydspratik",
       "buildNumber": "1",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "CFBundleDisplayName": "YDS Pratik"
+      }
     },
     "android": {
-      "package": "com.celebi.ydsmaster",
+      "package": "com.celebi.ydspratik",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#1E40AF"
       }
     },
     "web": {

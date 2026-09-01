@@ -7,7 +7,6 @@ import {
   ScrollView,
   Alert,
   Switch,
-  Linking,
 } from 'react-native';
 import {
   User,
@@ -23,10 +22,10 @@ import {
   ExternalLink,
   RotateCcw,
   Crown,
-  Sparkles,
   Tag,
 } from 'lucide-react-native';
 import { useLearningStore } from '../store/useLearningStore';
+import { useThemeStore } from '../store/useThemeStore';
 import { SupabaseService } from '../services/SupabaseService';
 import { SmoothBottomSheet } from './SmoothBottomSheet';
 import { dbService } from '../database/DatabaseService';
@@ -39,12 +38,16 @@ interface Props {
 }
 
 export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth }) => {
-  const { userProfile, setUserProfile, loadVocabSession, loadDailyTasks } = useLearningStore();
+  const {
+    userProfile,
+    setUserProfile,
+    resetAllProgress,
+    deleteUserAccount,
+  } = useLearningStore();
+  const { colors } = useThemeStore();
 
   const [dailyTarget, setDailyTarget] = useState<number>(35);
   const [notificationsEnabled, setNotificationsEnabled] = useState<boolean>(true);
-  const [showPrivacyModal, setShowPrivacyModal] = useState<boolean>(false);
-  const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
   const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState<boolean>(false);
 
   const handleLogout = async () => {
@@ -55,7 +58,7 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
         style: 'destructive',
         onPress: async () => {
           await SupabaseService.signOut();
-          setUserProfile(null);
+          await setUserProfile(null);
           onClose();
         },
       },
@@ -72,8 +75,7 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
           text: 'Hesabımı ve Verilerimi Sil',
           style: 'destructive',
           onPress: async () => {
-            await SupabaseService.deleteAccount();
-            setUserProfile(null);
+            await deleteUserAccount();
             onClose();
             Alert.alert('Hesap Silindi', 'Hesabınız ve ilişkili tüm veriler başarıyla silindi.');
           },
@@ -85,17 +87,15 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
   const handleResetProgress = () => {
     Alert.alert(
       'İlerlemeyi Sıfırla',
-      'Günlük görev havuzunu ve kelime kutularınızı başlangıç durumuna getirmek istiyor musunuz?',
+      'Tüm kelime hafıza kutularınız (Aralıklı Tekrar), çözülen soru ve deneme geçmişiniz, hata kasanız ve günlük seriniz başlangıç durumuna getirilecektir. Bu işlem geri alınamaz. Devam etmek istiyor musunuz?',
       [
         { text: 'Vazgeç', style: 'cancel' },
         {
-          text: 'Sıfırla',
+          text: 'Evet, Sıfırla',
           style: 'destructive',
           onPress: async () => {
-            await dbService.seedQuestionsIfEmpty();
-            await loadVocabSession();
-            await loadDailyTasks();
-            Alert.alert('Başarılı', 'İlerlemeniz sıfırlandı.');
+            await resetAllProgress();
+            Alert.alert('Başarılı', 'Tüm öğrenme ilerlemeniz başarıyla sıfırlandı.');
           },
         },
       ]
@@ -104,108 +104,110 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
 
   return (
     <SmoothBottomSheet visible={visible} onClose={onClose} maxHeight="90%">
-      <View style={styles.content}>
+      <View style={[styles.content, { backgroundColor: colors.cardBackground }]}>
         {/* Header */}
-        <View style={styles.header}>
+        <View style={[styles.header, { borderBottomColor: colors.border }]}>
           <View style={styles.headerTitleRow}>
-            <View style={styles.iconBox}>
-              <User size={18} color="#4F46E5" />
+            <View style={[styles.iconBox, { backgroundColor: colors.brandLight }]}>
+              <User size={18} color={colors.brand} />
             </View>
             <View>
-              <Text style={styles.title}>Profil & Ayarlar</Text>
-              <Text style={styles.subtitle}>Hesap, hedef ve yasal mağaza tercihleri</Text>
+              <Text style={[styles.title, { color: colors.text }]}>Profil & Ayarlar</Text>
+              <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Hesap, hedef ve yasal mağaza tercihleri</Text>
             </View>
           </View>
-          <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-            <Text style={styles.closeBtnText}>✕</Text>
+          <TouchableOpacity onPress={onClose} style={[styles.closeBtn, { backgroundColor: colors.subtleBackground }]}>
+            <Text style={[styles.closeBtnText, { color: colors.textSecondary }]}>✕</Text>
           </TouchableOpacity>
         </View>
 
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
           {/* USER CARD */}
           {userProfile ? (
-            <View style={styles.userCard}>
-              <View style={styles.avatarCircle}>
-                <Text style={styles.avatarLetter}>
+            <View style={[styles.userCard, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
+              <View style={[styles.avatarCircle, { backgroundColor: colors.brand }]}>
+                <Text style={[styles.avatarLetter, { color: colors.textOnBrand }]}>
                   {userProfile.fullName ? userProfile.fullName.charAt(0).toUpperCase() : 'A'}
                 </Text>
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={styles.userName}>{userProfile.fullName || 'YDS Öğrencisi'}</Text>
-                <Text style={styles.userEmail}>{userProfile.email}</Text>
+                <Text style={[styles.userName, { color: colors.text }]}>{userProfile.fullName || 'YDS Öğrencisi'}</Text>
+                {userProfile.email && !userProfile.email.includes('privaterelay') && (
+                  <Text style={[styles.userEmail, { color: colors.textSecondary }]}>{userProfile.email}</Text>
+                )}
                 <View style={styles.badgeRow}>
-                  <View style={styles.targetBadge}>
-                    <Award size={11} color="#4F46E5" />
-                    <Text style={styles.targetBadgeText}>Hedef: {userProfile.targetScore || 80}+</Text>
+                  <View style={[styles.targetBadge, { backgroundColor: colors.brandLight }]}>
+                    <Award size={11} color={colors.brand} />
+                    <Text style={[styles.targetBadgeText, { color: colors.brand }]}>Hedef: {userProfile.targetScore || 80}+</Text>
                   </View>
                   {userProfile.isGuest && (
-                    <View style={styles.guestBadge}>
-                      <Text style={styles.guestBadgeText}>Misafir Hesap</Text>
+                    <View style={[styles.guestBadge, { backgroundColor: colors.subtleBackground }]}>
+                      <Text style={[styles.guestBadgeText, { color: colors.textSecondary }]}>Misafir Hesap</Text>
                     </View>
                   )}
                 </View>
               </View>
             </View>
           ) : (
-            <View style={styles.guestPromptCard}>
+            <View style={[styles.guestPromptCard, { backgroundColor: colors.brandLight, borderColor: colors.brandLightBorder }]}>
               <View>
-                <Text style={styles.guestPromptTitle}>Misafir Olarak Kullanıyorsunuz</Text>
-                <Text style={styles.guestPromptSub}>
+                <Text style={[styles.guestPromptTitle, { color: colors.brand }]}>Misafir Olarak Kullanıyorsunuz</Text>
+                <Text style={[styles.guestPromptSub, { color: colors.textSecondary }]}>
                   İlerlemenizi bulutta yedeklemek ve cihazlar arası eşitlemek için giriş yapın.
                 </Text>
               </View>
               <TouchableOpacity
-                style={styles.loginBtn}
+                style={[styles.loginBtn, { backgroundColor: colors.brand }]}
                 onPress={() => {
                   onClose();
                   setTimeout(() => onOpenAuth(), 300);
                 }}
                 activeOpacity={0.8}
               >
-                <Text style={styles.loginBtnText}>Giriş Yap / Kayıt Ol</Text>
+                <Text style={[styles.loginBtnText, { color: colors.textOnBrand }]}>Giriş Yap / Kayıt Ol</Text>
               </TouchableOpacity>
             </View>
           )}
 
-          {/* PRO MEMBERSHIP BANNER (ALİ20 PROMO & VIP PASS) */}
+          {/* PRO MEMBERSHIP BANNER */}
           <TouchableOpacity
-            style={styles.proUpgradeBanner}
+            style={[styles.proUpgradeBanner, { backgroundColor: colors.brandLight, borderColor: colors.brandLightBorder }]}
             onPress={() => setIsSubscriptionModalOpen(true)}
             activeOpacity={0.85}
           >
             <View style={styles.proUpgradeLeft}>
-              <View style={styles.proUpgradeIconWrap}>
-                <Crown size={20} color="#FFFFFF" />
+              <View style={[styles.proUpgradeIconWrap, { backgroundColor: colors.brand }]}>
+                <Crown size={20} color={colors.textOnBrand} />
               </View>
               <View style={{ flex: 1 }}>
                 <View style={styles.proTitleRow}>
-                  <Text style={styles.proUpgradeTitle}>
-                    {userProfile?.isPro ? '👑 YDS Master Pro Aktif' : '💎 YDS Master Pro Üyelik'}
+                  <Text style={[styles.proUpgradeTitle, { color: colors.brand }]}>
+                    {userProfile?.isPro ? '👑 YDS Pratik Pro Aktif' : '💎 YDS Pratik Pro Üyelik'}
                   </Text>
-                  <View style={styles.proPromoBadge}>
-                    <Tag size={10} color="#7C3AED" />
-                    <Text style={styles.proPromoBadgeText}>%20 HOCA İNDİRİMİ</Text>
+                  <View style={[styles.proPromoBadge, { backgroundColor: colors.accentWarmLight }]}>
+                    <Tag size={10} color={colors.accentWarm} />
+                    <Text style={[styles.proPromoBadgeText, { color: colors.accentWarm }]}>%20 HOCA İNDİRİMİ</Text>
                   </View>
                 </View>
-                <Text style={styles.proUpgradeSub}>
+                <Text style={[styles.proUpgradeSub, { color: colors.textSecondary }]}>
                   {userProfile?.isPro
                     ? 'Sınav gününe kadar sınırsız AI ve Master deneme erişimi'
                     : 'AI tuzak analizi ve 80 soruluk denemeler · ALİ20 ile 470 TL'}
                 </Text>
               </View>
             </View>
-            <ChevronRight size={18} color="#94A3B8" />
+            <ChevronRight size={18} color={colors.textSecondary} />
           </TouchableOpacity>
 
           {/* SECTION 1: HEDEF VE ÇALIŞMA */}
-          <Text style={styles.sectionHeading}>🎯 Hedef ve Çalışma Düzeni</Text>
-          <View style={styles.settingsCard}>
+          <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>🎯 Hedef ve Çalışma Düzeni</Text>
+          <View style={[styles.settingsCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
             <View style={styles.settingRow}>
               <View style={styles.settingLeft}>
-                <Target size={18} color="#4F46E5" />
+                <Target size={18} color={colors.brand} />
                 <View>
-                  <Text style={styles.settingTitle}>Günlük Soru Hedefi</Text>
-                  <Text style={styles.settingDesc}>Günde çözmek istediğiniz soru sayısı</Text>
+                  <Text style={[styles.settingTitle, { color: colors.text }]}>Günlük Soru Hedefi</Text>
+                  <Text style={[styles.settingDesc, { color: colors.textSecondary }]}>Günde çözmek istediğiniz soru sayısı</Text>
                 </View>
               </View>
             </View>
@@ -217,12 +219,22 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
                 return (
                   <TouchableOpacity
                     key={count}
-                    style={[styles.targetChip, isSelected && styles.targetChipActive]}
+                    style={[
+                      styles.targetChip,
+                      {
+                        backgroundColor: isSelected ? colors.brandLight : colors.subtleBackground,
+                        borderColor: isSelected ? colors.brand : colors.border,
+                      },
+                    ]}
                     onPress={() => setDailyTarget(count)}
                     activeOpacity={0.7}
                   >
                     <Text
-                      style={[styles.targetChipText, isSelected && styles.targetChipTextActive]}
+                      style={[
+                        styles.targetChipText,
+                        { color: isSelected ? colors.brand : colors.textSecondary },
+                        isSelected && { fontWeight: '800' },
+                      ]}
                     >
                       {count} Soru
                     </Text>
@@ -231,40 +243,40 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
               })}
             </View>
 
-            <View style={styles.divider} />
+            <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
             <View style={styles.settingRow}>
               <View style={styles.settingLeft}>
-                <Bell size={18} color="#7C3AED" />
+                <Bell size={18} color={colors.brand} />
                 <View>
-                  <Text style={styles.settingTitle}>Günlük Hatırlatıcı</Text>
-                  <Text style={styles.settingDesc}>Serinizi kaybetmemeniz için bildirimler</Text>
+                  <Text style={[styles.settingTitle, { color: colors.text }]}>Günlük Hatırlatıcı</Text>
+                  <Text style={[styles.settingDesc, { color: colors.textSecondary }]}>Serinizi kaybetmemeniz için bildirimler</Text>
                 </View>
               </View>
               <Switch
                 value={notificationsEnabled}
                 onValueChange={setNotificationsEnabled}
-                trackColor={{ false: '#E2E8F0', true: '#C7D2FE' }}
-                thumbColor={notificationsEnabled ? '#4F46E5' : '#94A3B8'}
+                trackColor={{ false: colors.border, true: colors.brandLight }}
+                thumbColor={notificationsEnabled ? colors.brand : colors.textSecondary}
               />
             </View>
           </View>
 
           {/* SECTION 2: VERİ & SENKRONİZASYON */}
-          <Text style={styles.sectionHeading}>☁️ Veri ve Senkronizasyon</Text>
-          <View style={styles.settingsCard}>
+          <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>☁️ Veri ve Senkronizasyon</Text>
+          <View style={[styles.settingsCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
             <View style={styles.settingRow}>
               <View style={styles.settingLeft}>
-                <Cloud size={18} color="#059669" />
+                <Cloud size={18} color={colors.success} />
                 <View>
-                  <Text style={styles.settingTitle}>Supabase Bulut Yedekleme</Text>
-                  <Text style={styles.settingDesc}>Verileriniz cihazda ve bulutta güvende</Text>
+                  <Text style={[styles.settingTitle, { color: colors.text }]}>Supabase Bulut Yedekleme</Text>
+                  <Text style={[styles.settingDesc, { color: colors.textSecondary }]}>Verileriniz cihazda ve bulutta güvende</Text>
                 </View>
               </View>
-              <Text style={styles.activePillText}>Aktif</Text>
+              <Text style={[styles.activePillText, { backgroundColor: colors.successLight, color: colors.success }]}>Aktif</Text>
             </View>
 
-            <View style={styles.divider} />
+            <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
             <TouchableOpacity
               style={styles.settingRowAction}
@@ -272,80 +284,80 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
               activeOpacity={0.7}
             >
               <View style={styles.settingLeft}>
-                <RotateCcw size={18} color="#D97706" />
-                <Text style={[styles.settingTitle, { color: '#B45309' }]}>
+                <RotateCcw size={18} color={colors.accentWarm} />
+                <Text style={[styles.settingTitle, { color: colors.accentWarm }]}>
                   İlerlemeyi Sıfırla
                 </Text>
               </View>
-              <ChevronRight size={18} color="#CBD5E1" />
+              <ChevronRight size={18} color={colors.textSecondary} />
             </TouchableOpacity>
           </View>
 
-          {/* SECTION 3: YASAL & MAĞAZA POLİTİKALARI (APPLE / GOOGLE STORE COMPLIANT) */}
-          <Text style={styles.sectionHeading}>⚖️ Yasal Bilgiler & Mağaza Uyumluluğu</Text>
-          <View style={styles.settingsCard}>
+          {/* SECTION 3: YASAL & MAĞAZA POLİTİKALARI */}
+          <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>⚖️ Yasal Bilgiler & Mağaza Uyumluluğu</Text>
+          <View style={[styles.settingsCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
             <TouchableOpacity
               style={styles.settingRowAction}
               onPress={() => {
                 Alert.alert(
                   'Gizlilik Politikası (Privacy Policy)',
-                  'YDS Master, kullanıcı gizliliğine saygı duyar. Çözdüğünüz sorular, kelime istatistikleriniz ve kullanıcı profiliniz yalnızca sınav başarınızı artırmak amacıyla işlenir. Verileriniz 3. taraflarla paylaşılmaz ve satılmaz. KVKK ve GDPR uyumludur.'
+                  'YDS Pratik, kullanıcı gizliliğine saygı duyar. Çözdüğünüz sorular, kelime istatistikleriniz ve kullanıcı profiliniz yalnızca sınav başarınızı artırmak amacıyla işlenir. Verileriniz 3. taraflarla paylaşılmaz ve satılmaz. KVKK ve GDPR uyumludur.'
                 );
               }}
               activeOpacity={0.7}
             >
               <View style={styles.settingLeft}>
-                <ShieldCheck size={18} color="#4F46E5" />
-                <Text style={styles.settingTitle}>Gizlilik Politikası (Privacy Policy)</Text>
+                <ShieldCheck size={18} color={colors.brand} />
+                <Text style={[styles.settingTitle, { color: colors.text }]}>Gizlilik Politikası (Privacy Policy)</Text>
               </View>
-              <ExternalLink size={16} color="#94A3B8" />
+              <ExternalLink size={16} color={colors.textSecondary} />
             </TouchableOpacity>
 
-            <View style={styles.divider} />
+            <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
             <TouchableOpacity
               style={styles.settingRowAction}
               onPress={() => {
                 Alert.alert(
                   'Kullanım Koşulları (Terms of Service / EULA)',
-                  'YDS Master uygulamasındaki tüm sınav materyalleri, soru bankaları ve AI içerikleri bireysel eğitim ve sınav hazırlığı amacıyla sunulmaktadır. Ticari olarak kopyalanamaz veya dağıtılamaz.'
+                  'YDS Pratik uygulamasındaki tüm sınav materyalleri, soru bankaları ve AI içerikleri bireysel eğitim ve sınav hazırlığı amacıyla sunulmaktadır. Ticari olarak kopyalanamaz veya dağıtılamaz.'
                 );
               }}
               activeOpacity={0.7}
             >
               <View style={styles.settingLeft}>
-                <FileText size={18} color="#4F46E5" />
-                <Text style={styles.settingTitle}>Kullanım Koşulları (Terms of Use / EULA)</Text>
+                <FileText size={18} color={colors.brand} />
+                <Text style={[styles.settingTitle, { color: colors.text }]}>Kullanım Koşulları (Terms of Use / EULA)</Text>
               </View>
-              <ExternalLink size={16} color="#94A3B8" />
+              <ExternalLink size={16} color={colors.textSecondary} />
             </TouchableOpacity>
 
-            <View style={styles.divider} />
+            <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
             <View style={styles.settingRow}>
-              <Text style={styles.versionLabel}>Uygulama Sürümü</Text>
-              <Text style={styles.versionValue}>v1.0.0 (Build 1) · Production</Text>
+              <Text style={[styles.versionLabel, { color: colors.textSecondary }]}>Uygulama Sürümü</Text>
+              <Text style={[styles.versionValue, { color: colors.text }]}>v1.0.0 (Build 1) · Production</Text>
             </View>
           </View>
 
-          {/* SECTION 4: HESAP VE GÜVENLİK (APPLE GUIDELINE 5.1.1 ACCOUNT DELETION) */}
+          {/* SECTION 4: HESAP VE GÜVENLİK */}
           {userProfile && (
             <>
-              <Text style={styles.sectionHeading}>🔒 Hesap Güvenliği</Text>
-              <View style={styles.settingsCard}>
+              <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>🔒 Hesap Güvenliği</Text>
+              <View style={[styles.settingsCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
                 <TouchableOpacity
                   style={styles.settingRowAction}
                   onPress={handleLogout}
                   activeOpacity={0.7}
                 >
                   <View style={styles.settingLeft}>
-                    <LogOut size={18} color="#475569" />
-                    <Text style={styles.settingTitle}>Çıkış Yap</Text>
+                    <LogOut size={18} color={colors.textSecondary} />
+                    <Text style={[styles.settingTitle, { color: colors.textSecondary }]}>Çıkış Yap</Text>
                   </View>
-                  <ChevronRight size={18} color="#CBD5E1" />
+                  <ChevronRight size={18} color={colors.textSecondary} />
                 </TouchableOpacity>
 
-                <View style={styles.divider} />
+                <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
                 {/* APPLE 5.1.1 MANDATORY ACCOUNT DELETION BUTTON */}
                 <TouchableOpacity
@@ -354,8 +366,8 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
                   activeOpacity={0.7}
                 >
                   <View style={styles.settingLeft}>
-                    <Trash2 size={18} color="#DC2626" />
-                    <Text style={[styles.settingTitle, { color: '#DC2626', fontWeight: '800' }]}>
+                    <Trash2 size={18} color={colors.error} />
+                    <Text style={[styles.settingTitle, { color: colors.error, fontWeight: '800' }]}>
                       Hesabımı ve Tüm Verilerimi Kalıcı Olarak Sil
                     </Text>
                   </View>
@@ -386,7 +398,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E7EAF3',
     marginBottom: 8,
   },
   headerTitleRow: {
@@ -399,68 +410,57 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 12,
-    backgroundColor: '#EEF2FF',
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
     fontSize: 16.5,
     fontWeight: '800',
-    color: '#0F172A',
   },
   subtitle: {
     fontSize: 11.5,
-    color: '#64748B',
     marginTop: 1,
   },
   closeBtn: {
     width: 32,
     height: 32,
     borderRadius: 11,
-    backgroundColor: '#F1F4FA',
     alignItems: 'center',
     justifyContent: 'center',
   },
   closeBtnText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#475569',
   },
   scroll: {
     paddingBottom: 20,
   },
   userCard: {
-    backgroundColor: '#F8FAFC',
     borderRadius: 20,
     padding: 14,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
     borderWidth: 1,
-    borderColor: '#E7EAF3',
     marginVertical: 10,
   },
   avatarCircle: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#4F46E5',
     alignItems: 'center',
     justifyContent: 'center',
   },
   avatarLetter: {
     fontSize: 20,
     fontWeight: '900',
-    color: '#FFFFFF',
   },
   userName: {
     fontSize: 15,
     fontWeight: '800',
-    color: '#0F172A',
   },
   userEmail: {
     fontSize: 12,
-    color: '#64748B',
     marginTop: 1,
   },
   badgeRow: {
@@ -472,7 +472,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#EEF2FF',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
@@ -480,10 +479,8 @@ const styles = StyleSheet.create({
   targetBadgeText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#4F46E5',
   },
   guestBadge: {
-    backgroundColor: '#FEF3C7',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
@@ -491,54 +488,44 @@ const styles = StyleSheet.create({
   guestBadgeText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#D97706',
   },
   guestPromptCard: {
-    backgroundColor: '#EEF2FF',
     borderRadius: 20,
     padding: 16,
     marginVertical: 10,
     borderWidth: 1,
-    borderColor: '#C7D2FE',
     gap: 12,
   },
   guestPromptTitle: {
     fontSize: 14.5,
     fontWeight: '800',
-    color: '#1E1B4B',
   },
   guestPromptSub: {
     fontSize: 12,
-    color: '#4338CA',
     marginTop: 2,
     lineHeight: 17,
   },
   loginBtn: {
-    backgroundColor: '#4F46E5',
     paddingVertical: 11,
     borderRadius: 12,
     alignItems: 'center',
   },
   loginBtnText: {
-    color: '#FFFFFF',
     fontSize: 13,
     fontWeight: '800',
   },
   sectionHeading: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#475569',
     marginTop: 14,
     marginBottom: 8,
     textTransform: 'uppercase',
     letterSpacing: 0.3,
   },
   settingsCard: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 20,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E7EAF3',
   },
   settingRow: {
     flexDirection: 'row',
@@ -561,18 +548,14 @@ const styles = StyleSheet.create({
   settingTitle: {
     fontSize: 13.5,
     fontWeight: '700',
-    color: '#0F172A',
   },
   settingDesc: {
     fontSize: 11.5,
-    color: '#64748B',
     marginTop: 2,
   },
   activePillText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#059669',
-    backgroundColor: '#ECFDF5',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
@@ -584,51 +567,35 @@ const styles = StyleSheet.create({
   },
   targetChip: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
     borderWidth: 1.4,
-    borderColor: '#E7EAF3',
     paddingVertical: 9,
     borderRadius: 12,
     alignItems: 'center',
   },
-  targetChipActive: {
-    backgroundColor: '#0F172A',
-    borderColor: '#0F172A',
-  },
   targetChipText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#475569',
-  },
-  targetChipTextActive: {
-    color: '#FFFFFF',
   },
   divider: {
     height: 1,
-    backgroundColor: '#F1F5F9',
     marginVertical: 10,
   },
   versionLabel: {
     fontSize: 12.5,
-    color: '#64748B',
     fontWeight: '600',
   },
   versionValue: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#0F172A',
   },
   proUpgradeBanner: {
-    backgroundColor: '#FAF5FF',
     borderWidth: 1.5,
-    borderColor: '#E9D5FF',
     borderRadius: 18,
     padding: 14,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 20,
-    shadowColor: '#7C3AED',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
@@ -644,7 +611,6 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 14,
-    backgroundColor: '#7C3AED',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -657,13 +623,11 @@ const styles = StyleSheet.create({
   proUpgradeTitle: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#581C87',
   },
   proPromoBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    backgroundColor: '#EDE9FE',
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 6,
@@ -671,11 +635,9 @@ const styles = StyleSheet.create({
   proPromoBadgeText: {
     fontSize: 9.5,
     fontWeight: '800',
-    color: '#7C3AED',
   },
   proUpgradeSub: {
     fontSize: 11.5,
-    color: '#7E22CE',
     lineHeight: 16,
     marginTop: 2,
   },

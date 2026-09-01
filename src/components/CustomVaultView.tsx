@@ -5,7 +5,6 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
-  ScrollView,
   Alert,
 } from 'react-native';
 import {
@@ -16,10 +15,10 @@ import {
   Trash2,
   CheckCircle2,
   RotateCcw,
-  Volume2,
 } from 'lucide-react-native';
 import { WordWithProgress, dbService } from '../database/DatabaseService';
 import { useLearningStore } from '../store/useLearningStore';
+import { useThemeStore } from '../store/useThemeStore';
 import { CardComponent } from './CardComponent';
 import { CustomWordModal } from './CustomWordModal';
 
@@ -27,64 +26,26 @@ interface Props {
   words: WordWithProgress[];
 }
 
-export const CustomVaultView: React.FC<Props> = ({ words }) => {
+export const CustomVaultView: React.FC<Props> = ({ words = [] }) => {
   const { loadVocabSession } = useLearningStore();
+  const { colors } = useThemeStore();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeMode, setActiveMode] = useState<'LIST' | 'FLASHCARD'>('LIST');
   const [flashIndex, setFlashIndex] = useState(0);
 
-  const demoWords: WordWithProgress[] = [
-    {
-      id: 9901,
-      word: 'EXACERBATE',
-      meaning: 'daha da kötüleştirmek, şiddetlendirmek',
-      category: 'VOCABULARY',
-      subcategory: 'Kişisel Kelime Defterim',
-      level: 'B2',
-      synonyms: ['worsen', 'aggravate', 'deteriorate'],
-      example_sentence: 'The lack of investment will only exacerbate the current economic crisis.',
-      example_translation: 'Yatırım eksikliği mevcut ekonomik krizi yalnızca daha da kötüleştirecektir.',
-      is_custom: true,
-      isStudied: true,
-      box: 1,
-      status: 'NEW',
-      correctCount: 0,
-      incorrectCount: 0,
-      nextReviewAt: null,
-    },
-    {
-      id: 9902,
-      word: 'PLAUSIBLE',
-      meaning: 'akla yatkın, makul, olası',
-      category: 'VOCABULARY',
-      subcategory: 'Kişisel Kelime Defterim',
-      level: 'C1',
-      synonyms: ['reasonable', 'credible', 'feasible'],
-      example_sentence: 'She offered a plausible explanation for her unexpected absence.',
-      example_translation: 'Beklenmeyen devamsızlığı için akla yatkın bir açıklama sundu.',
-      is_custom: true,
-      isStudied: true,
-      box: 2,
-      status: 'MASTERED',
-      correctCount: 2,
-      incorrectCount: 0,
-      nextReviewAt: null,
-    },
-  ];
-
-  const activeWordsList = words.length > 0 ? words : demoWords;
+  const activeWordsList = words || [];
 
   // Filter words by search
   const filteredWords = activeWordsList.filter(
     (w) =>
-      w.word.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      w.meaning.toLowerCase().includes(searchQuery.toLowerCase())
+      w &&
+      (w.word.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        w.meaning.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  const learnedCount = activeWordsList.filter((w) => (w.box || 1) > 1).length;
-  const studyingCount = activeWordsList.filter((w) => (w.box || 1) <= 1).length;
+  const learnedCount = activeWordsList.filter((w) => w && (w.box || 1) > 1).length;
 
   const handleDeleteWord = (item: WordWithProgress) => {
     Alert.alert(
@@ -113,14 +74,14 @@ export const CustomVaultView: React.FC<Props> = ({ words }) => {
   return (
     <View style={styles.container}>
       {/* HERO BANNER FOR CUSTOM WORDS */}
-      <View style={styles.heroBanner}>
+      <View style={[styles.heroBanner, { backgroundColor: colors.brand }]}>
         <View style={styles.heroTopRow}>
           <View style={styles.heroIconBox}>
-            <Sparkles size={20} color="#FFFFFF" />
+            <Sparkles size={20} color={colors.textOnBrand} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={styles.heroTitle}>Kişisel Kelime Kasası</Text>
-            <Text style={styles.heroSubtitle}>
+            <Text style={[styles.heroTitle, { color: colors.textOnBrand }]}>Kişisel Kelime Kasası</Text>
+            <Text style={[styles.heroSubtitle, { color: 'rgba(255, 255, 255, 0.85)' }]}>
               Makalelerde ve günlük hayatta karşılaştığın bilmediğin kelimeleri buraya ekle.
             </Text>
           </View>
@@ -128,40 +89,49 @@ export const CustomVaultView: React.FC<Props> = ({ words }) => {
 
         {/* Big Add Word Button */}
         <TouchableOpacity
-          style={styles.heroAddBtn}
+          style={[styles.heroAddBtn, { backgroundColor: colors.cardBackground }]}
           onPress={() => setIsModalOpen(true)}
           activeOpacity={0.85}
         >
-          <Plus size={18} color="#4F46E5" strokeWidth={2.5} />
-          <Text style={styles.heroAddBtnText}>+ Yeni Kelime Ekle (AI Otomatik Doldurur)</Text>
+          <Text style={[styles.heroAddBtnText, { color: colors.brand }]}>+ Yeni Kelime Ekle (AI Otomatik Doldurur)</Text>
         </TouchableOpacity>
       </View>
 
       {/* STATS & MODE SELECTOR */}
       <View style={styles.statsBar}>
-        <View style={styles.statPill}>
-          <Text style={styles.statPillText}>⭐ {words.length} Özel Kelime</Text>
+        <View style={[styles.statPill, { backgroundColor: colors.brandLight }]}>
+          <Text style={[styles.statPillText, { color: colors.brand }]}>⭐ {words.length} Özel Kelime</Text>
         </View>
-        <View style={[styles.statPill, { backgroundColor: '#ECFDF5' }]}>
-          <Text style={[styles.statPillText, { color: '#059669' }]}>
+        <View style={[styles.statPill, { backgroundColor: colors.successLight }]}>
+          <Text style={[styles.statPillText, { color: colors.success }]}>
             ✅ {learnedCount} Öğrenildi
           </Text>
         </View>
 
         {/* View Mode Toggle */}
-        <View style={styles.modeToggle}>
+        <View style={[styles.modeToggle, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
           <TouchableOpacity
-            style={[styles.modeBtn, activeMode === 'LIST' && styles.modeBtnActive]}
+            style={[
+              styles.modeBtn,
+              activeMode === 'LIST' && [styles.modeBtnActive, { backgroundColor: colors.brandLight }],
+            ]}
             onPress={() => setActiveMode('LIST')}
           >
             <Text
-              style={[styles.modeBtnText, activeMode === 'LIST' && styles.modeBtnTextActive]}
+              style={[
+                styles.modeBtnText,
+                { color: activeMode === 'LIST' ? colors.brand : colors.textSecondary },
+                activeMode === 'LIST' && { fontWeight: '800' },
+              ]}
             >
               📋 Liste
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.modeBtn, activeMode === 'FLASHCARD' && styles.modeBtnActive]}
+            style={[
+              styles.modeBtn,
+              activeMode === 'FLASHCARD' && [styles.modeBtnActive, { backgroundColor: colors.brandLight }],
+            ]}
             onPress={() => {
               setFlashIndex(0);
               setActiveMode('FLASHCARD');
@@ -170,7 +140,8 @@ export const CustomVaultView: React.FC<Props> = ({ words }) => {
             <Text
               style={[
                 styles.modeBtnText,
-                activeMode === 'FLASHCARD' && styles.modeBtnTextActive,
+                { color: activeMode === 'FLASHCARD' ? colors.brand : colors.textSecondary },
+                activeMode === 'FLASHCARD' && { fontWeight: '800' },
               ]}
             >
               🎴 Flashcard
@@ -194,20 +165,38 @@ export const CustomVaultView: React.FC<Props> = ({ words }) => {
                 setFlashIndex((prev) => prev + 1);
               }}
             />
+          ) : words.length === 0 ? (
+            <View style={[styles.emptyState, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+              <View style={[styles.emptyIconCircle, { backgroundColor: colors.brandLight }]}>
+                <BookOpen size={36} color={colors.brand} />
+              </View>
+              <Text style={[styles.emptyTitle, { color: colors.text }]}>Henüz Özel Kelime Eklenmedi</Text>
+              <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>
+                Flashcard tekrarı yapmak için önce yukarıdaki butondan kelime ekleyin.
+              </Text>
+              <TouchableOpacity
+                style={[styles.emptyAddBtn, { backgroundColor: colors.brand }]}
+                onPress={() => setIsModalOpen(true)}
+                activeOpacity={0.85}
+              >
+                <Plus size={16} color={colors.textOnBrand} strokeWidth={2.5} />
+                <Text style={[styles.emptyAddBtnText, { color: colors.textOnBrand }]}>İlk Kelimeni Ekle</Text>
+              </TouchableOpacity>
+            </View>
           ) : (
-            <View style={styles.finishedCard}>
-              <CheckCircle2 size={44} color="#10B981" />
-              <Text style={styles.finishedTitle}>Özel Kelimeler Seti Tamamlandı!</Text>
-              <Text style={styles.finishedSubtitle}>
+            <View style={[styles.finishedCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+              <CheckCircle2 size={44} color={colors.success} />
+              <Text style={[styles.finishedTitle, { color: colors.text }]}>Özel Kelimeler Seti Tamamlandı!</Text>
+              <Text style={[styles.finishedSubtitle, { color: colors.textSecondary }]}>
                 Kişisel kelime kutundaki tüm kelimeleri tekrar ettin.
               </Text>
               <TouchableOpacity
-                style={styles.restartBtn}
+                style={[styles.restartBtn, { backgroundColor: colors.brand }]}
                 onPress={() => setFlashIndex(0)}
                 activeOpacity={0.8}
               >
-                <RotateCcw size={16} color="#FFFFFF" />
-                <Text style={styles.restartBtnText}>Baştan Tekrar Et</Text>
+                <RotateCcw size={16} color={colors.textOnBrand} />
+                <Text style={[styles.restartBtnText, { color: colors.textOnBrand }]}>Baştan Tekrar Et</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -218,18 +207,18 @@ export const CustomVaultView: React.FC<Props> = ({ words }) => {
       {activeMode === 'LIST' && (
         <View style={{ flex: 1 }}>
           {/* Search Box */}
-          <View style={styles.searchBox}>
-            <Search size={16} color="#94A3B8" />
+          <View style={[styles.searchBox, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+            <Search size={16} color={colors.textSecondary} />
             <TextInput
-              style={styles.searchInput}
+              style={[styles.searchInput, { color: colors.text }]}
               placeholder="Kişisel kelimelerimde ara..."
-              placeholderTextColor="#94A3B8"
+              placeholderTextColor={colors.textSecondary}
               value={searchQuery}
               onChangeText={setSearchQuery}
             />
             {searchQuery ? (
               <TouchableOpacity onPress={() => setSearchQuery('')}>
-                <Text style={styles.clearSearchText}>✕</Text>
+                <Text style={[styles.clearSearchText, { color: colors.textSecondary }]}>✕</Text>
               </TouchableOpacity>
             ) : null}
           </View>
@@ -241,13 +230,23 @@ export const CustomVaultView: React.FC<Props> = ({ words }) => {
                 const isLearned = (item.box || 1) > 1;
 
                 return (
-                  <View key={item.id} style={styles.wordCard}>
+                  <View
+                    key={item.id}
+                    style={[
+                      styles.wordCard,
+                      {
+                        backgroundColor: colors.cardBackground,
+                        borderColor: colors.border,
+                        shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
+                      },
+                    ]}
+                  >
                     {/* Top Row: Word & Level & Actions */}
                     <View style={styles.cardHeader}>
                       <View style={styles.wordTitleRow}>
-                        <Text style={styles.wordText}>{item.word}</Text>
-                        <View style={styles.levelBadge}>
-                          <Text style={styles.levelBadgeText}>{item.level || 'B2'}</Text>
+                        <Text style={[styles.wordText, { color: colors.text }]}>{item.word}</Text>
+                        <View style={[styles.levelBadge, { backgroundColor: colors.brandLight }]}>
+                          <Text style={[styles.levelBadgeText, { color: colors.brand }]}>{item.level || 'B2'}</Text>
                         </View>
                       </View>
 
@@ -255,7 +254,9 @@ export const CustomVaultView: React.FC<Props> = ({ words }) => {
                         <TouchableOpacity
                           style={[
                             styles.statusBtn,
-                            isLearned ? styles.statusLearned : styles.statusLearning,
+                            isLearned
+                              ? { backgroundColor: colors.successLight }
+                              : { backgroundColor: colors.subtleBackground },
                           ]}
                           onPress={() => handleToggleLearned(item)}
                           activeOpacity={0.7}
@@ -263,7 +264,8 @@ export const CustomVaultView: React.FC<Props> = ({ words }) => {
                           <Text
                             style={[
                               styles.statusBtnText,
-                              isLearned ? styles.statusLearnedText : styles.statusLearningText,
+                              { color: isLearned ? colors.success : colors.textSecondary },
+                              { fontWeight: '800' },
                             ]}
                           >
                             {isLearned ? '✅ Öğrendim' : '⏳ Öğreniliyor'}
@@ -275,22 +277,22 @@ export const CustomVaultView: React.FC<Props> = ({ words }) => {
                           onPress={() => handleDeleteWord(item)}
                           activeOpacity={0.7}
                         >
-                          <Trash2 size={16} color="#94A3B8" />
+                          <Trash2 size={16} color={colors.textSecondary} />
                         </TouchableOpacity>
                       </View>
                     </View>
 
                     {/* Meaning Box */}
-                    <View style={styles.meaningBox}>
-                      <Text style={styles.meaningText}>{item.meaning}</Text>
+                    <View style={[styles.meaningBox, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
+                      <Text style={[styles.meaningText, { color: colors.text }]}>{item.meaning}</Text>
                     </View>
 
                     {/* Example Sentence */}
                     {item.example_sentence && (
-                      <View style={styles.exampleBox}>
-                        <Text style={styles.exampleEn}>"{item.example_sentence}"</Text>
+                      <View style={[styles.exampleBox, { borderLeftColor: colors.brand }]}>
+                        <Text style={[styles.exampleEn, { color: colors.text }]}>"{item.example_sentence}"</Text>
                         {item.example_translation && (
-                          <Text style={styles.exampleTr}>{item.example_translation}</Text>
+                          <Text style={[styles.exampleTr, { color: colors.textSecondary }]}>{item.example_translation}</Text>
                         )}
                       </View>
                     )}
@@ -299,8 +301,8 @@ export const CustomVaultView: React.FC<Props> = ({ words }) => {
                     {item.synonyms && item.synonyms.length > 0 && (
                       <View style={styles.synonymsRow}>
                         {item.synonyms.map((s, idx) => (
-                          <View key={idx} style={styles.synonymChip}>
-                            <Text style={styles.synonymChipText}>{s}</Text>
+                          <View key={idx} style={[styles.synonymChip, { backgroundColor: colors.brandLight }]}>
+                            <Text style={[styles.synonymChipText, { color: colors.brand }]}>{s}</Text>
                           </View>
                         ))}
                       </View>
@@ -310,21 +312,21 @@ export const CustomVaultView: React.FC<Props> = ({ words }) => {
               })}
             </View>
           ) : (
-            <View style={styles.emptyState}>
-              <View style={styles.emptyIconCircle}>
-                <BookOpen size={36} color="#4F46E5" />
+            <View style={[styles.emptyState, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+              <View style={[styles.emptyIconCircle, { backgroundColor: colors.brandLight }]}>
+                <BookOpen size={36} color={colors.brand} />
               </View>
-              <Text style={styles.emptyTitle}>Henüz Özel Kelime Eklenmedi</Text>
-              <Text style={styles.emptySubtitle}>
+              <Text style={[styles.emptyTitle, { color: colors.text }]}>Henüz Özel Kelime Eklenmedi</Text>
+              <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>
                 İngilizce makaleler okurken veya günlük hayatta bilmediğin kelimeleri tek tıkla buraya ekleyebilirsin. AI otomatik olarak anlamını ve YDS örnek cümlesini hazırlar.
               </Text>
               <TouchableOpacity
-                style={styles.emptyAddBtn}
+                style={[styles.emptyAddBtn, { backgroundColor: colors.brand }]}
                 onPress={() => setIsModalOpen(true)}
                 activeOpacity={0.85}
               >
-                <Plus size={16} color="#FFFFFF" strokeWidth={2.5} />
-                <Text style={styles.emptyAddBtnText}>İlk Kelimeni Ekle</Text>
+                <Plus size={16} color={colors.textOnBrand} strokeWidth={2.5} />
+                <Text style={[styles.emptyAddBtnText, { color: colors.textOnBrand }]}>İlk Kelimeni Ekle</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -344,13 +346,11 @@ const styles = StyleSheet.create({
   heroBanner: {
     borderRadius: 24,
     padding: 18,
-    backgroundColor: '#7C3AED',
     marginBottom: 14,
-    shadowColor: '#7C3AED',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 3,
   },
   heroTopRow: {
     flexDirection: 'row',
@@ -369,11 +369,9 @@ const styles = StyleSheet.create({
   heroTitle: {
     fontSize: 16,
     fontWeight: '900',
-    color: '#FFFFFF',
   },
   heroSubtitle: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.85)',
     marginTop: 2,
     lineHeight: 17,
   },
@@ -382,12 +380,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#FFFFFF',
     paddingVertical: 12,
     borderRadius: 14,
   },
   heroAddBtnText: {
-    color: '#4F46E5',
     fontSize: 13.5,
     fontWeight: '800',
   },
@@ -398,7 +394,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   statPill: {
-    backgroundColor: '#EEF2FF',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 999,
@@ -406,15 +401,12 @@ const styles = StyleSheet.create({
   statPillText: {
     fontSize: 11.5,
     fontWeight: '800',
-    color: '#4F46E5',
   },
   modeToggle: {
     flexDirection: 'row',
     marginLeft: 'auto',
-    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E7EAF3',
     padding: 2,
   },
   modeBtn: {
@@ -422,16 +414,10 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 10,
   },
-  modeBtnActive: {
-    backgroundColor: '#0F172A',
-  },
+  modeBtnActive: {},
   modeBtnText: {
     fontSize: 11.5,
     fontWeight: '700',
-    color: '#475569',
-  },
-  modeBtnTextActive: {
-    color: '#FFFFFF',
   },
   flashcardArea: {
     marginTop: 4,
@@ -440,9 +426,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#FFFFFF',
     borderWidth: 1.4,
-    borderColor: '#E7EAF3',
     borderRadius: 16,
     paddingHorizontal: 14,
     paddingVertical: 10,
@@ -451,13 +435,11 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 13.5,
-    color: '#0F172A',
     fontWeight: '500',
   },
   clearSearchText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#94A3B8',
     paddingHorizontal: 4,
   },
   cardsList: {
@@ -465,12 +447,9 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   wordCard: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 22,
     padding: 16,
     borderWidth: 1,
-    borderColor: 'rgba(15,23,42,0.03)',
-    shadowColor: '#0F172A',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 8,
@@ -490,11 +469,9 @@ const styles = StyleSheet.create({
   wordText: {
     fontSize: 17,
     fontWeight: '900',
-    color: '#0F172A',
     letterSpacing: -0.3,
   },
   levelBadge: {
-    backgroundColor: '#F5F3FF',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 6,
@@ -502,7 +479,6 @@ const styles = StyleSheet.create({
   levelBadgeText: {
     fontSize: 10.5,
     fontWeight: '800',
-    color: '#7C3AED',
   },
   actionsRight: {
     flexDirection: 'row',
@@ -514,22 +490,6 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 8,
   },
-  statusLearning: {
-    backgroundColor: '#FEF3C7',
-  },
-  statusLearningText: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#D97706',
-  },
-  statusLearned: {
-    backgroundColor: '#ECFDF5',
-  },
-  statusLearnedText: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#059669',
-  },
   statusBtnText: {
     fontSize: 11,
   },
@@ -537,35 +497,28 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   meaningBox: {
-    backgroundColor: '#F8FAFC',
     borderRadius: 12,
     padding: 10,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#E7EAF3',
   },
   meaningText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#0F172A',
   },
   exampleBox: {
-    backgroundColor: '#FFFFFF',
     borderLeftWidth: 3,
-    borderLeftColor: '#4F46E5',
     paddingLeft: 10,
     paddingVertical: 2,
     marginBottom: 10,
   },
   exampleEn: {
     fontSize: 12.5,
-    color: '#1E293B',
     lineHeight: 18,
     fontStyle: 'italic',
   },
   exampleTr: {
     fontSize: 11.5,
-    color: '#64748B',
     lineHeight: 17,
     marginTop: 4,
   },
@@ -575,7 +528,6 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   synonymChip: {
-    backgroundColor: '#F5F3FF',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
@@ -583,23 +535,19 @@ const styles = StyleSheet.create({
   synonymChipText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#7C3AED',
   },
   emptyState: {
     alignItems: 'center',
     justifyContent: 'center',
     padding: 30,
-    backgroundColor: '#FFFFFF',
     borderRadius: 24,
     borderWidth: 1,
-    borderColor: '#E7EAF3',
     marginTop: 6,
   },
   emptyIconCircle: {
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: '#EEF2FF',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 14,
@@ -607,13 +555,11 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 16.5,
     fontWeight: '800',
-    color: '#0F172A',
     marginBottom: 6,
     textAlign: 'center',
   },
   emptySubtitle: {
     fontSize: 12.5,
-    color: '#64748B',
     textAlign: 'center',
     lineHeight: 18,
     marginBottom: 18,
@@ -622,13 +568,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#4F46E5',
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 14,
   },
   emptyAddBtnText: {
-    color: '#FFFFFF',
     fontSize: 13.5,
     fontWeight: '800',
   },
@@ -636,22 +580,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 30,
-    backgroundColor: '#FFFFFF',
     borderRadius: 24,
     borderWidth: 1,
-    borderColor: '#E7EAF3',
   },
   finishedTitle: {
     fontSize: 16.5,
     fontWeight: '800',
-    color: '#0F172A',
     marginTop: 12,
     marginBottom: 4,
     textAlign: 'center',
   },
   finishedSubtitle: {
     fontSize: 12.5,
-    color: '#64748B',
     textAlign: 'center',
     marginBottom: 16,
   },
@@ -659,13 +599,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#4F46E5',
     paddingHorizontal: 18,
     paddingVertical: 12,
     borderRadius: 14,
   },
   restartBtnText: {
-    color: '#FFFFFF',
     fontSize: 13,
     fontWeight: '800',
   },

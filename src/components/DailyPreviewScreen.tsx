@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { BookMarked, Eye, EyeOff, Play } from 'lucide-react-native';
 import { CardWord } from '../types';
+import { useThemeStore } from '../store/useThemeStore';
 
 export interface DailyPreviewScreenProps {
   words: CardWord[];
@@ -18,53 +19,63 @@ export const DailyPreviewScreen: React.FC<DailyPreviewScreenProps> = ({
   words,
   onStartTest,
 }) => {
+  const { colors } = useThemeStore();
   const [hideMeanings, setHideMeanings] = useState<boolean>(false);
 
   const renderStudyCard = ({ item, index }: { item: CardWord; index: number }) => {
     return (
-      <View style={styles.studyCard}>
+      <View
+        style={[
+          styles.studyCard,
+          {
+            backgroundColor: colors.cardBackground,
+            borderColor: colors.border,
+            shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
+          },
+        ]}
+      >
         {/* Top Info Bar */}
         <View style={styles.cardHeader}>
-          <View style={styles.indexBadge}>
-            <Text style={styles.indexBadgeText}>#{index + 1}</Text>
+          <View style={[styles.indexBadge, { backgroundColor: colors.brandLight }]}>
+            <Text style={[styles.indexBadgeText, { color: colors.brand }]}>#{index + 1}</Text>
           </View>
 
           <View style={styles.headerBadgesRight}>
-            <View style={styles.levelBadge}>
-              <Text style={styles.levelBadgeText}>{item.level}</Text>
+            <View style={[styles.levelBadge, { backgroundColor: colors.brandLight }]}>
+              <Text style={[styles.levelBadgeText, { color: colors.brand }]}>{item.level}</Text>
             </View>
-            <View style={styles.categoryBadge}>
-              <Text style={styles.categoryBadgeText}>{item.category}</Text>
+            <View style={[styles.categoryBadge, { backgroundColor: colors.subtleBackground }]}>
+              <Text style={[styles.categoryBadgeText, { color: colors.textSecondary }]}>{item.category}</Text>
             </View>
           </View>
         </View>
 
         {/* Word Title & Subcategory */}
-        <Text style={styles.wordTitle}>{item.word}</Text>
+        <Text style={[styles.wordTitle, { color: colors.text }]}>{item.word}</Text>
         {item.subcategory ? (
-          <Text style={styles.subcategoryText}>{item.subcategory}</Text>
+          <Text style={[styles.subcategoryText, { color: colors.textSecondary }]}>{item.subcategory}</Text>
         ) : null}
 
         {/* Meaning Box */}
-        <View style={styles.meaningBox}>
-          <Text style={styles.meaningLabel}>Türkçe Karşılığı:</Text>
+        <View style={[styles.meaningBox, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
+          <Text style={[styles.meaningLabel, { color: colors.brand }]}>Türkçe Karşılığı:</Text>
           {hideMeanings ? (
-            <Text style={styles.hiddenMeaningText}>
+            <Text style={[styles.hiddenMeaningText, { color: colors.textSecondary }]}>
               [Gizlendi - Hatırlamaya Çalışın]
             </Text>
           ) : (
-            <Text style={styles.meaningText}>{item.meaning}</Text>
+            <Text style={[styles.meaningText, { color: colors.text }]}>{item.meaning}</Text>
           )}
         </View>
 
         {/* Synonyms */}
         {!hideMeanings && item.synonyms && item.synonyms.length > 0 && (
           <View style={styles.synonymsRow}>
-            <Text style={styles.synonymLabel}>Eş Anlamlılar:</Text>
+            <Text style={[styles.synonymLabel, { color: colors.textSecondary }]}>Eş Anlamlılar:</Text>
             <View style={styles.synonymChips}>
               {item.synonyms.map((syn, idx) => (
-                <View key={idx} style={styles.synonymChip}>
-                  <Text style={styles.synonymChipText}>{syn}</Text>
+                <View key={idx} style={[styles.synonymChip, { backgroundColor: colors.brandLight }]}>
+                  <Text style={[styles.synonymChipText, { color: colors.brand }]}>{syn}</Text>
                 </View>
               ))}
             </View>
@@ -73,12 +84,12 @@ export const DailyPreviewScreen: React.FC<DailyPreviewScreenProps> = ({
 
         {/* Example Sentence */}
         {!hideMeanings && item.example_sentence && (
-          <View style={styles.exampleContainer}>
-            <Text style={styles.exampleSentence}>
+          <View style={[styles.exampleContainer, { borderLeftColor: colors.brand }]}>
+            <Text style={[styles.exampleSentence, { color: colors.text }]}>
               "{item.example_sentence}"
             </Text>
             {item.example_translation && (
-              <Text style={styles.exampleTranslation}>
+              <Text style={[styles.exampleTranslation, { color: colors.textSecondary }]}>
                 {item.example_translation}
               </Text>
             )}
@@ -87,8 +98,8 @@ export const DailyPreviewScreen: React.FC<DailyPreviewScreenProps> = ({
 
         {/* Etymology Note */}
         {!hideMeanings && item.etymology_note && (
-          <View style={styles.etymologyContainer}>
-            <Text style={styles.etymologyText}>
+          <View style={[styles.etymologyContainer, { backgroundColor: colors.subtleBackground }]}>
+            <Text style={[styles.etymologyText, { color: colors.textSecondary }]}>
               Kök/Ek Notu: {item.etymology_note}
             </Text>
           </View>
@@ -98,32 +109,32 @@ export const DailyPreviewScreen: React.FC<DailyPreviewScreenProps> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Top Banner & Instructions */}
-      <View style={styles.topBanner}>
-        <View style={styles.bannerIconChip}>
-          <BookMarked size={20} color="#2563EB" strokeWidth={2.2} />
+      <View style={[styles.topBanner, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
+        <View style={[styles.bannerIconChip, { backgroundColor: colors.brandLight }]}>
+          <BookMarked size={20} color={colors.brand} strokeWidth={2.2} />
         </View>
 
         <View style={styles.bannerTextGroup}>
-          <Text style={styles.bannerTitle}>Çalışma & Ezberleme Modu</Text>
-          <Text style={styles.bannerSubtitle}>
+          <Text style={[styles.bannerTitle, { color: colors.text }]}>Çalışma & Ezberleme Modu</Text>
+          <Text style={[styles.bannerSubtitle, { color: colors.textSecondary }]}>
             Bugünkü {words.length} kelimeyi testten önce inceleyin.
           </Text>
         </View>
 
         {/* Toggle Hide/Show Meanings button */}
         <TouchableOpacity
-          style={styles.toggleButton}
+          style={[styles.toggleButton, { backgroundColor: colors.subtleBackground }]}
           onPress={() => setHideMeanings(!hideMeanings)}
           activeOpacity={0.8}
         >
           {hideMeanings ? (
-            <Eye size={14} color="#334155" strokeWidth={2.2} />
+            <Eye size={14} color={colors.textSecondary} strokeWidth={2.2} />
           ) : (
-            <EyeOff size={14} color="#334155" strokeWidth={2.2} />
+            <EyeOff size={14} color={colors.textSecondary} strokeWidth={2.2} />
           )}
-          <Text style={styles.toggleButtonText}>
+          <Text style={[styles.toggleButtonText, { color: colors.textSecondary }]}>
             {hideMeanings ? 'Göster' : 'Gizle'}
           </Text>
         </TouchableOpacity>
@@ -139,14 +150,14 @@ export const DailyPreviewScreen: React.FC<DailyPreviewScreenProps> = ({
       />
 
       {/* Bottom Start Test Action Button */}
-      <View style={styles.bottomBar}>
+      <View style={[styles.bottomBar, { backgroundColor: colors.cardBackground, borderTopColor: colors.border }]}>
         <TouchableOpacity
-          style={styles.startTestButton}
+          style={[styles.startTestButton, { backgroundColor: colors.brand }]}
           onPress={onStartTest}
           activeOpacity={0.85}
         >
-          <Play size={16} color="#FFFFFF" strokeWidth={2.5} fill="#FFFFFF" />
-          <Text style={styles.startTestButtonText}>
+          <Play size={16} color={colors.textOnBrand} strokeWidth={2.5} fill={colors.textOnBrand} />
+          <Text style={[styles.startTestButtonText, { color: colors.textOnBrand }]}>
             Hazırım, Testi Başlat ({words.length} Kelime)
           </Text>
         </TouchableOpacity>
@@ -158,21 +169,17 @@ export const DailyPreviewScreen: React.FC<DailyPreviewScreenProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
   },
   topBanner: {
-    backgroundColor: '#FFFFFF',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 10,
   },
   bannerIconChip: {
-    backgroundColor: '#EFF6FF',
     padding: 8,
     borderRadius: 10,
   },
@@ -180,13 +187,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bannerTitle: {
-    color: '#0F172A',
     fontSize: 15,
     fontWeight: '700',
     marginBottom: 2,
   },
   bannerSubtitle: {
-    color: '#64748B',
     fontSize: 11,
     lineHeight: 15,
   },
@@ -194,34 +199,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#F1F5F9',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#CBD5E1',
   },
   toggleButtonText: {
-    color: '#334155',
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '600',
   },
   listContent: {
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 80,
+    padding: 16,
+    paddingBottom: 100,
   },
   studyCard: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
-    shadowColor: '#64748B',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
-    shadowRadius: 4,
+    shadowRadius: 6,
     elevation: 2,
   },
   cardHeader: {
@@ -231,162 +228,132 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   indexBadge: {
-    backgroundColor: '#F1F5F9',
     paddingHorizontal: 8,
-    paddingVertical: 2,
+    paddingVertical: 3,
     borderRadius: 6,
   },
   indexBadgeText: {
-    color: '#64748B',
     fontSize: 11,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   headerBadgesRight: {
     flexDirection: 'row',
     gap: 6,
   },
   levelBadge: {
-    backgroundColor: '#2563EB',
     paddingHorizontal: 8,
-    paddingVertical: 2,
+    paddingVertical: 3,
     borderRadius: 6,
   },
   levelBadgeText: {
-    color: '#FFFFFF',
-    fontSize: 11,
-    fontWeight: '700',
+    fontSize: 10,
+    fontWeight: '800',
   },
   categoryBadge: {
-    backgroundColor: '#F1F5F9',
     paddingHorizontal: 8,
-    paddingVertical: 2,
+    paddingVertical: 3,
     borderRadius: 6,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
   },
   categoryBadgeText: {
-    color: '#475569',
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '600',
   },
   wordTitle: {
-    color: '#0F172A',
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '800',
     marginBottom: 2,
   },
   subcategoryText: {
-    color: '#64748B',
     fontSize: 11,
-    fontWeight: '500',
     marginBottom: 8,
+    fontStyle: 'italic',
   },
   meaningBox: {
-    backgroundColor: '#F8FAFC',
-    padding: 10,
     borderRadius: 8,
+    padding: 10,
+    marginVertical: 8,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
-    marginBottom: 8,
   },
   meaningLabel: {
-    color: '#64748B',
-    fontSize: 10,
-    fontWeight: '700',
-    textTransform: 'uppercase',
+    fontSize: 10.5,
+    fontWeight: '800',
     marginBottom: 2,
+    textTransform: 'uppercase',
   },
   meaningText: {
-    color: '#16A34A',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '700',
   },
   hiddenMeaningText: {
-    color: '#94A3B8',
     fontSize: 13,
     fontStyle: 'italic',
+    fontWeight: '500',
   },
   synonymsRow: {
-    marginBottom: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 6,
+    flexWrap: 'wrap',
   },
   synonymLabel: {
-    color: '#64748B',
-    fontSize: 10,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    marginBottom: 4,
+    fontSize: 11,
+    fontWeight: '600',
   },
   synonymChips: {
     flexDirection: 'row',
+    gap: 4,
     flexWrap: 'wrap',
-    gap: 6,
   },
   synonymChip: {
-    backgroundColor: '#EFF6FF',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: '#BFDBFE',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
   },
   synonymChipText: {
-    color: '#1E40AF',
     fontSize: 11,
     fontWeight: '600',
   },
   exampleContainer: {
-    backgroundColor: '#FFFFFF',
-    padding: 8,
-    borderRadius: 6,
     borderLeftWidth: 3,
-    borderLeftColor: '#2563EB',
-    marginBottom: 6,
+    paddingLeft: 8,
+    marginTop: 8,
   },
   exampleSentence: {
-    color: '#1E293B',
     fontSize: 12,
     fontStyle: 'italic',
-    marginBottom: 2,
+    lineHeight: 16,
   },
   exampleTranslation: {
-    color: '#64748B',
     fontSize: 11,
+    marginTop: 2,
   },
   etymologyContainer: {
-    backgroundColor: '#FFFBEB',
     padding: 6,
     borderRadius: 6,
-    borderWidth: 1,
-    borderColor: '#FDE68A',
+    marginTop: 6,
   },
   etymologyText: {
-    color: '#D97706',
-    fontSize: 11,
-    fontWeight: '600',
+    fontSize: 10.5,
   },
   bottomBar: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    padding: 14,
     borderTopWidth: 1,
-    borderTopColor: '#E2E8F0',
   },
   startTestButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#2563EB',
     paddingVertical: 14,
     borderRadius: 12,
   },
   startTestButtonText: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: '700',
+    fontSize: 14.5,
+    fontWeight: '800',
   },
 });

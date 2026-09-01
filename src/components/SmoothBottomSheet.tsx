@@ -7,9 +7,10 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
   PanResponder,
-  KeyboardAvoidingView,
+  Keyboard,
   Platform,
 } from 'react-native';
+import { useThemeStore } from '../store/useThemeStore';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -18,6 +19,7 @@ interface Props {
   onClose: () => void;
   children: React.ReactNode;
   maxHeight?: string | number;
+  height?: string | number;
   showHandle?: boolean;
 }
 
@@ -26,8 +28,10 @@ export const SmoothBottomSheet: React.FC<Props> = ({
   onClose,
   children,
   maxHeight = '88%',
+  height,
   showHandle = true,
 }) => {
+  const { colors } = useThemeStore();
   const [showModal, setShowModal] = useState(visible);
   const slideAnim = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -109,6 +113,47 @@ export const SmoothBottomSheet: React.FC<Props> = ({
     })
   ).current;
 
+  const [keyboardOffset, setKeyboardOffset] = useState(0);
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      (e) => {
+        setKeyboardOffset(e.endCoordinates.height);
+      }
+    );
+    const hideSub = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      () => {
+        setKeyboardOffset(0);
+      }
+    );
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
+
+  const parsedMaxHeight =
+    typeof maxHeight === 'string' && maxHeight.endsWith('%')
+      ? (SCREEN_HEIGHT * parseFloat(maxHeight)) / 100
+      : Number(maxHeight) || SCREEN_HEIGHT * 0.88;
+
+  const parsedHeight =
+    typeof height === 'string' && height.endsWith('%')
+      ? (SCREEN_HEIGHT * parseFloat(height)) / 100
+      : height !== undefined
+      ? Number(height)
+      : undefined;
+
+  const effectiveMaxHeight = keyboardOffset > 0
+    ? Math.min(parsedMaxHeight, SCREEN_HEIGHT - keyboardOffset - (Platform.OS === 'ios' ? 60 : 30))
+    : parsedMaxHeight;
+
+  const effectiveHeight = parsedHeight
+    ? (keyboardOffset > 0 ? Math.min(parsedHeight, effectiveMaxHeight) : parsedHeight)
+    : undefined;
+
   if (!showModal) return null;
 
   return (
@@ -119,11 +164,8 @@ export const SmoothBottomSheet: React.FC<Props> = ({
       onRequestClose={handleClose}
       statusBarTranslucent
     >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.container}
-      >
-        {/* Fading Backdrop (Zero sudden flash) */}
+      <View style={styles.container}>
+        {/* Fading Backdrop */}
         <TouchableWithoutFeedback onPress={handleClose}>
           <Animated.View
             style={[
@@ -143,19 +185,22 @@ export const SmoothBottomSheet: React.FC<Props> = ({
           style={[
             styles.sheetContainer,
             {
-              maxHeight: typeof maxHeight === 'string' ? (maxHeight as any) : maxHeight,
+              backgroundColor: colors.cardBackground,
+              maxHeight: effectiveMaxHeight,
+              ...(effectiveHeight ? { height: effectiveHeight } : {}),
+              marginBottom: keyboardOffset,
               transform: [{ translateY: slideAnim }],
             },
           ]}
         >
           {showHandle && (
-            <View {...panResponder.panHandlers} style={styles.handleArea}>
-              <View style={styles.handlePill} />
+            <View {...panResponder.panHandlers} style={[styles.handleArea, { backgroundColor: colors.cardBackground }]}>
+              <View style={[styles.handlePill, { backgroundColor: colors.border }]} />
             </View>
           )}
           {children}
         </Animated.View>
-      </KeyboardAvoidingView>
+      </View>
     </Modal>
   );
 };
@@ -167,14 +212,13 @@ const styles = StyleSheet.create({
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#0F172A',
+    backgroundColor: '#000000',
   },
   sheetContainer: {
-    backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
     overflow: 'hidden',
-    shadowColor: '#0F172A',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: -6 },
     shadowOpacity: 0.16,
     shadowRadius: 24,
@@ -184,12 +228,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 10,
-    backgroundColor: '#FFFFFF',
   },
   handlePill: {
     width: 38,
     height: 4.5,
     borderRadius: 999,
-    backgroundColor: '#E2E8F0',
   },
 });

@@ -55,14 +55,17 @@ export class YdsExamEngine {
       }
     });
 
+    const totalQ = exam.questions.length;
     const netScore = correct; // In YDS, 4 wrongs do not cancel 1 right (Doğrular silinmez)
-    const ydsScore = Number((correct * 1.25).toFixed(2));
+    const ydsScore = totalQ > 0 ? Number(((correct / totalQ) * 100).toFixed(2)) : 0;
 
-    let levelGrade: 'A' | 'B' | 'C' | 'D' | 'E' = 'E';
+    let levelGrade: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' = 'F';
     if (ydsScore >= 90) levelGrade = 'A';
     else if (ydsScore >= 80) levelGrade = 'B';
     else if (ydsScore >= 70) levelGrade = 'C';
     else if (ydsScore >= 60) levelGrade = 'D';
+    else if (ydsScore >= 50) levelGrade = 'E';
+    else levelGrade = 'F';
 
     const categoryBreakdown = Object.entries(categoryMap)
       .filter(([_, stats]) => stats.total > 0)
@@ -76,7 +79,7 @@ export class YdsExamEngine {
     return {
       examId: exam.id,
       title: exam.title,
-      totalQuestions: exam.questions.length,
+      totalQuestions: totalQ,
       correctCount: correct,
       wrongCount: wrong,
       emptyCount: empty,
@@ -85,7 +88,9 @@ export class YdsExamEngine {
       levelGrade,
       timeSpentSeconds,
       completedAt: new Date().toISOString(),
-      categoryBreakdown
+      categoryBreakdown,
+      userAnswers: { ...userAnswers },
+      questions: exam.questions,
     };
   }
 }

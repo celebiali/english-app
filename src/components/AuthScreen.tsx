@@ -10,7 +10,8 @@ import {
   Alert,
   SafeAreaView,
   StatusBar,
-  Platform,
+  Modal,
+  Image,
 } from 'react-native';
 import {
   Sparkles,
@@ -19,11 +20,14 @@ import {
   User,
   ArrowRight,
   ShieldCheck,
-  Award,
-  CheckCircle2,
+  Eye,
+  EyeOff,
+  KeyRound,
+  X,
 } from 'lucide-react-native';
 import { SupabaseService } from '../services/SupabaseService';
 import { useLearningStore } from '../store/useLearningStore';
+import { useThemeStore } from '../store/useThemeStore';
 
 interface Props {
   onSuccess?: () => void;
@@ -31,17 +35,33 @@ interface Props {
 
 export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
   const { setUserProfile } = useLearningStore();
+  const { colors } = useThemeStore();
 
   const [authMode, setAuthMode] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [targetScore, setTargetScore] = useState<number>(80);
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Forgot Password Modal State
+  const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [isForgotLoading, setIsForgotLoading] = useState(false);
+
+  const validateEmail = (val: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
+  };
 
   const handleEmailLogin = async () => {
     if (!email.trim() || !password.trim()) {
-      Alert.alert('Eksik Bilgi', 'Lütfen e-posta ve şifrenizi girin.');
+      Alert.alert('Eksik Bilgi', 'Lütfen e-posta adresinizi ve şifrenizi girin.');
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      Alert.alert('Geçersiz E-Posta', 'Lütfen geçerli bir e-posta adresi girin.');
       return;
     }
 
@@ -49,10 +69,10 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
     try {
       const res = await SupabaseService.signIn(email, password);
       if (res.user) {
-        setUserProfile(res.user);
+        await setUserProfile(res.user);
         onSuccess?.();
       } else {
-        Alert.alert('Giriş Hatası', res.error || 'Giriş yapılamadı.');
+        Alert.alert('Giriş Başarısız', res.error || 'E-posta veya şifreniz hatalı.');
       }
     } catch (err: any) {
       Alert.alert('Hata', err.message || 'Bir sorun oluştu.');
@@ -67,15 +87,25 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
       return;
     }
 
+    if (!validateEmail(email)) {
+      Alert.alert('Geçersiz E-Posta', 'Lütfen geçerli bir e-posta formatı girin.');
+      return;
+    }
+
+    if (password.length < 6) {
+      Alert.alert('Kısa Şifre', 'Şifreniz güvenlik nedeniyle en az 6 karakter olmalıdır.');
+      return;
+    }
+
     setIsLoading(true);
     try {
       const res = await SupabaseService.signUp(email, password, fullName, targetScore);
       if (res.user) {
-        setUserProfile(res.user);
-        Alert.alert('Hoş Geldiniz!', 'Hesabınız başarıyla oluşturuldu.');
+        await setUserProfile(res.user);
+        Alert.alert('Hoş Geldiniz 🎉', `Tebrikler ${res.user.fullName}, hesabınız oluşturuldu!`);
         onSuccess?.();
       } else {
-        Alert.alert('Kayıt Hatası', res.error || 'Kayıt yapılamadı.');
+        Alert.alert('Kayıt Başarısız', res.error || 'Hesap oluşturulamadı.');
       }
     } catch (err: any) {
       Alert.alert('Hata', err.message || 'Bir sorun oluştu.');
@@ -89,7 +119,7 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
     try {
       const res = await SupabaseService.signInWithApple();
       if (res.user) {
-        setUserProfile(res.user);
+        await setUserProfile(res.user);
         onSuccess?.();
       } else if (res.error) {
         Alert.alert('Apple Girişi', res.error);
@@ -104,7 +134,7 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
     try {
       const res = await SupabaseService.signInWithGoogle();
       if (res.user) {
-        setUserProfile(res.user);
+        await setUserProfile(res.user);
         onSuccess?.();
       } else if (res.error) {
         Alert.alert('Google Girişi', res.error);
@@ -114,17 +144,39 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
     }
   };
 
-  const handleGuestContinue = () => {
+  const handleGuestContinue = async () => {
     const guestUser = SupabaseService.signInAsGuest();
-    setUserProfile(guestUser);
+    await setUserProfile(guestUser);
     onSuccess?.();
   };
 
+  const handleSendPasswordReset = async () => {
+    if (!forgotEmail.trim() || !validateEmail(forgotEmail)) {
+      Alert.alert('Uyarı', 'Lütfen geçerli bir e-posta adresi girin.');
+      return;
+    }
+
+    setIsForgotLoading(true);
+    const res = await SupabaseService.resetPasswordForEmail(forgotEmail);
+    setIsForgotLoading(false);
+
+    if (res.success) {
+      setIsForgotModalOpen(false);
+      Alert.alert(
+        'Sıfırlama Bağlantısı Gönderildi 📩',
+        `${forgotEmail} adresinize şifre sıfırlama e-postası iletildi. Lütfen gelen kutunuzu kontrol edin.`
+      );
+      setForgotEmail('');
+    } else {
+      Alert.alert('Hata', res.error || 'Şifre sıfırlama e-postası gönderilemedi.');
+    }
+  };
+
   return (
-    <SafeAreaView style={styles.safeContainer}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+    <SafeAreaView style={[styles.safeContainer, { backgroundColor: colors.background }]}>
+      <StatusBar barStyle={colors.isDark ? 'light-content' : 'dark-content'} />
       <ScrollView
-        style={styles.container}
+        style={[styles.container, { backgroundColor: colors.background }]}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
@@ -132,81 +184,108 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
         {/* BRAND HERO HEADER */}
         <View style={styles.heroSection}>
           <View style={styles.logoBadgeContainer}>
-            <View style={styles.logoBadge}>
-              <Sparkles size={28} color="#FBBF24" />
-            </View>
+            <Image
+              source={require('../../assets/icon.png')}
+              style={styles.logoImage}
+              resizeMode="cover"
+            />
           </View>
-          <Text style={styles.appTitle}>YDS Master</Text>
-          <Text style={styles.appSubtitle}>
+          <Text style={[styles.appTitle, { color: colors.text }]}>YDS Pratik</Text>
+          <Text style={[styles.appSubtitle, { color: colors.textSecondary }]}>
             Akademik Sınav Hazırlığı & Spaced Repetition Kelime Motoru
           </Text>
 
           {/* Feature Highlights */}
           <View style={styles.featurePillsRow}>
-            <View style={styles.featurePill}>
-              <Text style={styles.featurePillText}>🎯 80 Soruluk Denemeler</Text>
+            <View style={[styles.featurePill, { backgroundColor: colors.brandLight, borderColor: colors.brandLightBorder }]}>
+              <Text style={[styles.featurePillText, { color: colors.brand }]}>🎯 80 Soruluk Denemeler</Text>
             </View>
-            <View style={styles.featurePill}>
-              <Text style={styles.featurePillText}>📖 Tureng Leitner</Text>
+            <View style={[styles.featurePill, { backgroundColor: colors.brandLight }]}>
+              <Text style={[styles.featurePillText, { color: colors.brand }]}>📖 Akıllı Kelime Kartları</Text>
             </View>
-            <View style={styles.featurePill}>
-              <Text style={styles.featurePillText}>🧠 AI Analiz</Text>
+            <View style={[styles.featurePill, { backgroundColor: colors.brandLight, borderColor: colors.brandLightBorder }]}>
+              <Text style={[styles.featurePillText, { color: colors.brand }]}>🧠 AI Analiz</Text>
             </View>
           </View>
         </View>
 
         {/* SOCIAL SIGN IN (APPLE & GOOGLE) */}
         <View style={styles.socialAuthContainer}>
-          {Platform.OS === 'ios' && (
-            <TouchableOpacity
-              style={styles.appleButton}
-              onPress={handleAppleSignIn}
-              disabled={isLoading}
-              activeOpacity={0.85}
-            >
-              <Text style={styles.appleLogoIcon}></Text>
-              <Text style={styles.appleButtonText}>Apple ile Giriş Yap</Text>
-            </TouchableOpacity>
-          )}
-
+          {/* Apple Sign-In Button */}
           <TouchableOpacity
-            style={styles.googleButton}
+            style={[styles.appleButton, { backgroundColor: colors.isDark ? '#FFFFFF' : '#000000' }]}
+            onPress={handleAppleSignIn}
+            disabled={isLoading}
+            activeOpacity={0.85}
+          >
+            <Text style={[styles.appleLogoIcon, { color: colors.isDark ? '#000000' : '#FFFFFF' }]}></Text>
+            <Text style={[styles.appleButtonText, { color: colors.isDark ? '#000000' : '#FFFFFF' }]}>Apple ile Giriş Yap</Text>
+          </TouchableOpacity>
+
+          {/* Google Sign-In Button */}
+          <TouchableOpacity
+            style={[
+              styles.googleButton,
+              {
+                backgroundColor: colors.cardBackground,
+                borderColor: colors.border,
+                shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
+              },
+            ]}
             onPress={handleGoogleSignIn}
             disabled={isLoading}
             activeOpacity={0.85}
           >
-            <View style={styles.googleGLogo}>
-              <Text style={styles.googleGText}>G</Text>
+            <View style={[styles.googleGLogo, { backgroundColor: colors.brand }]}>
+              <Text style={[styles.googleGText, { color: colors.textOnBrand }]}>G</Text>
             </View>
-            <Text style={styles.googleButtonText}>Google ile Devam Et</Text>
+            <Text style={[styles.googleButtonText, { color: colors.text }]}>Google ile Devam Et</Text>
           </TouchableOpacity>
         </View>
 
         {/* OR DIVIDER */}
         <View style={styles.dividerRow}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>veya e-posta ile</Text>
-          <View style={styles.dividerLine} />
+          <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+          <Text style={[styles.dividerText, { color: colors.textSecondary }]}>veya e-posta ile</Text>
+          <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
         </View>
 
         {/* TAB SELECTOR (LOGIN / REGISTER) */}
-        <View style={styles.tabContainer}>
+        <View style={[styles.tabContainer, { backgroundColor: colors.subtleBackground }]}>
           <TouchableOpacity
-            style={[styles.tabBtn, authMode === 'LOGIN' && styles.tabBtnActive]}
+            style={[
+              styles.tabBtn,
+              authMode === 'LOGIN' && [styles.tabBtnActive, { backgroundColor: colors.cardBackground }],
+            ]}
             onPress={() => setAuthMode('LOGIN')}
             activeOpacity={0.8}
           >
-            <Text style={[styles.tabBtnText, authMode === 'LOGIN' && styles.tabBtnTextActive]}>
+            <Text
+              style={[
+                styles.tabBtnText,
+                { color: authMode === 'LOGIN' ? colors.brand : colors.textSecondary },
+                authMode === 'LOGIN' && { fontWeight: '800' },
+              ]}
+            >
               Giriş Yap
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.tabBtn, authMode === 'REGISTER' && styles.tabBtnActive]}
+            style={[
+              styles.tabBtn,
+              authMode === 'REGISTER' && [styles.tabBtnActive, { backgroundColor: colors.cardBackground }],
+            ]}
             onPress={() => setAuthMode('REGISTER')}
             activeOpacity={0.8}
           >
-            <Text style={[styles.tabBtnText, authMode === 'REGISTER' && styles.tabBtnTextActive]}>
+            <Text
+              style={[
+                styles.tabBtnText,
+                { color: authMode === 'REGISTER' ? colors.brand : colors.textSecondary },
+                authMode === 'REGISTER' && { fontWeight: '800' },
+              ]}
+            >
               Kayıt Ol
             </Text>
           </TouchableOpacity>
@@ -215,59 +294,31 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
         {/* FORM INPUTS */}
         <View style={styles.formContainer}>
           {authMode === 'REGISTER' && (
-            <>
-              <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Ad Soyad</Text>
-                <View style={styles.inputField}>
-                  <User size={18} color="#94A3B8" />
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder="Adınız Soyadınız"
-                    placeholderTextColor="#94A3B8"
-                    value={fullName}
-                    onChangeText={setFullName}
-                    autoCapitalize="words"
-                  />
-                </View>
+            <View style={styles.inputGroup}>
+              <Text style={[styles.inputLabel, { color: colors.text }]}>Ad Soyad</Text>
+              <View style={[styles.inputField, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+                <User size={18} color={colors.textSecondary} />
+                <TextInput
+                  style={[styles.textInput, { color: colors.text }]}
+                  placeholder="Adınız Soyadınız"
+                  placeholderTextColor={colors.textSecondary}
+                  value={fullName}
+                  onChangeText={setFullName}
+                  autoCapitalize="words"
+                />
               </View>
-
-              {/* Target Score Picker */}
-              <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>🎯 YDS Hedef Puanınız</Text>
-                <View style={styles.scorePickerRow}>
-                  {[60, 70, 80, 90].map((score) => (
-                    <TouchableOpacity
-                      key={score}
-                      style={[
-                        styles.scoreChip,
-                        targetScore === score && styles.scoreChipActive,
-                      ]}
-                      onPress={() => setTargetScore(score)}
-                      activeOpacity={0.7}
-                    >
-                      <Text
-                        style={[
-                          styles.scoreChipText,
-                          targetScore === score && styles.scoreChipTextActive,
-                        ]}
-                      >
-                        {score}+
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-            </>
+            </View>
           )}
 
+          {/* Email Field */}
           <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>E-Posta Adresi</Text>
-            <View style={styles.inputField}>
-              <Mail size={18} color="#94A3B8" />
+            <Text style={[styles.inputLabel, { color: colors.text }]}>E-Posta Adresi</Text>
+            <View style={[styles.inputField, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+              <Mail size={18} color={colors.textSecondary} />
               <TextInput
-                style={styles.textInput}
+                style={[styles.textInput, { color: colors.text }]}
                 placeholder="ornek@email.com"
-                placeholderTextColor="#94A3B8"
+                placeholderTextColor={colors.textSecondary}
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -277,63 +328,87 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
             </View>
           </View>
 
+          {/* Password Field with Eye Toggle */}
           <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Şifre</Text>
-            <View style={styles.inputField}>
-              <Lock size={18} color="#94A3B8" />
+            <View style={styles.labelRow}>
+              <Text style={[styles.inputLabel, { color: colors.text }]}>Şifre</Text>
+              {authMode === 'LOGIN' && (
+                <TouchableOpacity
+                  onPress={() => {
+                    setForgotEmail(email);
+                    setIsForgotModalOpen(true);
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Text style={[styles.forgotPassText, { color: colors.brand }]}>Şifremi Unuttum?</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            <View style={[styles.inputField, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+              <Lock size={18} color={colors.textSecondary} />
               <TextInput
-                style={styles.textInput}
+                style={[styles.textInput, { color: colors.text }]}
                 placeholder="••••••••"
-                placeholderTextColor="#94A3B8"
+                placeholderTextColor={colors.textSecondary}
                 value={password}
                 onChangeText={setPassword}
-                secureTextEntry
+                secureTextEntry={!showPassword}
               />
+              <TouchableOpacity
+                onPress={() => setShowPassword(!showPassword)}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                {showPassword ? (
+                  <EyeOff size={18} color={colors.textSecondary} />
+                ) : (
+                  <Eye size={18} color={colors.textSecondary} />
+                )}
+              </TouchableOpacity>
             </View>
           </View>
 
           {/* SUBMIT BUTTON */}
           <TouchableOpacity
-            style={styles.submitButton}
+            style={[styles.submitButton, { backgroundColor: colors.brand }]}
             onPress={authMode === 'LOGIN' ? handleEmailLogin : handleEmailRegister}
             disabled={isLoading}
             activeOpacity={0.85}
           >
             {isLoading ? (
-              <ActivityIndicator color="#FFFFFF" />
+              <ActivityIndicator color={colors.textOnBrand} />
             ) : (
               <>
-                <Text style={styles.submitButtonText}>
+                <Text style={[styles.submitButtonText, { color: colors.textOnBrand }]}>
                   {authMode === 'LOGIN' ? 'Giriş Yap' : 'Hesap Oluştur'}
                 </Text>
-                <ArrowRight size={18} color="#FFFFFF" />
+                <ArrowRight size={18} color={colors.textOnBrand} />
               </>
             )}
           </TouchableOpacity>
         </View>
 
-        {/* GUEST ACCESS (APPLE REVIEWER COMPLIANCE) */}
+        {/* GUEST ACCESS */}
         <TouchableOpacity
           style={styles.guestButton}
           onPress={handleGuestContinue}
           activeOpacity={0.7}
         >
-          <Text style={styles.guestButtonText}>
+          <Text style={[styles.guestButtonText, { color: colors.textSecondary }]}>
             Kayıt Olmadan Misafir Olarak Devam Et ➔
           </Text>
         </TouchableOpacity>
 
         {/* FOOTER POLICIES */}
         <View style={styles.footerPolicies}>
-          <ShieldCheck size={14} color="#94A3B8" />
-          <Text style={styles.footerPolicyText}>
+          <ShieldCheck size={14} color={colors.textSecondary} />
+          <Text style={[styles.footerPolicyText, { color: colors.textSecondary }]}>
             Devam ederek{' '}
             <Text
-              style={styles.policyLink}
+              style={[styles.policyLink, { color: colors.brand }]}
               onPress={() =>
                 Alert.alert(
                   'Gizlilik Politikası (Privacy Policy)',
-                  'YDS Master kişisel verilerinizi KVKK ve GDPR kapsamında korur. Bilgileriniz 3. taraflarla asla paylaşılmaz.'
+                  'YDS Pratik kişisel verilerinizi KVKK ve GDPR kapsamında korur. Bilgileriniz 3. taraflarla asla paylaşılmaz.'
                 )
               }
             >
@@ -341,7 +416,7 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
             </Text>
             'nı ve{' '}
             <Text
-              style={styles.policyLink}
+              style={[styles.policyLink, { color: colors.brand }]}
               onPress={() =>
                 Alert.alert(
                   'Kullanım Şartları (Terms / EULA)',
@@ -355,6 +430,61 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
           </Text>
         </View>
       </ScrollView>
+
+      {/* FORGOT PASSWORD MODAL */}
+      <Modal
+        visible={isForgotModalOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsForgotModalOpen(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: colors.cardBackground }]}>
+            <View style={styles.modalHeader}>
+              <View style={[styles.modalHeaderIconWrap, { backgroundColor: colors.brandLight }]}>
+                <KeyRound size={20} color={colors.brand} />
+              </View>
+              <TouchableOpacity
+                onPress={() => setIsForgotModalOpen(false)}
+                style={styles.modalCloseBtn}
+              >
+                <X size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
+
+            <Text style={[styles.modalTitle, { color: colors.text }]}>Şifremi Unuttum</Text>
+            <Text style={[styles.modalSub, { color: colors.textSecondary }]}>
+              Kayıtlı e-posta adresinizi girin, size anında bir şifre sıfırlama bağlantısı gönderelim.
+            </Text>
+
+            <View style={[styles.modalInputField, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
+              <Mail size={18} color={colors.textSecondary} />
+              <TextInput
+                style={[styles.textInput, { color: colors.text }]}
+                placeholder="ornek@email.com"
+                placeholderTextColor={colors.textSecondary}
+                value={forgotEmail}
+                onChangeText={setForgotEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+            </View>
+
+            <TouchableOpacity
+              style={[styles.modalActionBtn, { backgroundColor: colors.brand }]}
+              onPress={handleSendPasswordReset}
+              disabled={isForgotLoading}
+              activeOpacity={0.85}
+            >
+              {isForgotLoading ? (
+                <ActivityIndicator color={colors.textOnBrand} />
+              ) : (
+                <Text style={[styles.modalActionBtnText, { color: colors.textOnBrand }]}>Sıfırlama Linki Gönder</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -362,7 +492,6 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
   },
   container: {
     flex: 1,
@@ -379,14 +508,17 @@ const styles = StyleSheet.create({
   logoBadgeContainer: {
     marginBottom: 12,
   },
+  logoImage: {
+    width: 68,
+    height: 68,
+    borderRadius: 18,
+  },
   logoBadge: {
     width: 64,
     height: 64,
     borderRadius: 22,
-    backgroundColor: '#312E81',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#4F46E5',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.25,
     shadowRadius: 16,
@@ -395,12 +527,10 @@ const styles = StyleSheet.create({
   appTitle: {
     fontSize: 24,
     fontWeight: '900',
-    color: '#0F172A',
     letterSpacing: -0.5,
   },
   appSubtitle: {
     fontSize: 13,
-    color: '#64748B',
     textAlign: 'center',
     marginTop: 4,
     lineHeight: 18,
@@ -414,17 +544,14 @@ const styles = StyleSheet.create({
     marginTop: 14,
   },
   featurePill: {
-    backgroundColor: '#EEF2FF',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 999,
     borderWidth: 1,
-    borderColor: '#C7D2FE',
   },
   featurePillText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#4F46E5',
   },
   socialAuthContainer: {
     gap: 10,
@@ -435,18 +562,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#000000',
     paddingVertical: 14,
     borderRadius: 16,
   },
   appleLogoIcon: {
-    color: '#FFFFFF',
-    fontSize: 19,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 2,
   },
   appleButtonText: {
-    color: '#FFFFFF',
     fontSize: 15,
     fontWeight: '700',
   },
@@ -455,12 +579,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    backgroundColor: '#FFFFFF',
     borderWidth: 1.4,
-    borderColor: '#E7EAF3',
     paddingVertical: 13,
     borderRadius: 16,
-    shadowColor: '#0F172A',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.04,
     shadowRadius: 4,
@@ -470,17 +591,14 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: '#EA4335',
     alignItems: 'center',
     justifyContent: 'center',
   },
   googleGText: {
-    color: '#FFFFFF',
     fontSize: 13,
     fontWeight: '900',
   },
   googleButtonText: {
-    color: '#0F172A',
     fontSize: 14.5,
     fontWeight: '700',
   },
@@ -493,16 +611,13 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#E7EAF3',
   },
   dividerText: {
     fontSize: 12,
-    color: '#94A3B8',
     fontWeight: '600',
   },
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#F1F4FA',
     borderRadius: 14,
     padding: 4,
     marginBottom: 16,
@@ -514,8 +629,6 @@ const styles = StyleSheet.create({
     borderRadius: 11,
   },
   tabBtnActive: {
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#0F172A',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 4,
@@ -524,11 +637,6 @@ const styles = StyleSheet.create({
   tabBtnText: {
     fontSize: 13.5,
     fontWeight: '700',
-    color: '#64748B',
-  },
-  tabBtnTextActive: {
-    color: '#0F172A',
-    fontWeight: '800',
   },
   formContainer: {
     gap: 14,
@@ -536,18 +644,24 @@ const styles = StyleSheet.create({
   inputGroup: {
     gap: 6,
   },
+  labelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   inputLabel: {
     fontSize: 12.5,
     fontWeight: '700',
-    color: '#334155',
+  },
+  forgotPassText: {
+    fontSize: 12,
+    fontWeight: '700',
   },
   inputField: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    backgroundColor: '#F8FAFC',
     borderWidth: 1.4,
-    borderColor: '#E7EAF3',
     borderRadius: 14,
     paddingHorizontal: 14,
     paddingVertical: 10,
@@ -555,52 +669,22 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     fontSize: 14,
-    color: '#0F172A',
     fontWeight: '600',
-  },
-  scorePickerRow: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  scoreChip: {
-    flex: 1,
-    backgroundColor: '#F8FAFC',
-    borderWidth: 1.4,
-    borderColor: '#E7EAF3',
-    paddingVertical: 10,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  scoreChipActive: {
-    backgroundColor: '#0F172A',
-    borderColor: '#0F172A',
-  },
-  scoreChipText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#64748B',
-  },
-  scoreChipTextActive: {
-    color: '#FFFFFF',
-    fontWeight: '800',
   },
   submitButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#4F46E5',
     paddingVertical: 15,
     borderRadius: 16,
     marginTop: 6,
-    shadowColor: '#4F46E5',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.28,
     shadowRadius: 12,
     elevation: 3,
   },
   submitButtonText: {
-    color: '#FFFFFF',
     fontSize: 15,
     fontWeight: '800',
   },
@@ -610,7 +694,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   guestButtonText: {
-    color: '#64748B',
     fontSize: 13,
     fontWeight: '700',
   },
@@ -624,11 +707,73 @@ const styles = StyleSheet.create({
   footerPolicyText: {
     flex: 1,
     fontSize: 11,
-    color: '#94A3B8',
     lineHeight: 16,
   },
   policyLink: {
-    color: '#4F46E5',
     fontWeight: '700',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    borderRadius: 24,
+    padding: 24,
+    width: '100%',
+    maxWidth: 400,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.15,
+    shadowRadius: 20,
+    elevation: 10,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  modalHeaderIconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalCloseBtn: {
+    padding: 6,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '900',
+  },
+  modalSub: {
+    fontSize: 12.5,
+    marginTop: 4,
+    lineHeight: 18,
+    marginBottom: 18,
+  },
+  modalInputField: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    borderWidth: 1.4,
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    marginBottom: 16,
+  },
+  modalActionBtn: {
+    paddingVertical: 14,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalActionBtnText: {
+    fontSize: 14.5,
+    fontWeight: '800',
   },
 });

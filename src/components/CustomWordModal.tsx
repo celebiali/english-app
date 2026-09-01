@@ -1,79 +1,133 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
   Text,
   TextInput,
   TouchableOpacity,
-  ActivityIndicator,
   Alert,
   ScrollView,
+  ActivityIndicator,
+  Platform,
+  Keyboard,
 } from 'react-native';
-import { Sparkles, Check, BookmarkPlus } from 'lucide-react-native';
+import { BookmarkPlus, Check, X, Sparkles } from 'lucide-react-native';
 import { useLearningStore } from '../store/useLearningStore';
-import { AIService } from '../services/AIService';
 import { dbService } from '../database/DatabaseService';
+import { useThemeStore } from '../store/useThemeStore';
+import { AIService } from '../services/AIService';
 import { SmoothBottomSheet } from './SmoothBottomSheet';
 
 interface Props {
   visible: boolean;
   onClose: () => void;
   initialWord?: string;
+  initialMeaning?: string;
+  initialFolderId?: string | null;
+  onOpenAddFolder?: () => void;
 }
 
-export const CustomWordModal: React.FC<Props> = ({ visible, onClose, initialWord = '' }) => {
-  const { loadVocabSession } = useLearningStore();
+export const CustomWordModal: React.FC<Props> = ({
+  visible,
+  onClose,
+  initialWord = '',
+  initialMeaning = '',
+  initialFolderId = null,
+  onOpenAddFolder,
+}) => {
+  const { loadVocabSession, vocabFolders } = useLearningStore();
+  const { colors } = useThemeStore();
+
+  const userFolders = (vocabFolders || []).filter((f) => !f.is_system);
 
   const [wordText, setWordText] = useState(initialWord);
-  const [meaning, setMeaning] = useState('');
+  const [meaning, setMeaning] = useState(initialMeaning);
   const [exampleSentence, setExampleSentence] = useState('');
   const [exampleTranslation, setExampleTranslation] = useState('');
-  const [synonymsText, setSynonymsText] = useState('');
-  const [isLoadingAI, setIsLoadingAI] = useState(false);
+  const [selectedFolderName, setSelectedFolderName] = useState<string>('');
+  const [isAutoFilling, setIsAutoFilling] = useState(false);
 
-  const handleAutoFillAI = async () => {
+  useEffect(() => {
+    if (visible) {
+      setWordText(initialWord);
+      setMeaning(initialMeaning);
+      setExampleSentence('');
+      setExampleTranslation('');
+
+      // Match folder by initialFolderId or default (ONLY from user-created custom folders)
+      if (initialFolderId && userFolders.length > 0) {
+        const found = userFolders.find((f) => f.id === initialFolderId);
+        if (found) {
+          setSelectedFolderName(found.name);
+        } else {
+          setSelectedFolderName(userFolders[0]?.name || '');
+        }
+      } else if (userFolders.length > 0) {
+        setSelectedFolderName(userFolders[0]?.name || '');
+      } else {
+        setSelectedFolderName('');
+      }
+    }
+  }, [visible, initialWord, initialMeaning, initialFolderId, vocabFolders]);
+
+  const handleAiAutoFill = async () => {
     if (!wordText.trim()) {
-      Alert.alert('Uyarı', 'Lütfen önce bir İngilizce kelime yazın.');
+      Alert.alert('Kelime Yazın', 'Lütfen önce bir İngilizce kelime yazın.');
       return;
     }
-
-    setIsLoadingAI(true);
+    Keyboard.dismiss();
+    setIsAutoFilling(true);
     try {
-      const data = await AIService.autoCompleteWord(wordText.trim());
-      if (data.meaning) setMeaning(data.meaning);
-      if (data.example_sentence) setExampleSentence(data.example_sentence);
-      if (data.example_translation) setExampleTranslation(data.example_translation);
-      if (data.synonyms && data.synonyms.length > 0) {
-        setSynonymsText(data.synonyms.join(', '));
+      const details = await AIService.autoCompleteWord(wordText.trim());
+      if (details && details.meaning) {
+        setMeaning(details.meaning);
+        if (details.example_sentence) setExampleSentence(details.example_sentence);
+        if (details.example_translation) setExampleTranslation(details.example_translation);
+      } else {
+        Alert.alert(
+          'Kelime Bulunamadı',
+          `"${wordText.trim()}" kelimesi sözlükte bulunamadı. Lütfen kelimenin yazımını kontrol edin veya anlamını manuel olarak yazın.`
+        );
       }
     } catch (err) {
-      console.error('AI autofill failed:', err);
-      Alert.alert('Bilgi', 'Kelime analiz edildi, lütfen alanları kontrol ediniz.');
+      console.warn('Sözlük sorgulama hatası:', err);
+      Alert.alert('Hata', 'Sözlük sorgulanırken bir bağlantı hatası oluştu. Lütfen tekrar deneyin.');
     } finally {
-      setIsLoadingAI(false);
+      setIsAutoFilling(false);
     }
   };
 
   const handleSave = async () => {
     if (!wordText.trim() || !meaning.trim()) {
-      Alert.alert('Eksik Bilgi', 'Lütfen kelimeyi ve Türkçe anlamını girin.');
+      Alert.alert('Eksik Bilgi', 'Lütfen kelimeyi ve Türkçe karşılığını yazın.');
       return;
     }
 
-    const syns = synonymsText
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean);
+    if (!selectedFolderName.trim()) {
+      Alert.alert(
+        'Klasör Seçilmedi',
+        'Hazır sistem listelerine kelime eklenemez. Kelimenizi kaydetmek için lütfen bir klasör oluşturun veya seçin.',
+        [
+          { text: 'Vazgeç', style: 'cancel' },
+          {
+            text: '+ Klasör Oluştur',
+            onPress: () => {
+              if (onOpenAddFolder) onOpenAddFolder();
+            },
+          },
+        ]
+      );
+      return;
+    }
 
     await dbService.insertCustomWord({
       word: wordText.trim(),
       meaning: meaning.trim(),
       category: 'VOCABULARY',
-      subcategory: 'Kişisel Kelime Defterim',
+      subcategory: selectedFolderName,
       level: 'B2',
       example_sentence: exampleSentence.trim() || undefined,
       example_translation: exampleTranslation.trim() || undefined,
-      synonyms: syns,
     });
 
     await loadVocabSession();
@@ -83,113 +137,173 @@ export const CustomWordModal: React.FC<Props> = ({ visible, onClose, initialWord
     setMeaning('');
     setExampleSentence('');
     setExampleTranslation('');
-    setSynonymsText('');
     onClose();
 
     Alert.alert(
-      'Kelime Kaydedildi! ⭐',
-      `"${wordText.trim()}" özel kelime defterine ve Kutu 1'e eklendi.`
+      'Kelime Eklendi! ⭐',
+      `"${wordText.trim()}" kelimesi "${selectedFolderName}" klasörünüze kaydedildi.`
     );
   };
 
   return (
-    <SmoothBottomSheet visible={visible} onClose={onClose} maxHeight="88%">
-      <View style={styles.content}>
+    <SmoothBottomSheet visible={visible} onClose={onClose} maxHeight="85%">
+      <View style={[styles.content, { backgroundColor: colors.cardBackground }]}>
         {/* Header */}
-        <View style={styles.header}>
+        <View style={[styles.header, { borderBottomColor: colors.border }]}>
           <View style={styles.headerTitleRow}>
-            <View style={styles.iconBox}>
-              <BookmarkPlus size={18} color="#4F46E5" />
+            <View style={[styles.iconBox, { backgroundColor: colors.brandLight }]}>
+              <BookmarkPlus size={18} color={colors.brand} />
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={styles.title}>Özel Kelime Defterine Ekle</Text>
-              <Text style={styles.subtitle}>
-                Metinlerden veya günlük hayattan bilmediğin kelimeleri kaydet
+              <Text style={[styles.title, { color: colors.text }]}>Kelime Ekle</Text>
+              <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+                Akademik karşılığı ve örnek cümlesi otomatik getirilir.
               </Text>
             </View>
           </View>
-          <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-            <Text style={styles.closeBtnText}>✕</Text>
+          <TouchableOpacity onPress={onClose} style={[styles.closeBtn, { backgroundColor: colors.subtleBackground }]}>
+            <X size={18} color={colors.textSecondary} />
           </TouchableOpacity>
         </View>
 
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
-          {/* Word Input & AI Autofill Button */}
-          <Text style={styles.inputLabel}>İngilizce Kelime / Kalıp</Text>
-          <View style={styles.wordInputRow}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scroll}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          bounces={false}
+          style={{ flexShrink: 1 }}
+        >
+          {/* Target Folder Selector */}
+          <Text style={[styles.inputLabel, { color: colors.text }]}>📁 Hedef Klasör</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.folderRowScroll}>
+            {/* + Yeni Klasör Ekle Chip */}
+            <TouchableOpacity
+              style={[
+                styles.folderChip,
+                { backgroundColor: colors.brandLight, borderColor: colors.brand, borderStyle: 'dashed' },
+              ]}
+              onPress={() => {
+                if (onOpenAddFolder) {
+                  onOpenAddFolder();
+                }
+              }}
+              activeOpacity={0.8}
+            >
+              <Text style={[styles.folderChipText, { color: colors.brand, fontWeight: '800' }]}>
+                + Yeni Klasör
+              </Text>
+            </TouchableOpacity>
+
+            {userFolders.map((f) => {
+              const isSelected = selectedFolderName === f.name;
+              return (
+                <TouchableOpacity
+                  key={f.id}
+                  style={[
+                    styles.folderChip,
+                    {
+                      backgroundColor: isSelected ? f.color + '20' : colors.subtleBackground,
+                      borderColor: isSelected ? f.color : colors.border,
+                    },
+                  ]}
+                  onPress={() => setSelectedFolderName(f.name)}
+                  activeOpacity={0.75}
+                >
+                  <View style={[styles.folderDot, { backgroundColor: f.color }]} />
+                  <Text
+                    style={[
+                      styles.folderChipText,
+                      { color: isSelected ? f.color : colors.textSecondary },
+                      isSelected && { fontWeight: '800' },
+                    ]}
+                  >
+                    {f.name}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+
+          {userFolders.length === 0 && (
+            <View style={[styles.noFolderBanner, { backgroundColor: colors.brandLight, borderColor: colors.border }]}>
+              <Text style={[styles.noFolderBannerText, { color: colors.brand }]}>
+                ℹ️ Hazır sistem listelerine kelime eklenemez. Kelime ekleyebilmek için lütfen yukarıdaki <Text style={{ fontWeight: '800' }}>+ Yeni Klasör</Text> butonundan kendi klasörünüzü oluşturun.
+              </Text>
+            </View>
+          )}
+
+          {/* Word Input with Embedded Action Button */}
+          <Text style={[styles.inputLabel, { color: colors.text, marginTop: 6 }]}>İngilizce Kelime *</Text>
+          <View style={[styles.wordInputWrapper, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
             <TextInput
-              style={styles.wordInput}
-              placeholder="Örn: exacerbate, plausible, deteriorate..."
-              placeholderTextColor="#94A3B8"
+              style={[styles.wordTextInput, { color: colors.text }]}
+              placeholder=""
+              placeholderTextColor={colors.textSecondary}
               value={wordText}
               onChangeText={setWordText}
               autoCapitalize="none"
+              returnKeyType="search"
+              onSubmitEditing={handleAiAutoFill}
             />
             <TouchableOpacity
-              style={styles.aiFillBtn}
-              onPress={handleAutoFillAI}
-              disabled={isLoadingAI}
+              style={[
+                styles.embeddedFetchBtn,
+                { backgroundColor: wordText.trim() ? colors.brand : colors.border },
+              ]}
+              onPress={handleAiAutoFill}
+              disabled={isAutoFilling || !wordText.trim()}
               activeOpacity={0.8}
             >
-              {isLoadingAI ? (
+              {isAutoFilling ? (
                 <ActivityIndicator size="small" color="#FFFFFF" />
               ) : (
-                <>
-                  <Sparkles size={14} color="#FFFFFF" />
-                  <Text style={styles.aiFillBtnText}>AI Doldur</Text>
-                </>
+                <Sparkles size={16} color={wordText.trim() ? '#FFFFFF' : colors.textSecondary} />
               )}
             </TouchableOpacity>
           </View>
 
           {/* Meaning Input */}
-          <Text style={styles.inputLabel}>Türkçe Karşılığı</Text>
+          <Text style={[styles.inputLabel, { color: colors.text, marginTop: 12 }]}>Türkçe Anlamı *</Text>
           <TextInput
-            style={styles.input}
-            placeholder="Örn: daha da kötüleştirmek, şiddetlendirmek"
-            placeholderTextColor="#94A3B8"
+            style={[styles.input, { backgroundColor: colors.subtleBackground, color: colors.text, borderColor: colors.border }]}
+            placeholder=""
+            placeholderTextColor={colors.textSecondary}
             value={meaning}
             onChangeText={setMeaning}
           />
 
           {/* Example Sentence */}
-          <Text style={styles.inputLabel}>Akademik / YDS Örnek Cümle (İngilizce)</Text>
+          <Text style={[styles.inputLabel, { color: colors.text, marginTop: 12 }]}>Örnek Cümle (İngilizce)</Text>
           <TextInput
-            style={[styles.input, styles.multilineInput]}
-            placeholder="Örn: Economic instability will only exacerbate current hardships."
-            placeholderTextColor="#94A3B8"
+            style={[styles.input, styles.multilineInput, { backgroundColor: colors.subtleBackground, color: colors.text, borderColor: colors.border }]}
+            placeholder=""
+            placeholderTextColor={colors.textSecondary}
             value={exampleSentence}
             onChangeText={setExampleSentence}
             multiline
           />
 
           {/* Example Translation */}
-          <Text style={styles.inputLabel}>Cümlenin Türkçe Çevirisi</Text>
+          <Text style={[styles.inputLabel, { color: colors.text, marginTop: 12 }]}>Örnek Cümle Çevirisi (Türkçe)</Text>
           <TextInput
-            style={[styles.input, styles.multilineInput]}
-            placeholder="Örn: Ekonomik istikrarsızlık mevcut zorlukları sadece daha da kötüleştirecektir."
-            placeholderTextColor="#94A3B8"
+            style={[styles.input, { backgroundColor: colors.subtleBackground, color: colors.text, borderColor: colors.border }]}
+            placeholder=""
+            placeholderTextColor={colors.textSecondary}
             value={exampleTranslation}
             onChangeText={setExampleTranslation}
-            multiline
           />
 
-          {/* Synonyms */}
-          <Text style={styles.inputLabel}>Eş Anlamlıları (Virgülle ayırın)</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Örn: worsen, aggravate, impair"
-            placeholderTextColor="#94A3B8"
-            value={synonymsText}
-            onChangeText={setSynonymsText}
-          />
+          {/* Submit Button (Directly under the inputs, no gap) */}
+          <TouchableOpacity
+            style={[styles.saveBtn, { backgroundColor: colors.brand }]}
+            onPress={handleSave}
+            activeOpacity={0.85}
+          >
+            <Check size={18} color={colors.textOnBrand} strokeWidth={2.5} />
+            <Text style={[styles.saveBtnText, { color: colors.textOnBrand }]}>Kelimeyi Klasöre Kaydet</Text>
+          </TouchableOpacity>
         </ScrollView>
-
-        {/* Submit Button */}
-        <TouchableOpacity style={styles.saveBtn} onPress={handleSave} activeOpacity={0.8}>
-          <Check size={18} color="#FFFFFF" strokeWidth={2.5} />
-          <Text style={styles.saveBtnText}>Özel Kelimelerime Kaydet</Text>
-        </TouchableOpacity>
       </View>
     </SmoothBottomSheet>
   );
@@ -198,7 +312,8 @@ export const CustomWordModal: React.FC<Props> = ({ visible, onClose, initialWord
 const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 20,
-    paddingBottom: 28,
+    paddingBottom: Platform.OS === 'ios' ? 24 : 14,
+    flexShrink: 1,
   },
   header: {
     flexDirection: 'row',
@@ -206,7 +321,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#E7EAF3',
     marginBottom: 10,
   },
   headerTitleRow: {
@@ -219,110 +333,115 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 12,
-    backgroundColor: '#EEF2FF',
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#0F172A',
   },
   subtitle: {
     fontSize: 11.5,
-    color: '#64748B',
     marginTop: 2,
   },
   closeBtn: {
     width: 32,
     height: 32,
-    borderRadius: 11,
-    backgroundColor: '#F1F4FA',
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  closeBtnText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#475569',
-  },
   scroll: {
-    paddingBottom: 16,
+    paddingBottom: 12,
   },
-  inputLabel: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: '#475569',
-    marginBottom: 6,
-    marginTop: 12,
-  },
-  wordInputRow: {
+  folderRowScroll: {
     flexDirection: 'row',
-    gap: 8,
+    marginTop: 6,
+    marginBottom: 10,
   },
-  wordInput: {
-    flex: 1,
-    backgroundColor: '#F8FAFC',
-    borderWidth: 1.4,
-    borderColor: '#E7EAF3',
-    borderRadius: 14,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 14,
-    color: '#0F172A',
-    fontWeight: '600',
-  },
-  aiFillBtn: {
+  folderChip: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#7C3AED',
-    paddingHorizontal: 14,
-    borderRadius: 14,
-    justifyContent: 'center',
-    shadowColor: '#7C3AED',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 3,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 12,
+    borderWidth: 1.2,
+    marginRight: 8,
   },
-  aiFillBtnText: {
-    color: '#FFFFFF',
-    fontSize: 12.5,
-    fontWeight: '800',
+  folderDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
   },
-  input: {
-    backgroundColor: '#F8FAFC',
-    borderWidth: 1.4,
-    borderColor: '#E7EAF3',
-    borderRadius: 14,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 13.5,
-    color: '#0F172A',
+  folderChipText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  noFolderBanner: {
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    marginBottom: 12,
+  },
+  noFolderBannerText: {
+    fontSize: 12,
+    lineHeight: 17,
     fontWeight: '500',
   },
+  inputLabel: {
+    fontSize: 12.5,
+    fontWeight: '700',
+    marginBottom: 6,
+  },
+  wordInputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 14,
+    borderWidth: 1,
+    paddingLeft: 14,
+    paddingRight: 6,
+    height: 48,
+  },
+  wordTextInput: {
+    flex: 1,
+    fontSize: 14,
+    paddingVertical: 10,
+  },
+  embeddedFetchBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  input: {
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 11,
+    fontSize: 13.5,
+    borderWidth: 1,
+  },
   multilineInput: {
-    minHeight: 60,
+    height: 56,
     textAlignVertical: 'top',
+    paddingTop: 8,
   },
   saveBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    backgroundColor: '#4F46E5',
-    paddingVertical: 15,
-    borderRadius: 16,
     justifyContent: 'center',
-    marginTop: 10,
-    shadowColor: '#4F46E5',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.35,
-    shadowRadius: 12,
+    gap: 8,
+    paddingVertical: 14,
+    borderRadius: 16,
+    marginTop: 18,
+    marginBottom: 8,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
     elevation: 3,
   },
   saveBtnText: {
-    color: '#FFFFFF',
     fontSize: 14.5,
     fontWeight: '800',
   },

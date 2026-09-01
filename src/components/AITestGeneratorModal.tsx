@@ -4,14 +4,12 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Modal,
   TextInput,
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
 import {
   Sparkles,
-  X,
   BookOpen,
   Puzzle,
   Link,
@@ -23,6 +21,7 @@ import {
 import { YdsQuestionType } from '../types';
 import { AIService } from '../services/AIService';
 import { useLearningStore } from '../store/useLearningStore';
+import { useThemeStore } from '../store/useThemeStore';
 import { SmoothBottomSheet } from './SmoothBottomSheet';
 
 interface Props {
@@ -37,48 +36,43 @@ export const AITestGeneratorModal: React.FC<Props> = ({
   onStartCustomQuiz,
 }) => {
   const { mistakes } = useLearningStore();
+  const { colors } = useThemeStore();
 
   const [selectedType, setSelectedType] = useState<YdsQuestionType | 'MIXED' | 'MISTAKE_RECOVERY'>('SENTENCE_COMPLETION');
   const [questionCount, setQuestionCount] = useState<number>(10);
   const [topicPrompt, setTopicPrompt] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
-  const typeOptions: { key: YdsQuestionType | 'MIXED' | 'MISTAKE_RECOVERY'; label: string; Icon: any; color: string }[] = [
+  const typeOptions: { key: YdsQuestionType | 'MIXED' | 'MISTAKE_RECOVERY'; label: string; Icon: any }[] = [
     {
       key: 'SENTENCE_COMPLETION',
       label: 'Cümle Tamamlama',
       Icon: Link,
-      color: '#059669',
     },
     {
       key: 'PARAGRAPH',
       label: 'Paragraf (Reading)',
       Icon: BookOpen,
-      color: '#2563EB',
     },
     {
       key: 'CLOZE_TEST',
       label: 'Cloze Test',
       Icon: Puzzle,
-      color: '#7C3AED',
     },
     {
       key: 'SKILL_DIALOGUE',
       label: 'Diyalog & Skills',
       Icon: MessageSquare,
-      color: '#D97706',
     },
     {
       key: 'MIXED',
       label: 'Karma Test (Tümü)',
       Icon: Shuffle,
-      color: '#0891B2',
     },
     {
       key: 'MISTAKE_RECOVERY',
       label: `Hata Defterim (${mistakes.length} Yanlış)`,
       Icon: AlertTriangle,
-      color: '#DC2626',
     },
   ];
 
@@ -110,107 +104,134 @@ export const AITestGeneratorModal: React.FC<Props> = ({
 
   return (
     <SmoothBottomSheet visible={visible} onClose={onClose} maxHeight="88%">
-      <View style={styles.sheetContent}>
+      <View style={[styles.sheetContent, { backgroundColor: colors.cardBackground }]}>
         {/* Header */}
-        <View style={styles.header}>
+        <View style={[styles.header, { borderBottomColor: colors.border }]}>
           <View style={styles.headerTitleRow}>
-            <Sparkles size={20} color="#7C3AED" />
-            <Text style={styles.title}>AI ile Özel Test Oluştur</Text>
+            <Sparkles size={20} color={colors.brand} />
+            <Text style={[styles.title, { color: colors.text }]}>AI ile Özel Test Oluştur</Text>
           </View>
-          <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-            <Text style={styles.closeBtnText}>✕</Text>
-          </TouchableOpacity>
-        </View>
-
-          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
-            {/* Question Type Selection */}
-            <Text style={styles.sectionLabel}>1. Soru Tipi Seçin</Text>
-            <View style={styles.typeGrid}>
-              {typeOptions.map((opt) => {
-                const isSelected = selectedType === opt.key;
-                const IconComp = opt.Icon;
-
-                return (
-                  <TouchableOpacity
-                    key={opt.key}
-                    style={[
-                      styles.typeCard,
-                      isSelected && { borderColor: opt.color, backgroundColor: `${opt.color}10` },
-                    ]}
-                    onPress={() => setSelectedType(opt.key)}
-                    activeOpacity={0.7}
-                  >
-                    <IconComp size={16} color={isSelected ? opt.color : '#64748B'} />
-                    <Text
-                      style={[
-                        styles.typeCardText,
-                        isSelected && { color: opt.color, fontWeight: '700' },
-                      ]}
-                    >
-                      {opt.label}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-
-            {/* Question Count Selection */}
-            <Text style={styles.sectionLabel}>2. Soru Sayısı</Text>
-            <View style={styles.countRow}>
-              {countOptions.map((cnt) => {
-                const isSelected = questionCount === cnt;
-                return (
-                  <TouchableOpacity
-                    key={cnt}
-                    style={[styles.countButton, isSelected && styles.countButtonSelected]}
-                    onPress={() => setQuestionCount(cnt)}
-                    activeOpacity={0.7}
-                  >
-                    <Text style={[styles.countButtonText, isSelected && styles.countButtonTextSelected]}>
-                      {cnt} Soru
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-
-            {/* Custom Topic / Prompt */}
-            <Text style={styles.sectionLabel}>3. Özel Konu / Tema (İsteğe Bağlı)</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Örn: Zıtlık bağlaçları, Tıp & Sağlık, Phrasal verbs..."
-              value={topicPrompt}
-              onChangeText={setTopicPrompt}
-            />
-
-            {/* Info notice */}
-            <View style={styles.infoNotice}>
-              <Text style={styles.infoNoticeText}>
-                💡 Yapay zeka B2-C1 akademik seviyesinde, güçlü çeldiricilere ve detaylı çözümlere sahip sıfır kilometre bir test hazırlayacaktır.
-              </Text>
-            </View>
-          </ScrollView>
-
-          {/* Submit Button */}
           <TouchableOpacity
-            style={styles.generateButton}
-            onPress={handleGenerate}
-            disabled={isGenerating}
-            activeOpacity={0.8}
+            onPress={onClose}
+            style={[styles.closeBtn, { backgroundColor: colors.subtleBackground }]}
           >
-            {isGenerating ? (
-              <View style={styles.generatingRow}>
-                <ActivityIndicator size="small" color="#FFFFFF" />
-                <Text style={styles.generateButtonText}>Yapay Zeka Testi Hazırlıyor...</Text>
-              </View>
-            ) : (
-              <View style={styles.generatingRow}>
-                <Play size={18} color="#FFFFFF" fill="#FFFFFF" />
-                <Text style={styles.generateButtonText}>Testi Oluştur ve Başlat</Text>
-              </View>
-            )}
+            <Text style={[styles.closeBtnText, { color: colors.textSecondary }]}>✕</Text>
           </TouchableOpacity>
         </View>
+
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
+          {/* Question Type Selection */}
+          <Text style={[styles.sectionLabel, { color: colors.text }]}>1. Soru Tipi Seçin</Text>
+          <View style={styles.typeGrid}>
+            {typeOptions.map((opt) => {
+              const isSelected = selectedType === opt.key;
+              const IconComp = opt.Icon;
+
+              return (
+                <TouchableOpacity
+                  key={opt.key}
+                  style={[
+                    styles.typeCard,
+                    {
+                      backgroundColor: isSelected ? colors.brandLight : colors.cardBackground,
+                      borderColor: isSelected ? colors.brand : colors.border,
+                    },
+                  ]}
+                  onPress={() => setSelectedType(opt.key)}
+                  activeOpacity={0.7}
+                >
+                  <IconComp size={16} color={isSelected ? colors.brand : colors.textSecondary} />
+                  <Text
+                    style={[
+                      styles.typeCardText,
+                      { color: isSelected ? colors.brand : colors.textSecondary },
+                      isSelected && { fontWeight: '800' },
+                    ]}
+                  >
+                    {opt.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
+          {/* Question Count Selection */}
+          <Text style={[styles.sectionLabel, { color: colors.text }]}>2. Soru Sayısı</Text>
+          <View style={styles.countRow}>
+            {countOptions.map((cnt) => {
+              const isSelected = questionCount === cnt;
+              return (
+                <TouchableOpacity
+                  key={cnt}
+                  style={[
+                    styles.countButton,
+                    {
+                      backgroundColor: isSelected ? colors.brandLight : colors.subtleBackground,
+                      borderColor: isSelected ? colors.brand : colors.border,
+                    },
+                  ]}
+                  onPress={() => setQuestionCount(cnt)}
+                  activeOpacity={0.7}
+                >
+                  <Text
+                    style={[
+                      styles.countButtonText,
+                      { color: isSelected ? colors.brand : colors.textSecondary },
+                      isSelected && { fontWeight: '800' },
+                    ]}
+                  >
+                    {cnt} Soru
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
+          {/* Custom Topic / Prompt */}
+          <Text style={[styles.sectionLabel, { color: colors.text }]}>3. Özel Konu / Tema (İsteğe Bağlı)</Text>
+          <TextInput
+            style={[
+              styles.input,
+              {
+                backgroundColor: colors.cardBackground,
+                borderColor: colors.border,
+                color: colors.text,
+              },
+            ]}
+            placeholder="Örn: Zıtlık bağlaçları, Tıp & Sağlık, Phrasal verbs..."
+            placeholderTextColor={colors.textSecondary}
+            value={topicPrompt}
+            onChangeText={setTopicPrompt}
+          />
+
+          {/* Info notice */}
+          <View style={[styles.infoNotice, { backgroundColor: colors.brandLight, borderColor: colors.brandLightBorder }]}>
+            <Text style={[styles.infoNoticeText, { color: colors.brand }]}>
+              💡 Yapay zeka B2-C1 akademik seviyesinde, güçlü çeldiricilere ve detaylı çözümlere sahip sıfır kilometre bir test hazırlayacaktır.
+            </Text>
+          </View>
+        </ScrollView>
+
+        {/* Submit Button */}
+        <TouchableOpacity
+          style={[styles.generateButton, { backgroundColor: colors.brand }]}
+          onPress={handleGenerate}
+          disabled={isGenerating}
+          activeOpacity={0.8}
+        >
+          {isGenerating ? (
+            <View style={styles.generatingRow}>
+              <ActivityIndicator size="small" color={colors.textOnBrand} />
+              <Text style={[styles.generateButtonText, { color: colors.textOnBrand }]}>Yapay Zeka Testi Hazırlıyor...</Text>
+            </View>
+          ) : (
+            <View style={styles.generatingRow}>
+              <Play size={18} color={colors.textOnBrand} fill={colors.textOnBrand} />
+              <Text style={[styles.generateButtonText, { color: colors.textOnBrand }]}>Testi Oluştur ve Başlat</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+      </View>
     </SmoothBottomSheet>
   );
 };
@@ -226,7 +247,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
     marginBottom: 12,
   },
   headerTitleRow: {
@@ -237,20 +257,17 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#0F172A',
   },
   closeBtn: {
     width: 32,
     height: 32,
     borderRadius: 11,
-    backgroundColor: '#F1F4FA',
     alignItems: 'center',
     justifyContent: 'center',
   },
   closeBtnText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#475569',
   },
   scroll: {
     paddingBottom: 16,
@@ -258,7 +275,6 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#334155',
     marginBottom: 8,
     marginTop: 10,
   },
@@ -275,15 +291,12 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
     borderRadius: 10,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-    backgroundColor: '#FFFFFF',
     minWidth: '45%',
     flex: 1,
   },
   typeCardText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#475569',
   },
   countRow: {
     flexDirection: 'row',
@@ -293,49 +306,31 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 10,
     borderRadius: 10,
-    backgroundColor: '#F8FAFC',
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
     alignItems: 'center',
-  },
-  countButtonSelected: {
-    backgroundColor: '#EFF6FF',
-    borderColor: '#2563EB',
   },
   countButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#64748B',
-  },
-  countButtonTextSelected: {
-    color: '#2563EB',
-    fontWeight: '800',
   },
   input: {
-    backgroundColor: '#F8FAFC',
     borderWidth: 1,
-    borderColor: '#CBD5E1',
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 14,
-    color: '#0F172A',
   },
   infoNotice: {
-    backgroundColor: '#F5F3FF',
     padding: 12,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#EDE9FE',
     marginTop: 14,
   },
   infoNoticeText: {
     fontSize: 12,
-    color: '#6D28D9',
     lineHeight: 18,
   },
   generateButton: {
-    backgroundColor: '#7C3AED',
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',
@@ -347,7 +342,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   generateButtonText: {
-    color: '#FFFFFF',
     fontSize: 15,
     fontWeight: '700',
   },

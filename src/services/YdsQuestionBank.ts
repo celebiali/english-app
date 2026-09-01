@@ -100,7 +100,7 @@ export const INITIAL_YDS_QUESTIONS: Omit<QuestionItem, 'id'>[] = [
     type: 'PARAGRAPH',
     title: 'Bioluminescence in Marine Organisms',
     passage:
-      'Bioluminescence, the production and emission of light by a living organism, is predominantly found in marine vertebrates and invertebrates. In the abyssal depths of the ocean, where sunlight fails to penetrate, light emission serves critical evolutionary functions including camouflage, prey attraction, predator deterrence, and communication. Unlike incandescent bulbs that lose vast amounts of energy as heat, bioluminescent reactions are nearly 100 percent efficient, transforming chemical energy directly into light via the oxidation of luciferin catalyzed by luciferase.',
+      'Bioluminescence, the production and emission of light by a living organism, is predominantly found in marine vertebrates and invertebrates. In the abyssal depths of the ocean, where sunlight fails to penetrate, light emission serves critical evolutionary functions including camouflage, prey attraction, predator deterrence, and communication. Unlike incandescent bulbs that lose vast amounts of energy as heat, bioluminescent reactions are nearly 100 percent efficient, transforming chemical energy directly into light via the oxidation of luciferin catalyzed by luciferase. Furthermore, scientists are now harnessing these naturally occurring biochemical pathways for biomedical imaging and environmental monitoring.',
     question_number: 5,
     question_text: 'According to the passage, the light produced by marine organisms is notably distinct because ----.',
     options: {
@@ -114,6 +114,72 @@ export const INITIAL_YDS_QUESTIONS: Omit<QuestionItem, 'id'>[] = [
     explanation:
       "Metinde geçen 'Unlike incandescent bulbs that lose vast amounts of energy as heat, bioluminescent reactions are nearly 100 percent efficient...' cümlesi C şıkkını doğrulamaktadır.",
     subtopic: 'Ecology / Detail',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Reading Pool',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'PARAGRAPH',
+    title: 'Bioluminescence in Marine Organisms',
+    passage:
+      'Bioluminescence, the production and emission of light by a living organism, is predominantly found in marine vertebrates and invertebrates. In the abyssal depths of the ocean, where sunlight fails to penetrate, light emission serves critical evolutionary functions including camouflage, prey attraction, predator deterrence, and communication. Unlike incandescent bulbs that lose vast amounts of energy as heat, bioluminescent reactions are nearly 100 percent efficient, transforming chemical energy directly into light via the oxidation of luciferin catalyzed by luciferase. Furthermore, scientists are now harnessing these naturally occurring biochemical pathways for biomedical imaging and environmental monitoring.',
+    question_number: 6,
+    question_text: 'It is clearly stated in the passage that deep-sea bioluminescence ----.',
+    options: {
+      A: 'is primarily used to navigate through shallow coastal waters',
+      B: 'fulfills multiple vital functions ranging from attracting food to deterring threats',
+      C: 'has only recently evolved in response to modern global warming',
+      D: 'causes serious optical damage to neighboring marine species',
+      E: 'occurs solely among macroscopic mammalian species'
+    },
+    correct_option: 'B',
+    explanation:
+      "Metindeki '...light emission serves critical evolutionary functions including camouflage, prey attraction, predator deterrence, and communication' ifadesi B şıkkını ('fulfills multiple vital functions ranging from attracting food to deterring threats') doğrular.",
+    subtopic: 'Ecology / Detail',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Reading Pool',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'PARAGRAPH',
+    title: 'Bioluminescence in Marine Organisms',
+    passage:
+      'Bioluminescence, the production and emission of light by a living organism, is predominantly found in marine vertebrates and invertebrates. In the abyssal depths of the ocean, where sunlight fails to penetrate, light emission serves critical evolutionary functions including camouflage, prey attraction, predator deterrence, and communication. Unlike incandescent bulbs that lose vast amounts of energy as heat, bioluminescent reactions are nearly 100 percent efficient, transforming chemical energy directly into light via the oxidation of luciferin catalyzed by luciferase. Furthermore, scientists are now harnessing these naturally occurring biochemical pathways for biomedical imaging and environmental monitoring.',
+    question_number: 7,
+    question_text: 'One can understand from the passage that luciferase is an enzyme that ----.',
+    options: {
+      A: 'inhibits the chemical reaction required for light emission',
+      B: 'converts light into chemical nutrients for deep-sea plants',
+      C: 'facilitates and accelerates the oxidation process of luciferin',
+      D: 'absorbs solar radiation in the upper photic zones',
+      E: 'prevents marine creatures from communicating with one another'
+    },
+    correct_option: 'C',
+    explanation:
+      "Metinde '...via the oxidation of luciferin catalyzed by luciferase' denilmektedir. Katalizör (catalyze) enzimi reaksiyonu hızlandırıp kolaylaştıran unsurdur (C seçeneği).",
+    subtopic: 'Biochemistry / Vocabulary in Context',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Reading Pool',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'PARAGRAPH',
+    title: 'Bioluminescence in Marine Organisms',
+    passage:
+      'Bioluminescence, the production and emission of light by a living organism, is predominantly found in marine vertebrates and invertebrates. In the abyssal depths of the ocean, where sunlight fails to penetrate, light emission serves critical evolutionary functions including camouflage, prey attraction, predator deterrence, and communication. Unlike incandescent bulbs that lose vast amounts of energy as heat, bioluminescent reactions are nearly 100 percent efficient, transforming chemical energy directly into light via the oxidation of luciferin catalyzed by luciferase. Furthermore, scientists are now harnessing these naturally occurring biochemical pathways for biomedical imaging and environmental monitoring.',
+    question_number: 8,
+    question_text: 'The primary purpose of the author in this passage is to ----.',
+    options: {
+      A: 'advocate for the commercial harvesting of rare deep-sea organisms',
+      B: 'explain the mechanisms, evolutionary functions, and scientific applications of bioluminescence',
+      C: 'criticize modern electrical lighting technologies for high energy waste',
+      D: 'compare oceanic ecosystems with terrestrial rainforest habitats',
+      E: 'warn against the ecological dangers of biomedical imaging'
+    },
+    correct_option: 'B',
+    explanation:
+      "Parça bioluminescence'in tanımını, işlevlerini (camouflage, prey attraction) ve biyomedikal kullanımını açıklamayı amaçlamaktadır (B şıkkı).",
+    subtopic: 'Author Purpose / Main Idea',
     difficulty: 'YDS_EXAM',
     source: 'YDS Reading Pool',
     status: 'ACTIVE'
@@ -521,6 +587,465 @@ export const INITIAL_YDS_QUESTIONS: Omit<QuestionItem, 'id'>[] = [
     explanation:
       "Bütçe kısıtlamaları nedeniyle belediye meclisi projeleri 'iptal etmek' zorunda kaldı. 'Call off' (iptal etmek) doğru phrasal verb'dür (A şıkkı). Diğerleri: look down on (küçümsemek), make up for (telafi etmek), run out of (tükenmek), catch up with (yetişmek).",
     subtopic: 'Vocabulary / Phrasal Verbs',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Vocab Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'SKILL_DIALOGUE',
+    question_text:
+      "Dr. Evans: The new clinical trials show that the experimental drug significantly accelerates cellular repair.\nDr. Ramos: That sounds promising, but what about the adverse side effects in elderly patients?\nDr. Evans: ----\nDr. Ramos: That is reassuring to hear; patient safety must always remain our paramount priority.",
+    options: {
+      A: 'We have not yet obtained ethical approval to test the compound on humans.',
+      B: 'In fact, the control group exhibited fewer complications than those on standard therapies.',
+      C: 'We decided to terminate the research prematurely due to severe liver toxicity.',
+      D: 'The pharmaceutical sponsor demanded that we conceal any negative trial findings.',
+      E: 'Elderly demographics were completely excluded from our initial research phases.'
+    },
+    correct_option: 'B',
+    explanation:
+      "Dr. Ramos'un 'That is reassuring to hear' (Bunu duymak rahatlatıcı) tepkisi, Dr. Evans'ın yan etkiler konusunda olumlu bir bilgi verdiğini gösterir. B seçeneği ('komplikasyonların standart tedavilerden bile daha az olduğu') bu rahatlamayı tam olarak gerekçelendirir.",
+    subtopic: 'Dialogue Completion / Medical Context',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Skills Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'SKILL_DIALOGUE',
+    question_text:
+      "Professor: In your term paper, you argue that multilingualism delays the onset of dementia symptoms.\nStudent: Yes, several neuroimaging studies demonstrate greater cognitive reserve in bilingual adults.\nProfessor: ----\nStudent: I will definitely incorporate those comparative longevity statistics in my revised draft.",
+    options: {
+      A: 'I think you should abandon this thesis topic and choose something less controversial.',
+      B: 'Your argument is compelling, but you should bolster it with epidemiological data from recent longitudinal surveys.',
+      C: 'Multilingual children usually acquire vocabulary at a much slower rate than monolinguals.',
+      D: 'Have you considered translating the entire research paper into multiple languages?',
+      E: 'The university library has unfortunately discarded all archival neurological journals.'
+    },
+    correct_option: 'B',
+    explanation:
+      "Öğrencinin 'I will definitely incorporate those comparative longevity statistics in my revised draft' (Revize taslağımda bu istatistiklere kesinlikle yer vereceğim) cevabı, profesörün kanıtları uzun vadeli istatistiki verilerle güçlendirmeyi önerdiğini (B şıkkı) gösterir.",
+    subtopic: 'Dialogue Completion / Academic Context',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Skills Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'SKILL_DIALOGUE',
+    question_text:
+      "Journalist: Space exploration missions require billions of dollars in taxpayer funding. Is it truly justifiable when we have pressing crises on Earth?\nAstronomer: ----\nJournalist: I see your point. Many technologies we take for granted today originated in the aerospace sector.",
+    options: {
+      A: 'Governments should immediately halt all astrophysical funding until poverty is solved.',
+      B: 'Space exploration has never produced any practical technology for regular citizens.',
+      C: 'Space research drives cutting-edge innovations in telecommunications, materials science, and medical imaging that directly benefit life on Earth.',
+      D: 'Private commercial companies should bear the full economic burden of rocket launches.',
+      E: 'We explore outer space solely to satisfy philosophical curiosity, not for technological gains.'
+    },
+    correct_option: 'C',
+    explanation:
+      "Gazetecinin 'I see your point. Many technologies we take for granted originated in aerospace' cevabı, gökbilimcinin uzay araştırmalarının dünyadaki yaşama doğrudan teknolojik faydalar sağladığını (C şıkkı) savunduğunu gösterir.",
+    subtopic: 'Dialogue Completion / Science & Technology',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Skills Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'RESTATEMENT',
+    question_text:
+      'No sooner had the meteorologist issued the severe hurricane warning than the local residents began evacuating the coastal town.',
+    options: {
+      A: 'The local residents delayed their evacuation until the hurricane had already made landfall on the coastal town.',
+      B: 'As soon as the meteorologist announced the severe hurricane alert, the townspeople started evacuating the coastal area.',
+      C: 'Although the meteorologist warned of an impending hurricane, very few residents chose to abandon their properties.',
+      D: 'The meteorologist issued a hurricane warning only after the majority of coastal residents had already evacuated.',
+      E: 'Because evacuation routes were congested, the meteorologist advised citizens to shelter in place rather than flee.'
+    },
+    correct_option: 'B',
+    explanation:
+      "'No sooner ... than ...' kalıbı '... yapar yapmaz' anlamına gelir. 'Meteorolog kasırga uyarısı verir vermez kasaba halkı tahliyeye başladı' anlamını B seçeneğindeki 'As soon as the meteorologist announced...' cümlesi eksiksiz verir.",
+    subtopic: 'Restatement / Inversion & Time Adverbs',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Skills Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'RESTATEMENT',
+    question_text:
+      'Despite extensive diplomatic efforts, the peace negotiations collapsed due to irreconcilable territorial disputes between the two neighboring states.',
+    options: {
+      A: 'Because the neighboring states resolved their border disagreements, the diplomatic peace talks concluded with a historic treaty.',
+      B: 'The peace talks broke down because the two neighboring nations could not resolve their conflicting territorial claims, notwithstanding widespread diplomatic initiatives.',
+      C: 'Had diplomatic envoys intervened earlier, the territorial disputes between the neighboring countries would have been easily settled.',
+      D: 'The collapse of the negotiations was unexpected, as both nations had previously agreed on mutual border demarcations.',
+      E: 'Unless third-party mediators intervene, the neighboring states will continue their armed skirmishes over contested territories.'
+    },
+    correct_option: 'B',
+    explanation:
+      "'Despite extensive diplomatic efforts' (kapsamlı diplomatik çabalara rağmen) + 'peace negotiations collapsed due to irreconcilable territorial disputes' (uzlaşmaz toprak anlaşmazlıkları nedeniyle barış görüşmeleri çöktü) anlamı, B şıkkında 'peace talks broke down because... notwithstanding widespread diplomatic initiatives' ile tam olarak aktarılmıştır.",
+    subtopic: 'Restatement / Contrast & Cause',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Skills Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'TRANSLATION',
+    question_text:
+      'Yapay zeka sistemleri karmaşık veri kümelerini insanların yapabileceğinden çok daha hızlı analiz edebilse de, karar alma süreçlerinde insani sezgi ve etik değerler vazgeçilmezdir.',
+    options: {
+      A: 'Although artificial intelligence systems can analyze complex datasets much faster than humans can, human intuition and ethical values are indispensable in decision-making processes.',
+      B: 'Since AI algorithms process massive datasets with unprecedented speed, human decision-makers are no longer required in ethical evaluations.',
+      C: 'Even if human intuition is essential in moral governance, artificial intelligence systems will eventually replace human analysts.',
+      D: 'While artificial intelligence assists humans in data management, ethical reasoning remains the exclusive domain of biological brains.',
+      E: 'Because machines lack empathy and moral consciousness, their analytical speed cannot compensate for faulty decision-making.'
+    },
+    correct_option: 'A',
+    explanation:
+      "'Yapay zeka sistemleri karmaşık veri kümelerini insanların yapabileceğinden çok daha hızlı analiz edebilse de' (Although artificial intelligence systems can analyze complex datasets much faster than humans can) + 'karar alma süreçlerinde insani sezgi ve etik değerler vazgeçilmezdir' (human intuition and ethical values are indispensable in decision-making processes). A şıkkı eksiksiz doğru çeviridir.",
+    subtopic: 'Translation / TR -> EN',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Translation Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'TRANSLATION',
+    question_text:
+      'The preservation of historical monuments is essential not only for maintaining cultural heritage but also for boosting international tourism revenue.',
+    options: {
+      A: 'Tarihi anıtların korunması, yalnızca kültürel mirası sürdürmek için değil, aynı zamanda uluslararası turizm gelirlerini artırmak için de şarttır.',
+      B: 'Kültürel mirasın korunması sayesinde uluslararası turizm gelirleri dünya çapında önemli bir artış göstermiştir.',
+      C: 'Tarihi eserlerin onarımı, kültürel bilinci geliştirmekten ziyade ülkeye döviz kazandırmayı amaçlamaktadır.',
+      D: 'Uluslararası turizm gelirlerini artırmak isteyen ülkeler, öncelikle kendi anıtlarını koruma altına almalıdır.',
+      E: 'Hem kültürel zenginliğin aktarılması hem de turizm gelirlerinin yükselmesi tarihi yapıların restorasyonuna bağlıdır.'
+    },
+    correct_option: 'A',
+    explanation:
+      "'not only ... but also ...' (yalnızca ... değil, aynı zamanda ...) kalıbı ile kurulan cümle: 'Tarihi anıtların korunması (The preservation of historical monuments), yalnızca kültürel mirası sürdürmek için değil (not only for maintaining cultural heritage), aynı zamanda uluslararası turizm gelirlerini artırmak için de (but also for boosting international tourism revenue) şarttır / gereklidir (is essential)'. A şıkkı birebir doğrudur.",
+    subtopic: 'Translation / EN -> TR',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Translation Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'VOCABULARY_GRAMMAR',
+    question_text:
+      'Recent archeological excavations in Mesopotamia have ---- evidence that ancient societies engaged in sophisticated maritime trade much earlier than historians previously ----.',
+    options: {
+      A: 'uncovered / had assumed',
+      B: 'uncovering / will assume',
+      C: 'been uncovered / assumes',
+      D: 'to uncover / was assuming',
+      E: 'uncover / have been assumed'
+    },
+    correct_option: 'A',
+    explanation:
+      "Kazılar kanıtları gün yüzüne çıkarmıştır (have uncovered - Present Perfect); tarihçilerin daha önceki varsayımı ise geçmişten daha eski bir eylemi anlattığı için Past Perfect (had assumed) gerektirir. A şıkkı tırnak uyumu ile doğrudur.",
+    subtopic: 'Grammar / Tense Sequence',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Grammar Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'VOCABULARY_GRAMMAR',
+    question_text:
+      'The government introduced comprehensive subsidies to ---- renewable energy investments, aiming to reduce dependence on imported fossil fuels.',
+    options: {
+      A: 'deter',
+      B: 'foster',
+      C: 'diminish',
+      D: 'repress',
+      E: 'undermine'
+    },
+    correct_option: 'B',
+    explanation:
+      "Hükümet, fosil yakıtlara bağımlılığı azaltmak için yenilenebilir enerji yatırımlarını 'teşvik etmek / geliştirmek' (foster) amacıyla sübvansiyonlar sundu. 'Foster' (geliştirmek, teşvik etmek) doğru kelimedir. Diğerleri: deter (caydırmak), diminish (azaltmak), repress (bastırmak), undermine (baltalamak).",
+    subtopic: 'Vocabulary / Academic Verbs',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Vocab Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'VOCABULARY_GRAMMAR',
+    question_text:
+      'Despite facing fierce competition from multinational conglomerates, the local artisan cooperative managed to ---- its market share through superior product quality.',
+    options: {
+      A: 'maintain',
+      B: 'surrender',
+      C: 'deplete',
+      D: 'forfeit',
+      E: 'jeopardize'
+    },
+    correct_option: 'A',
+    explanation:
+      "Yerel kooperatif, yoğun rekabete rağmen üstün ürün kalitesi sayesinde pazar payını 'korumayı' (maintain) başardı (A şıkkı). Diğerleri: surrender (teslim etmek), deplete (tüketmek), forfeit (kaybetmek), jeopardize (tehlikeye atmak).",
+    subtopic: 'Vocabulary / Academic Verbs',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Vocab Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'VOCABULARY_GRAMMAR',
+    question_text:
+      'The CEO emphasized that innovation is ---- to the company’s long-term survival in an increasingly digitalized global marketplace.',
+    options: {
+      A: 'redundant',
+      B: 'indispensable',
+      C: 'negligible',
+      D: 'detrimental',
+      E: 'superfluous'
+    },
+    correct_option: 'B',
+    explanation:
+      "Şirketin uzun vadeli varlığı için inovasyonun 'vazgeçilmez / zorunlu' (indispensable) olduğu vurgulandı (B şıkkı). Diğerleri: redundant (gereksiz), negligible (önemsiz), detrimental (zararlı), superfluous (fuzuli).",
+    subtopic: 'Vocabulary / Adjectives',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Vocab Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'SKILL_DIALOGUE',
+    question_text:
+      "Historian: Many classical empires collapsed not purely because of external barbarian invasions, but primarily due to internal fiscal decay.\nColleague: ----\nHistorian: Exactly. When currency debasement and corruption hollow out institutions from within, a single external shock can bring down the entire state.",
+    options: {
+      A: 'Are you suggesting that economic mismanagement and inflation made them vulnerable from the inside?',
+      B: 'I think military conquests always strengthen an empire’s financial reserves.',
+      C: 'Barbarian tribes were renowned for their sophisticated monetary policies.',
+      D: 'No historical empire has ever survived longer than fifty consecutive years.',
+      E: 'Climate change was the sole catalyst for the downfall of the Western Roman Empire.'
+    },
+    correct_option: 'A',
+    explanation:
+      "Tarihçinin 'Exactly. When currency debasement and corruption hollow out institutions...' (Kesinlikle. Paranın değer kaybetmesi ve yolsuzluk içeriden çökerttiğinde...) cevabı, meslektaşının ekonomik kötü yönetim ve enflasyonun içeriden zayıflattığı tezini sormasını (A şıkkı) gerektirir.",
+    subtopic: 'Dialogue Completion / History & Economics',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Skills Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'SKILL_DIALOGUE',
+    question_text:
+      "Sarah: Urban planners are advocating for '15-minute cities' where all daily necessities are accessible within a short walk or bike ride.\nDavid: That sounds wonderful for public health and the environment, but is it feasible for sprawling metropolitan areas?\nSarah: ----\nDavid: That makes sense. Decentralizing municipal services could gradually transform even massive cities into interconnected community hubs.",
+    options: {
+      A: 'It is completely impossible, so urban developers have already abandoned the concept worldwide.',
+      B: 'Yes, if cities adopt a polycentric development model with distributed sub-centers rather than a single downtown.',
+      C: 'Everyone should be legally mandated to sell their personal vehicles immediately.',
+      D: 'Public transit systems are far too expensive to construct in any modern city.',
+      E: 'Bicycle lanes have been proven to increase traffic congestion in rural districts.'
+    },
+    correct_option: 'B',
+    explanation:
+      "David'in 'That makes sense. Decentralizing municipal services could gradually transform massive cities into interconnected community hubs' (Hizmetleri merkezsizleştirmek büyük şehirleri birbirine bağlı merkezlere dönüştürebilir) onayı, Sarah'ın çok merkezli (polycentric) şehir modelini önerdiğini (B şıkkı) doğrular.",
+    subtopic: 'Dialogue Completion / Urban Planning',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Skills Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'RESTATEMENT',
+    question_text:
+      'Only when a society invests substantially in quality public education can it achieve sustainable socioeconomic progress.',
+    options: {
+      A: 'Sustainable socioeconomic advancement is achievable solely if a society commits significant resources to quality public education.',
+      B: 'Investing in public schools is beneficial, but socioeconomic growth depends primarily on industrial exports.',
+      C: 'Even without investing in public educational institutions, nations can attain long-term social equilibrium.',
+      D: 'Societies that overfund education often neglect other critical infrastructure sectors like transportation.',
+      E: 'Whenever socioeconomic development occurs, public education systems tend to deteriorate rapidly.'
+    },
+    correct_option: 'A',
+    explanation:
+      "'Only when ... can ...' (Ancak ... yaparsa ... başarabilir) sınırlayıcı koşulunu A seçeneği ('Sustainable socioeconomic advancement is achievable solely if...') tam olarak karşılar.",
+    subtopic: 'Restatement / Inversion & Condition',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Skills Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'PARAGRAPH',
+    title: 'The Evolution of Human Language',
+    passage:
+      'Linguists and evolutionary anthropologists have long debated the precise origins of human language. Unlike stone tools or fossilized skeletons, spoken words leave no physical trace in the archaeological record. Consequently, researchers must rely on comparative anatomy, neurogenetics, and primate vocal behavior to reconstruct this evolutionary milestone. Recent discoveries concerning the FOXP2 gene suggest that neural circuitry enabling complex syntax and fine motor control of the larynx evolved over hundreds of thousands of years. Furthermore, cultural transmission played a pivotal role: as early human societies grew more complex, the survival advantage conferred by nuanced symbolic communication became insurmountable.',
+    question_number: 5,
+    question_text: 'According to the passage, studying the evolution of human speech is challenging because ----.',
+    options: {
+      A: 'early hominid fossil evidence has been destroyed by environmental catastrophes',
+      B: 'spoken language leaves no physical artifacts in archaeological excavations',
+      C: 'genetic mutations in the FOXP2 gene are impossible to sequence today',
+      D: 'primates refuse to cooperate in scientific vocalization experiments',
+      E: 'cultural transmission cannot be analyzed using modern anthropological tools'
+    },
+    correct_option: 'B',
+    explanation:
+      "Metinde geçen 'Unlike stone tools... spoken words leave no physical trace in the archaeological record' cümlesi, dilin evrimini incelemenin neden zor olduğunu açıklar (B şıkkı).",
+    subtopic: 'Linguistics / Direct Information',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Reading Pool',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'CLOZE_TEST',
+    question_text:
+      'Climate change is accelerating at an alarming rate, and scientists warn that unless carbon emissions are curtailed immediately, global ecosystems will suffer ---- damage.',
+    options: {
+      A: 'irreversible',
+      B: 'superficial',
+      C: 'fleeting',
+      D: 'negligible',
+      E: 'marginal'
+    },
+    correct_option: 'A',
+    explanation:
+      "Emisyonlar kısılmazsa ekosistemlerin 'geri döndürülemez / kalıcı' (irreversible) hasar göreceği uyarısı yapılmaktadır (A şıkkı). Diğerleri: superficial (yüzeysel), fleeting (geçici), negligible (önemsiz), marginal (marjinal).",
+    subtopic: 'Cloze Test / Vocabulary',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Cloze Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'SENTENCE_COMPLETION',
+    question_text:
+      '----, ancient civilizations developed intricate irrigation networks to sustain their agricultural output.',
+    options: {
+      A: 'Although annual rainfall in river valleys was unpredictable and sparse',
+      B: 'Because water resources were naturally abundant throughout the year',
+      C: 'Since nomadic tribes refused to settle down in fertile riverbanks',
+      D: 'Even if technological innovations had been banned by ruling dynasties',
+      E: 'Unless agricultural engineers discovered how to construct stone aqueducts'
+    },
+    correct_option: 'A',
+    explanation:
+      "Sulama kanalları geliştirmenin mantıksal nedeni yağışların düzensiz veya yetersiz olmasıdır: 'Nehir vadilerindeki yıllık yağış tahmin edilemez ve az olmasına rağmen...' (A şıkkı).",
+    subtopic: 'Sentence Completion / Adverbial Clauses',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Grammar Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'SKILL_DIALOGUE',
+    question_text:
+      "Alex: Have you considered adopting remote work policies for our engineering team full-time?\nManager: I am concerned that productivity and creative collaboration might suffer.\nAlex: ----\nManager: That is a compelling argument; hybrid flexibility might indeed attract top-tier talent without compromising deliverables.",
+    options: {
+      A: 'We should definitely mandate five days a week in the physical office for everyone.',
+      B: 'Recent industry metrics indicate that asynchronous workflows actually increased developer output by 20%.',
+      C: 'All our competitors have recently abolished remote work entirely.',
+      D: 'Engineering projects do not require any collaboration or communication among team members.',
+      E: 'We cannot afford to purchase laptops for our newly hired staff.'
+    },
+    correct_option: 'B',
+    explanation:
+      "Yöneticinin 'That is a compelling argument; hybrid flexibility might indeed attract top-tier talent...' tepkisi, Alex'in verimlilik endişesini çürüten pozitif veriler sunduğunu (B şıkkı) gösterir.",
+    subtopic: 'Dialogue Completion / Business Context',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Skills Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'VOCABULARY_GRAMMAR',
+    question_text:
+      'The pharmaceutical regulatory authority strictly requires that all experimental vaccines ---- rigorous double-blind trials before they ---- for public distribution.',
+    options: {
+      A: 'undergo / are approved',
+      B: 'underwent / will approve',
+      C: 'have undergone / were approved',
+      D: 'undergoing / had been approved',
+      E: 'undergoes / approved'
+    },
+    correct_option: 'A',
+    explanation:
+      "'requires that ... undergo' (Subjunctive / Base verb kuralı) + 'before they are approved' (Present passive zaman uyumu) A seçeneğini doğru kılar.",
+    subtopic: 'Grammar / Subjunctive & Passive',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Grammar Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'VOCABULARY_GRAMMAR',
+    question_text:
+      'The international treaty aims to ---- the proliferation of nuclear armaments and foster multilateral peace.',
+    options: {
+      A: 'curb',
+      B: 'accelerate',
+      C: 'stimulate',
+      D: 'amplify',
+      E: 'magnify'
+    },
+    correct_option: 'A',
+    explanation:
+      "Anlaşmanın amacı nükleer silahların yayılmasını 'frenlemek / sınırlandırmak'tır (curb). A şıkkı doğrudur.",
+    subtopic: 'Vocabulary / Academic Verbs',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Vocab Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'TRANSLATION',
+    question_text:
+      'Nörolojik araştırmalar, düzenli uykunun beynin toksik proteinleri temizlemesinde ve anıları pekiştirmesinde kritik rol oynadığını göstermektedir.',
+    options: {
+      A: 'Neurological research indicates that regular sleep plays a critical role in clearing toxic proteins from the brain and consolidating memories.',
+      B: 'Because regular sleep purges toxic metabolites from brain tissue, cognitive longevity is significantly enhanced.',
+      C: 'Even if neurological studies demonstrate the benefits of sleep, memory consolidation remains poorly understood.',
+      D: 'While sleep deprivation impairs protein synthesis, memory retention depends primarily on genetic factors.',
+      E: 'Unless individuals obtain eight hours of sleep, toxic proteins will inevitably destroy neural synapses.'
+    },
+    correct_option: 'A',
+    explanation:
+      "'Nörolojik araştırmalar ... kritik rol oynadığını göstermektedir' (Neurological research indicates that regular sleep plays a critical role in clearing toxic proteins from the brain and consolidating memories). A şıkkı tam çeviridir.",
+    subtopic: 'Translation / TR -> EN',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Translation Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'RESTATEMENT',
+    question_text:
+      'Had the financial crisis not coincided with severe inflation, the central bank would have lowered interest rates much earlier.',
+    options: {
+      A: 'The central bank postponed lowering interest rates specifically because the financial crisis was accompanied by severe inflation.',
+      B: 'Even without high inflation rates, the central bank was unwilling to reduce interest rates during the crisis.',
+      C: 'Because interest rates were drastically slashed, the financial crisis escalated into hyperinflation.',
+      D: 'The central bank lowered interest rates in order to stimulate consumer spending despite soaring inflation.',
+      E: 'Had interest rates been raised earlier, the financial crisis would have had a minimal economic impact.'
+    },
+    correct_option: 'A',
+    explanation:
+      "'Finansal kriz şiddetli enflasyon ile denk gelmeseydi (ama geldi), merkez bankası faizleri çok daha erken düşürürdü (ama düşüremedi)'. A şıkkı bu sebebi ('postponed specifically because it was accompanied by severe inflation') eksiksiz verir.",
+    subtopic: 'Restatement / Conditionals',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Skills Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'SENTENCE_COMPLETION',
+    question_text:
+      '----, many developing countries are investing heavily in nationwide fiber-optic telecommunication networks.',
+    options: {
+      A: 'In order to bridge the digital divide and accelerate modern economic integration',
+      B: 'Although internet access is considered a trivial luxury by international economists',
+      C: 'Because traditional copper cables are superior in bandwidth to optical fibers',
+      D: 'Unless domestic corporations refuse to adopt digital banking platforms',
+      E: 'Since satellite communications have completely eliminated the need for ground infrastructure'
+    },
+    correct_option: 'A',
+    explanation:
+      "Amaç bildiren 'In order to bridge the digital divide and accelerate modern economic integration' (Dijital uçurumu kapatmak ve modern ekonomik entegrasyonu hızlandırmak amacıyla) ifadesi cümleyi anlamlı tamamlar (A şıkkı).",
+    subtopic: 'Sentence Completion / Purpose Clauses',
+    difficulty: 'YDS_EXAM',
+    source: 'YDS Grammar Bank',
+    status: 'ACTIVE'
+  },
+  {
+    type: 'VOCABULARY_GRAMMAR',
+    question_text:
+      'The archaeologist carefully examined the fragile papyrus scroll, fearing that the slightest mishandling would cause it to ---- into dust.',
+    options: {
+      A: 'disintegrate',
+      B: 'consolidate',
+      C: 'rejuvenate',
+      D: 'flourish',
+      E: 'thrive'
+    },
+    correct_option: 'A',
+    explanation:
+      "Hassas parşömenin en ufak yanlış kullanımda toza 'parçalanması / ufalanması' (disintegrate) korkusu ifade edilmektedir (A şıkkı).",
+    subtopic: 'Vocabulary / Academic Verbs',
     difficulty: 'YDS_EXAM',
     source: 'YDS Vocab Bank',
     status: 'ACTIVE'

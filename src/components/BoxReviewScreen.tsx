@@ -3,10 +3,11 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
+  ScrollView,
 } from 'react-native';
-import { Lock, Unlock, Clock } from 'lucide-react-native';
+import { Lock, Unlock, PackageCheck, Clock } from 'lucide-react-native';
 import { WordWithProgress } from '../database/DatabaseService';
+import { useThemeStore } from '../store/useThemeStore';
 
 export interface BoxReviewScreenProps {
   boxType: 'WEEKLY' | 'MONTHLY';
@@ -15,91 +16,209 @@ export interface BoxReviewScreenProps {
 
 export const BoxReviewScreen: React.FC<BoxReviewScreenProps> = ({
   boxType,
-  words,
+  words = [],
 }) => {
+  const { colors } = useThemeStore();
+  const safeWords = words || [];
+
   const isWeekly = boxType === 'WEEKLY';
-  const boxTitle = isWeekly ? 'Haftalık Kutu (Box 2)' : 'Aylık Kutu (Box 3)';
+  const boxTitle = isWeekly ? 'Haftalık Tekrar Havuzu' : 'Aylık Kalıcı Hafıza Havuzu';
   const boxPeriodName = isWeekly ? '7 Günlük' : '30 Günlük';
 
-  const unlockedWords = words.filter((w) => w.isUnlocked);
-  const lockedWords = words.filter((w) => !w.isUnlocked);
+  const unlockedWords = safeWords.filter((w) => w && w.isUnlocked);
+  const lockedWords = safeWords.filter((w) => w && !w.isUnlocked);
 
   const minDaysRemaining =
     lockedWords.length > 0
       ? Math.min(...lockedWords.map((w) => w.daysRemaining || 1))
       : 0;
 
-  const isFullyLocked = words.length > 0 && unlockedWords.length === 0;
+  const isFullyLocked = safeWords.length > 0 && unlockedWords.length === 0;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerCard}>
-        <Text style={styles.headerTitle}>{boxTitle}</Text>
-        <Text style={styles.headerSubtitle}>
-          {boxPeriodName} kalıcılık test havuzunda {words.length} kelime var.
+    <ScrollView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
+    >
+      <View
+        style={[
+          styles.headerCard,
+          {
+            backgroundColor: colors.cardBackground,
+            borderColor: colors.border,
+          },
+        ]}
+      >
+        <View style={styles.headerTopRow}>
+          <View
+            style={[
+              styles.boxBadge,
+              { backgroundColor: colors.brandLight },
+            ]}
+          >
+            <Text
+              style={[
+                styles.boxBadgeText,
+                { color: colors.brand },
+              ]}
+            >
+              {isWeekly ? 'HAFTALIK' : 'AYLIK'}
+            </Text>
+          </View>
+          <Text style={[styles.wordCountPill, { color: colors.textSecondary }]}>
+            {safeWords.length} Kelime
+          </Text>
+        </View>
+
+        <Text style={[styles.headerTitle, { color: colors.text }]}>{boxTitle}</Text>
+        <Text style={[styles.headerSubtitle, { color: colors.textSecondary }]}>
+          {isWeekly
+            ? '7 günde bir yapılan aralıklı tekrar havuzu'
+            : '30 günde bir test edilen kalıcı hafıza havuzu'}
         </Text>
 
-        {words.length === 0 ? (
-          <View style={styles.emptyBoxInfo}>
-            <Text style={styles.emptyBoxText}>
+        {safeWords.length === 0 ? (
+          <View
+            style={[
+              styles.emptyBoxInfo,
+              {
+                backgroundColor: colors.subtleBackground,
+                borderColor: colors.border,
+              },
+            ]}
+          >
+            <PackageCheck size={28} color={colors.brand} style={styles.emptyIcon} />
+            <Text style={[styles.emptyBoxTitle, { color: colors.text }]}>
+              Bu Havuzda Henüz Kelime Yok
+            </Text>
+            <Text style={[styles.emptyBoxText, { color: colors.textSecondary }]}>
               {isWeekly
-                ? 'Bu kutuda henüz kelime yok. Günlük kelime çalışmasında doğru bildikleriniz 7 günlük kalıcılık testine girmek üzere buraya aktarılır.'
-                : 'Bu kutuda henüz kelime yok. Haftalık görevini (Box 2) başarıyla tamamlayan kelimeler 30 günlük kalıcılık testine girmek üzere buraya aktarılır.'}
+                ? 'Günlük kelime çalışmasında bildiğiniz kelimeler 7 günlük pekiştirme testine tabi tutulmak üzere otomatik olarak buraya aktarılır.'
+                : 'Haftalık tekrarını başarıyla tamamlayan kelimeler 30 günlük kalıcı hafıza onay testine girmek üzere buraya aktarılır.'}
             </Text>
           </View>
         ) : isFullyLocked ? (
-          <View style={styles.lockBanner}>
-            <View style={styles.lockIconChip}>
-              <Lock size={20} color="#DC2626" strokeWidth={2.2} />
+          <View
+            style={[
+              styles.lockBanner,
+              {
+                backgroundColor: colors.subtleBackground,
+                borderColor: colors.border,
+              },
+            ]}
+          >
+            <View
+              style={[
+                styles.lockIconChip,
+                { backgroundColor: colors.cardBackground },
+              ]}
+            >
+              <Lock size={18} color={colors.textSecondary} strokeWidth={2.2} />
             </View>
             <View style={styles.lockBannerTextGroup}>
-              <Text style={styles.lockBannerTitle}>Kutu Kilitli (Süresi Dolmadı)</Text>
-              <Text style={styles.lockBannerDesc}>
+              <Text style={[styles.lockBannerTitle, { color: colors.text }]}>
+                Havuz Kilitli (Süresi Dolmadı)
+              </Text>
+              <Text style={[styles.lockBannerDesc, { color: colors.textSecondary }]}>
                 {boxPeriodName} tekrar süresi henüz dolmadı. İlk tekrar kilit açılışı için yaklaşık{' '}
-                <Text style={{ fontWeight: '800', color: '#DC2626' }}>{minDaysRemaining} gün</Text>{' '}
+                <Text style={{ fontWeight: '800', color: colors.brand }}>
+                  {minDaysRemaining} gün
+                </Text>{' '}
                 kaldı. Zamanı gelince kilit otomatik olarak açılacaktır.
               </Text>
             </View>
           </View>
         ) : (
-          <View style={styles.unlockBanner}>
-            <View style={styles.unlockIconChip}>
-              <Unlock size={20} color="#16A34A" strokeWidth={2.2} />
+          <View
+            style={[
+              styles.unlockBanner,
+              {
+                backgroundColor: colors.brandLight,
+                borderColor: colors.brandLightBorder,
+              },
+            ]}
+          >
+            <View
+              style={[
+                styles.unlockIconChip,
+                { backgroundColor: colors.cardBackground },
+              ]}
+            >
+              <Unlock size={18} color={colors.brand} strokeWidth={2.2} />
             </View>
             <View style={styles.lockBannerTextGroup}>
-              <Text style={styles.unlockBannerTitle}>Tekrar Zamanı Geldi!</Text>
-              <Text style={styles.unlockBannerDesc}>
-                {unlockedWords.length} kelimenin {boxPeriodName} tekrar süresi
-                doldu. Hemen tekrar edebilirsiniz.
+              <Text style={[styles.unlockBannerTitle, { color: colors.brand }]}>
+                Tekrar Zamanı Geldi!
+              </Text>
+              <Text style={[styles.unlockBannerDesc, { color: colors.text }]}>
+                {unlockedWords.length} kelimenin {boxPeriodName} tekrar süresi doldu. Hemen tekrar edebilirsiniz.
               </Text>
             </View>
           </View>
         )}
       </View>
 
-      {/* RENDER WORDS AS STANDARD VIEW TO PREVENT VIRTUALIZED LIST SCROLL CONFLICT */}
-      {words.length > 0 && (
+      {/* RENDER WORDS */}
+      {safeWords.length > 0 && (
         <View style={styles.listSection}>
-          <Text style={styles.listTitle}>Kutudaki Kelimeler ve Kilit Durumları</Text>
+          <Text style={[styles.listTitle, { color: colors.text }]}>
+            Havuzdaki Kelimeler ({safeWords.length})
+          </Text>
           <View style={styles.wordRowsWrap}>
-            {words.map((item) => (
-              <View key={item.id} style={styles.wordRow}>
+            {safeWords.map((item) => (
+              <View
+                key={item.id}
+                style={[
+                  styles.wordRow,
+                  {
+                    backgroundColor: colors.cardBackground,
+                    borderColor: colors.border,
+                    shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
+                  },
+                ]}
+              >
                 <View style={styles.rowLeft}>
-                  <Text style={styles.wordText}>{item.word}</Text>
-                  <Text style={styles.meaningText}>{item.meaning}</Text>
+                  <Text style={[styles.wordText, { color: colors.text }]}>
+                    {item.word}
+                  </Text>
+                  <Text
+                    style={[styles.meaningText, { color: colors.textSecondary }]}
+                    numberOfLines={2}
+                  >
+                    {item.meaning}
+                  </Text>
                 </View>
 
                 <View style={styles.rowRight}>
                   {item.isUnlocked ? (
-                    <View style={styles.unlockedBadge}>
-                      <Unlock size={12} color="#059669" strokeWidth={2.2} />
-                      <Text style={styles.unlockedBadgeText}>Hazır</Text>
+                    <View
+                      style={[
+                        styles.unlockedBadge,
+                        {
+                          backgroundColor: colors.brandLight,
+                          borderColor: colors.brandLightBorder,
+                        },
+                      ]}
+                    >
+                      <Unlock size={12} color={colors.brand} strokeWidth={2.2} />
+                      <Text style={[styles.unlockedBadgeText, { color: colors.brand }]}>
+                        Hazır
+                      </Text>
                     </View>
                   ) : (
-                    <View style={styles.lockedBadge}>
-                      <Lock size={12} color="#DC2626" strokeWidth={2.2} />
-                      <Text style={styles.lockedBadgeText}>
-                        {item.daysRemaining || 7} Gün Kaldı
+                    <View
+                      style={[
+                        styles.lockedBadge,
+                        {
+                          backgroundColor: colors.subtleBackground,
+                          borderColor: colors.border,
+                        },
+                      ]}
+                    >
+                      <Clock size={12} color={colors.textSecondary} strokeWidth={2.2} />
+                      <Text style={[styles.lockedBadgeText, { color: colors.textSecondary }]}>
+                        {item.daysRemaining || (isWeekly ? 7 : 30)}g
                       </Text>
                     </View>
                   )}
@@ -109,67 +228,93 @@ export const BoxReviewScreen: React.FC<BoxReviewScreenProps> = ({
           </View>
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 4,
-    paddingBottom: 20,
+    flex: 1,
+  },
+  content: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 40,
   },
   headerCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 22,
-    padding: 16,
+    borderRadius: 20,
+    padding: 18,
     borderWidth: 1,
-    borderColor: '#E7EAF3',
-    marginBottom: 14,
-    shadowColor: '#0F172A',
+    marginBottom: 16,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 8,
     elevation: 2,
   },
+  headerTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  boxBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+  },
+  boxBadgeText: {
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  wordCountPill: {
+    fontSize: 12.5,
+    fontWeight: '600',
+  },
   headerTitle: {
-    color: '#0F172A',
-    fontSize: 18,
-    fontWeight: '900',
-    marginBottom: 2,
+    fontSize: 19,
+    fontWeight: '800',
+    marginBottom: 4,
   },
   headerSubtitle: {
-    color: '#64748B',
-    fontSize: 12.5,
+    fontSize: 13,
     fontWeight: '500',
-    marginBottom: 12,
+    lineHeight: 18,
+    marginBottom: 16,
   },
   emptyBoxInfo: {
-    backgroundColor: '#F8FAFC',
-    padding: 12,
-    borderRadius: 14,
+    padding: 18,
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#E7EAF3',
+    alignItems: 'center',
+    textAlign: 'center',
+  },
+  emptyIcon: {
+    marginBottom: 8,
+  },
+  emptyBoxTitle: {
+    fontSize: 14.5,
+    fontWeight: '700',
+    marginBottom: 6,
+    textAlign: 'center',
   },
   emptyBoxText: {
-    fontSize: 12,
-    color: '#64748B',
-    lineHeight: 18,
+    fontSize: 12.5,
+    lineHeight: 19,
+    textAlign: 'center',
   },
   lockBanner: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 12,
-    backgroundColor: '#FEF2F2',
     borderWidth: 1,
-    borderColor: '#FECACA',
     borderRadius: 16,
     padding: 14,
   },
   lockIconChip: {
-    width: 36,
-    height: 36,
-    borderRadius: 12,
-    backgroundColor: '#FEE2E2',
+    width: 34,
+    height: 34,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -179,51 +324,44 @@ const styles = StyleSheet.create({
   lockBannerTitle: {
     fontSize: 13.5,
     fontWeight: '800',
-    color: '#DC2626',
     marginBottom: 3,
   },
   lockBannerDesc: {
     fontSize: 12,
-    color: '#991B1B',
     lineHeight: 17,
   },
   unlockBanner: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 12,
-    backgroundColor: '#ECFDF5',
     borderWidth: 1,
-    borderColor: '#A7F3D0',
     borderRadius: 16,
     padding: 14,
   },
   unlockIconChip: {
-    width: 36,
-    height: 36,
-    borderRadius: 12,
-    backgroundColor: '#D1FAE5',
+    width: 34,
+    height: 34,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
   unlockBannerTitle: {
     fontSize: 13.5,
     fontWeight: '800',
-    color: '#059669',
     marginBottom: 3,
   },
   unlockBannerDesc: {
     fontSize: 12,
-    color: '#065F46',
     lineHeight: 17,
   },
   listSection: {
-    marginTop: 6,
+    marginTop: 4,
   },
   listTitle: {
     fontSize: 15,
     fontWeight: '800',
-    color: '#0F172A',
     marginBottom: 10,
+    marginLeft: 2,
   },
   wordRowsWrap: {
     gap: 8,
@@ -232,12 +370,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#E7EAF3',
     borderRadius: 16,
     padding: 14,
-    shadowColor: '#0F172A',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.03,
     shadowRadius: 4,
@@ -250,11 +385,9 @@ const styles = StyleSheet.create({
   wordText: {
     fontSize: 15,
     fontWeight: '800',
-    color: '#0F172A',
   },
   meaningText: {
     fontSize: 12.5,
-    color: '#64748B',
     marginTop: 2,
   },
   rowRight: {
@@ -264,32 +397,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#ECFDF5',
     paddingHorizontal: 9,
     paddingVertical: 4,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
   },
   unlockedBadgeText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#059669',
   },
   lockedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FEF2F2',
     paddingHorizontal: 9,
     paddingVertical: 4,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#FECACA',
   },
   lockedBadgeText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#DC2626',
   },
 });

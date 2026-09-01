@@ -1,33 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
   ScrollView,
-  Modal,
   Alert,
 } from 'react-native';
 import {
   Sparkles,
+  ChevronLeft,
+  BookOpen,
 } from 'lucide-react-native';
 import { useLearningStore } from '../store/useLearningStore';
+import { useThemeStore } from '../store/useThemeStore';
 import { QuestionCard } from './QuestionCard';
 import { AITestGeneratorModal } from './AITestGeneratorModal';
 import { SmoothBottomSheet } from './SmoothBottomSheet';
 import {
   EXAM_CATALOG,
-  CatalogExamInfo,
+  YdsExamCatalogService,
 } from '../services/YdsExamCatalog';
+import { QuestionItem, OptionKey } from '../types';
 
 export const MockExamScreen: React.FC = () => {
+  const { colors } = useThemeStore();
   const {
     currentExam,
     examState,
     examScoreCard,
     examHistory,
-    selectedCatalogExam,
-    selectCatalogExam,
     startExamFromCatalog,
     startCustomAIQuiz,
     selectExamQuestion,
@@ -42,6 +44,26 @@ export const MockExamScreen: React.FC = () => {
   const [isAIGeneratorOpen, setIsAIGeneratorOpen] = useState(false);
   const [catalogFilter, setCatalogFilter] = useState<'ALL' | 'MASTER' | 'ADVANCED' | 'AI'>('ALL');
   const [selectedResultToView, setSelectedResultToView] = useState<any>(null);
+
+  // Review mode state (reviewing questions of a completed exam)
+  const [isReviewingExam, setIsReviewingExam] = useState(false);
+  const [reviewQuestionIndex, setReviewQuestionIndex] = useState(0);
+  const [isReviewGridOpen, setIsReviewGridOpen] = useState(false);
+
+  // Check if any question prior to current index has been marked/answered
+  const hasAnsweredPreviousExamQuestion = useMemo(() => {
+    if (!examState || examState.currentQuestionIndex === 0) return false;
+    for (let i = 0; i < examState.currentQuestionIndex; i++) {
+      if (examState.userAnswers[i]) {
+        return true;
+      }
+    }
+    return false;
+  }, [examState?.currentQuestionIndex, examState?.userAnswers]);
+
+  const isExamPrevDisabled = examState
+    ? examState.currentQuestionIndex === 0 || !hasAnsweredPreviousExamQuestion
+    : true;
 
   // Timer interval for active exam
   useEffect(() => {
@@ -65,15 +87,64 @@ export const MockExamScreen: React.FC = () => {
       .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  const handleFinishConfirm = () => {
+  const handleCancelExam = () => {
     Alert.alert(
-      'Sınavı Bitirmek İstiyor Musunuz?',
-      'Cevaplarınız değerlendirilecek ve YDS puanınız hesaplanacaktır.',
+      'Sınavı İptal Etmek İstiyor Musunuz?',
+      'Sınavı şimdi iptal ederseniz cevaplarınız kaydedilmeyecek ve sonuç listesine eklenmeyecektir.',
       [
-        { text: 'Devam Et', style: 'cancel' },
+        { text: 'Sınava Devam Et', style: 'cancel' },
+        {
+          text: 'Sınavı İptal Et ve Çık',
+          style: 'destructive',
+          onPress: () => {
+            setIsGridModalOpen(false);
+            resetExam();
+          },
+        },
+      ]
+    );
+  };
+
+  const handleFinishConfirm = () => {
+    const answeredCount = Object.keys(examState?.userAnswers || {}).length;
+    const totalQ = currentExam?.questions.length || 80;
+
+    if (answeredCount === 0) {
+      Alert.alert(
+        'Soru Cevaplanmadı',
+        'Henüz hiçbir soruya cevap vermediniz. Sınavı iptal etmek için sol üstteki "Çıkış" butonunu kullanabilirsiniz.',
+        [{ text: 'Tamam' }]
+      );
+      return;
+    }
+
+    if (answeredCount < totalQ) {
+      Alert.alert(
+        'Sınavı Bitirmek İstiyor Musunuz?',
+        `Sınavda toplam ${totalQ} soru bulunmaktadır, siz ${answeredCount} soru yanıtladınız (${totalQ - answeredCount} boş soru var).\n\nSınavı erken bitirip sonuç karnenizi görmek istiyor musunuz?`,
+        [
+          { text: 'Sınava Devam Et', style: 'cancel' },
+          {
+            text: 'Sınavı Bitir ve Sonucu Gör',
+            style: 'destructive',
+            onPress: () => {
+              setIsGridModalOpen(false);
+              finishMockExam();
+            },
+          },
+        ]
+      );
+      return;
+    }
+
+    Alert.alert(
+      'Sınavı Bitir',
+      `Tüm ${totalQ} soruyu tamamladınız. Sınavınızı bitirip YDS sonuç karnenizi görmek istiyor musunuz?`,
+      [
+        { text: 'Kontrol Et', style: 'cancel' },
         {
           text: 'Sınavı Bitir',
-          style: 'destructive',
+          style: 'default',
           onPress: () => {
             setIsGridModalOpen(false);
             finishMockExam();
@@ -92,119 +163,397 @@ export const MockExamScreen: React.FC = () => {
 
   const activeScoreCard = examScoreCard || selectedResultToView;
 
+  // Grade Theme & Colors
+  const getGradeTheme = (grade: string) => {
+    switch (grade) {
+      case 'A':
+      case 'B':
+        return {
+          border: colors.success,
+          bg: colors.successLight,
+          text: colors.success,
+          tagBg: colors.successLight,
+          label: `${grade} Seviyesi (80-100 Puan)`,
+          desc: 'Çok İyi / Mükemmel Akademik Başarı',
+        };
+      case 'C':
+      case 'D':
+        return {
+          border: colors.accentWarm,
+          bg: colors.accentWarmLight,
+          text: colors.accentWarm,
+          tagBg: colors.accentWarmLight,
+          label: `${grade} Seviyesi (60-79 Puan)`,
+          desc: 'Orta / İyi Düzey Yeterlilik',
+        };
+      default:
+        return {
+          border: colors.error,
+          bg: colors.errorLight,
+          text: colors.error,
+          tagBg: colors.errorLight,
+          label: 'Geliştirilmeli (0-59 Puan)',
+          desc: 'Temel Seviye / Tekrar Gerekli',
+        };
+    }
+  };
+
+  const getCategoryColor = () => colors.brand;
+
+  const getCategoryLabel = (type: string) => {
+    switch (type) {
+      case 'PARAGRAPH':
+        return 'Paragraf';
+      case 'CLOZE_TEST':
+        return 'Cloze Test';
+      case 'SENTENCE_COMPLETION':
+        return 'Cümle Tamamlama';
+      case 'SKILL_DIALOGUE':
+        return 'Diyalog & Skills';
+      case 'RESTATEMENT':
+        return 'Anlamca En Yakın';
+      case 'TRANSLATION':
+        return 'Çeviri (TR-EN)';
+      case 'PARAGRAPH_COMPLETION':
+        return 'Paragraf Tam.';
+      case 'IRRELEVANT_SENTENCE':
+        return 'Akışı Bozan Cümle';
+      default:
+        return 'Kelime & Gramer';
+    }
+  };
+
+  // Helper to retrieve exam questions for review
+  const getExamQuestionsForReview = (): QuestionItem[] => {
+    if (activeScoreCard?.questions && activeScoreCard.questions.length > 0) {
+      return activeScoreCard.questions;
+    }
+    if (currentExam?.questions && currentExam.questions.length > 0) {
+      return currentExam.questions;
+    }
+    if (activeScoreCard?.examId) {
+      return YdsExamCatalogService.getFullExam(activeScoreCard.examId).questions;
+    }
+    return [];
+  };
+
+  const getExamUserAnswersForReview = (): Record<number, OptionKey> => {
+    if (activeScoreCard?.userAnswers) {
+      return activeScoreCard.userAnswers;
+    }
+    if (examState?.userAnswers) {
+      return examState.userAnswers;
+    }
+    return {};
+  };
+
   // =========================================================================
-  // VIEW 1: SCORECARD / EXAM RESULT VIEW (SCREEN 3 SCORE HERO)
+  // VIEW 1.5: EXAM QUESTIONS REVIEW MODE
+  // =========================================================================
+  if (activeScoreCard && isReviewingExam) {
+    const reviewQuestions = getExamQuestionsForReview();
+    const userAnswers = getExamUserAnswersForReview();
+    const totalQ = reviewQuestions.length || activeScoreCard.totalQuestions;
+    const currentQ = reviewQuestions[reviewQuestionIndex];
+    const userChoice = userAnswers[reviewQuestionIndex] || null;
+
+    return (
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        {/* Review Top Bar */}
+        <View style={[styles.reviewTopBar, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
+          <TouchableOpacity
+            style={styles.reviewBackBtn}
+            onPress={() => setIsReviewingExam(false)}
+            activeOpacity={0.7}
+          >
+            <ChevronLeft size={20} color={colors.brand} />
+            <Text style={[styles.reviewBackBtnText, { color: colors.brand }]}>Sonuç Özetine Dön</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.reviewOpticBtn, { backgroundColor: colors.subtleBackground }]}
+            onPress={() => setIsReviewGridOpen(true)}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.reviewOpticBtnText, { color: colors.text }]}>
+              ▦ Soru {reviewQuestionIndex + 1}/{totalQ}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Current Question Review Solver */}
+        {currentQ ? (
+          <View style={{ flex: 1 }}>
+            <QuestionCard
+              question={currentQ}
+              questionIndex={reviewQuestionIndex}
+              totalQuestions={totalQ}
+              mode="REVIEW"
+              selectedOption={userChoice}
+            />
+
+            {/* Bottom Nav Controls */}
+            <View style={[styles.bottomExamNav, { backgroundColor: colors.cardBackground, borderTopColor: colors.border }]}>
+              <TouchableOpacity
+                style={[
+                  styles.examNavBtn,
+                  { backgroundColor: colors.subtleBackground, borderColor: colors.border },
+                  reviewQuestionIndex === 0 && styles.examNavBtnDisabled,
+                ]}
+                disabled={reviewQuestionIndex === 0}
+                onPress={() => setReviewQuestionIndex((prev) => Math.max(0, prev - 1))}
+                activeOpacity={0.7}
+              >
+                <Text style={[styles.examNavBtnText, { color: colors.text }]}>← Önceki Soru</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.examNavBtnPrimary,
+                  { backgroundColor: colors.brand },
+                  reviewQuestionIndex >= totalQ - 1 && styles.examNavBtnDisabled,
+                ]}
+                disabled={reviewQuestionIndex >= totalQ - 1}
+                onPress={() => setReviewQuestionIndex((prev) => Math.min(totalQ - 1, prev + 1))}
+                activeOpacity={0.8}
+              >
+                <Text style={[styles.examNavBtnPrimaryText, { color: colors.textOnBrand }]}>Sonraki Soru →</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ) : (
+          <View style={styles.emptyReviewBox}>
+            <Text style={[styles.emptyReviewText, { color: colors.textSecondary }]}>Soru verisi bulunamadı.</Text>
+          </View>
+        )}
+
+        {/* Review Optic Grid Drawer */}
+        <SmoothBottomSheet
+          visible={isReviewGridOpen}
+          onClose={() => setIsReviewGridOpen(false)}
+          maxHeight="82%"
+        >
+          <View style={[styles.opticSheetContent, { backgroundColor: colors.cardBackground }]}>
+            <View style={styles.opticHeaderRow}>
+              <View>
+                <Text style={[styles.opticSheetTitle, { color: colors.text }]}>Soru İnceleme Menüsü</Text>
+                <Text style={[styles.opticSheetSub, { color: colors.textSecondary }]}>
+                  Yeşil: Doğru · Kırmızı: Yanlış · Gri: Boş
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={[styles.closeBtn, { backgroundColor: colors.subtleBackground }]}
+                onPress={() => setIsReviewGridOpen(false)}
+              >
+                <Text style={[styles.closeBtnText, { color: colors.textSecondary }]}>✕</Text>
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView contentContainerStyle={styles.opticGrid}>
+              {reviewQuestions.map((q, idx) => {
+                const ans = userAnswers[idx];
+                const isCorrect = ans && ans === q.correct_option;
+                const isWrong = ans && ans !== q.correct_option;
+                const isCurrent = reviewQuestionIndex === idx;
+
+                let cellStyle: any = styles.opticCell;
+                let cellTextStyle: any = styles.opticCellText;
+
+                if (isCorrect) {
+                  cellStyle = [styles.opticCell, { backgroundColor: colors.successLight }];
+                  cellTextStyle = [styles.opticCellText, { color: colors.success }];
+                } else if (isWrong) {
+                  cellStyle = [styles.opticCell, { backgroundColor: colors.errorLight }];
+                  cellTextStyle = [styles.opticCellText, { color: colors.error }];
+                } else {
+                  cellStyle = [styles.opticCell, { backgroundColor: colors.subtleBackground }];
+                  cellTextStyle = [styles.opticCellText, { color: colors.textSecondary }];
+                }
+
+                if (isCurrent) {
+                  cellStyle.push([styles.opticCellCurrent, { borderColor: colors.brand }]);
+                }
+
+                return (
+                  <TouchableOpacity
+                    key={idx}
+                    style={cellStyle}
+                    onPress={() => {
+                      setReviewQuestionIndex(idx);
+                      setIsReviewGridOpen(false);
+                    }}
+                  >
+                    <Text style={cellTextStyle}>{idx + 1}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </View>
+        </SmoothBottomSheet>
+      </View>
+    );
+  }
+
+  // =========================================================================
+  // VIEW 1: SCORECARD / EXAM RESULT VIEW
   // =========================================================================
   if (activeScoreCard) {
+    const gradeTheme = getGradeTheme(activeScoreCard.levelGrade || 'F');
+    const correctCount = activeScoreCard.correctCount ?? 0;
+    const wrongCount = activeScoreCard.wrongCount ?? 0;
+    const emptyCount = activeScoreCard.emptyCount ?? 0;
+    const ydsScore =
+      typeof activeScoreCard.ydsScore === 'number'
+        ? activeScoreCard.ydsScore.toFixed(2)
+        : '0.00';
+
     return (
       <ScrollView
-        style={styles.container}
+        style={[styles.container, { backgroundColor: colors.background }]}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.topline} />
         <View style={styles.scoreTopRow}>
-          <Text style={styles.eyebrow}>{activeScoreCard.title || '2024 YDS/1'} · SONUÇ</Text>
+          <Text style={[styles.eyebrow, { color: colors.textSecondary }]}>
+            {activeScoreCard.title || 'YDS Sınavı'} · SONUÇ
+          </Text>
           <TouchableOpacity
-            style={styles.flagBtn}
+            style={[styles.flagBtn, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}
             onPress={() => {
               setSelectedResultToView(null);
               resetExam();
             }}
           >
-            <Text style={styles.flagBtnText}>✕</Text>
+            <Text style={[styles.flagBtnText, { color: colors.textSecondary }]}>✕</Text>
           </TouchableOpacity>
         </View>
 
         {/* GRADE RING HERO */}
         <View style={styles.scoreHero}>
-          <View style={styles.gradeRing}>
+          <View
+            style={[
+              styles.gradeRing,
+              { borderColor: gradeTheme.border, backgroundColor: gradeTheme.bg },
+            ]}
+          >
             <View style={styles.gradeCenter}>
-              <Text style={styles.gradeLetter}>{activeScoreCard.levelGrade || 'A'}</Text>
-              <Text style={styles.gradeNum}>{activeScoreCard.ydsScore || '92.50'} / 100</Text>
+              <Text style={[styles.gradeLetter, { color: gradeTheme.text }]}>
+                {activeScoreCard.levelGrade || 'F'}
+              </Text>
+              <Text style={[styles.gradeNum, { color: colors.textSecondary }]}>{ydsScore} / 100</Text>
             </View>
           </View>
+          <View style={[styles.gradeDescBadge, { backgroundColor: gradeTheme.tagBg }]}>
+            <Text style={[styles.gradeDescText, { color: gradeTheme.text }]}>
+              {gradeTheme.label}
+            </Text>
+          </View>
+          <Text style={[styles.gradeDescSub, { color: colors.textSecondary }]}>{gradeTheme.desc}</Text>
         </View>
 
         {/* STATS ROW (3 BOXES) */}
         <View style={styles.statRow}>
-          <View style={[styles.statBox, { backgroundColor: '#ECFDF5' }]}>
-            <Text style={[styles.statBoxVal, { color: '#059669' }]}>
-              {activeScoreCard.correctCount || 74}
-            </Text>
-            <Text style={styles.statBoxLbl}>DOĞRU</Text>
+          <View style={[styles.statBox, { backgroundColor: colors.successLight }]}>
+            <Text style={[styles.statBoxVal, { color: colors.success }]}>{correctCount}</Text>
+            <Text style={[styles.statBoxLbl, { color: colors.success }]}>DOĞRU</Text>
           </View>
 
-          <View style={[styles.statBox, { backgroundColor: '#FEF2F2' }]}>
-            <Text style={[styles.statBoxVal, { color: '#DC2626' }]}>
-              {activeScoreCard.wrongCount || 4}
-            </Text>
-            <Text style={styles.statBoxLbl}>YANLIŞ</Text>
+          <View style={[styles.statBox, { backgroundColor: colors.errorLight }]}>
+            <Text style={[styles.statBoxVal, { color: colors.error }]}>{wrongCount}</Text>
+            <Text style={[styles.statBoxLbl, { color: colors.error }]}>YANLIŞ</Text>
           </View>
 
-          <View style={[styles.statBox, { backgroundColor: '#F1F4FA' }]}>
-            <Text style={[styles.statBoxVal, { color: '#475569' }]}>
-              {activeScoreCard.emptyCount || 2}
-            </Text>
-            <Text style={styles.statBoxLbl}>BOŞ</Text>
+          <View style={[styles.statBox, { backgroundColor: colors.subtleBackground }]}>
+            <Text style={[styles.statBoxVal, { color: colors.textSecondary }]}>{emptyCount}</Text>
+            <Text style={[styles.statBoxLbl, { color: colors.textSecondary }]}>BOŞ</Text>
           </View>
         </View>
 
         {/* CATEGORY BREAKDOWN */}
         <View style={styles.sectionTitleRow}>
-          <Text style={styles.sectionTitle}>Konu Bazlı Dağılım</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Konu Bazlı Başarı Dağılımı</Text>
         </View>
 
-        <View style={styles.cardBreakdown}>
-          <View style={styles.breakdownRow}>
-            <Text style={styles.breakdownLabel}>Paragraf</Text>
-            <View style={styles.breakdownTrack}>
-              <View style={[styles.breakdownTrackFill, { width: '92%', backgroundColor: '#2563EB' }]} />
+        <View style={[styles.cardBreakdown, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+          {activeScoreCard.categoryBreakdown && activeScoreCard.categoryBreakdown.length > 0 ? (
+            activeScoreCard.categoryBreakdown.map((cat: any) => {
+              const pct = cat.total > 0 ? Math.round((cat.correct / cat.total) * 100) : 0;
+              const catColor = getCategoryColor();
+              return (
+                <View key={cat.type} style={styles.breakdownRow}>
+                  <Text style={[styles.breakdownLabel, { color: colors.textSecondary }]} numberOfLines={1}>
+                    {getCategoryLabel(cat.type)}
+                  </Text>
+                  <View style={[styles.breakdownTrack, { backgroundColor: colors.subtleBackground }]}>
+                    <View
+                      style={[
+                        styles.breakdownTrackFill,
+                        { width: `${pct}%`, backgroundColor: catColor },
+                      ]}
+                    />
+                  </View>
+                  <Text style={[styles.breakdownVal, { color: colors.text }]}>
+                    {cat.correct}/{cat.total} (%{pct})
+                  </Text>
+                </View>
+              );
+            })
+          ) : (
+            <View style={styles.breakdownRow}>
+              <Text style={[styles.breakdownLabel, { color: colors.textSecondary }]}>Toplam Soru</Text>
+              <View style={[styles.breakdownTrack, { backgroundColor: colors.subtleBackground }]}>
+                <View
+                  style={[
+                    styles.breakdownTrackFill,
+                    {
+                      width: `${
+                        activeScoreCard.totalQuestions > 0
+                          ? Math.round((correctCount / activeScoreCard.totalQuestions) * 100)
+                          : 0
+                      }%`,
+                      backgroundColor: colors.brand,
+                    },
+                  ]}
+                />
+              </View>
+              <Text style={[styles.breakdownVal, { color: colors.text }]}>
+                {correctCount}/{activeScoreCard.totalQuestions || 80}
+              </Text>
             </View>
-            <Text style={styles.breakdownVal}>23/25</Text>
-          </View>
-
-          <View style={styles.breakdownRow}>
-            <Text style={styles.breakdownLabel}>Cloze Test</Text>
-            <View style={styles.breakdownTrack}>
-              <View style={[styles.breakdownTrackFill, { width: '80%', backgroundColor: '#7C3AED' }]} />
-            </View>
-            <Text style={styles.breakdownVal}>16/20</Text>
-          </View>
-
-          <View style={styles.breakdownRow}>
-            <Text style={styles.breakdownLabel}>Cümle Tam.</Text>
-            <View style={styles.breakdownTrack}>
-              <View style={[styles.breakdownTrackFill, { width: '95%', backgroundColor: '#059669' }]} />
-            </View>
-            <Text style={styles.breakdownVal}>19/20</Text>
-          </View>
-
-          <View style={styles.breakdownRow}>
-            <Text style={styles.breakdownLabel}>Diyalog</Text>
-            <View style={styles.breakdownTrack}>
-              <View style={[styles.breakdownTrackFill, { width: '88%', backgroundColor: '#D97706' }]} />
-            </View>
-            <Text style={styles.breakdownVal}>16/18</Text>
-          </View>
+          )}
         </View>
 
+        {/* REVIEW QUESTIONS BUTTON */}
         <TouchableOpacity
-          style={styles.btnPrimary}
+          style={[styles.btnReview, { backgroundColor: colors.brand }]}
+          onPress={() => {
+            setReviewQuestionIndex(0);
+            setIsReviewingExam(true);
+          }}
+          activeOpacity={0.85}
+        >
+          <BookOpen size={17} color={colors.textOnBrand} />
+          <Text style={[styles.btnReviewText, { color: colors.textOnBrand }]}>Soruları ve Çözümleri İncele</Text>
+        </TouchableOpacity>
+
+        {/* RETURN TO CATALOG BUTTON */}
+        <TouchableOpacity
+          style={[styles.btnSecondary, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}
           onPress={() => {
             setSelectedResultToView(null);
             resetExam();
           }}
           activeOpacity={0.8}
         >
-          <Text style={styles.btnPrimaryText}>Sınav Kütüphanesine Dön</Text>
+          <Text style={[styles.btnSecondaryText, { color: colors.text }]}>Sınav Kütüphanesine Dön</Text>
         </TouchableOpacity>
       </ScrollView>
     );
   }
 
   // =========================================================================
-  // VIEW 2: ACTIVE LIVE EXAM VIEW (SCREEN 3 LIVE EXAM IN HTML)
+  // VIEW 2: ACTIVE LIVE EXAM VIEW
   // =========================================================================
   if (currentExam && examState) {
     const currentQ = currentExam.questions[examState.currentQuestionIndex];
@@ -213,28 +562,41 @@ export const MockExamScreen: React.FC = () => {
     const isCurrentFlagged = !!examState.flaggedQuestions[examState.currentQuestionIndex];
 
     return (
-      <View style={styles.container}>
-        {/* LIVE BAR (STICKY TOP BAR IN HTML) */}
-        <View style={styles.liveBar}>
-          <View style={styles.timerPill}>
-            <View style={styles.dotRed} />
-            <Text style={styles.timerPillText}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        {/* LIVE BAR (STICKY TOP BAR) */}
+        <View style={[styles.liveBar, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
+          <TouchableOpacity
+            style={[styles.cancelExamBtn, { backgroundColor: colors.errorLight }]}
+            onPress={handleCancelExam}
+            activeOpacity={0.7}
+          >
+            <ChevronLeft size={18} color={colors.error} />
+            <Text style={[styles.cancelExamBtnText, { color: colors.error }]}>Çıkış</Text>
+          </TouchableOpacity>
+
+          <View style={[styles.timerPill, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
+            <View style={[styles.dotRed, { backgroundColor: colors.accentWarm }]} />
+            <Text style={[styles.timerPillText, { color: colors.text }]}>
               {formatTimer(examState.timeRemainingSeconds)}
             </Text>
           </View>
 
           <TouchableOpacity
-            style={styles.gridBtn}
+            style={[styles.gridBtn, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}
             onPress={() => setIsGridModalOpen(true)}
             activeOpacity={0.7}
           >
-            <Text style={styles.gridBtnText}>
-              ▦ Optik <Text style={{ color: '#4F46E5', fontWeight: '800' }}>{answeredCount}/{totalQ}</Text>
+            <Text style={[styles.gridBtnText, { color: colors.text }]}>
+              ▦ <Text style={{ color: colors.brand, fontWeight: '800' }}>{answeredCount}/{totalQ}</Text>
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.finishBtn} onPress={handleFinishConfirm} activeOpacity={0.8}>
-            <Text style={styles.finishBtnText}>Bitir</Text>
+          <TouchableOpacity
+            style={[styles.finishBtn, { backgroundColor: colors.brand }]}
+            onPress={handleFinishConfirm}
+            activeOpacity={0.8}
+          >
+            <Text style={[styles.finishBtnText, { color: colors.textOnBrand }]}>Bitir</Text>
           </TouchableOpacity>
         </View>
 
@@ -255,66 +617,73 @@ export const MockExamScreen: React.FC = () => {
             />
 
             {/* Bottom Nav Controls */}
-            <View style={styles.bottomExamNav}>
+            <View style={[styles.bottomExamNav, { backgroundColor: colors.cardBackground, borderTopColor: colors.border }]}>
               <TouchableOpacity
-                style={[styles.examNavBtn, examState.currentQuestionIndex === 0 && styles.examNavBtnDisabled]}
-                disabled={examState.currentQuestionIndex === 0}
+                style={[
+                  styles.examNavBtn,
+                  { backgroundColor: colors.subtleBackground, borderColor: colors.border },
+                  isExamPrevDisabled && styles.examNavBtnDisabled,
+                ]}
+                disabled={isExamPrevDisabled}
                 onPress={() => selectExamQuestion(examState.currentQuestionIndex - 1)}
                 activeOpacity={0.7}
               >
-                <Text style={styles.examNavBtnText}>← Önceki</Text>
+                <Text style={[styles.examNavBtnText, { color: isExamPrevDisabled ? colors.textSecondary : colors.text }]}>
+                  ← Önceki Soru
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={[
                   styles.examNavBtnPrimary,
+                  { backgroundColor: colors.brand },
                   examState.currentQuestionIndex >= totalQ - 1 && styles.examNavBtnDisabled,
                 ]}
                 disabled={examState.currentQuestionIndex >= totalQ - 1}
                 onPress={() => selectExamQuestion(examState.currentQuestionIndex + 1)}
                 activeOpacity={0.8}
               >
-                <Text style={styles.examNavBtnPrimaryText}>Sonraki →</Text>
+                <Text style={[styles.examNavBtnPrimaryText, { color: colors.textOnBrand }]}>Sonraki Soru →</Text>
               </TouchableOpacity>
             </View>
           </View>
         )}
 
-        {/* OPTIC GRID BOTTOM SHEET (8-COLUMN GRID IN HTML) */}
+        {/* OPTIC GRID BOTTOM SHEET */}
         <SmoothBottomSheet
           visible={isGridModalOpen}
           onClose={() => setIsGridModalOpen(false)}
           maxHeight="82%"
         >
-          <View style={styles.opticSheetContent}>
+          <View style={[styles.opticSheetContent, { backgroundColor: colors.cardBackground }]}>
             <View style={styles.opticHeaderRow}>
               <View>
-                <Text style={styles.opticSheetTitle}>Optik Form</Text>
-                <Text style={styles.opticSheetSub}>
+                <Text style={[styles.opticSheetTitle, { color: colors.text }]}>Optik Form</Text>
+                <Text style={[styles.opticSheetSub, { color: colors.textSecondary }]}>
                   {totalQ} sorudan {answeredCount}'i cevaplandı
                 </Text>
               </View>
               <TouchableOpacity
-                style={styles.closeBtn}
+                style={[styles.closeBtn, { backgroundColor: colors.subtleBackground }]}
                 onPress={() => setIsGridModalOpen(false)}
               >
-                <Text style={styles.closeBtnText}>✕</Text>
+                <Text style={[styles.closeBtnText, { color: colors.textSecondary }]}>✕</Text>
               </TouchableOpacity>
             </View>
 
             {/* Legend */}
             <View style={styles.opticLegend}>
               <View style={styles.legendItem}>
-                <View style={[styles.legendDot, { backgroundColor: '#D1FAE5' }]} />
-                <Text style={styles.legendLbl}>Çözüldü</Text>
+                <View style={[styles.legendDot, { backgroundColor: colors.successLight }]} />
+                <Text style={[styles.legendLbl, { color: colors.textSecondary }]}>Cevaplandı</Text>
               </View>
               <View style={styles.legendItem}>
-                <View style={[styles.legendDot, { backgroundColor: '#F1F4FA' }]} />
-                <Text style={styles.legendLbl}>Boş</Text>
+                <View style={[styles.legendDot, { backgroundColor: colors.subtleBackground }]} />
+                <Text style={[styles.legendLbl, { color: colors.textSecondary }]}>Boş</Text>
               </View>
               <View style={styles.legendItem}>
-                <View style={[styles.legendDot, { backgroundColor: '#FEF3C7' }]} />
-                <Text style={styles.legendLbl}>İşaretli</Text>
+                <View style={[styles.legendDot, { backgroundColor: colors.accentWarmLight }]} />
+                <Text style={[styles.legendLbl, { color: colors.textSecondary }]}>İşaretli</Text>
               </View>
             </View>
 
@@ -329,18 +698,18 @@ export const MockExamScreen: React.FC = () => {
                 let cellTextStyle: any = styles.opticCellText;
 
                 if (isAnswered) {
-                  cellStyle = [styles.opticCell, styles.opticCellSolved];
-                  cellTextStyle = [styles.opticCellText, { color: '#059669' }];
+                  cellStyle = [styles.opticCell, { backgroundColor: colors.successLight }];
+                  cellTextStyle = [styles.opticCellText, { color: colors.success }];
                 } else if (isFlagged) {
-                  cellStyle = [styles.opticCell, styles.opticCellFlagged];
-                  cellTextStyle = [styles.opticCellText, { color: '#B45309' }];
+                  cellStyle = [styles.opticCell, { backgroundColor: colors.accentWarmLight }];
+                  cellTextStyle = [styles.opticCellText, { color: colors.accentWarm }];
                 } else {
-                  cellStyle = [styles.opticCell, styles.opticCellEmpty];
-                  cellTextStyle = [styles.opticCellText, { color: '#94A3B8' }];
+                  cellStyle = [styles.opticCell, { backgroundColor: colors.subtleBackground }];
+                  cellTextStyle = [styles.opticCellText, { color: colors.textSecondary }];
                 }
 
                 if (isCurrent) {
-                  cellStyle.push(styles.opticCellCurrent);
+                  cellStyle.push([styles.opticCellCurrent, { borderColor: colors.brand }]);
                 }
 
                 return (
@@ -358,8 +727,8 @@ export const MockExamScreen: React.FC = () => {
               })}
             </ScrollView>
 
-            <TouchableOpacity style={styles.btnPrimary} onPress={handleFinishConfirm}>
-              <Text style={styles.btnPrimaryText}>Sınavı Tamamla ve Puanı Hesapla</Text>
+            <TouchableOpacity style={[styles.btnPrimary, { backgroundColor: colors.brand }]} onPress={handleFinishConfirm}>
+              <Text style={[styles.btnPrimaryText, { color: colors.textOnBrand }]}>Sınavı Tamamla ve Puanı Hesapla</Text>
             </TouchableOpacity>
           </View>
         </SmoothBottomSheet>
@@ -368,25 +737,25 @@ export const MockExamScreen: React.FC = () => {
   }
 
   // =========================================================================
-  // VIEW 3: EXAM CATALOG (SCREEN 3 CATALOG VIEW IN HTML)
+  // VIEW 3: EXAM CATALOG
   // =========================================================================
   return (
     <ScrollView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.topline} />
 
       <View style={styles.catalogTopBar}>
-        <Text style={styles.catalogHeading}>Deneme Sınavları</Text>
+        <Text style={[styles.catalogHeading, { color: colors.text }]}>Deneme Sınavları</Text>
         <TouchableOpacity
-          style={styles.aiCustomPill}
+          style={[styles.aiCustomPill, { backgroundColor: colors.brandLight }]}
           onPress={() => setIsAIGeneratorOpen(true)}
           activeOpacity={0.8}
         >
-          <Sparkles size={13} color="#7C3AED" />
-          <Text style={styles.aiCustomPillText}>+ AI Testi</Text>
+          <Sparkles size={13} color={colors.brand} />
+          <Text style={[styles.aiCustomPillText, { color: colors.brand }]}>+ AI Testi</Text>
         </TouchableOpacity>
       </View>
 
@@ -397,37 +766,77 @@ export const MockExamScreen: React.FC = () => {
         contentContainerStyle={styles.filterRow}
       >
         <TouchableOpacity
-          style={[styles.chip, catalogFilter === 'ALL' && styles.chipOn]}
+          style={[
+            styles.chip,
+            { backgroundColor: colors.cardBackground, borderColor: colors.border },
+            catalogFilter === 'ALL' && { backgroundColor: colors.brandLight, borderColor: colors.brand },
+          ]}
           onPress={() => setCatalogFilter('ALL')}
         >
-          <Text style={[styles.chipText, catalogFilter === 'ALL' && styles.chipTextOn]}>
+          <Text
+            style={[
+              styles.chipText,
+              { color: colors.textSecondary },
+              catalogFilter === 'ALL' && { color: colors.brand, fontWeight: '800' },
+            ]}
+          >
             Tümü
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.chip, catalogFilter === 'MASTER' && styles.chipOn]}
+          style={[
+            styles.chip,
+            { backgroundColor: colors.cardBackground, borderColor: colors.border },
+            catalogFilter === 'MASTER' && { backgroundColor: colors.brandLight, borderColor: colors.brand },
+          ]}
           onPress={() => setCatalogFilter('MASTER')}
         >
-          <Text style={[styles.chipText, catalogFilter === 'MASTER' && styles.chipTextOn]}>
+          <Text
+            style={[
+              styles.chipText,
+              { color: colors.textSecondary },
+              catalogFilter === 'MASTER' && { color: colors.brand, fontWeight: '800' },
+            ]}
+          >
             Master Denemeler
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.chip, catalogFilter === 'ADVANCED' && styles.chipOn]}
+          style={[
+            styles.chip,
+            { backgroundColor: colors.cardBackground, borderColor: colors.border },
+            catalogFilter === 'ADVANCED' && { backgroundColor: colors.brandLight, borderColor: colors.brand },
+          ]}
           onPress={() => setCatalogFilter('ADVANCED')}
         >
-          <Text style={[styles.chipText, catalogFilter === 'ADVANCED' && styles.chipTextOn]}>
+          <Text
+            style={[
+              styles.chipText,
+              { color: colors.textSecondary },
+              catalogFilter === 'ADVANCED' && { color: colors.brand, fontWeight: '800' },
+            ]}
+          >
             İleri Düzey & Odak
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.chip, catalogFilter === 'AI' && styles.chipOn]}
+          style={[
+            styles.chip,
+            { backgroundColor: colors.cardBackground, borderColor: colors.border },
+            catalogFilter === 'AI' && { backgroundColor: colors.brandLight, borderColor: colors.brand },
+          ]}
           onPress={() => setCatalogFilter('AI')}
         >
-          <Text style={[styles.chipText, catalogFilter === 'AI' && styles.chipTextOn]}>
+          <Text
+            style={[
+              styles.chipText,
+              { color: colors.textSecondary },
+              catalogFilter === 'AI' && { color: colors.brand, fontWeight: '800' },
+            ]}
+          >
             AI Özel Denemeler
           </Text>
         </TouchableOpacity>
@@ -435,60 +844,64 @@ export const MockExamScreen: React.FC = () => {
 
       {/* EXAM CARDS LIST */}
       <View style={styles.examCardsList}>
-        {filteredExams.map((exam, index) => {
+        {filteredExams.map((exam) => {
           const isAI = exam.tag === 'AI Özel';
-          const isMaster = exam.tag === 'Master Deneme';
 
-          let yearBg = '#EEF2FF';
-          let yearColor = '#4F46E5';
-
-          if (isAI) {
-            yearBg = '#EDE9FE';
-            yearColor = '#7C3AED';
-          } else if (isMaster) {
-            yearBg = '#FEF3C7';
-            yearColor = '#D97706';
-          }
-
-          // Real scores from database examHistory
-          const realResult = examHistory.find((h) => h.examId === exam.id);
+          // Real scores from database examHistory (only valid answered exams)
+          const realResult = (examHistory || []).find(
+            (h) => h && h.examId === exam.id && (h.correctCount + h.wrongCount > 0)
+          );
           const scoreVal = realResult ? realResult.ydsScore.toFixed(2) : null;
           const gradeVal = realResult ? realResult.levelGrade : null;
+          const itemGradeTheme = gradeVal ? getGradeTheme(gradeVal) : null;
 
           return (
             <TouchableOpacity
               key={exam.id}
-              style={styles.examCard}
+              style={[
+                styles.examCard,
+                {
+                  backgroundColor: colors.cardBackground,
+                  borderColor: colors.border,
+                  shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
+                },
+              ]}
               onPress={() => startExamFromCatalog(exam.id)}
-              activeOpacity={0.8}
+              activeOpacity={0.85}
             >
-              <View style={[styles.examYear, { backgroundColor: yearBg }]}>
-                <Text style={[styles.examYearBig, { color: yearColor }]}>
+              <View style={[styles.examYear, { backgroundColor: colors.brandLight }]}>
+                <Text style={[styles.examYearBig, { color: colors.brand }]}>
                   {isAI ? 'AI' : exam.year}
                 </Text>
-                <Text style={[styles.examYearSub, { color: yearColor }]}>
+                <Text style={[styles.examYearSub, { color: colors.brand }]}>
                   {isAI ? 'Adaptif' : exam.season}
                 </Text>
               </View>
 
               <View style={{ flex: 1 }}>
-                <Text style={styles.examMetaTitle}>{exam.title}</Text>
+                <Text style={[styles.examMetaTitle, { color: colors.text }]}>{exam.title}</Text>
                 <View style={styles.examMetaSub}>
-                  <Text style={styles.metaSubItem}>⏱ {exam.durationMinutes} dk</Text>
-                  <Text style={styles.metaSubItem}>📝 {exam.totalQuestions} soru</Text>
+                  <Text style={[styles.metaSubItem, { color: colors.textSecondary }]}>⏱ {exam.durationMinutes} dk</Text>
+                  <Text style={[styles.metaSubItem, { color: colors.textSecondary }]}>📝 {exam.totalQuestions} soru</Text>
                 </View>
               </View>
 
               <View style={styles.examScorePill}>
-                {scoreVal ? (
+                {scoreVal && itemGradeTheme ? (
                   <>
-                    <Text style={styles.scorePillVal}>{scoreVal}</Text>
-                    <Text style={styles.scorePillGrade}>Not: {gradeVal}</Text>
+                    <Text style={[styles.scorePillVal, { color: itemGradeTheme.text }]}>
+                      {scoreVal}
+                    </Text>
+                    <View style={[styles.miniGradeBadge, { backgroundColor: itemGradeTheme.tagBg }]}>
+                      <Text style={[styles.miniGradeText, { color: itemGradeTheme.text }]}>
+                        Not: {gradeVal}
+                      </Text>
+                    </View>
                   </>
                 ) : (
                   <>
-                    <Text style={[styles.scorePillVal, { color: '#94A3B8' }]}>—</Text>
-                    <Text style={styles.scorePillGrade}>Çözülmedi</Text>
+                    <Text style={[styles.scorePillVal, { color: colors.textSecondary }]}>—</Text>
+                    <Text style={[styles.scorePillGrade, { color: colors.textSecondary }]}>Çözülmedi</Text>
                   </>
                 )}
               </View>
@@ -497,29 +910,56 @@ export const MockExamScreen: React.FC = () => {
         })}
       </View>
 
-      {/* LAST RESULT PREVIEW CARD (ONLY SHOWN IF USER ACTUALLY TOOK AN EXAM) */}
-      {examHistory.length > 0 && (
+      {/* LAST RESULT PREVIEW CARD */}
+      {(examHistory?.length || 0) > 0 && examHistory[0] && (
         <View style={styles.lastResultSection}>
           <View style={styles.sectionTitleRow}>
-            <Text style={styles.sectionTitle}>Son Sınav Sonucun</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>Son Sınav Sonucun</Text>
           </View>
 
-          <TouchableOpacity
-            style={styles.lastResultCard}
-            onPress={() => setSelectedResultToView(examHistory[0])}
-            activeOpacity={0.8}
-          >
-            <View style={styles.scoreHeroInline}>
-              <View style={styles.gradeRingSmall}>
-                <Text style={styles.gradeLetterSmall}>
-                  {examHistory[0].levelGrade || 'A'}
-                </Text>
-              </View>
-              <Text style={styles.scoreHeroText}>
-                {examHistory[0].title} · {examHistory[0].ydsScore.toFixed(2)} / 100 — Sonuç Kartını Gör
-              </Text>
-            </View>
-          </TouchableOpacity>
+          {(() => {
+            const lastExam = examHistory[0];
+            if (!lastExam) return null;
+            const theme = getGradeTheme(lastExam.levelGrade || 'F');
+            return (
+              <TouchableOpacity
+                style={[
+                  styles.lastResultCard,
+                  {
+                    backgroundColor: colors.cardBackground,
+                    borderColor: colors.border,
+                    shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
+                  },
+                ]}
+                onPress={() => setSelectedResultToView(lastExam)}
+                activeOpacity={0.8}
+              >
+                <View style={styles.scoreHeroInline}>
+                  <View
+                    style={[
+                      styles.gradeRingSmall,
+                      { borderColor: theme.border, backgroundColor: theme.bg },
+                    ]}
+                  >
+                    <Text style={[styles.gradeLetterSmall, { color: theme.text }]}>
+                      {lastExam.levelGrade || 'F'}
+                    </Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.scoreHeroTitle, { color: colors.text }]} numberOfLines={1}>
+                      {lastExam.title}
+                    </Text>
+                    <Text style={[styles.scoreHeroText, { color: colors.textSecondary }]}>
+                      Puan: {lastExam.ydsScore.toFixed(2)} / 100 · {lastExam.correctCount} Doğru, {lastExam.wrongCount} Yanlış
+                    </Text>
+                  </View>
+                  <View style={[styles.viewResultBtn, { backgroundColor: colors.brandLight }]}>
+                    <Text style={[styles.viewResultBtnText, { color: colors.brand }]}>İncele ➔</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            );
+          })()}
         </View>
       )}
 
@@ -535,7 +975,6 @@ export const MockExamScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
   },
   content: {
     paddingHorizontal: 20,
@@ -554,13 +993,11 @@ const styles = StyleSheet.create({
   catalogHeading: {
     fontSize: 19,
     fontWeight: '900',
-    color: '#0F172A',
   },
   aiCustomPill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#F5F3FF',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 999,
@@ -568,7 +1005,6 @@ const styles = StyleSheet.create({
   aiCustomPillText: {
     fontSize: 11.5,
     fontWeight: '800',
-    color: '#7C3AED',
   },
   filterRow: {
     flexDirection: 'row',
@@ -579,35 +1015,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 9,
     borderRadius: 999,
-    backgroundColor: '#FFFFFF',
     borderWidth: 1.4,
-    borderColor: '#E7EAF3',
-  },
-  chipOn: {
-    backgroundColor: '#0F172A',
-    borderColor: '#0F172A',
   },
   chipText: {
     fontSize: 12.5,
     fontWeight: '700',
-    color: '#475569',
-  },
-  chipTextOn: {
-    color: '#FFFFFF',
   },
   examCardsList: {
     gap: 12,
   },
   examCard: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 24,
     padding: 15,
     borderWidth: 1,
-    borderColor: 'rgba(15,23,42,0.03)',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 13,
-    shadowColor: '#0F172A',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 8,
@@ -633,7 +1056,6 @@ const styles = StyleSheet.create({
   examMetaTitle: {
     fontSize: 13.5,
     fontWeight: '800',
-    color: '#0F172A',
   },
   examMetaSub: {
     flexDirection: 'row',
@@ -642,7 +1064,6 @@ const styles = StyleSheet.create({
   },
   metaSubItem: {
     fontSize: 11.5,
-    color: '#475569',
     fontWeight: '500',
   },
   examScorePill: {
@@ -651,12 +1072,20 @@ const styles = StyleSheet.create({
   scorePillVal: {
     fontSize: 14,
     fontWeight: '900',
-    color: '#059669',
   },
   scorePillGrade: {
     fontSize: 10,
-    color: '#94A3B8',
     fontWeight: '600',
+  },
+  miniGradeBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+    marginTop: 2,
+  },
+  miniGradeText: {
+    fontSize: 10,
+    fontWeight: '800',
   },
   lastResultSection: {
     marginTop: 20,
@@ -667,62 +1096,76 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16.5,
     fontWeight: '800',
-    color: '#0F172A',
   },
   lastResultCard: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 24,
     padding: 16,
     borderWidth: 1,
-    borderColor: 'rgba(15,23,42,0.03)',
-    shadowColor: '#0F172A',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 8,
     elevation: 2,
   },
   scoreHeroInline: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
+    gap: 12,
   },
   gradeRingSmall: {
-    width: 110,
-    height: 110,
-    borderRadius: 55,
-    borderWidth: 10,
-    borderColor: '#059669',
-    backgroundColor: '#ECFDF5',
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+    borderWidth: 4,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 8,
   },
   gradeLetterSmall: {
-    fontSize: 26,
+    fontSize: 20,
     fontWeight: '900',
-    color: '#059669',
+  },
+  scoreHeroTitle: {
+    fontSize: 13.5,
+    fontWeight: '800',
+    marginBottom: 2,
   },
   scoreHeroText: {
-    fontSize: 12.5,
-    fontWeight: '700',
-    color: '#475569',
+    fontSize: 12,
+    fontWeight: '600',
   },
-  // Live Exam Styles
+  viewResultBtn: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 10,
+  },
+  viewResultBtnText: {
+    fontSize: 11.5,
+    fontWeight: '800',
+  },
   liveBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 20,
+    gap: 8,
+    paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: 'rgba(248,250,252,0.92)',
     borderBottomWidth: 1,
-    borderBottomColor: '#E7EAF3',
+  },
+  cancelExamBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+    paddingHorizontal: 8,
+    paddingVertical: 7,
+    borderRadius: 10,
+  },
+  cancelExamBtnText: {
+    fontSize: 12,
+    fontWeight: '800',
   },
   timerPill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 7,
-    backgroundColor: '#0F172A',
+    borderWidth: 1,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 12,
@@ -731,17 +1174,13 @@ const styles = StyleSheet.create({
     width: 7,
     height: 7,
     borderRadius: 3.5,
-    backgroundColor: '#EF4444',
   },
   timerPillText: {
-    color: '#FFFFFF',
     fontSize: 14.5,
     fontWeight: '700',
   },
   gridBtn: {
-    backgroundColor: '#FFFFFF',
     borderWidth: 1.4,
-    borderColor: '#E7EAF3',
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 12,
@@ -749,17 +1188,14 @@ const styles = StyleSheet.create({
   gridBtnText: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#0F172A',
   },
   finishBtn: {
     marginLeft: 'auto',
-    backgroundColor: '#EF4444',
     paddingHorizontal: 14,
     paddingVertical: 9,
     borderRadius: 12,
   },
   finishBtnText: {
-    color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '800',
   },
@@ -768,15 +1204,11 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingHorizontal: 20,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
-    borderTopColor: '#E7EAF3',
   },
   examNavBtn: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
     borderWidth: 1.6,
-    borderColor: '#E7EAF3',
     paddingVertical: 14,
     borderRadius: 16,
     alignItems: 'center',
@@ -787,24 +1219,20 @@ const styles = StyleSheet.create({
   examNavBtnText: {
     fontSize: 14.5,
     fontWeight: '800',
-    color: '#0F172A',
   },
   examNavBtnPrimary: {
     flex: 1,
-    backgroundColor: '#4F46E5',
     paddingVertical: 14,
     borderRadius: 16,
     alignItems: 'center',
-    shadowColor: '#4F46E5',
     shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.35,
+    shadowOpacity: 0.25,
     shadowRadius: 12,
     elevation: 3,
   },
   examNavBtnPrimaryText: {
     fontSize: 14.5,
     fontWeight: '800',
-    color: '#FFFFFF',
   },
   // Optic Sheet Styles
   opticSheetContent: {
@@ -820,25 +1248,21 @@ const styles = StyleSheet.create({
   opticSheetTitle: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#0F172A',
   },
   opticSheetSub: {
     fontSize: 12,
-    color: '#64748B',
     marginTop: 2,
   },
   closeBtn: {
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: '#F1F4FA',
     alignItems: 'center',
     justifyContent: 'center',
   },
   closeBtnText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#475569',
   },
   opticLegend: {
     flexDirection: 'row',
@@ -858,7 +1282,6 @@ const styles = StyleSheet.create({
   legendLbl: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#475569',
   },
   opticGrid: {
     flexDirection: 'row',
@@ -874,18 +1297,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  opticCellSolved: {
-    backgroundColor: '#D1FAE5',
-  },
-  opticCellEmpty: {
-    backgroundColor: '#F1F4FA',
-  },
-  opticCellFlagged: {
-    backgroundColor: '#FEF3C7',
-  },
   opticCellCurrent: {
     borderWidth: 2,
-    borderColor: '#4F46E5',
   },
   opticCellText: {
     fontSize: 11,
@@ -902,52 +1315,59 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '800',
     letterSpacing: 0.9,
-    color: '#94A3B8',
     textTransform: 'uppercase',
   },
   flagBtn: {
     width: 32,
     height: 32,
     borderRadius: 11,
-    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#E7EAF3',
     alignItems: 'center',
     justifyContent: 'center',
   },
   flagBtnText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#475569',
   },
   scoreHero: {
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: 18,
   },
   gradeRing: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    borderWidth: 13,
-    borderColor: '#059669',
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    borderWidth: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ECFDF5',
   },
   gradeCenter: {
     alignItems: 'center',
   },
   gradeLetter: {
-    fontSize: 36,
+    fontSize: 38,
     fontWeight: '900',
-    color: '#059669',
-    lineHeight: 40,
+    lineHeight: 42,
   },
   gradeNum: {
-    fontSize: 12.5,
+    fontSize: 13,
     fontWeight: '700',
-    color: '#475569',
     marginTop: 2,
+  },
+  gradeDescBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 999,
+    marginTop: 12,
+  },
+  gradeDescText: {
+    fontSize: 12.5,
+    fontWeight: '800',
+  },
+  gradeDescSub: {
+    fontSize: 11.5,
+    fontWeight: '600',
+    marginTop: 4,
   },
   statRow: {
     flexDirection: 'row',
@@ -962,22 +1382,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statBoxVal: {
-    fontSize: 19,
+    fontSize: 20,
     fontWeight: '900',
   },
   statBoxLbl: {
     fontSize: 10.5,
     fontWeight: '700',
-    color: '#475569',
     marginTop: 2,
   },
   cardBreakdown: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 24,
     padding: 16,
     borderWidth: 1,
-    borderColor: 'rgba(15,23,42,0.03)',
-    marginBottom: 18,
+    marginBottom: 16,
     gap: 12,
   },
   breakdownRow: {
@@ -986,16 +1403,14 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   breakdownLabel: {
-    width: 100,
-    fontSize: 12.5,
+    width: 110,
+    fontSize: 12,
     fontWeight: '700',
-    color: '#475569',
   },
   breakdownTrack: {
     flex: 1,
     height: 8,
     borderRadius: 6,
-    backgroundColor: '#EEF1F8',
     overflow: 'hidden',
   },
   breakdownTrackFill: {
@@ -1003,28 +1418,89 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   breakdownVal: {
-    width: 42,
-    fontSize: 12,
+    width: 75,
+    fontSize: 11.5,
     fontWeight: '700',
-    color: '#0F172A',
     textAlign: 'right',
   },
+  btnReview: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 15,
+    borderRadius: 16,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 3,
+    marginBottom: 10,
+  },
+  btnReviewText: {
+    fontSize: 14.5,
+    fontWeight: '800',
+  },
   btnPrimary: {
-    backgroundColor: '#4F46E5',
     paddingVertical: 15,
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#4F46E5',
     shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.35,
+    shadowOpacity: 0.25,
     shadowRadius: 12,
     elevation: 3,
     marginTop: 10,
   },
   btnPrimaryText: {
-    color: '#FFFFFF',
     fontSize: 14.5,
     fontWeight: '800',
+  },
+  btnSecondary: {
+    borderWidth: 1.5,
+    paddingVertical: 14,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  btnSecondaryText: {
+    fontSize: 14,
+    fontWeight: '800',
+  },
+  // Review Mode Styles
+  reviewTopBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+  },
+  reviewBackBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  reviewBackBtnText: {
+    fontSize: 13.5,
+    fontWeight: '800',
+  },
+  reviewOpticBtn: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 10,
+  },
+  reviewOpticBtnText: {
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  emptyReviewBox: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 30,
+  },
+  emptyReviewText: {
+    fontSize: 14,
+    fontWeight: '600',
   },
 });

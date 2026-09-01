@@ -11,6 +11,8 @@ import {
   ExamScoreCard,
   WordItem,
   UserProfile,
+  TaskGoalsConfig,
+  VocabFolder,
 } from '../types';
 import { dbService, WordWithProgress } from '../database/DatabaseService';
 import { srEngine } from '../services/SpacedRepetitionEngine';
@@ -19,9 +21,16 @@ import { YdsQuestionBankService } from '../services/YdsQuestionBank';
 import { YdsExamEngine } from '../services/YdsExamEngine';
 import { AIService } from '../services/AIService';
 import { YdsExamCatalogService, CatalogExamInfo } from '../services/YdsExamCatalog';
+import { SupabaseService } from '../services/SupabaseService';
+import { NotificationService } from '../services/NotificationService';
 
-export type AppTab = 'TASKS' | 'EXAM' | 'MISTAKES' | 'VOCAB';
+export type AppTab = 'TASKS' | 'EXAM' | 'VOCAB' | 'STATS' | 'MISTAKES';
 export type StudyMode = 'PREVIEW' | 'TEST';
+
+export function getTaskGoals(goals?: TaskGoalsConfig) {
+  if (goals) return goals;
+  return { paragraph: 8, cloze: 5, sentence: 8, skills: 14 };
+}
 
 interface DailyTaskProgress {
   paragraphCompleted: number;
@@ -38,6 +47,7 @@ interface LearningState {
   streakCount: number;
 
   // Daily Tasks State
+  taskGoals: TaskGoalsConfig;
   dailyQuestionTarget: number;
   dailyTasksProgress: DailyTaskProgress;
   activeDailyQuestions: QuestionItem[];
@@ -56,7 +66,7 @@ interface LearningState {
   selectedMistake: MistakeItem | null;
   isAnalyzingMistake: boolean;
 
-  // Vocabulary & Leitner State
+  // Vocabulary & Leitner & Folder State
   studyMode: StudyMode;
   dailyLimit: number;
   sessionWords: CardWord[];
@@ -65,6 +75,8 @@ interface LearningState {
   weeklyWords: WordWithProgress[];
   monthlyWords: WordWithProgress[];
   dictionaryWords: WordWithProgress[];
+  vocabFolders: VocabFolder[];
+  activeFolderId: string | null;
   completedTodayCount: number;
   // User Auth & Profile
   userProfile: UserProfile | null;
@@ -72,11 +84,13 @@ interface LearningState {
   // Actions
   initStore: () => Promise<void>;
   setActiveTab: (tab: AppTab) => void;
-  setUserProfile: (profile: UserProfile | null) => void;
+  setUserProfile: (profile: UserProfile | null) => Promise<void>;
+  updateUserTargetScore: (score: number) => Promise<void>;
   setDailyQuestionTarget: (target: number) => void;
+  setTaskGoals: (goals: Partial<TaskGoalsConfig>) => Promise<void>;
 
   // Daily Tasks Actions
-  loadDailyTasks: () => Promise<void>;
+  loadDailyTasks: (force?: boolean) => Promise<void>;
   answerDailyQuestion: (question: QuestionItem, selectedOption: OptionKey) => Promise<boolean>;
   generateFreshAIQuestions: (type: YdsQuestionType) => Promise<void>;
   nextDailyQuestion: () => void;
@@ -102,19 +116,34 @@ interface LearningState {
 
   // Vocabulary Actions
   setStudyMode: (mode: StudyMode) => void;
-  loadVocabSession: () => Promise<void>;
+  loadVocabSession: (force?: boolean) => Promise<void>;
   answerCurrentVocabCard: (isCorrect: boolean) => Promise<void>;
   resetVocabSession: () => Promise<void>;
-  addCustomWordWithAI: (wordText: string) => Promise<boolean>;
+  addCustomWordWithAI: (wordText: string, folderName?: string) => Promise<boolean>;
+  loadVocabFolders: () => Promise<void>;
+  setActiveFolderId: (id: string | null) => void;
+  createVocabFolder: (folder: { name: string; description?: string; color: string; icon: string }) => Promise<void>;
+  updateVocabFolder: (id: string, updates: { name?: string; description?: string; color?: string; icon?: string }) => Promise<void>;
+  deleteVocabFolder: (id: string) => Promise<void>;
+  deleteWord: (wordId: number) => Promise<void>;
+
+  resetAllProgress: () => Promise<void>;
+  deleteUserAccount: () => Promise<void>;
 }
 
 export const useLearningStore = create<LearningState>((set, get) => ({
   activeTab: 'TASKS',
   isLoading: true,
   isInitialized: false,
-  streakCount: 1,
+  streakCount: 0,
 
   // Daily Tasks
+  taskGoals: {
+    paragraph: 8,
+    cloze: 5,
+    sentence: 8,
+    skills: 14,
+  },
   dailyQuestionTarget: 35,
   dailyTasksProgress: {
     paragraphCompleted: 0,
@@ -139,7 +168,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   selectedMistake: null,
   isAnalyzingMistake: false,
 
-  // Vocabulary
+  // Vocabulary & Folders
   studyMode: 'PREVIEW',
   dailyLimit: 25,
   sessionWords: [],
@@ -155,6 +184,8 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   weeklyWords: [],
   monthlyWords: [],
   dictionaryWords: [],
+  vocabFolders: [],
+  activeFolderId: null,
   completedTodayCount: 0,
   userProfile: null,
 
@@ -165,6 +196,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     set({ isLoading: true });
     try {
       await dbService.initDatabase();
+      await dbService.seedQuestionsIfEmpty();
 
       const count = await dbService.getWordCount();
       if (count < 7000) {
@@ -174,12 +206,30 @@ export const useLearningStore = create<LearningState>((set, get) => ({
 
       const streak = await dbService.getStreakCount();
       const examHist = await dbService.getExamHistory();
+      const savedUser = await dbService.getUserSession();
+      const userGoals = await dbService.getUserTaskGoals();
+      const totalTarget = userGoals.paragraph + userGoals.cloze + userGoals.sentence + userGoals.skills;
 
-      set({ streakCount: streak, examHistory: examHist });
+      if (savedUser) {
+        SupabaseService.setCurrentUser(savedUser);
+      }
+
+      set({
+        streakCount: streak,
+        examHistory: examHist,
+        userProfile: savedUser,
+        taskGoals: userGoals,
+        dailyQuestionTarget: totalTarget,
+      });
 
       await get().loadDailyTasks();
       await get().loadMistakes();
       await get().loadVocabSession();
+
+      // Silently configure daily reminders in background
+      NotificationService.scheduleAllReminders(20, 0, totalTarget, streak).catch((nErr) => {
+        console.warn('Background notification init:', nErr);
+      });
 
       set({ isInitialized: true, isLoading: false });
     } catch (e) {
@@ -190,26 +240,81 @@ export const useLearningStore = create<LearningState>((set, get) => ({
 
   setActiveTab: (tab: AppTab) => {
     set({ activeTab: tab });
-    if (tab === 'TASKS') get().loadDailyTasks();
-    if (tab === 'MISTAKES') get().loadMistakes();
-    if (tab === 'VOCAB') get().loadVocabSession();
+    if (tab === 'TASKS') {
+      if (get().activeDailyQuestions.length === 0) {
+        get().loadDailyTasks();
+      }
+    }
+    if (tab === 'MISTAKES') {
+      get().loadMistakes();
+    }
+    if (tab === 'VOCAB') {
+      if (get().sessionWords.length === 0) {
+        get().loadVocabSession();
+      }
+    }
   },
 
-  setUserProfile: (profile: UserProfile | null) => {
+  setUserProfile: async (profile: UserProfile | null) => {
+    SupabaseService.setCurrentUser(profile);
     set({ userProfile: profile });
+
+    if (profile) {
+      await dbService.saveUserSession(profile);
+      // Schedule study reminders for user
+      const streak = get().streakCount;
+      const target = get().dailyQuestionTarget;
+      NotificationService.scheduleAllReminders(20, 0, target, streak).catch(() => {});
+    } else {
+      await dbService.clearUserSession();
+    }
+  },
+
+  updateUserTargetScore: async (score: number) => {
+    const current = get().userProfile;
+    if (current) {
+      const updated: UserProfile = { ...current, targetScore: score };
+      set({ userProfile: updated });
+      SupabaseService.setCurrentUser(updated);
+      await dbService.saveUserSession(updated);
+    }
   },
 
   setDailyQuestionTarget: (target: number) => {
     set({ dailyQuestionTarget: target });
+    get().loadDailyTasks(true);
+  },
+
+  setTaskGoals: async (newGoals: Partial<TaskGoalsConfig>) => {
+    const current = get().taskGoals;
+    const merged: TaskGoalsConfig = {
+      paragraph: Math.max(1, Math.min(30, newGoals.paragraph ?? current.paragraph)),
+      cloze: Math.max(1, Math.min(30, newGoals.cloze ?? current.cloze)),
+      sentence: Math.max(1, Math.min(30, newGoals.sentence ?? current.sentence)),
+      skills: Math.max(1, Math.min(30, newGoals.skills ?? current.skills)),
+    };
+    const total = merged.paragraph + merged.cloze + merged.sentence + merged.skills;
+    await dbService.saveUserTaskGoals(merged);
+    set({
+      taskGoals: merged,
+      dailyQuestionTarget: total,
+    });
+    await get().loadDailyTasks(true);
   },
 
   // ==========================================
   // DAILY TASKS & DYNAMIC POOL
   // ==========================================
-  loadDailyTasks: async () => {
+  loadDailyTasks: async (force = false) => {
     try {
-      const activeQs = await dbService.getActiveQuestionsByType(undefined, 30);
-      set({ activeDailyQuestions: activeQs, currentDailyIndex: 0 });
+      const { taskGoals } = get();
+      const todayProg = await dbService.getDailyTaskProgressToday(taskGoals);
+      const activeQs = await dbService.getDailyTaskQuestions(taskGoals);
+      set({
+        dailyTasksProgress: todayProg,
+        activeDailyQuestions: activeQs,
+        currentDailyIndex: 0,
+      });
     } catch (err) {
       console.error('Failed to load daily questions:', err);
     }
@@ -217,35 +322,24 @@ export const useLearningStore = create<LearningState>((set, get) => ({
 
   answerDailyQuestion: async (question: QuestionItem, selectedOption: OptionKey) => {
     const isCorrect = selectedOption === question.correct_option;
+    const { taskGoals } = get();
 
     // Record in DB: correct -> 'SOLVED_CORRECT' (graduates/disappears), wrong -> 'MISTAKE' (moves to mistake vault)
     await dbService.completeQuestion(question.id, selectedOption, isCorrect);
 
+    // Update persistent daily task progress
+    const updatedProg = await dbService.incrementDailyTaskProgress(question.type, taskGoals);
+
     // Update real consecutive day streak
     const updatedStreak = await dbService.checkAndUpdateDailyStreak();
 
-    // Update daily task progress counter
-    set((state) => {
-      const prog = { ...state.dailyTasksProgress };
-      if (question.type === 'PARAGRAPH') prog.paragraphCompleted += 1;
-      else if (question.type === 'CLOZE_TEST') prog.clozeCompleted += 1;
-      else if (question.type === 'SENTENCE_COMPLETION') prog.sentenceCompleted += 1;
-      else prog.skillsCompleted += 1;
-
-      // Filter out correctly solved question immediately from active view
-      const remainingQuestions = isCorrect
-        ? state.activeDailyQuestions.filter((q) => q.id !== question.id)
-        : state.activeDailyQuestions;
-
-      return {
-        dailyTasksProgress: prog,
-        activeDailyQuestions: remainingQuestions,
-        streakCount: updatedStreak,
-      };
+    set({
+      dailyTasksProgress: updatedProg,
+      streakCount: updatedStreak,
     });
 
     if (!isCorrect) {
-      // Refresh mistakes list
+      // Refresh mistakes list in background
       get().loadMistakes();
     }
 
@@ -454,7 +548,24 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       }));
     } catch (err) {
       console.error('Failed to analyze mistake with AI:', err);
-      set({ isAnalyzingMistake: false });
+      const fallbackAnalysis = {
+        summary: `Bu soru ${mistake.question.subtopic || 'Akademik Bağlam'} kuralını test etmektedir.`,
+        why_correct: `Doğru cevap olan (${mistake.question.correct_option}) seçeneği: "${mistake.question.options[mistake.question.correct_option] || ''}" ifadesi, akademik bağlam ve zaman uyumu ile tam örtüşmektedir. ${mistake.question.explanation || ''}`,
+        why_distractor_failed: `İşaretlediğiniz (${mistake.user_selected_option}) seçeneği: "${mistake.question.options[mistake.user_selected_option] || ''}" ifadesi ÖSYM'nin klasik çeldirici tuzaklarındandır.`,
+        key_vocabulary: [
+          'deteriorate (kötüleşmek, gerilemek)',
+          'deplete (tükenmek, eksilmek)',
+          'precedent (emsal, geçmiş örnek)',
+          'subsequent (ardından gelen, sonraki)',
+        ],
+        grammar_rule: mistake.question.subtopic || 'Akademik Bağlam & Gramer',
+      };
+      const updatedMistake: MistakeItem = { ...mistake, ai_analysis: fallbackAnalysis };
+      set((state) => ({
+        selectedMistake: updatedMistake,
+        mistakes: state.mistakes.map((m) => (m.id === mistake.id ? updatedMistake : m)),
+        isAnalyzingMistake: false,
+      }));
     }
   },
 
@@ -467,51 +578,76 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   },
 
   // ==========================================
-  // VOCABULARY & LEITNER
+  // VOCABULARY & FOLDER MANAGEMENT
   // ==========================================
   setStudyMode: (mode: StudyMode) => set({ studyMode: mode }),
+  setActiveFolderId: (id: string | null) => set({ activeFolderId: id }),
 
-  loadVocabSession: async () => {
-    const { dailyLimit } = get();
-    let words = await srEngine.loadDailyBatch(dailyLimit);
+  loadVocabFolders: async () => {
+    try {
+      const folders = await dbService.getVocabFolders();
+      set({ vocabFolders: folders });
+    } catch (err) {
+      console.error('Failed to load vocab folders:', err);
+    }
+  },
 
-    if (words.length === 0) {
-      try {
-        const freshWords = await AIService.generateDynamicAcademicWords(dailyLimit);
-        if (freshWords && freshWords.length > 0) {
-          for (const w of freshWords) {
-            await dbService.insertCustomWord(w);
-          }
-          words = await srEngine.loadDailyBatch(dailyLimit);
-        }
-      } catch (err) {
-        console.warn('Auto dynamic word generation error:', err);
-      }
+  loadVocabSession: async (force = false) => {
+    const { dailyLimit, sessionWords, currentVocabIndex } = get();
+    let words = sessionWords;
+
+    if (force || sessionWords.length === 0) {
+      words = await srEngine.loadDailyBatch(dailyLimit);
     }
 
     const summary = await srEngine.fetchBoxSummary();
     const weekly = await dbService.getWordsForBoxReview(2);
     const monthly = await dbService.getWordsForBoxReview(3);
     const dictionary = await dbService.getAllWordsWithProgress();
+    const folders = await dbService.getVocabFolders();
 
     set({
       sessionWords: words,
-      currentVocabIndex: 0,
+      currentVocabIndex: force ? 0 : currentVocabIndex,
       boxSummary: summary,
       weeklyWords: weekly,
       monthlyWords: monthly,
       dictionaryWords: dictionary,
+      vocabFolders: folders,
     });
   },
 
   answerCurrentVocabCard: async (isCorrect: boolean) => {
-    const { sessionWords, currentVocabIndex } = get();
+    const { sessionWords, currentVocabIndex, dailyLimit } = get();
     const currentWord = sessionWords[currentVocabIndex];
     if (!currentWord) return;
 
     await srEngine.processAnswer(currentWord.id, isCorrect);
     const nextIdx = currentVocabIndex + 1;
     const summary = await srEngine.fetchBoxSummary();
+
+    // Seamless continuous learning: when reaching end of loaded words, auto-fetch more words
+    if (nextIdx >= sessionWords.length) {
+      const moreWords = await srEngine.loadDailyBatch(dailyLimit || 30);
+      if (moreWords && moreWords.length > 0) {
+        // Filter out already seen in this session to prevent duplicate immediate loops
+        const existingIds = new Set(sessionWords.map((w) => w.id));
+        const freshWords = moreWords.filter((w) => !existingIds.has(w.id));
+        const wordsToAdd = freshWords.length > 0 ? freshWords : moreWords;
+
+        set((state) => ({
+          sessionWords: [...state.sessionWords, ...wordsToAdd],
+          currentVocabIndex: nextIdx,
+          boxSummary: summary,
+          completedTodayCount: isCorrect ? state.completedTodayCount + 1 : state.completedTodayCount,
+          dailyTasksProgress: {
+            ...state.dailyTasksProgress,
+            vocabCompleted: state.dailyTasksProgress.vocabCompleted + 1,
+          },
+        }));
+        return;
+      }
+    }
 
     set((state) => ({
       currentVocabIndex: nextIdx,
@@ -525,18 +661,112 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   },
 
   resetVocabSession: async () => {
-    await get().loadVocabSession();
+    await get().loadVocabSession(true);
   },
 
-  addCustomWordWithAI: async (wordText: string) => {
+  addCustomWordWithAI: async (wordText: string, folderName?: string) => {
     try {
       const autoFilled = await AIService.autoCompleteWord(wordText);
+      if (folderName) {
+        autoFilled.subcategory = folderName;
+      }
       await dbService.insertCustomWord(autoFilled);
       await get().loadVocabSession();
       return true;
     } catch (err) {
       console.error('Failed to add custom word:', err);
       return false;
+    }
+  },
+
+  createVocabFolder: async (folder: { name: string; description?: string; color: string; icon: string }) => {
+    try {
+      await dbService.createVocabFolder(folder);
+      await get().loadVocabFolders();
+    } catch (err) {
+      console.error('Failed to create vocab folder:', err);
+    }
+  },
+
+  updateVocabFolder: async (id: string, updates: { name?: string; description?: string; color?: string; icon?: string }) => {
+    try {
+      await dbService.updateVocabFolder(id, updates);
+      await get().loadVocabFolders();
+      await get().loadVocabSession();
+    } catch (err) {
+      console.error('Failed to update vocab folder:', err);
+    }
+  },
+
+  deleteVocabFolder: async (id: string) => {
+    try {
+      await dbService.deleteVocabFolder(id);
+      set((state) => (state.activeFolderId === id ? { activeFolderId: null } : {}));
+      await get().loadVocabFolders();
+      await get().loadVocabSession();
+    } catch (err) {
+      console.error('Failed to delete vocab folder:', err);
+    }
+  },
+
+  deleteWord: async (wordId: number) => {
+    try {
+      await dbService.deleteCustomWord(wordId);
+      await get().loadVocabSession();
+    } catch (err) {
+      console.error('Failed to delete word:', err);
+    }
+  },
+
+  resetAllProgress: async () => {
+    set({ isLoading: true });
+    try {
+      await dbService.resetAllUserProgress();
+      await dbService.seedQuestionsIfEmpty();
+      await get().loadDailyTasks(true);
+      await get().loadVocabSession(true);
+      await get().loadMistakes();
+      const streak = await dbService.getStreakCount();
+      const examHist = await dbService.getExamHistory();
+      set({
+        streakCount: streak,
+        examHistory: examHist,
+        currentDailyIndex: 0,
+        currentVocabIndex: 0,
+        completedTodayCount: 0,
+        isLoading: false,
+      });
+    } catch (err) {
+      console.error('Failed to reset all progress:', err);
+      set({ isLoading: false });
+    }
+  },
+
+  deleteUserAccount: async () => {
+    set({ isLoading: true });
+    try {
+      await SupabaseService.deleteAccount();
+      await dbService.resetAllUserProgress();
+      await dbService.clearUserSession();
+      await dbService.seedQuestionsIfEmpty();
+      await get().setUserProfile(null);
+      await get().loadDailyTasks(true);
+      await get().loadVocabSession(true);
+      await get().loadMistakes();
+      const streak = await dbService.getStreakCount();
+      const examHist = await dbService.getExamHistory();
+      set({
+        streakCount: streak,
+        examHistory: examHist,
+        userProfile: null,
+        currentDailyIndex: 0,
+        currentVocabIndex: 0,
+        completedTodayCount: 0,
+        isLoading: false,
+      });
+    } catch (err) {
+      console.error('Failed to delete account:', err);
+      set({ isLoading: false });
     }
   },
 }));

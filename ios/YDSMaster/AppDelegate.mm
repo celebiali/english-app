@@ -24,7 +24,11 @@
 - (NSURL *)bundleURL
 {
 #if DEBUG
-  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@".expo/.virtual-metro-entry"];
+  NSURL *url = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@".expo/.virtual-metro-entry"];
+  if (!url) {
+    url = [NSURL URLWithString:@"http://10.20.10.50:8081/.expo/.virtual-metro-entry.bundle?platform=ios&dev=true"];
+  }
+  return url;
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif

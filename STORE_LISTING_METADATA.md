@@ -38,38 +38,38 @@ YDS, YÖKDİL ve YDT sınavlarına 5 kutulu Leitner aralıklı tekrar sistemi, 7
 ### 7. Tam Açıklama (Description)
 > **Maksimum 4000 Karakter**
 ```markdown
-🎯 Akademik İngilizce ve Sınav Kelimelerini Kalıcı Olarak Öğrenin: YDS Pratik!
+Akademik İngilizce ve Sınav Kelimelerini Kalıcı Olarak Öğrenin: YDS Pratik!
 
 YDS, YÖKDİL, YDT ve akademik İngilizce metinleri rahatça anlamanın en temel şartı güçlü bir kelime haznesidir. YDS Pratik; klasik ezber yöntemleri yerine bilimsel "Aralıklı Tekrar Algoritması (Leitner Kutuları)" ile kelimeleri hafızanıza kalıcı olarak yerleştirir ve düzenli soru pratiği yapmanızı sağlar.
 
-🚀 ÖNE ÇIKAN ÖZELLİKLER:
+ÖNE ÇIKAN ÖZELLİKLER:
 
-🧠 1. 5 Kademeli Leitner Kutu Sistemi
-• 7.000+ seçkin akademik kelimeyi 5 kademeli kutularda aşama aşama öğrenin.
-• Zorlandığınız kelimeler daha sık, iyi bildikleriniz daha aralıklı karşınıza çıkar.
-• Kelimeleri rastgele ezberlemek yerine zihninizde kalıcı hale getirin.
+1. 5 Kademeli Leitner Kutu Sistemi
+- 7.000+ seçkin akademik kelimeyi 5 kademeli kutularda aşama aşama öğrenin.
+- Zorlandığınız kelimeler daha sık, iyi bildikleriniz daha aralıklı karşınıza çıkar.
+- Kelimeleri rastgele ezberlemek yerine zihninizde kalıcı hale getirin.
 
-📚 2. Günlük Soru Pratiği & Hedef Takibi
-• Paragraf Soruları (Okuma & Anlama)
-• Cloze Test Soruları (Metin İçi Boşluk Doldurma)
-• Cümle Tamamlama & Bağlaç Pratiği
-• Diyalog ve Dil Bilgisi
-• Günlük soru çözme hedeflerinizi dilediğiniz gibi belirleyin ve takip edin.
+2. Günlük Soru Pratiği ve Hedef Takibi
+- Paragraf Soruları (Okuma ve Anlama)
+- Cloze Test Soruları (Metin İçi Boşluk Doldurma)
+- Cümle Tamamlama ve Bağlaç Pratiği
+- Diyalog ve Dil Bilgisi
+- Günlük soru çözme hedeflerinizi dilediğiniz gibi belirleyin ve takip edin.
 
-⏱️ 3. Kapsamlı Seviye & Deneme Testleri
-• Sınav formatında soru çözerek hızınızı ve odaklanmanızı artırın.
-• Seviye değerlendirmesi (A, B, C, D) ile gelişiminizi puan bazında görün.
-• Doğru, yanlış ve boş analiziyle eksik olduğunuz konuları tespit edin.
+3. Kapsamlı Seviye ve Deneme Testleri
+- Sınav formatında soru çözerek hızınızı ve odaklanmanızı artırın.
+- Seviye değerlendirmesi (A, B, C, D) ile gelişiminizi puan bazında görün.
+- Doğru, yanlış ve boş analiziyle eksik olduğunuz konuları tespit edin.
 
-📕 4. Yanlış Havuzu & Kendi Kelimelerini Ekle
-• Yanlış çözdüğünüz sorular otomatik olarak Yanlış Havuzuna kaydedilir, dilediğiniz zaman tekrar çözebilirsiniz.
-• Okuduğunuz metinlerde karşılaştığınız yeni kelimeleri sözlüğünüze ekleyip çalışabilirsiniz.
+4. Yanlış Havuzu ve Kendi Kelimelerini Ekle
+- Yanlış çözdüğünüz sorular otomatik olarak Yanlış Havuzuna kaydedilir, dilediğiniz zaman tekrar çözebilirsiniz.
+- Okuduğunuz metinlerde karşılaştığınız yeni kelimeleri sözlüğünüze ekleyip çalışabilirsiniz.
 
-🌙 5. Sade ve Konforlu Arayüz
-• Göz yormayan Gece ve Gündüz modları
-• Özelleştirilebilir yazı boyutu ve tipografi
-• İnternetsiz (Offline) tam çalışma desteği
-• İlerlemenizi dilediğiniz zaman bulut ile senkronize etme imkanı
+5. Sade ve Konforlu Arayüz
+- Göz yormayan Gece ve Gündüz modları
+- Özelleştirilebilir yazı boyutu ve tipografi
+- İnternetsiz (Offline) tam çalışma desteği
+- İlerlemenizi dilediğiniz zaman bulut ile senkronize etme imkanı
 
 YDS ve YÖKDİL hazırlık sürecinde kelime dağarcığınızı sağlamlaştırmak ve soru çözme pratiği kazanmak için YDS Pratik ile hemen başlayın!
 ```

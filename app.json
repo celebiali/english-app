@@ -11,7 +11,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1E40AF"
+      "backgroundColor": "#4762BD"
     },
     "ios": {
       "bundleIdentifier": "com.celebi.ydspratik",

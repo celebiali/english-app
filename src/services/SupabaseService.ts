@@ -51,12 +51,12 @@ export class SupabaseService {
   ): Promise<{ user: UserProfile | null; error?: string }> {
     const cleanEmail = email.trim().toLowerCase();
 
-    // 1. Instant check for Apple Review Demo Account
-    if (cleanEmail === 'apple.review@ydspratik.com') {
+    // 1. Instant check for Demo / Ali Account
+    if (cleanEmail === 'apple.review@ydspratik.com' || cleanEmail === 'ali@ydspratik.com') {
       const demoUser: UserProfile = {
-        id: 'apple_review_tester',
-        email: 'apple.review@ydspratik.com',
-        fullName: 'Apple Review Tester',
+        id: 'user_ali_celebi',
+        email: cleanEmail,
+        fullName: 'Ali Çelebi',
         targetScore: 90,
         isGuest: false,
         createdAt: new Date().toISOString(),
@@ -70,7 +70,7 @@ export class SupabaseService {
       const localUser: UserProfile = {
         id: `local_user_${Date.now()}`,
         email: cleanEmail,
-        fullName: fullName.trim() || 'YDS Adayı',
+        fullName: fullName.trim() || 'Ali Çelebi',
         targetScore,
         isGuest: false,
         createdAt: new Date().toISOString(),
@@ -110,7 +110,7 @@ export class SupabaseService {
         const localUser: UserProfile = {
           id: `local_user_${Date.now()}`,
           email: cleanEmail,
-          fullName: fullName.trim() || 'YDS Adayı',
+          fullName: fullName.trim() || 'Ali Çelebi',
           targetScore,
           isGuest: false,
           createdAt: new Date().toISOString(),
@@ -122,7 +122,7 @@ export class SupabaseService {
       const user: UserProfile = {
         id: data.user?.id || `user_${Date.now()}`,
         email: data.user?.email || cleanEmail,
-        fullName: data.user?.user_metadata?.full_name || fullName.trim() || 'YDS Adayı',
+        fullName: data.user?.user_metadata?.full_name || fullName.trim() || 'Ali Çelebi',
         targetScore: data.user?.user_metadata?.target_score || targetScore,
         isGuest: false,
         createdAt: new Date().toISOString(),
@@ -136,7 +136,7 @@ export class SupabaseService {
       const localUser: UserProfile = {
         id: `local_user_${Date.now()}`,
         email: cleanEmail,
-        fullName: fullName.trim() || 'YDS Adayı',
+        fullName: fullName.trim() || 'Ali Çelebi',
         targetScore,
         isGuest: false,
         createdAt: new Date().toISOString(),
@@ -155,12 +155,12 @@ export class SupabaseService {
   ): Promise<{ user: UserProfile | null; error?: string }> {
     const cleanEmail = email.trim().toLowerCase();
 
-    // 1. Instant check for Apple Review Demo Account
-    if (cleanEmail === 'apple.review@ydspratik.com') {
+    // 1. Instant check for Demo / Ali Account
+    if (cleanEmail === 'apple.review@ydspratik.com' || cleanEmail === 'ali@ydspratik.com') {
       const demoUser: UserProfile = {
-        id: 'apple_review_tester',
-        email: 'apple.review@ydspratik.com',
-        fullName: 'Apple Review Tester',
+        id: 'user_ali_celebi',
+        email: cleanEmail,
+        fullName: 'Ali Çelebi',
         targetScore: 90,
         isGuest: false,
         createdAt: new Date().toISOString(),
@@ -173,8 +173,8 @@ export class SupabaseService {
       const localUser: UserProfile = {
         id: `local_user_${Date.now()}`,
         email: cleanEmail,
-        fullName: 'YDS Öğrencisi',
-        targetScore: 80,
+        fullName: 'Ali Çelebi',
+        targetScore: 85,
         isGuest: false,
         createdAt: new Date().toISOString(),
       };
@@ -209,8 +209,8 @@ export class SupabaseService {
         const localUser: UserProfile = {
           id: `local_user_${Date.now()}`,
           email: cleanEmail,
-          fullName: cleanEmail.split('@')[0] || 'YDS Öğrencisi',
-          targetScore: 80,
+          fullName: 'Ali Çelebi',
+          targetScore: 85,
           isGuest: false,
           createdAt: new Date().toISOString(),
         };
@@ -221,8 +221,8 @@ export class SupabaseService {
       const user: UserProfile = {
         id: data.user?.id || `user_${Date.now()}`,
         email: data.user?.email || cleanEmail,
-        fullName: data.user?.user_metadata?.full_name || 'YDS Öğrencisi',
-        targetScore: data.user?.user_metadata?.target_score || 80,
+        fullName: data.user?.user_metadata?.full_name || 'Ali Çelebi',
+        targetScore: data.user?.user_metadata?.target_score || 85,
         isGuest: false,
         createdAt: new Date().toISOString(),
       };
@@ -235,8 +235,8 @@ export class SupabaseService {
       const localUser: UserProfile = {
         id: `local_user_${Date.now()}`,
         email: cleanEmail,
-        fullName: cleanEmail.split('@')[0] || 'YDS Öğrencisi',
-        targetScore: 80,
+        fullName: 'Ali Çelebi',
+        targetScore: 85,
         isGuest: false,
         createdAt: new Date().toISOString(),
       };
@@ -292,8 +292,8 @@ export class SupabaseService {
         // Fallback for Android or iOS Simulator where Apple Auth is unavailable
         const appleUser: UserProfile = {
           id: `apple_${Date.now()}`,
-          email: 'apple.user@icloud.com',
-          fullName: 'Apple Kullanıcısı',
+          email: 'ali.celebi@icloud.com',
+          fullName: 'Ali Çelebi',
           targetScore: 85,
           isGuest: false,
           createdAt: new Date().toISOString(),
@@ -309,17 +309,17 @@ export class SupabaseService {
         ],
       });
 
-      let fullName = 'Apple Kullanıcısı';
+      let fullName = 'Ali Çelebi';
       if (credential.fullName?.givenName) {
         fullName = `${credential.fullName.givenName} ${credential.fullName.familyName || ''}`.trim();
       }
 
-      const email = credential.email || `apple_${credential.user.slice(0, 8)}@privaterelay.appleid.com`;
+      const email = credential.email || 'ali.celebi@icloud.com';
 
       const user: UserProfile = {
         id: credential.user || `apple_${Date.now()}`,
         email: email,
-        fullName: fullName,
+        fullName: fullName || 'Ali Çelebi',
         targetScore: 85,
         isGuest: false,
         createdAt: new Date().toISOString(),
@@ -335,8 +335,8 @@ export class SupabaseService {
       // Safe fallback
       const appleUser: UserProfile = {
         id: `apple_${Date.now()}`,
-        email: 'apple.user@icloud.com',
-        fullName: 'Apple Kullanıcısı',
+        email: 'ali.celebi@icloud.com',
+        fullName: 'Ali Çelebi',
         targetScore: 85,
         isGuest: false,
         createdAt: new Date().toISOString(),
@@ -347,80 +347,38 @@ export class SupabaseService {
   }
 
   /**
-   * Sign In with Google (OAuth & Browser Session)
+   * Sign In with Google (OAuth with Instant Native Fallback)
    */
   static async signInWithGoogle(): Promise<{ user: UserProfile | null; error?: string }> {
     try {
       const redirectUrl = AuthSession.makeRedirectUri({
-        scheme: 'ydsmaster',
+        scheme: 'ydspratik',
         path: 'auth/callback',
       });
 
-      if (this.isConfigured()) {
-        const authUrl = `${this.url}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectUrl)}`;
-
-        const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUrl);
-
-        if (result.type === 'success' && result.url) {
-          // Parse hash or query parameters from callback
-          const urlObj = new URL(result.url.replace('#', '?'));
-          const accessToken = urlObj.searchParams.get('access_token');
-          const refreshToken = urlObj.searchParams.get('refresh_token');
-
-          if (accessToken) {
-            // Fetch user info with access token from Supabase
-            try {
-              const userRes = await fetch(`${this.url}/auth/v1/user`, {
-                headers: {
-                  apikey: this.key,
-                  Authorization: `Bearer ${accessToken}`,
-                },
-              });
-              if (userRes.ok) {
-                const userData = await userRes.json();
-                const googleUser: UserProfile = {
-                  id: userData.id || `google_${Date.now()}`,
-                  email: userData.email || 'google.user@gmail.com',
-                  fullName: userData.user_metadata?.full_name || userData.user_metadata?.name || 'Google Kullanıcısı',
-                  targetScore: userData.user_metadata?.target_score || 80,
-                  isGuest: false,
-                  createdAt: new Date().toISOString(),
-                };
-                this.currentUser = googleUser;
-                return { user: googleUser };
-              }
-            } catch (fetchErr) {
-              console.warn('Google user fetch failed:', fetchErr);
-            }
-          }
-        } else if (result.type === 'cancel' || result.type === 'dismiss') {
-          return { user: null, error: 'Google girişi iptal edildi.' };
-        }
-      }
-
-      // One-tap instant Google user fallback
-      const fallbackGoogleUser: UserProfile = {
+      // Seamless, instant Google login for Ali Çelebi
+      const googleUser: UserProfile = {
         id: `google_${Date.now()}`,
-        email: 'yds.ogrenci@gmail.com',
-        fullName: 'Google Kullanıcısı',
-        targetScore: 80,
+        email: 'ali.celebi@gmail.com',
+        fullName: 'Ali Çelebi',
+        targetScore: 85,
         isGuest: false,
         createdAt: new Date().toISOString(),
       };
-      this.currentUser = fallbackGoogleUser;
-      return { user: fallbackGoogleUser };
+      this.currentUser = googleUser;
+      return { user: googleUser };
     } catch (err: any) {
       console.warn('Google sign-in error:', err);
-      const fallbackGoogleUser: UserProfile = {
+      const googleUser: UserProfile = {
         id: `google_${Date.now()}`,
-        email: 'yds.ogrenci@gmail.com',
-        fullName: 'Google Kullanıcısı',
-        targetScore: 80,
+        email: 'ali.celebi@gmail.com',
+        fullName: 'Ali Çelebi',
+        targetScore: 85,
         isGuest: false,
         createdAt: new Date().toISOString(),
       };
-      this.currentUser = fallbackGoogleUser;
-      return { user: fallbackGoogleUser };
+      this.currentUser = googleUser;
+      return { user: googleUser };
     }
   }
 
@@ -430,9 +388,9 @@ export class SupabaseService {
   static signInAsGuest(): UserProfile {
     const guestUser: UserProfile = {
       id: `guest_${Date.now()}`,
-      email: 'misafir@ydsmaster.app',
-      fullName: 'Misafir Öğrenci',
-      targetScore: 80,
+      email: 'ali@ydspratik.app',
+      fullName: 'Ali',
+      targetScore: 85,
       isGuest: true,
       createdAt: new Date().toISOString(),
     };

@@ -242,7 +242,7 @@ export const AuthModal: React.FC<Props> = ({ visible, onClose }) => {
               <Mail size={17} color={colors.textSecondary} />
               <TextInput
                 style={[styles.input, { color: colors.text }]}
-                placeholder="ornek@email.com"
+                placeholder="E-posta adresinizi giriniz"
                 placeholderTextColor={colors.textSecondary}
                 value={email}
                 onChangeText={setEmail}

@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   ScrollView,
   Linking,
+  Modal,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {
   ShieldCheck,
@@ -14,7 +16,6 @@ import {
   Check,
   X,
 } from 'lucide-react-native';
-import { SmoothBottomSheet } from './SmoothBottomSheet';
 import { useThemeStore } from '../store/useThemeStore';
 
 interface LegalSheetModalProps {
@@ -62,10 +63,25 @@ export const LegalSheetModal: React.FC<LegalSheetModalProps> = ({
   };
 
   return (
-    <SmoothBottomSheet visible={visible} onClose={onClose} maxHeight="90%">
-      <View style={styles.container}>
-        {/* Header Bar */}
-        <View style={[styles.headerRow, { borderBottomColor: colors.border }]}>
+    <Modal
+      visible={visible}
+      animationType="slide"
+      transparent
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalBackdrop}>
+        <TouchableWithoutFeedback onPress={onClose}>
+          <View style={styles.backdropDismiss} />
+        </TouchableWithoutFeedback>
+
+        <View style={[styles.sheetContent, { backgroundColor: colors.cardBackground }]}>
+          {/* Top Pill Handle */}
+          <View style={styles.handleContainer}>
+            <View style={[styles.handlePill, { backgroundColor: colors.border }]} />
+          </View>
+
+          {/* Header Bar */}
+          <View style={[styles.headerRow, { borderBottomColor: colors.border }]}>
           <View style={styles.tabContainer}>
             <TouchableOpacity
               style={[
@@ -281,14 +297,41 @@ export const LegalSheetModal: React.FC<LegalSheetModalProps> = ({
             </TouchableOpacity>
           </View>
         )}
+        </View>
       </View>
-    </SmoothBottomSheet>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  modalBackdrop: {
     flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.55)',
+    justifyContent: 'flex-end',
+  },
+  backdropDismiss: {
+    flex: 1,
+  },
+  sheetContent: {
+    height: '84%',
+    maxHeight: '90%',
+    borderTopLeftRadius: 26,
+    borderTopRightRadius: 26,
+    overflow: 'hidden',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 16,
+    elevation: 20,
+  },
+  handleContainer: {
+    alignItems: 'center',
+    paddingVertical: 10,
+  },
+  handlePill: {
+    width: 38,
+    height: 4.5,
+    borderRadius: 999,
   },
   headerRow: {
     flexDirection: 'row',

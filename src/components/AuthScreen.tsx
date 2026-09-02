@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
@@ -11,13 +10,13 @@ import {
   SafeAreaView,
   StatusBar,
   Modal,
-  Image,
   KeyboardAvoidingView,
   Platform,
   Linking,
+  Keyboard,
+  TextInput,
 } from 'react-native';
 import {
-  Sparkles,
   Mail,
   Lock,
   User,
@@ -33,6 +32,9 @@ import { SupabaseService } from '../services/SupabaseService';
 import { useLearningStore } from '../store/useLearningStore';
 import { useThemeStore } from '../store/useThemeStore';
 import { LegalSheetModal } from './LegalSheetModal';
+import { AppLogo } from './AppLogo';
+import { AppleIcon, GoogleIcon } from './SocialIcons';
+import { FormInput } from './FormInput';
 
 interface Props {
   onSuccess?: () => void;
@@ -49,6 +51,22 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
   const [targetScore, setTargetScore] = useState<number>(80);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      () => setIsKeyboardVisible(true)
+    );
+    const hideSub = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      () => setIsKeyboardVisible(false)
+    );
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   // Forgot Password Modal State
   const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
@@ -236,77 +254,32 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
       >
         <ScrollView
           style={[styles.container, { backgroundColor: colors.background }]}
-          contentContainerStyle={styles.content}
+          contentContainerStyle={[
+            styles.content,
+            isKeyboardVisible && { paddingBottom: 40 },
+          ]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
         >
         {/* BRAND HERO HEADER */}
-        <View style={styles.heroSection}>
-          <View style={styles.logoBadgeContainer}>
-            <Image
-              source={require('../../assets/icon.png')}
-              style={styles.logoImage}
-              resizeMode="cover"
+        <View
+          style={[
+            styles.heroSection,
+            isKeyboardVisible && styles.heroSectionKeyboard,
+          ]}
+        >
+          <View style={[styles.logoBadgeContainer, isKeyboardVisible && { marginBottom: 4 }]}>
+            <AppLogo
+              size={isKeyboardVisible ? 36 : 62}
+              borderRadius={isKeyboardVisible ? 10 : 18}
             />
           </View>
-          <Text style={[styles.appTitle, { color: colors.text }]}>YDS Pratik</Text>
-          <Text style={[styles.appSubtitle, { color: colors.textSecondary }]}>
-            Akademik Sınav Hazırlığı & Spaced Repetition Kelime Motoru
-          </Text>
-
-          {/* Feature Highlights */}
-          <View style={styles.featurePillsRow}>
-            <View style={[styles.featurePill, { backgroundColor: colors.brandLight, borderColor: colors.brandLightBorder }]}>
-              <Text style={[styles.featurePillText, { color: colors.brand }]}>🎯 80 Soruluk Denemeler</Text>
-            </View>
-            <View style={[styles.featurePill, { backgroundColor: colors.brandLight }]}>
-              <Text style={[styles.featurePillText, { color: colors.brand }]}>📖 Akıllı Kelime Kartları</Text>
-            </View>
-            <View style={[styles.featurePill, { backgroundColor: colors.brandLight, borderColor: colors.brandLightBorder }]}>
-              <Text style={[styles.featurePillText, { color: colors.brand }]}>🧠 AI Analiz</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* SOCIAL SIGN IN (APPLE & GOOGLE) */}
-        <View style={styles.socialAuthContainer}>
-          {/* Apple Sign-In Button */}
-          <TouchableOpacity
-            style={[styles.appleButton, { backgroundColor: colors.isDark ? '#FFFFFF' : '#000000' }]}
-            onPress={handleAppleSignIn}
-            disabled={isLoading}
-            activeOpacity={0.85}
-          >
-            <Text style={[styles.appleLogoIcon, { color: colors.isDark ? '#000000' : '#FFFFFF' }]}></Text>
-            <Text style={[styles.appleButtonText, { color: colors.isDark ? '#000000' : '#FFFFFF' }]}>Apple ile Giriş Yap</Text>
-          </TouchableOpacity>
-
-          {/* Google Sign-In Button */}
-          <TouchableOpacity
-            style={[
-              styles.googleButton,
-              {
-                backgroundColor: colors.cardBackground,
-                borderColor: colors.border,
-                shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
-              },
-            ]}
-            onPress={handleGoogleSignIn}
-            disabled={isLoading}
-            activeOpacity={0.85}
-          >
-            <View style={[styles.googleGLogo, { backgroundColor: colors.brand }]}>
-              <Text style={[styles.googleGText, { color: colors.textOnBrand }]}>G</Text>
-            </View>
-            <Text style={[styles.googleButtonText, { color: colors.text }]}>Google ile Devam Et</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* OR DIVIDER */}
-        <View style={styles.dividerRow}>
-          <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
-          <Text style={[styles.dividerText, { color: colors.textSecondary }]}>veya e-posta ile</Text>
-          <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+          {!isKeyboardVisible && (
+            <Text style={[styles.appTitle, { color: colors.text }]}>
+              YDS Pratik
+            </Text>
+          )}
         </View>
 
         {/* TAB SELECTOR (LOGIN / REGISTER) */}
@@ -322,8 +295,10 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
             <Text
               style={[
                 styles.tabBtnText,
-                { color: authMode === 'LOGIN' ? colors.brand : colors.textSecondary },
-                authMode === 'LOGIN' && { fontWeight: '800' },
+                {
+                  color: authMode === 'LOGIN' ? colors.brand : colors.textSecondary,
+                  fontWeight: '700',
+                },
               ]}
             >
               Giriş Yap
@@ -341,8 +316,10 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
             <Text
               style={[
                 styles.tabBtnText,
-                { color: authMode === 'REGISTER' ? colors.brand : colors.textSecondary },
-                authMode === 'REGISTER' && { fontWeight: '800' },
+                {
+                  color: authMode === 'REGISTER' ? colors.brand : colors.textSecondary,
+                  fontWeight: '700',
+                },
               ]}
             >
               Kayıt Ol
@@ -351,68 +328,53 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
         </View>
 
         {/* FORM INPUTS */}
-        <View style={styles.formContainer}>
+        <View style={[styles.formContainer, authMode === 'REGISTER' && styles.formContainerRegister]}>
           {authMode === 'REGISTER' && (
-            <View style={styles.inputGroup}>
-              <Text style={[styles.inputLabel, { color: colors.text }]}>Ad Soyad</Text>
-              <View style={[styles.inputField, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
-                <User size={18} color={colors.textSecondary} />
-                <TextInput
-                  style={[styles.textInput, { color: colors.text }]}
-                  placeholder="Adınız Soyadınız"
-                  placeholderTextColor={colors.textSecondary}
-                  value={fullName}
-                  onChangeText={setFullName}
-                  autoCapitalize="words"
-                />
-              </View>
-            </View>
+            <FormInput
+              label="Ad Soyad"
+              icon={<User size={18} color={colors.textSecondary} />}
+              placeholder="Adınız Soyadınız"
+              value={fullName}
+              onChangeText={setFullName}
+              autoCapitalize="words"
+            />
           )}
 
-          {/* Email Field */}
-          <View style={styles.inputGroup}>
-            <Text style={[styles.inputLabel, { color: colors.text }]}>E-Posta Adresi</Text>
-            <View style={[styles.inputField, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
-              <Mail size={18} color={colors.textSecondary} />
-              <TextInput
-                style={[styles.textInput, { color: colors.text }]}
-                placeholder="ornek@email.com"
-                placeholderTextColor={colors.textSecondary}
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
-            </View>
-          </View>
+          <FormInput
+            label="E-Posta Adresi"
+            icon={<Mail size={18} color={colors.textSecondary} />}
+            placeholder="E-posta adresinizi giriniz"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
 
-          {/* Password Field with Eye Toggle */}
-          <View style={styles.inputGroup}>
-            <View style={styles.labelRow}>
-              <Text style={[styles.inputLabel, { color: colors.text }]}>Şifre</Text>
-              {authMode === 'LOGIN' && (
+          <FormInput
+            label="Şifre"
+            icon={<Lock size={18} color={colors.textSecondary} />}
+            placeholder="••••••••"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
+            topRightElement={
+              authMode === 'LOGIN' ? (
                 <TouchableOpacity
                   onPress={() => {
                     setForgotEmail(email);
                     setIsForgotModalOpen(true);
                   }}
                   activeOpacity={0.7}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                 >
-                  <Text style={[styles.forgotPassText, { color: colors.brand }]}>Şifremi Unuttum?</Text>
+                  <Text style={[styles.forgotPassText, { color: colors.brand }]}>
+                    Şifremi Unuttum?
+                  </Text>
                 </TouchableOpacity>
-              )}
-            </View>
-            <View style={[styles.inputField, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
-              <Lock size={18} color={colors.textSecondary} />
-              <TextInput
-                style={[styles.textInput, { color: colors.text }]}
-                placeholder="••••••••"
-                placeholderTextColor={colors.textSecondary}
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={!showPassword}
-              />
+              ) : undefined
+            }
+            rightElement={
               <TouchableOpacity
                 onPress={() => setShowPassword(!showPassword)}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
@@ -423,8 +385,8 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
                   <Eye size={18} color={colors.textSecondary} />
                 )}
               </TouchableOpacity>
-            </View>
-          </View>
+            }
+          />
 
           {/* REGISTER CHECKBOX CONSENT (KVKK & EULA COMPLIANCE) */}
           {authMode === 'REGISTER' && (
@@ -450,15 +412,17 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
 
               <Text style={[styles.termsConsentText, { color: colors.textSecondary }]}>
                 <Text
-                  style={{ color: colors.brand, fontWeight: '700' }}
+                  style={[styles.termsLinkText, { color: colors.brand }]}
                   onPress={() => openLegalModal('TERMS')}
+                  suppressHighlighting={false}
                 >
                   Kullanım Şartları
                 </Text>
                 {' '}ve{' '}
                 <Text
-                  style={{ color: colors.brand, fontWeight: '700' }}
+                  style={[styles.termsLinkText, { color: colors.brand }]}
                   onPress={() => openLegalModal('PRIVACY')}
+                  suppressHighlighting={false}
                 >
                   Gizlilik Politikası
                 </Text>
@@ -487,42 +451,86 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
           </TouchableOpacity>
         </View>
 
+        {/* OR DIVIDER */}
+        <View style={[styles.dividerRow, authMode === 'REGISTER' && styles.dividerRowRegister]}>
+          <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+          <Text style={[styles.dividerText, { color: colors.textSecondary }]}>veya şununla devam et</Text>
+          <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+        </View>
+
+        {/* SOCIAL SIGN IN (APPLE & GOOGLE) AT THE BOTTOM */}
+        <View style={styles.socialAuthRow}>
+          {/* Apple Sign-In Button */}
+          <TouchableOpacity
+            style={[
+              styles.socialButton,
+              styles.appleButton,
+              { backgroundColor: colors.isDark ? '#FFFFFF' : '#000000' },
+            ]}
+            onPress={handleAppleSignIn}
+            disabled={isLoading}
+            activeOpacity={0.85}
+          >
+            <AppleIcon size={18} color={colors.isDark ? '#000000' : '#FFFFFF'} />
+            <Text
+              style={[
+                styles.socialButtonText,
+                { color: colors.isDark ? '#000000' : '#FFFFFF' },
+              ]}
+            >
+              Apple
+            </Text>
+          </TouchableOpacity>
+
+          {/* Google Sign-In Button */}
+          <TouchableOpacity
+            style={[
+              styles.socialButton,
+              styles.googleButton,
+              {
+                backgroundColor: colors.cardBackground,
+                borderColor: colors.border,
+                shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
+              },
+            ]}
+            onPress={handleGoogleSignIn}
+            disabled={isLoading}
+            activeOpacity={0.85}
+          >
+            <GoogleIcon size={18} />
+            <Text style={[styles.socialButtonText, { color: colors.text }]}>Google</Text>
+          </TouchableOpacity>
+        </View>
+
         {/* GUEST ACCESS (OFFLINE & DEMO FRIENDLY) */}
         <TouchableOpacity
-          style={[
-            styles.guestButton,
-            {
-              backgroundColor: colors.subtleBackground,
-              borderColor: colors.border,
-              borderWidth: 1,
-              borderRadius: 14,
-              marginTop: 14,
-              paddingVertical: 14,
-            },
-          ]}
+          style={[styles.guestLinkContainer, authMode === 'REGISTER' && styles.guestLinkContainerRegister]}
           onPress={handleGuestContinue}
-          activeOpacity={0.75}
+          activeOpacity={0.7}
+          hitSlop={{ top: 8, bottom: 8, left: 16, right: 16 }}
         >
-          <Text style={[styles.guestButtonText, { color: colors.text }]}>
-            Giriş Yapmadan Devam Et (Misafir / Çevrimdışı) ➔
+          <Text style={[styles.guestLinkText, { color: colors.textSecondary }]}>
+            Daha Sonra Hesap Oluştur
           </Text>
         </TouchableOpacity>
 
         {/* FOOTER POLICIES WITH BOTTOM SHEET MODAL */}
-        <View style={styles.footerPolicies}>
-          <ShieldCheck size={14} color={colors.textSecondary} />
+        <View style={[styles.footerPolicies, authMode === 'REGISTER' && styles.footerPoliciesRegister]}>
+          <ShieldCheck size={14} color={colors.textSecondary} style={{ marginTop: 2 }} />
           <Text style={[styles.footerPolicyText, { color: colors.textSecondary }]}>
             Devam ederek{' '}
             <Text
-              style={[styles.policyLink, { color: colors.brand, textDecorationLine: 'underline' }]}
+              style={[styles.policyLink, { color: colors.brand }]}
               onPress={() => openLegalModal('PRIVACY')}
+              suppressHighlighting={false}
             >
               Gizlilik Politikası
             </Text>
             'nı ve{' '}
             <Text
-              style={[styles.policyLink, { color: colors.brand, textDecorationLine: 'underline' }]}
+              style={[styles.policyLink, { color: colors.brand }]}
               onPress={() => openLegalModal('TERMS')}
+              suppressHighlighting={false}
             >
               Kullanım Şartları (EULA)
             </Text>
@@ -567,18 +575,15 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
               Kayıtlı e-posta adresinizi girin, size anında bir şifre sıfırlama bağlantısı gönderelim.
             </Text>
 
-            <View style={[styles.modalInputField, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
-              <Mail size={18} color={colors.textSecondary} />
-              <TextInput
-                style={[styles.textInput, { color: colors.text }]}
-                placeholder="ornek@email.com"
-                placeholderTextColor={colors.textSecondary}
-                value={forgotEmail}
-                onChangeText={setForgotEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-            </View>
+            <FormInput
+              icon={<Mail size={18} color={colors.textSecondary} />}
+              placeholder="E-posta adresinizi giriniz"
+              value={forgotEmail}
+              onChangeText={setForgotEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              containerStyle={{ marginBottom: 16 }}
+            />
 
             <TouchableOpacity
               style={[styles.modalActionBtn, { backgroundColor: colors.brand }]}
@@ -607,134 +612,39 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingHorizontal: 24,
-    paddingTop: 16,
-    paddingBottom: 40,
+    paddingHorizontal: 22,
+    paddingTop: 12,
+    paddingBottom: 24,
+    flexGrow: 1,
   },
   heroSection: {
     alignItems: 'center',
-    marginBottom: 24,
+    marginTop: 6,
+    marginBottom: 16,
+  },
+  heroSectionKeyboard: {
+    marginTop: 0,
+    marginBottom: 4,
   },
   logoBadgeContainer: {
-    marginBottom: 12,
-  },
-  logoImage: {
-    width: 68,
-    height: 68,
-    borderRadius: 18,
-  },
-  logoBadge: {
-    width: 64,
-    height: 64,
-    borderRadius: 22,
+    marginBottom: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.25,
-    shadowRadius: 16,
-    elevation: 5,
   },
   appTitle: {
     fontSize: 24,
     fontWeight: '900',
     letterSpacing: -0.5,
   },
-  appSubtitle: {
-    fontSize: 13,
-    textAlign: 'center',
-    marginTop: 4,
-    lineHeight: 18,
-    paddingHorizontal: 16,
-  },
-  featurePillsRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: 6,
-    marginTop: 14,
-  },
-  featurePill: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 999,
-    borderWidth: 1,
-  },
-  featurePillText: {
-    fontSize: 11,
-    fontWeight: '700',
-  },
-  socialAuthContainer: {
-    gap: 10,
-    marginBottom: 16,
-  },
-  appleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    paddingVertical: 14,
-    borderRadius: 16,
-  },
-  appleLogoIcon: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 2,
-  },
-  appleButtonText: {
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  googleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-    borderWidth: 1.4,
-    paddingVertical: 13,
-    borderRadius: 16,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  googleGLogo: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  googleGText: {
-    fontSize: 13,
-    fontWeight: '900',
-  },
-  googleButtonText: {
-    fontSize: 14.5,
-    fontWeight: '700',
-  },
-  dividerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    marginVertical: 14,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-  },
-  dividerText: {
-    fontSize: 12,
-    fontWeight: '600',
-  },
   tabContainer: {
     flexDirection: 'row',
     borderRadius: 14,
-    padding: 4,
-    marginBottom: 16,
+    padding: 3.5,
+    marginBottom: 12,
   },
   tabBtn: {
     flex: 1,
-    paddingVertical: 10,
+    paddingVertical: 9,
     alignItems: 'center',
     borderRadius: 11,
   },
@@ -749,70 +659,106 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   formContainer: {
-    gap: 14,
+    gap: 12,
   },
-  inputGroup: {
-    gap: 6,
-  },
-  labelRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  inputLabel: {
-    fontSize: 12.5,
-    fontWeight: '700',
+  formContainerRegister: {
+    gap: 10,
   },
   forgotPassText: {
     fontSize: 12,
     fontWeight: '700',
-  },
-  inputField: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    borderWidth: 1.4,
-    borderRadius: 14,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-  },
-  textInput: {
-    flex: 1,
-    fontSize: 14,
-    fontWeight: '600',
   },
   submitButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    paddingVertical: 15,
+    height: 50,
     borderRadius: 16,
-    marginTop: 6,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.28,
-    shadowRadius: 12,
+    marginTop: 4,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.22,
+    shadowRadius: 8,
     elevation: 3,
   },
   submitButtonText: {
     fontSize: 15,
     fontWeight: '800',
   },
-  guestButton: {
+  dividerRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 14,
-    marginTop: 10,
+    gap: 12,
+    marginTop: 16,
+    marginBottom: 14,
   },
-  guestButtonText: {
-    fontSize: 13,
+  dividerRowRegister: {
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+  },
+  dividerText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  socialAuthRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  socialButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    height: 48,
+    borderRadius: 14,
+  },
+  appleButton: {
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  googleButton: {
+    borderWidth: 1.2,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  socialButtonText: {
+    fontSize: 14,
     fontWeight: '700',
+  },
+  guestLinkContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 14,
+    paddingVertical: 6,
+  },
+  guestLinkContainerRegister: {
+    marginTop: 10,
+    paddingVertical: 4,
+  },
+  guestLinkText: {
+    fontSize: 13,
+    fontWeight: '600',
+    textDecorationLine: 'underline',
   },
   footerPolicies: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 6,
-    marginTop: 16,
-    paddingHorizontal: 10,
+    marginTop: 14,
+    paddingHorizontal: 8,
+  },
+  footerPoliciesRegister: {
+    marginTop: 8,
   },
   footerPolicyText: {
     flex: 1,
@@ -821,6 +767,7 @@ const styles = StyleSheet.create({
   },
   policyLink: {
     fontWeight: '700',
+    textDecorationLine: 'underline',
   },
   modalOverlay: {
     flex: 1,
@@ -866,16 +813,6 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     marginBottom: 18,
   },
-  modalInputField: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    borderWidth: 1.4,
-    borderRadius: 14,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    marginBottom: 16,
-  },
   modalActionBtn: {
     paddingVertical: 14,
     borderRadius: 16,
@@ -890,24 +827,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginTop: 4,
-    marginBottom: 10,
+    marginTop: 2,
+    marginBottom: 4,
     paddingHorizontal: 2,
   },
   checkboxTouchable: {
     padding: 2,
   },
   checkboxBox: {
-    width: 22,
-    height: 22,
+    width: 20,
+    height: 20,
     borderRadius: 6,
     borderWidth: 1.8,
     alignItems: 'center',
     justifyContent: 'center',
   },
   termsConsentText: {
-    fontSize: 12.5,
-    lineHeight: 18,
+    fontSize: 12,
+    lineHeight: 17,
     flex: 1,
+  },
+  termsLinkText: {
+    fontWeight: '700',
+    textDecorationLine: 'underline',
   },
 });

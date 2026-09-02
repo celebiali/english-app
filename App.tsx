@@ -4,10 +4,8 @@ import {
   View,
   Text,
   SafeAreaView,
-  ActivityIndicator,
   StatusBar,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 
 import { User } from 'lucide-react-native';
@@ -23,6 +21,7 @@ import { AuthScreen } from './src/components/AuthScreen';
 import { SettingsScreen } from './src/components/SettingsScreen';
 import { SubscriptionModal } from './src/components/SubscriptionModal';
 import { AuthModal } from './src/components/AuthModal';
+import { AppLogo } from './src/components/AppLogo';
 
 export default function App() {
   const {
@@ -50,16 +49,7 @@ export default function App() {
     return (
       <SafeAreaView style={[styles.loadingContainer, { backgroundColor: colors.background }]}>
         <StatusBar barStyle={colors.isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
-        <Image
-          source={require('./assets/icon.png')}
-          style={{ width: 80, height: 80, borderRadius: 22, marginBottom: 16 }}
-          resizeMode="cover"
-        />
-        <ActivityIndicator size="large" color={colors.brand} />
-        <Text style={[styles.loadingTitle, { color: colors.text }]}>YDS Pratik</Text>
-        <Text style={[styles.loadingSubtitle, { color: colors.textSecondary }]}>
-          Soru havuzu ve aralıklı tekrar motoru hazırlanıyor...
-        </Text>
+        <AppLogo size={96} borderRadius={24} />
       </SafeAreaView>
     );
   }
@@ -251,15 +241,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
-  },
-  loadingTitle: {
-    fontSize: 20,
-    fontWeight: '900',
-    marginTop: 16,
-  },
-  loadingSubtitle: {
-    fontSize: 13,
-    marginTop: 6,
-    textAlign: 'center',
   },
 });

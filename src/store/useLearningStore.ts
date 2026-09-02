@@ -226,15 +226,14 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       await get().loadMistakes();
       await get().loadVocabSession();
 
-      // Silently configure daily reminders in background
-      NotificationService.scheduleAllReminders(20, 0, totalTarget, streak).catch((nErr) => {
+      // Silently configure daily reminders in background ONLY IF already granted
+      NotificationService.scheduleIfPermitted(20, 0, totalTarget, streak).catch((nErr) => {
         console.warn('Background notification init:', nErr);
       });
-
-      set({ isInitialized: true, isLoading: false });
     } catch (e) {
       console.error('Failed to initialize learning store:', e);
-      set({ isLoading: false });
+    } finally {
+      set({ isInitialized: true, isLoading: false });
     }
   },
 

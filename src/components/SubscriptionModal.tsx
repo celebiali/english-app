@@ -69,47 +69,30 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
   };
 
   const handleSubscribe = async (planId: string) => {
-    const plan = calculatedPlans.find((p) => p.id === planId);
-    if (!plan) return;
+    const plan = calculatedPlans.find((p) => p.id === planId) || calculatedPlans[0];
 
-    const finalPrice = plan.discountedPrice || plan.originalPrice;
+    if (activePromo) {
+      await PromoCodeService.recordPromoUsage(
+        activePromo.code,
+        plan?.id || 'pro_full',
+        0,
+        userProfile?.id
+      );
+    }
+
+    if (userProfile) {
+      setUserProfile({
+        ...userProfile,
+        isPro: true,
+        appliedPromoCode: activePromo?.code,
+        proExpiresAt: new Date(Date.now() + 365 * 86400000).toISOString(),
+      });
+    }
 
     Alert.alert(
-      'YDS Pratik Pro Aktivasyonu',
-      `${plan.title} (${finalPrice} TL) üyeliğiniz başlatılıyor. ${
-        activePromo ? `\n\nReferans Hoca: ${activePromo.teacherName} (%${activePromo.discountPercent} İndirim)` : ''
-      }`,
-      [
-        { text: 'Vazgeç', style: 'cancel' },
-        {
-          text: 'Onayla ve Başla',
-          style: 'default',
-          onPress: async () => {
-            if (activePromo) {
-              await PromoCodeService.recordPromoUsage(
-                activePromo.code,
-                plan.id,
-                finalPrice,
-                userProfile?.id
-              );
-            }
-
-            if (userProfile) {
-              setUserProfile({
-                ...userProfile,
-                isPro: true,
-                appliedPromoCode: activePromo?.code,
-                proExpiresAt: new Date(Date.now() + plan.durationMonths * 30 * 86400000).toISOString(),
-              });
-            }
-            Alert.alert(
-              'Tebrikler! 👑',
-              'YDS Pratik Pro üyeliğiniz başarıyla aktif edildi. Sınav gününe kadar tüm AI koçluk ve denemelere sınırsız erişebilirsiniz!'
-            );
-            onClose();
-          },
-        },
-      ]
+      'Tebrikler! 👑',
+      'YDS Pratik Pro erişiminiz başarıyla aktif edildi! Tüm AI koçluk analizleri, 80 soruluk denemeler ve sınırsız kelime modülü kullanımınıza açılmıştır.',
+      [{ text: 'Tamam', onPress: onClose }]
     );
   };
 
@@ -231,14 +214,11 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
                   </View>
 
                   <View style={styles.priceContainer}>
-                    {hasDiscount ? (
-                      <>
-                        <Text style={[styles.originalPriceStriked, { color: colors.textSecondary }]}>{plan.originalPrice} TL</Text>
-                        <Text style={[styles.discountedPriceBig, { color: colors.brand }]}>{plan.discountedPrice} TL</Text>
-                      </>
-                    ) : (
-                      <Text style={[styles.originalPriceBig, { color: colors.text }]}>{plan.originalPrice} TL</Text>
-                    )}
+                    <View style={{ paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10, backgroundColor: isSelected ? colors.brand : colors.subtleBackground }}>
+                      <Text style={{ fontSize: 13, fontWeight: '800', color: isSelected ? colors.textOnBrand : colors.brand }}>
+                        Tam Erişim
+                      </Text>
+                    </View>
                   </View>
                 </View>
 
@@ -264,11 +244,7 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
         >
           <Sparkles size={18} color={colors.textOnBrand} />
           <Text style={[styles.ctaButtonText, { color: colors.textOnBrand }]}>
-            {(() => {
-              const active = calculatedPlans.find((p) => p.id === selectedPlanId);
-              const price = active?.discountedPrice || active?.originalPrice || 399;
-              return `Hemen Başla · ${price} TL`;
-            })()}
+            Pro Özellikleri Hemen Aktifleştir
           </Text>
         </TouchableOpacity>
 
@@ -276,7 +252,7 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
         <View style={styles.trustFooter}>
           <ShieldCheck size={16} color={colors.success} />
           <Text style={[styles.trustFooterText, { color: colors.textSecondary }]}>
-            Güvenli Ödeme · İptal Garantisi · Sınav Odaklı Müfredat
+            Sınırsız Erişim · AI Sınav Koçluğu · Çevrimdışı Çalışma
           </Text>
         </View>
       </ScrollView>

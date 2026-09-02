@@ -863,12 +863,17 @@ class DatabaseService {
     await this.dbInstance.runAsync(`DELETE FROM words`);
 
     let inserted = 0;
+    const CHUNK_SIZE = 50;
+
     await this.dbInstance.withTransactionAsync(async () => {
-      for (const w of wordsList) {
-        await this.dbInstance.runAsync(
-          `INSERT INTO words (word, meaning, category, subcategory, level, synonyms, example_sentence, example_translation, etymology_note)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [
+      for (let i = 0; i < wordsList.length; i += CHUNK_SIZE) {
+        const chunk = wordsList.slice(i, i + CHUNK_SIZE);
+        const placeholders = chunk.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?)`).join(', ');
+        const sql = `INSERT INTO words (word, meaning, category, subcategory, level, synonyms, example_sentence, example_translation, etymology_note) VALUES ${placeholders}`;
+
+        const params: any[] = [];
+        for (const w of chunk) {
+          params.push(
             w.word,
             w.meaning,
             w.category || 'VOCABULARY',
@@ -877,10 +882,12 @@ class DatabaseService {
             w.synonyms ? JSON.stringify(w.synonyms) : null,
             w.example_sentence || null,
             w.example_translation || null,
-            w.etymology_note || null,
-          ]
-        );
-        inserted++;
+            w.etymology_note || null
+          );
+        }
+
+        await this.dbInstance.runAsync(sql, params);
+        inserted += chunk.length;
       }
     });
 

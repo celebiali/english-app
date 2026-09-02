@@ -17,8 +17,10 @@
       "bundleIdentifier": "com.celebi.ydspratik",
       "buildNumber": "1",
       "supportsTablet": true,
+      "requireFullScreen": true,
       "infoPlist": {
-        "CFBundleDisplayName": "YDS Pratik"
+        "CFBundleDisplayName": "YDS Pratik",
+        "UIRequiresFullScreen": true
       }
     },
     "android": {

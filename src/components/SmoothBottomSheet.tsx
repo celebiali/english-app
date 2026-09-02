@@ -5,14 +5,12 @@ import {
   Modal,
   Animated,
   TouchableWithoutFeedback,
-  Dimensions,
   PanResponder,
   Keyboard,
   Platform,
+  useWindowDimensions,
 } from 'react-native';
 import { useThemeStore } from '../store/useThemeStore';
-
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 interface Props {
   visible: boolean;
@@ -32,8 +30,9 @@ export const SmoothBottomSheet: React.FC<Props> = ({
   showHandle = true,
 }) => {
   const { colors } = useThemeStore();
+  const { height: screenHeight } = useWindowDimensions();
   const [showModal, setShowModal] = useState(visible);
-  const slideAnim = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
+  const slideAnim = useRef(new Animated.Value(screenHeight)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -61,7 +60,7 @@ export const SmoothBottomSheet: React.FC<Props> = ({
           useNativeDriver: true,
         }),
         Animated.timing(slideAnim, {
-          toValue: SCREEN_HEIGHT,
+          toValue: screenHeight,
           duration: 220,
           useNativeDriver: true,
         }),
@@ -79,7 +78,7 @@ export const SmoothBottomSheet: React.FC<Props> = ({
         useNativeDriver: true,
       }),
       Animated.timing(slideAnim, {
-        toValue: SCREEN_HEIGHT,
+        toValue: screenHeight,
         duration: 220,
         useNativeDriver: true,
       }),
@@ -136,18 +135,18 @@ export const SmoothBottomSheet: React.FC<Props> = ({
 
   const parsedMaxHeight =
     typeof maxHeight === 'string' && maxHeight.endsWith('%')
-      ? (SCREEN_HEIGHT * parseFloat(maxHeight)) / 100
-      : Number(maxHeight) || SCREEN_HEIGHT * 0.88;
+      ? (screenHeight * parseFloat(maxHeight)) / 100
+      : Number(maxHeight) || screenHeight * 0.88;
 
   const parsedHeight =
     typeof height === 'string' && height.endsWith('%')
-      ? (SCREEN_HEIGHT * parseFloat(height)) / 100
+      ? (screenHeight * parseFloat(height)) / 100
       : height !== undefined
       ? Number(height)
       : undefined;
 
   const effectiveMaxHeight = keyboardOffset > 0
-    ? Math.min(parsedMaxHeight, SCREEN_HEIGHT - keyboardOffset - (Platform.OS === 'ios' ? 60 : 30))
+    ? Math.min(parsedMaxHeight, screenHeight - keyboardOffset - (Platform.OS === 'ios' ? 60 : 30))
     : parsedMaxHeight;
 
   const effectiveHeight = parsedHeight

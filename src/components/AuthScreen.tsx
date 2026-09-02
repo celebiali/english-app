@@ -12,6 +12,9 @@ import {
   StatusBar,
   Modal,
   Image,
+  KeyboardAvoidingView,
+  Platform,
+  Linking,
 } from 'react-native';
 import {
   Sparkles,
@@ -172,15 +175,47 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
     }
   };
 
+  const openPrivacyPolicy = async () => {
+    const url = 'https://celebiali.github.io/english-app/privacy.html';
+    try {
+      const canOpen = await Linking.canOpenURL(url);
+      if (canOpen) {
+        await Linking.openURL(url);
+      } else {
+        Alert.alert('Gizlilik Politikası', 'YDS Pratik kişisel verilerinizi KVKK ve GDPR kapsamında korur. Bilgileriniz 3. taraflarla asla paylaşılmaz.');
+      }
+    } catch {
+      Alert.alert('Gizlilik Politikası', 'YDS Pratik kişisel verilerinizi KVKK ve GDPR kapsamında korur. Bilgileriniz 3. taraflarla asla paylaşılmaz.');
+    }
+  };
+
+  const openTerms = async () => {
+    const url = 'https://celebiali.github.io/english-app/terms.html';
+    try {
+      const canOpen = await Linking.canOpenURL(url);
+      if (canOpen) {
+        await Linking.openURL(url);
+      } else {
+        Alert.alert('Kullanım Şartları (EULA)', 'Uygulamadaki tüm YDS materyalleri ve testler bireysel eğitim amaçlıdır.');
+      }
+    } catch {
+      Alert.alert('Kullanım Şartları (EULA)', 'Uygulamadaki tüm YDS materyalleri ve testler bireysel eğitim amaçlıdır.');
+    }
+  };
+
   return (
     <SafeAreaView style={[styles.safeContainer, { backgroundColor: colors.background }]}>
       <StatusBar barStyle={colors.isDark ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        style={[styles.container, { backgroundColor: colors.background }]}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={{ flex: 1 }}
       >
+        <ScrollView
+          style={[styles.container, { backgroundColor: colors.background }]}
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
         {/* BRAND HERO HEADER */}
         <View style={styles.heroSection}>
           <View style={styles.logoBadgeContainer}>
@@ -387,49 +422,50 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
           </TouchableOpacity>
         </View>
 
-        {/* GUEST ACCESS */}
+        {/* GUEST ACCESS (OFFLINE & DEMO FRIENDLY) */}
         <TouchableOpacity
-          style={styles.guestButton}
+          style={[
+            styles.guestButton,
+            {
+              backgroundColor: colors.subtleBackground,
+              borderColor: colors.border,
+              borderWidth: 1,
+              borderRadius: 14,
+              marginTop: 14,
+              paddingVertical: 14,
+            },
+          ]}
           onPress={handleGuestContinue}
-          activeOpacity={0.7}
+          activeOpacity={0.75}
         >
-          <Text style={[styles.guestButtonText, { color: colors.textSecondary }]}>
-            Kayıt Olmadan Misafir Olarak Devam Et ➔
+          <Text style={[styles.guestButtonText, { color: colors.text }]}>
+            Giriş Yapmadan Devam Et (Misafir / Çevrimdışı) ➔
           </Text>
         </TouchableOpacity>
 
-        {/* FOOTER POLICIES */}
+        {/* FOOTER POLICIES WITH REAL EXTERNAL LINKS */}
         <View style={styles.footerPolicies}>
           <ShieldCheck size={14} color={colors.textSecondary} />
           <Text style={[styles.footerPolicyText, { color: colors.textSecondary }]}>
             Devam ederek{' '}
             <Text
-              style={[styles.policyLink, { color: colors.brand }]}
-              onPress={() =>
-                Alert.alert(
-                  'Gizlilik Politikası (Privacy Policy)',
-                  'YDS Pratik kişisel verilerinizi KVKK ve GDPR kapsamında korur. Bilgileriniz 3. taraflarla asla paylaşılmaz.'
-                )
-              }
+              style={[styles.policyLink, { color: colors.brand, textDecorationLine: 'underline' }]}
+              onPress={openPrivacyPolicy}
             >
               Gizlilik Politikası
             </Text>
             'nı ve{' '}
             <Text
-              style={[styles.policyLink, { color: colors.brand }]}
-              onPress={() =>
-                Alert.alert(
-                  'Kullanım Şartları (Terms / EULA)',
-                  'Uygulamadaki tüm YDS materyalleri ve AI analizleri bireysel eğitim amaçlıdır.'
-                )
-              }
+              style={[styles.policyLink, { color: colors.brand, textDecorationLine: 'underline' }]}
+              onPress={openTerms}
             >
-              Kullanım Şartları
+              Kullanım Şartları (EULA)
             </Text>
             'nı kabul etmiş olursunuz.
           </Text>
         </View>
       </ScrollView>
+    </KeyboardAvoidingView>
 
       {/* FORGOT PASSWORD MODAL */}
       <Modal

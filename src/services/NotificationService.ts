@@ -74,6 +74,21 @@ export class NotificationService {
   }
 
   /**
+   * Schedules reminders silently ONLY IF permissions are already granted by the user.
+   * Prevents invasive permission popups on cold launch.
+   */
+  static async scheduleIfPermitted(
+    eveningHour: number = 20,
+    eveningMinute: number = 0,
+    dailyTarget: number = 35,
+    streakCount: number = 1
+  ): Promise<boolean> {
+    const isGranted = await this.getPermissionsStatus();
+    if (!isGranted) return false;
+    return this.scheduleAllReminders(eveningHour, eveningMinute, dailyTarget, streakCount);
+  }
+
+  /**
    * Schedules full set of smart daily reminders:
    * 1. Morning Vocab (09:00 AM)
    * 2. Evening Task & Streak Protection (eveningHour e.g. 20:00)

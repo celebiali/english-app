@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -11,6 +11,8 @@ import {
   Alert,
   Modal,
   Platform,
+  BackHandler,
+  Linking,
 } from 'react-native';
 import {
   X,
@@ -24,6 +26,10 @@ import {
   UserX,
   Minus,
   Plus,
+  ShieldCheck,
+  FileText,
+  HelpCircle,
+  ExternalLink,
 } from 'lucide-react-native';
 import { useThemeStore, FontSizeValue } from '../store/useThemeStore';
 import { useLearningStore } from '../store/useLearningStore';
@@ -77,6 +83,29 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
   const [isHourModalOpen, setIsHourModalOpen] = useState(false);
   const [isGoalsModalOpen, setIsGoalsModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  // Android hardware back button handler
+  useEffect(() => {
+    const onBackPress = () => {
+      onBack();
+      return true;
+    };
+    const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    return () => subscription.remove();
+  }, [onBack]);
+
+  const openUrlSafely = async (url: string, title: string) => {
+    try {
+      const canOpen = await Linking.canOpenURL(url);
+      if (canOpen) {
+        await Linking.openURL(url);
+      } else {
+        Alert.alert(title, `Sayfayı tarayıcınızda açın:\n${url}`);
+      }
+    } catch {
+      Alert.alert(title, `Sayfayı tarayıcınızda açın:\n${url}`);
+    }
+  };
 
   const updateLastSyncTime = () => {
     const now = new Date();
@@ -187,6 +216,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
           onPress: async () => {
             await deleteUserAccount();
             Alert.alert('Hesap Silindi', 'Hesabınız ve tüm verileriniz başarıyla silindi.');
+            onBack();
           },
         },
       ]
@@ -544,6 +574,79 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
               <UserX size={16} color={colors.error} />
             </TouchableOpacity>
           )}
+        </View>
+
+        {/* YASAL BİLGİLER VE DESTEK (APP STORE GUIDELINE 5.1.1 & 1.2) */}
+        <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
+          YASAL BİLGİLER VE DESTEK
+        </Text>
+        <View style={[styles.groupedCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+          {/* Gizlilik Politikası */}
+          <TouchableOpacity
+            style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}
+            onPress={() => openUrlSafely('https://celebiali.github.io/english-app/privacy.html', 'Gizlilik Politikası')}
+            activeOpacity={0.7}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 }}>
+              <ShieldCheck size={18} color={colors.brand} />
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.rowLabel, { color: colors.text }]}>Gizlilik Politikası (Privacy Policy)</Text>
+                <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
+                  Kişisel verilerinizin korunması ve KVKK/GDPR
+                </Text>
+              </View>
+            </View>
+            <ExternalLink size={16} color={colors.textSecondary} />
+          </TouchableOpacity>
+
+          {/* Kullanım Şartları (EULA) */}
+          <TouchableOpacity
+            style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}
+            onPress={() => openUrlSafely('https://celebiali.github.io/english-app/terms.html', 'Kullanım Şartları')}
+            activeOpacity={0.7}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 }}>
+              <FileText size={18} color={colors.brand} />
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.rowLabel, { color: colors.text }]}>Kullanım Şartları ve EULA (Terms)</Text>
+                <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
+                  Apple standart lisans sözleşmesi ve kurallar
+                </Text>
+              </View>
+            </View>
+            <ExternalLink size={16} color={colors.textSecondary} />
+          </TouchableOpacity>
+
+          {/* Destek ve Yardım */}
+          <TouchableOpacity
+            style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}
+            onPress={() => openUrlSafely('https://celebiali.github.io/english-app/support.html', 'Destek ve Yardım')}
+            activeOpacity={0.7}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 }}>
+              <HelpCircle size={18} color={colors.brand} />
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.rowLabel, { color: colors.text }]}>Destek ve Yardım (Support & FAQ)</Text>
+                <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
+                  Sıkça sorulan sorular ve geliştirici iletişimi
+                </Text>
+              </View>
+            </View>
+            <ExternalLink size={16} color={colors.textSecondary} />
+          </TouchableOpacity>
+
+          {/* Uygulama Sürümü */}
+          <View style={styles.rowItem}>
+            <View>
+              <Text style={[styles.rowLabel, { color: colors.text }]}>Uygulama Sürümü</Text>
+              <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
+                YDS Pratik v1.0.0 (Build 1) · Çevrimdışı Destekli
+              </Text>
+            </View>
+            <View style={{ paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8, backgroundColor: colors.brandLight }}>
+              <Text style={{ fontSize: 11, fontWeight: '800', color: colors.brand }}>v1.0.0</Text>
+            </View>
+          </View>
         </View>
 
         <View style={{ height: 40 }} />

@@ -84,17 +84,26 @@ YDS Pratik'in ilk sürümü yayında!
 - Gece modu ve kişiselleştirilebilir çalışma hedefleri
 ```
 
-### 9. Destek & Gizlilik URL'leri (URLs)
-* **Destek URL (Support URL):** `https://celebiali.github.io/ydspratik/support.html` *(veya kişisel web siteniz/e-postanız)*
-* **Pazarlama URL (Marketing URL):** `https://celebiali.github.io/ydspratik`
-* **Gizlilik Politikası (Privacy Policy URL):** `https://celebiali.github.io/ydspratik/privacy.html`
+### 9. Destek, Gizlilik ve Şartlar URL'leri (URLs)
+* **Destek URL (Support URL):** `https://celebiali.github.io/english-app/support.html`
+* **Pazarlama URL (Marketing URL):** `https://celebiali.github.io/english-app/`
+* **Gizlilik Politikası (Privacy Policy URL):** `https://celebiali.github.io/english-app/privacy.html`
+* **Kullanım Şartları (Terms of Use / EULA):** `https://celebiali.github.io/english-app/terms.html`
 
 ### 10. Apple İnceleme Notları (App Review Information)
-* **Giriş Bilgileri Gerekli mi?:** Hayır (Uygulama misafir modunda tam çalışır; Apple ID ile giriş opsiyoneldir).
-* **İnceleme Notu (Notes):**
+* **Giriş Bilgileri Gerekli mi? (Sign-in required):** Evet / Opsiyonel (Misafir modu da mevcuttur).
+* **Test Hesabı Kullanıcı Adı (Demo Username):** `apple.review@ydspratik.com`
+* **Test Hesabı Şifresi (Demo Password):** `YdsTest2026!`
+* **İnceleme Notu (Notes for Reviewer):**
 ```text
-Uygulama herhangi bir zorunlu giriş gerektirmeden tam fonksiyonel olarak test edilebilir. Tüm kelime havuzu, soru bankası ve deneme sınavları internetsiz/yerel veri tabanı üzerinden anında çalışmaktadır.
+Sayın İnceleme Uzmanı,
+1. Uygulama herhangi bir zorunlu giriş gerektirmeden tam fonksiyonel olarak test edilebilir. Giriş ekranının altındaki "Kayıt Olmadan Misafir Olarak Devam Et" butonuna basarak tüm özelliklere doğrudan erişebilirsiniz.
+2. Giriş akışını test etmek isterseniz yukarıda belirtilen demo test hesabını kullanabilirsiniz:
+   E-posta: apple.review@ydspratik.com
+   Şifre: YdsTest2026!
+3. Tüm kelime havuzu (7000+ kelime), soru bankası ve deneme sınavları cihazdaki yerel SQLite veri tabanı üzerinde çevrimdışı (offline) olarak da eksiksiz çalışmaktadır.
 ```
+
 
 ---
 

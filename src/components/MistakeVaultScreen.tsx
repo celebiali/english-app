@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
   ScrollView,
-  Dimensions,
   ActivityIndicator,
+  BackHandler,
 } from 'react-native';
 import {
   Sparkles,
@@ -20,10 +20,7 @@ import { useThemeStore } from '../store/useThemeStore';
 import { MistakeItem } from '../types';
 import { CustomWordModal } from './CustomWordModal';
 import { SmoothBottomSheet } from './SmoothBottomSheet';
-
 import { dbService } from '../database/DatabaseService';
-
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 interface MistakeVaultScreenProps {
   onBack?: () => void;
@@ -32,6 +29,17 @@ interface MistakeVaultScreenProps {
 
 export const MistakeVaultScreen: React.FC<MistakeVaultScreenProps> = ({ onBack, onBackToTasks }) => {
   const handleBack = onBack || onBackToTasks;
+
+  useEffect(() => {
+    if (!handleBack) return;
+    const onBackPress = () => {
+      handleBack();
+      return true;
+    };
+    const sub = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    return () => sub.remove();
+  }, [handleBack]);
+
   const {
     mistakes,
     selectedMistake,
@@ -545,7 +553,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   bmSheetContent: {
-    maxHeight: SCREEN_HEIGHT * 0.85,
+    maxHeight: '88%',
     paddingHorizontal: 20,
     paddingBottom: 10,
   },
@@ -579,7 +587,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   bmScrollView: {
-    maxHeight: SCREEN_HEIGHT * 0.58,
+    maxHeight: 480,
   },
   bmScrollContent: {
     paddingBottom: 20,

@@ -58,6 +58,8 @@ PODS:
   - hermes-engine (0.74.5):
     - hermes-engine/Pre-built (= 0.74.5)
   - hermes-engine/Pre-built (0.74.5)
+  - PurchasesHybridCommon (18.33.1):
+    - RevenueCat (= 5.87.1)
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1215,6 +1217,10 @@ PODS:
     - React-logger (= 0.74.5)
     - React-perflogger (= 0.74.5)
     - React-utils (= 0.74.5)
+  - RevenueCat (5.87.1)
+  - RNPurchases (10.8.1):
+    - PurchasesHybridCommon (= 18.33.1)
+    - React-Core
   - RNSVG (15.2.0):
     - React-Core
   - SocketRocket (0.7.0)
@@ -1298,11 +1304,14 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNPurchases (from `../node_modules/react-native-purchases`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
+    - PurchasesHybridCommon
+    - RevenueCat
     - SocketRocket
     - sqlite3
 
@@ -1440,6 +1449,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNPurchases:
+    :path: "../node_modules/react-native-purchases"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -1465,6 +1476,7 @@ SPEC CHECKSUMS:
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
   hermes-engine: 8c1577f3fdb849cbe7729c2e7b5abc4b845e88f8
+  PurchasesHybridCommon: 10fa5043609584e834a84b4641f9c1166e69ea55
   RCT-Folly: 5dc73daec3476616d19e8a53f0156176f7b55461
   RCTDeprecation: 3afceddffa65aee666dafd6f0116f1d975db1584
   RCTRequired: ec1239bc9d8bf63e10fb92bd8b26171a9258e0c1
@@ -1512,6 +1524,8 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 2cbd0f3625b30bba08e8768776107f6f0203159b
   React-utils: 9fa4e5d0b5e6c6c85c958f19d6ef854337886417
   ReactCommon: 9f285823dbe955099978d9bff65a7653ca029256
+  RevenueCat: 7d45133f048270481facf0f7b02530e503a01620
+  RNPurchases: d3601e9d241046f8ef3837505b62ce7bd3057720
   RNSVG: 0e7deccab0678200815104223aadd5ca734dd41d
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   sqlite3: 02d1f07eaaa01f80a1c16b4b31dfcbb3345ee01a

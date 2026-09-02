@@ -14,12 +14,14 @@ import {
   Plus,
   Check,
   ChevronLeft,
+  Lock,
 } from 'lucide-react-native';
 import { useLearningStore } from '../store/useLearningStore';
 import { useThemeStore } from '../store/useThemeStore';
 import { MistakeItem } from '../types';
 import { CustomWordModal } from './CustomWordModal';
 import { SmoothBottomSheet } from './SmoothBottomSheet';
+import { SubscriptionModal } from './SubscriptionModal';
 import { dbService } from '../database/DatabaseService';
 
 interface MistakeVaultScreenProps {
@@ -47,17 +49,23 @@ export const MistakeVaultScreen: React.FC<MistakeVaultScreenProps> = ({ onBack, 
     selectMistake,
     archiveMistake,
     loadVocabSession,
+    isFeatureLocked,
   } = useLearningStore();
 
   const { colors } = useThemeStore();
 
   const [addedWords, setAddedWords] = useState<Record<string, boolean>>({});
   const [isWordModalOpen, setIsWordModalOpen] = useState(false);
+  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
   const [modalWord, setModalWord] = useState('');
   const [modalMeaning, setModalMeaning] = useState('');
   const [isPassageExpanded, setIsPassageExpanded] = useState(false);
 
   const handleOpenMistake = (item: MistakeItem) => {
+    if (isFeatureLocked('MISTAKES')) {
+      setIsSubscriptionModalOpen(true);
+      return;
+    }
     setIsPassageExpanded(false);
     selectMistake(item);
   };
@@ -135,8 +143,32 @@ export const MistakeVaultScreen: React.FC<MistakeVaultScreenProps> = ({ onBack, 
           </View>
         </View>
 
+        {/* LOCKED NOTICE IF TRIAL EXPIRED */}
+        {isFeatureLocked('MISTAKES') && (
+          <TouchableOpacity
+            style={[styles.lockWarningCard, { backgroundColor: colors.cardBackground, borderColor: colors.brand }]}
+            onPress={() => setIsSubscriptionModalOpen(true)}
+            activeOpacity={0.85}
+          >
+            <View style={[styles.lockIconBox, { backgroundColor: colors.brandLight }]}>
+              <Lock size={16} color={colors.brand} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.lockCardTitle, { color: colors.text }]}>
+                Hata Defteri Pro Üyelik Gerektirir
+              </Text>
+              <Text style={[styles.lockCardSub, { color: colors.textSecondary }]}>
+                7 günlük ücretsiz denemeniz sona erdi. ÖSYM çeldirici analizleri ve zayıf nokta telafisine devam etmek için Pro'ya geçin.
+              </Text>
+            </View>
+            <View style={[styles.lockCardActionBtn, { backgroundColor: colors.brand }]}>
+              <Text style={[styles.lockCardActionText, { color: colors.textOnBrand }]}>İncele</Text>
+            </View>
+          </TouchableOpacity>
+        )}
+
         {/* INSIGHT BANNER */}
-        {mistakes.length > 0 && (
+        {mistakes.length > 0 && !isFeatureLocked('MISTAKES') && (
           <View
             style={[
               styles.mvInsight,
@@ -414,6 +446,12 @@ export const MistakeVaultScreen: React.FC<MistakeVaultScreenProps> = ({ onBack, 
         onClose={() => setIsWordModalOpen(false)}
         initialWord={modalWord}
         initialMeaning={modalMeaning}
+      />
+
+      {/* Subscription Modal */}
+      <SubscriptionModal
+        visible={isSubscriptionModalOpen}
+        onClose={() => setIsSubscriptionModalOpen(false)}
       />
     </View>
   );
@@ -774,5 +812,39 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 13,
+  },
+  lockWarningCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    borderWidth: 1.5,
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 16,
+  },
+  lockIconBox: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  lockCardTitle: {
+    fontSize: 13.5,
+    fontWeight: '800',
+    marginBottom: 3,
+  },
+  lockCardSub: {
+    fontSize: 11.5,
+    lineHeight: 15,
+  },
+  lockCardActionBtn: {
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 10,
+  },
+  lockCardActionText: {
+    fontSize: 12,
+    fontWeight: '800',
   },
 });

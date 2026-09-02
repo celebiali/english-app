@@ -10,10 +10,13 @@ import {
 import {
   BookmarkPlus,
   ArrowRight,
+  Lock,
 } from 'lucide-react-native';
 import { QuestionItem, OptionKey } from '../types';
 import { CustomWordModal } from './CustomWordModal';
+import { SubscriptionModal } from './SubscriptionModal';
 import { useThemeStore } from '../store/useThemeStore';
+import { useLearningStore } from '../store/useLearningStore';
 
 interface Props {
   question: QuestionItem;
@@ -40,9 +43,11 @@ export const QuestionCard: React.FC<Props> = ({
   onNext,
   hasNext = false,
 }) => {
+  const { isFeatureLocked } = useLearningStore();
   const [localAnswered, setLocalAnswered] = useState<OptionKey | null>(selectedOption);
   const [isPassageExpanded, setIsPassageExpanded] = useState<boolean>(false);
   const [isAddWordModalOpen, setIsAddWordModalOpen] = useState<boolean>(false);
+  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState<boolean>(false);
   const [selectedWordForModal, setSelectedWordForModal] = useState<string>('');
 
   React.useEffect(() => {
@@ -307,12 +312,28 @@ export const QuestionCard: React.FC<Props> = ({
 
           {/* TRAP BREAKDOWN IF USER WAS WRONG */}
           {activeSelected && activeSelected !== question.correct_option && (
-            <View style={[styles.mistakeTrapBox, { backgroundColor: colors.errorLight, borderLeftColor: colors.error }]}>
-              <Text style={[styles.mistakeTrapTitle, { color: colors.error }]}>⚠ Düştüğün Çeldirici Tuzağı:</Text>
-              <Text style={[styles.mistakeTrapDesc, { color: colors.text }]}>
-                Seçtiğin ({activeSelected}) seçeneği: ÖSYM'nin klasik çeldirici modellerinden biridir. Cümledeki zaman akışını veya bağlaç yönünü tersine çevirerek yanıltıcı bir bağlam sunmaktadır.
-              </Text>
-            </View>
+            isFeatureLocked('AI_ANALYSIS') ? (
+              <TouchableOpacity
+                style={[styles.lockedTrapBox, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
+                onPress={() => setIsSubscriptionModalOpen(true)}
+                activeOpacity={0.8}
+              >
+                <View style={styles.lockedTrapHead}>
+                  <Lock size={13} color={colors.brand} />
+                  <Text style={[styles.lockedTrapTitle, { color: colors.brand }]}>ÖSYM Çeldirici Tuzağı Analizi (Pro)</Text>
+                </View>
+                <Text style={[styles.lockedTrapDesc, { color: colors.textSecondary }]}>
+                  Bu sorudaki çeldirici mantığını ve ÖSYM tuzak teşhisini görüntülemek için 7 günlük ücretsiz denemenizi başlatın veya Pro'ya geçin.
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <View style={[styles.mistakeTrapBox, { backgroundColor: colors.errorLight, borderLeftColor: colors.error }]}>
+                <Text style={[styles.mistakeTrapTitle, { color: colors.error }]}>⚠ Düştüğün Çeldirici Tuzağı:</Text>
+                <Text style={[styles.mistakeTrapDesc, { color: colors.text }]}>
+                  Seçtiğin ({activeSelected}) seçeneği: ÖSYM'nin klasik çeldirici modellerinden biridir. Cümledeki zaman akışını veya bağlaç yönünü tersine çevirerek yanıltıcı bir bağlam sunmaktadır.
+                </Text>
+              </View>
+            )
           )}
 
           <View style={[styles.trapTag, { backgroundColor: colors.brandLight }]}>
@@ -358,6 +379,12 @@ export const QuestionCard: React.FC<Props> = ({
         visible={isAddWordModalOpen}
         onClose={() => setIsAddWordModalOpen(false)}
         initialWord={selectedWordForModal}
+      />
+
+      {/* Subscription Modal */}
+      <SubscriptionModal
+        visible={isSubscriptionModalOpen}
+        onClose={() => setIsSubscriptionModalOpen(false)}
       />
     </ScrollView>
   );
@@ -632,5 +659,27 @@ const styles = StyleSheet.create({
   nextActionBtnText: {
     fontSize: 15,
     fontWeight: '800',
+  },
+  lockedTrapBox: {
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderRadius: 14,
+    padding: 12,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  lockedTrapHead: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 4,
+  },
+  lockedTrapTitle: {
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  lockedTrapDesc: {
+    fontSize: 11.5,
+    lineHeight: 16,
   },
 });

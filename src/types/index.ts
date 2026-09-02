@@ -279,8 +279,24 @@ export interface UserProfile {
   isGuest: boolean;
   isPro?: boolean;
   proExpiresAt?: string;
+  trialExpiresAt?: string;
+  subscriptionPlanId?: string;
   appliedPromoCode?: string;
   createdAt: string;
+}
+
+// ==========================================
+// ACCESS CONTROL & FREEMIUM GATING
+// ==========================================
+
+export type GatedFeature = 'EXAM' | 'AI_ANALYSIS' | 'AI_GENERATOR' | 'MISTAKES';
+
+export interface UserAccessStatus {
+  hasAccess: boolean;
+  isPro: boolean;
+  isInTrial: boolean;
+  trialDaysRemaining: number;
+  expiresAt: string | null;
 }
 
 // ==========================================
@@ -298,11 +314,15 @@ export interface PromoCodeInfo {
 
 export interface SubscriptionPlan {
   id: string;
+  appleProductId: string;
   title: string;
+  subtitle?: string;
   durationMonths: number;
   originalPrice: number;
+  monthlyPrice: number;
   discountedPrice?: number;
   badge?: string;
+  trialDays: number;
   isPopular?: boolean;
   features: string[];
 }

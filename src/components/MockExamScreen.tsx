@@ -11,12 +11,15 @@ import {
   Sparkles,
   ChevronLeft,
   BookOpen,
+  Lock,
+  Crown,
 } from 'lucide-react-native';
 import { useLearningStore } from '../store/useLearningStore';
 import { useThemeStore } from '../store/useThemeStore';
 import { QuestionCard } from './QuestionCard';
 import { AITestGeneratorModal } from './AITestGeneratorModal';
 import { SmoothBottomSheet } from './SmoothBottomSheet';
+import { SubscriptionModal } from './SubscriptionModal';
 import {
   EXAM_CATALOG,
   YdsExamCatalogService,
@@ -38,10 +41,12 @@ export const MockExamScreen: React.FC = () => {
     tickExamTimer,
     finishMockExam,
     resetExam,
+    isFeatureLocked,
   } = useLearningStore();
 
   const [isGridModalOpen, setIsGridModalOpen] = useState(false);
   const [isAIGeneratorOpen, setIsAIGeneratorOpen] = useState(false);
+  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
   const [catalogFilter, setCatalogFilter] = useState<'ALL' | 'MASTER' | 'ADVANCED' | 'AI'>('ALL');
   const [selectedResultToView, setSelectedResultToView] = useState<any>(null);
 
@@ -751,7 +756,13 @@ export const MockExamScreen: React.FC = () => {
         <Text style={[styles.catalogHeading, { color: colors.text }]}>Deneme Sınavları</Text>
         <TouchableOpacity
           style={[styles.aiCustomPill, { backgroundColor: colors.brandLight }]}
-          onPress={() => setIsAIGeneratorOpen(true)}
+          onPress={() => {
+            if (isFeatureLocked('AI_GENERATOR')) {
+              setIsSubscriptionModalOpen(true);
+              return;
+            }
+            setIsAIGeneratorOpen(true);
+          }}
           activeOpacity={0.8}
         >
           <Sparkles size={13} color={colors.brand} />
@@ -842,10 +853,35 @@ export const MockExamScreen: React.FC = () => {
         </TouchableOpacity>
       </ScrollView>
 
+      {/* TRIAL EXPIRED WARNING BANNER */}
+      {isFeatureLocked('EXAM') && (
+        <TouchableOpacity
+          style={[styles.lockWarningBanner, { backgroundColor: colors.cardBackground, borderColor: colors.brand }]}
+          onPress={() => setIsSubscriptionModalOpen(true)}
+          activeOpacity={0.85}
+        >
+          <View style={[styles.lockBannerIconCircle, { backgroundColor: colors.brandLight }]}>
+            <Lock size={18} color={colors.brand} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.lockBannerTitle, { color: colors.text }]}>
+              Deneme Sınavları Pro Üyelik Gerektirir
+            </Text>
+            <Text style={[styles.lockBannerSub, { color: colors.textSecondary }]}>
+              7 günlük ücretsiz denemeniz sona erdi. 80 soruluk denemelere devam etmek için paketinizi seçin.
+            </Text>
+          </View>
+          <View style={[styles.lockBannerBtn, { backgroundColor: colors.brand }]}>
+            <Text style={[styles.lockBannerBtnText, { color: colors.textOnBrand }]}>İncele</Text>
+          </View>
+        </TouchableOpacity>
+      )}
+
       {/* EXAM CARDS LIST */}
       <View style={styles.examCardsList}>
         {filteredExams.map((exam) => {
           const isAI = exam.tag === 'AI Özel';
+          const isLocked = isFeatureLocked('EXAM');
 
           // Real scores from database examHistory (only valid answered exams)
           const realResult = (examHistory || []).find(
@@ -866,7 +902,13 @@ export const MockExamScreen: React.FC = () => {
                   shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
                 },
               ]}
-              onPress={() => startExamFromCatalog(exam.id)}
+              onPress={() => {
+                if (isLocked) {
+                  setIsSubscriptionModalOpen(true);
+                  return;
+                }
+                startExamFromCatalog(exam.id);
+              }}
               activeOpacity={0.85}
             >
               <View style={[styles.examYear, { backgroundColor: colors.brandLight }]}>
@@ -967,6 +1009,11 @@ export const MockExamScreen: React.FC = () => {
         visible={isAIGeneratorOpen}
         onClose={() => setIsAIGeneratorOpen(false)}
         onStartCustomQuiz={(questions, title) => startCustomAIQuiz(questions, title)}
+      />
+
+      <SubscriptionModal
+        visible={isSubscriptionModalOpen}
+        onClose={() => setIsSubscriptionModalOpen(false)}
       />
     </ScrollView>
   );
@@ -1502,5 +1549,40 @@ const styles = StyleSheet.create({
   emptyReviewText: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  lockWarningBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    borderWidth: 1.5,
+    borderRadius: 16,
+    padding: 14,
+    marginHorizontal: 20,
+    marginBottom: 16,
+  },
+  lockBannerIconCircle: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  lockBannerTitle: {
+    fontSize: 13.5,
+    fontWeight: '800',
+    marginBottom: 3,
+  },
+  lockBannerSub: {
+    fontSize: 11.5,
+    lineHeight: 15,
+  },
+  lockBannerBtn: {
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 10,
+  },
+  lockBannerBtnText: {
+    fontSize: 12,
+    fontWeight: '800',
   },
 });

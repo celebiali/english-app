@@ -13,6 +13,8 @@ import {
   UserProfile,
   TaskGoalsConfig,
   VocabFolder,
+  UserAccessStatus,
+  GatedFeature,
 } from '../types';
 import { dbService, WordWithProgress } from '../database/DatabaseService';
 import { srEngine } from '../services/SpacedRepetitionEngine';
@@ -23,6 +25,7 @@ import { AIService } from '../services/AIService';
 import { YdsExamCatalogService, CatalogExamInfo } from '../services/YdsExamCatalog';
 import { SupabaseService } from '../services/SupabaseService';
 import { NotificationService } from '../services/NotificationService';
+import { ApplePurchaseService } from '../services/ApplePurchaseService';
 
 export type AppTab = 'TASKS' | 'EXAM' | 'VOCAB' | 'STATS' | 'MISTAKES';
 export type StudyMode = 'PREVIEW' | 'TEST';
@@ -129,6 +132,11 @@ interface LearningState {
 
   resetAllProgress: () => Promise<void>;
   deleteUserAccount: () => Promise<void>;
+
+  // Access Control & Apple Subscription Actions
+  getUserAccessStatus: () => UserAccessStatus;
+  isFeatureLocked: (feature: GatedFeature) => boolean;
+  syncSubscriptionWithApple: () => Promise<void>;
 }
 
 export const useLearningStore = create<LearningState>((set, get) => ({
@@ -211,6 +219,12 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       const totalTarget = userGoals.paragraph + userGoals.cloze + userGoals.sentence + userGoals.skills;
 
       if (savedUser) {
+        // Ensure 7-day trial timestamp exists
+        if (!savedUser.trialExpiresAt) {
+          const createdTime = new Date(savedUser.createdAt || Date.now()).getTime();
+          savedUser.trialExpiresAt = new Date(createdTime + 7 * 86400000).toISOString();
+          await dbService.saveUserSession(savedUser);
+        }
         SupabaseService.setCurrentUser(savedUser);
       }
 
@@ -220,6 +234,24 @@ export const useLearningStore = create<LearningState>((set, get) => ({
         userProfile: savedUser,
         taskGoals: userGoals,
         dailyQuestionTarget: totalTarget,
+      });
+
+      // Initialize Apple StoreKit / RevenueCat in background
+      ApplePurchaseService.initialize(savedUser?.id).then(async () => {
+        const status = await ApplePurchaseService.checkSubscriptionStatus();
+        if (status.isPro) {
+          const curr = get().userProfile;
+          if (curr && !curr.isPro) {
+            await get().setUserProfile({
+              ...curr,
+              isPro: true,
+              proExpiresAt: status.expiresAt || undefined,
+              subscriptionPlanId: status.planId,
+            });
+          }
+        }
+      }).catch((pErr) => {
+        console.warn('Apple Purchase init background:', pErr);
       });
 
       await get().loadDailyTasks();
@@ -255,17 +287,103 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   },
 
   setUserProfile: async (profile: UserProfile | null) => {
-    SupabaseService.setCurrentUser(profile);
-    set({ userProfile: profile });
-
+    let enrichedProfile = profile;
     if (profile) {
-      await dbService.saveUserSession(profile);
+      if (!profile.trialExpiresAt) {
+        const created = new Date(profile.createdAt || Date.now()).getTime();
+        enrichedProfile = {
+          ...profile,
+          trialExpiresAt: new Date(created + 7 * 86400000).toISOString(),
+        };
+      }
+      ApplePurchaseService.identifyUser(enrichedProfile.id).catch(() => {});
+    } else {
+      ApplePurchaseService.logoutUser().catch(() => {});
+    }
+
+    SupabaseService.setCurrentUser(enrichedProfile);
+    set({ userProfile: enrichedProfile });
+
+    if (enrichedProfile) {
+      await dbService.saveUserSession(enrichedProfile);
       // Schedule study reminders for user
       const streak = get().streakCount;
       const target = get().dailyQuestionTarget;
       NotificationService.scheduleAllReminders(20, 0, target, streak).catch(() => {});
     } else {
       await dbService.clearUserSession();
+    }
+  },
+
+  getUserAccessStatus: (): UserAccessStatus => {
+    const profile = get().userProfile;
+    if (!profile) {
+      return {
+        hasAccess: false,
+        isPro: false,
+        isInTrial: false,
+        trialDaysRemaining: 0,
+        expiresAt: null,
+      };
+    }
+
+    // Direct Pro check
+    if (profile.isPro) {
+      if (profile.proExpiresAt) {
+        const expires = new Date(profile.proExpiresAt).getTime();
+        if (expires > Date.now()) {
+          return {
+            hasAccess: true,
+            isPro: true,
+            isInTrial: false,
+            trialDaysRemaining: 0,
+            expiresAt: profile.proExpiresAt,
+          };
+        }
+      } else {
+        return {
+          hasAccess: true,
+          isPro: true,
+          isInTrial: false,
+          trialDaysRemaining: 0,
+          expiresAt: null,
+        };
+      }
+    }
+
+    // Standard Free Tier
+    return {
+      hasAccess: false,
+      isPro: false,
+      isInTrial: false,
+      trialDaysRemaining: 0,
+      expiresAt: null,
+    };
+  },
+
+  isFeatureLocked: (feature: GatedFeature): boolean => {
+    const access = get().getUserAccessStatus();
+    // Only unlocked if user is active Pro
+    return !access.hasAccess;
+  },
+
+  syncSubscriptionWithApple: async () => {
+    try {
+      const status = await ApplePurchaseService.checkSubscriptionStatus();
+      if (status.isPro) {
+        const current = get().userProfile;
+        if (current) {
+          const updated: UserProfile = {
+            ...current,
+            isPro: true,
+            proExpiresAt: status.expiresAt || undefined,
+            subscriptionPlanId: status.planId || current.subscriptionPlanId,
+          };
+          await get().setUserProfile(updated);
+        }
+      }
+    } catch (e) {
+      console.warn('Sync with Apple subscription failed:', e);
     }
   },
 

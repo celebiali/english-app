@@ -23,6 +23,7 @@
     "lucide-react-native": "^1.32.0",
     "react": "18.2.0",
     "react-native": "0.74.5",
+    "react-native-purchases": "^10.8.1",
     "react-native-svg": "15.2.0",
     "zustand": "^4.5.2"
   },

@@ -30,6 +30,7 @@ import {
   FileText,
   HelpCircle,
   ExternalLink,
+  Crown,
 } from 'lucide-react-native';
 import { useThemeStore, FontSizeValue } from '../store/useThemeStore';
 import { useLearningStore } from '../store/useLearningStore';
@@ -38,6 +39,7 @@ import { NotificationService } from '../services/NotificationService';
 import { SupabaseService } from '../services/SupabaseService';
 import { AuthModal } from './AuthModal';
 import { LegalSheetModal } from './LegalSheetModal';
+import { SubscriptionModal } from './SubscriptionModal';
 
 interface SettingsScreenProps {
   onBack: () => void;
@@ -71,7 +73,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
     loadDailyTasks,
     resetAllProgress,
     deleteUserAccount,
+    getUserAccessStatus,
   } = useLearningStore();
+
+  const accessStatus = getUserAccessStatus();
 
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [selectedHour, setSelectedHour] = useState(21);
@@ -84,6 +89,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
   const [isHourModalOpen, setIsHourModalOpen] = useState(false);
   const [isGoalsModalOpen, setIsGoalsModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
   const [legalSheetTab, setLegalSheetTab] = useState<'PRIVACY' | 'TERMS' | null>(null);
 
   // Android hardware back button handler
@@ -313,6 +319,56 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
             </View>
           </TouchableOpacity>
         )}
+
+        {/* SECTION: ÜYELİK VE PRO ABONELİK */}
+        <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
+          ÜYELİK VE ABONELİK
+        </Text>
+        <TouchableOpacity
+          style={[
+            styles.groupedCard,
+            {
+              backgroundColor: colors.cardBackground,
+              borderColor: userProfile?.isPro ? colors.brand : colors.accentWarm,
+              borderWidth: 1.5,
+              padding: 16,
+              marginBottom: 20,
+            },
+          ]}
+          onPress={() => {
+            console.log('[SettingsScreen] Opening SubscriptionModal...');
+            setIsSubscriptionModalOpen(true);
+          }}
+          activeOpacity={0.85}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <View
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 22,
+                backgroundColor: userProfile?.isPro ? colors.brandLight : colors.accentWarmLight,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Crown size={22} color={userProfile?.isPro ? colors.brand : colors.accentWarm} />
+            </View>
+
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.rowLabel, { color: colors.text, fontWeight: '800' }]}>
+                {userProfile?.isPro ? '👑 YDS Pratik Pro Aktif' : '💎 YDS Pratik Pro'}
+              </Text>
+              <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
+                {userProfile?.isPro
+                  ? 'Tüm 80 soruluk denemeler ve AI koçluğu sınırsız açık'
+                  : '7 Gün Ücretsiz Deneyin · Sınav Koçu & Master Denemeler'}
+              </Text>
+            </View>
+
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </View>
+        </TouchableOpacity>
 
         {/* SECTION: TEMA */}
         <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
@@ -1096,6 +1152,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
         onClose={() => setLegalSheetTab(null)}
         initialTab={legalSheetTab || 'PRIVACY'}
         showAcceptButton={false}
+      />
+
+      {/* SUBSCRIPTION MODAL */}
+      <SubscriptionModal
+        visible={isSubscriptionModalOpen}
+        onClose={() => setIsSubscriptionModalOpen(false)}
       />
     </SafeAreaView>
   );

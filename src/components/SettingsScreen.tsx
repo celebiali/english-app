@@ -37,6 +37,7 @@ import { dbService } from '../database/DatabaseService';
 import { NotificationService } from '../services/NotificationService';
 import { SupabaseService } from '../services/SupabaseService';
 import { AuthModal } from './AuthModal';
+import { LegalSheetModal } from './LegalSheetModal';
 
 interface SettingsScreenProps {
   onBack: () => void;
@@ -83,6 +84,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
   const [isHourModalOpen, setIsHourModalOpen] = useState(false);
   const [isGoalsModalOpen, setIsGoalsModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [legalSheetTab, setLegalSheetTab] = useState<'PRIVACY' | 'TERMS' | null>(null);
 
   // Android hardware back button handler
   useEffect(() => {
@@ -584,7 +586,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
           {/* Gizlilik Politikası */}
           <TouchableOpacity
             style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}
-            onPress={() => openUrlSafely('https://english-app-three-azure.vercel.app/privacy.html', 'Gizlilik Politikası')}
+            onPress={() => setLegalSheetTab('PRIVACY')}
             activeOpacity={0.7}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 }}>
@@ -602,7 +604,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
           {/* Kullanım Şartları (EULA) */}
           <TouchableOpacity
             style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}
-            onPress={() => openUrlSafely('https://english-app-three-azure.vercel.app/terms.html', 'Kullanım Şartları')}
+            onPress={() => setLegalSheetTab('TERMS')}
             activeOpacity={0.7}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 }}>
@@ -1086,6 +1088,14 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
       <AuthModal
         visible={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
+      />
+
+      {/* LEGAL & EULA BOTTOM SHEET */}
+      <LegalSheetModal
+        visible={legalSheetTab !== null}
+        onClose={() => setLegalSheetTab(null)}
+        initialTab={legalSheetTab || 'PRIVACY'}
+        showAcceptButton={false}
       />
     </SafeAreaView>
   );

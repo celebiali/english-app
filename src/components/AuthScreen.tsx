@@ -27,10 +27,12 @@ import {
   EyeOff,
   KeyRound,
   X,
+  Check,
 } from 'lucide-react-native';
 import { SupabaseService } from '../services/SupabaseService';
 import { useLearningStore } from '../store/useLearningStore';
 import { useThemeStore } from '../store/useThemeStore';
+import { LegalSheetModal } from './LegalSheetModal';
 
 interface Props {
   onSuccess?: () => void;
@@ -52,6 +54,16 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
   const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
   const [isForgotLoading, setIsForgotLoading] = useState(false);
+
+  // Legal / EULA Modal State
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+  const [isLegalModalOpen, setIsLegalModalOpen] = useState(false);
+  const [legalModalTab, setLegalModalTab] = useState<'PRIVACY' | 'TERMS'>('PRIVACY');
+
+  const openLegalModal = (tab: 'PRIVACY' | 'TERMS') => {
+    setLegalModalTab(tab);
+    setIsLegalModalOpen(true);
+  };
 
   const validateEmail = (val: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
@@ -97,6 +109,18 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
 
     if (password.length < 6) {
       Alert.alert('Kısa Şifre', 'Şifreniz güvenlik nedeniyle en az 6 karakter olmalıdır.');
+      return;
+    }
+
+    if (!isTermsAccepted) {
+      Alert.alert(
+        'Onay Gereklidir',
+        'Kayıt işlemine devam etmek için lütfen Kullanım Şartları ve Gizlilik Politikasını onaylayınız.',
+        [
+          { text: 'Şartları Oku', onPress: () => openLegalModal('TERMS') },
+          { text: 'Tamam', style: 'cancel' },
+        ]
+      );
       return;
     }
 
@@ -402,6 +426,47 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
             </View>
           </View>
 
+          {/* REGISTER CHECKBOX CONSENT (KVKK & EULA COMPLIANCE) */}
+          {authMode === 'REGISTER' && (
+            <View style={styles.termsConsentRow}>
+              <TouchableOpacity
+                style={styles.checkboxTouchable}
+                onPress={() => setIsTermsAccepted(!isTermsAccepted)}
+                activeOpacity={0.7}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <View
+                  style={[
+                    styles.checkboxBox,
+                    {
+                      borderColor: isTermsAccepted ? colors.brand : colors.border,
+                      backgroundColor: isTermsAccepted ? colors.brand : 'transparent',
+                    },
+                  ]}
+                >
+                  {isTermsAccepted && <Check size={14} color={colors.textOnBrand} strokeWidth={3} />}
+                </View>
+              </TouchableOpacity>
+
+              <Text style={[styles.termsConsentText, { color: colors.textSecondary }]}>
+                <Text
+                  style={{ color: colors.brand, fontWeight: '700' }}
+                  onPress={() => openLegalModal('TERMS')}
+                >
+                  Kullanım Şartları
+                </Text>
+                {' '}ve{' '}
+                <Text
+                  style={{ color: colors.brand, fontWeight: '700' }}
+                  onPress={() => openLegalModal('PRIVACY')}
+                >
+                  Gizlilik Politikası
+                </Text>
+                'nı okudum, onaylıyorum.
+              </Text>
+            </View>
+          )}
+
           {/* SUBMIT BUTTON */}
           <TouchableOpacity
             style={[styles.submitButton, { backgroundColor: colors.brand }]}
@@ -443,21 +508,21 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
           </Text>
         </TouchableOpacity>
 
-        {/* FOOTER POLICIES WITH REAL EXTERNAL LINKS */}
+        {/* FOOTER POLICIES WITH BOTTOM SHEET MODAL */}
         <View style={styles.footerPolicies}>
           <ShieldCheck size={14} color={colors.textSecondary} />
           <Text style={[styles.footerPolicyText, { color: colors.textSecondary }]}>
             Devam ederek{' '}
             <Text
               style={[styles.policyLink, { color: colors.brand, textDecorationLine: 'underline' }]}
-              onPress={openPrivacyPolicy}
+              onPress={() => openLegalModal('PRIVACY')}
             >
               Gizlilik Politikası
             </Text>
             'nı ve{' '}
             <Text
               style={[styles.policyLink, { color: colors.brand, textDecorationLine: 'underline' }]}
-              onPress={openTerms}
+              onPress={() => openLegalModal('TERMS')}
             >
               Kullanım Şartları (EULA)
             </Text>
@@ -466,6 +531,15 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
+
+      {/* LEGAL & EULA IN-APP BOTTOM SHEET MODAL */}
+      <LegalSheetModal
+        visible={isLegalModalOpen}
+        onClose={() => setIsLegalModalOpen(false)}
+        initialTab={legalModalTab}
+        onAccept={() => setIsTermsAccepted(true)}
+        showAcceptButton={authMode === 'REGISTER' && !isTermsAccepted}
+      />
 
       {/* FORGOT PASSWORD MODAL */}
       <Modal
@@ -811,5 +885,29 @@ const styles = StyleSheet.create({
   modalActionBtnText: {
     fontSize: 14.5,
     fontWeight: '800',
+  },
+  termsConsentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 4,
+    marginBottom: 10,
+    paddingHorizontal: 2,
+  },
+  checkboxTouchable: {
+    padding: 2,
+  },
+  checkboxBox: {
+    width: 22,
+    height: 22,
+    borderRadius: 6,
+    borderWidth: 1.8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  termsConsentText: {
+    fontSize: 12.5,
+    lineHeight: 18,
+    flex: 1,
   },
 });

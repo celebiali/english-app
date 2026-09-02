@@ -584,7 +584,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
           {/* Gizlilik Politikası */}
           <TouchableOpacity
             style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}
-            onPress={() => openUrlSafely('https://celebiali.github.io/english-app/privacy.html', 'Gizlilik Politikası')}
+            onPress={() => openUrlSafely('https://english-app-three-azure.vercel.app/privacy.html', 'Gizlilik Politikası')}
             activeOpacity={0.7}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 }}>
@@ -602,7 +602,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
           {/* Kullanım Şartları (EULA) */}
           <TouchableOpacity
             style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}
-            onPress={() => openUrlSafely('https://celebiali.github.io/english-app/terms.html', 'Kullanım Şartları')}
+            onPress={() => openUrlSafely('https://english-app-three-azure.vercel.app/terms.html', 'Kullanım Şartları')}
             activeOpacity={0.7}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 }}>
@@ -620,7 +620,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
           {/* Destek ve Yardım */}
           <TouchableOpacity
             style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}
-            onPress={() => openUrlSafely('https://celebiali.github.io/english-app/support.html', 'Destek ve Yardım')}
+            onPress={() => openUrlSafely('https://english-app-three-azure.vercel.app/support.html', 'Destek ve Yardım')}
             activeOpacity={0.7}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 }}>

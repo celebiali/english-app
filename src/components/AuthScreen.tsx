@@ -176,7 +176,7 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
   };
 
   const openPrivacyPolicy = async () => {
-    const url = 'https://celebiali.github.io/english-app/privacy.html';
+    const url = 'https://english-app-three-azure.vercel.app/privacy.html';
     try {
       const canOpen = await Linking.canOpenURL(url);
       if (canOpen) {
@@ -190,7 +190,7 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
   };
 
   const openTerms = async () => {
-    const url = 'https://celebiali.github.io/english-app/terms.html';
+    const url = 'https://english-app-three-azure.vercel.app/terms.html';
     try {
       const canOpen = await Linking.canOpenURL(url);
       if (canOpen) {

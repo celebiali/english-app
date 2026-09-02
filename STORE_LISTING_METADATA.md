@@ -85,10 +85,10 @@ YDS Pratik'in ilk sürümü yayında!
 ```
 
 ### 9. Destek, Gizlilik ve Şartlar URL'leri (URLs)
-* **Destek URL (Support URL):** `https://celebiali.github.io/english-app/support.html`
-* **Pazarlama URL (Marketing URL):** `https://celebiali.github.io/english-app/`
-* **Gizlilik Politikası (Privacy Policy URL):** `https://celebiali.github.io/english-app/privacy.html`
-* **Kullanım Şartları (Terms of Use / EULA):** `https://celebiali.github.io/english-app/terms.html`
+* **Destek URL (Support URL):** `https://english-app-three-azure.vercel.app/support.html`
+* **Pazarlama URL (Marketing URL):** `https://english-app-three-azure.vercel.app/`
+* **Gizlilik Politikası (Privacy Policy URL):** `https://english-app-three-azure.vercel.app/privacy.html`
+* **Kullanım Şartları (Terms of Use / EULA):** `https://english-app-three-azure.vercel.app/terms.html`
 
 ### 10. Apple İnceleme Notları (App Review Information)
 * **Giriş Bilgileri Gerekli mi? (Sign-in required):** Evet / Opsiyonel (Misafir modu da mevcuttur).

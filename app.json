@@ -20,7 +20,8 @@
       "requireFullScreen": true,
       "infoPlist": {
         "CFBundleDisplayName": "YDS Pratik",
-        "UIRequiresFullScreen": true
+        "UIRequiresFullScreen": true,
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {

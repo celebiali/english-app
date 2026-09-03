@@ -84,24 +84,6 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
     );
   };
 
-  const handleResetProgress = () => {
-    Alert.alert(
-      'İlerlemeyi Sıfırla',
-      'Tüm kelime hafıza kutularınız (Aralıklı Tekrar), çözülen soru ve deneme geçmişiniz, hata kasanız ve günlük seriniz başlangıç durumuna getirilecektir. Bu işlem geri alınamaz. Devam etmek istiyor musunuz?',
-      [
-        { text: 'Vazgeç', style: 'cancel' },
-        {
-          text: 'Evet, Sıfırla',
-          style: 'destructive',
-          onPress: async () => {
-            await resetAllProgress();
-            Alert.alert('Başarılı', 'Tüm öğrenme ilerlemeniz başarıyla sıfırlandı.');
-          },
-        },
-      ]
-    );
-  };
-
   return (
     <SmoothBottomSheet visible={visible} onClose={onClose} maxHeight="90%">
       <View style={[styles.content, { backgroundColor: colors.cardBackground }]}>
@@ -275,22 +257,6 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
               </View>
               <Text style={[styles.activePillText, { backgroundColor: colors.successLight, color: colors.success }]}>Aktif</Text>
             </View>
-
-            <View style={[styles.divider, { backgroundColor: colors.border }]} />
-
-            <TouchableOpacity
-              style={styles.settingRowAction}
-              onPress={handleResetProgress}
-              activeOpacity={0.7}
-            >
-              <View style={styles.settingLeft}>
-                <RotateCcw size={18} color={colors.accentWarm} />
-                <Text style={[styles.settingTitle, { color: colors.accentWarm }]}>
-                  İlerlemeyi Sıfırla
-                </Text>
-              </View>
-              <ChevronRight size={18} color={colors.textSecondary} />
-            </TouchableOpacity>
           </View>
 
           {/* SECTION 3: YASAL & MAĞAZA POLİTİKALARI */}

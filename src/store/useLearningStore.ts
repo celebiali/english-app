@@ -89,6 +89,7 @@ interface LearningState {
   setActiveTab: (tab: AppTab) => void;
   setUserProfile: (profile: UserProfile | null) => Promise<void>;
   updateUserTargetScore: (score: number) => Promise<void>;
+  updateUserFullName: (name: string) => Promise<void>;
   setDailyQuestionTarget: (target: number) => void;
   setTaskGoals: (goals: Partial<TaskGoalsConfig>) => Promise<void>;
 
@@ -391,6 +392,17 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     const current = get().userProfile;
     if (current) {
       const updated: UserProfile = { ...current, targetScore: score };
+      set({ userProfile: updated });
+      SupabaseService.setCurrentUser(updated);
+      await dbService.saveUserSession(updated);
+    }
+  },
+
+  updateUserFullName: async (name: string) => {
+    const current = get().userProfile;
+    if (current) {
+      const cleanName = name.trim();
+      const updated: UserProfile = { ...current, fullName: cleanName };
       set({ userProfile: updated });
       SupabaseService.setCurrentUser(updated);
       await dbService.saveUserSession(updated);

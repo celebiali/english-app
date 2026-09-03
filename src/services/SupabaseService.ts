@@ -1,5 +1,6 @@
 import { WordItem, ExamScoreCard, UserProfile } from '../types';
 import { ENV_CONFIG } from '../config/env';
+import { dbService } from '../database/DatabaseService';
 import * as WebBrowser from 'expo-web-browser';
 import * as AuthSession from 'expo-auth-session';
 
@@ -105,18 +106,14 @@ export class SupabaseService {
       const data = await response.json();
 
       if (!response.ok) {
-        // If server returns error, still gracefully fallback to offline local user for seamless offline experience
-        console.warn('Supabase signup returned error, creating local user:', data);
-        const localUser: UserProfile = {
-          id: `local_user_${Date.now()}`,
-          email: cleanEmail,
-          fullName: fullName.trim() || 'Ali Çelebi',
-          targetScore,
-          isGuest: false,
-          createdAt: new Date().toISOString(),
-        };
-        this.currentUser = localUser;
-        return { user: localUser };
+        const msg = data.msg || data.message || data.error_description;
+        let userError = 'Kayıt işlemi tamamlanamadı.';
+        if (msg?.toLowerCase().includes('already') || msg?.toLowerCase().includes('exists')) {
+          userError = 'Bu e-posta adresiyle zaten kayıtlı bir hesap var. Lütfen giriş yapın.';
+        } else if (msg) {
+          userError = msg;
+        }
+        return { user: null, error: userError };
       }
 
       const user: UserProfile = {
@@ -131,18 +128,8 @@ export class SupabaseService {
       this.currentUser = user;
       return { user };
     } catch (err: any) {
-      // Offline fallback: Network unavailable or host unreachable
-      console.warn('Network unavailable during signup, falling back to local user:', err.message);
-      const localUser: UserProfile = {
-        id: `local_user_${Date.now()}`,
-        email: cleanEmail,
-        fullName: fullName.trim() || 'Ali Çelebi',
-        targetScore,
-        isGuest: false,
-        createdAt: new Date().toISOString(),
-      };
-      this.currentUser = localUser;
-      return { user: localUser };
+      console.warn('Network error during signup:', err.message);
+      return { user: null, error: 'Sunucuya bağlanılamadı. Lütfen internet bağlantınızı kontrol edip tekrar deneyin.' };
     }
   }
 
@@ -170,16 +157,7 @@ export class SupabaseService {
     }
 
     if (!this.isConfigured()) {
-      const localUser: UserProfile = {
-        id: `local_user_${Date.now()}`,
-        email: cleanEmail,
-        fullName: 'Ali Çelebi',
-        targetScore: 85,
-        isGuest: false,
-        createdAt: new Date().toISOString(),
-      };
-      this.currentUser = localUser;
-      return { user: localUser };
+      return { user: null, error: 'Veritabanı yapılandırması bulunamadı.' };
     }
 
     try {
@@ -204,18 +182,15 @@ export class SupabaseService {
       const data = await response.json();
 
       if (!response.ok) {
-        // If server failed (e.g. invalid endpoint or unregistered), fallback to local session
-        console.warn('Supabase signin returned error, logging in locally:', data);
-        const localUser: UserProfile = {
-          id: `local_user_${Date.now()}`,
-          email: cleanEmail,
-          fullName: 'Ali Çelebi',
-          targetScore: 85,
-          isGuest: false,
-          createdAt: new Date().toISOString(),
-        };
-        this.currentUser = localUser;
-        return { user: localUser };
+        console.warn('Supabase signin failed:', data);
+        const msg = data.error_description || data.msg || data.message;
+        let userError = 'E-posta veya şifreniz hatalı. Lütfen bilgilerinizi kontrol edin.';
+        if (data.error_code === 'invalid_credentials' || msg?.toLowerCase().includes('invalid')) {
+          userError = 'E-posta adresiniz veya şifreniz hatalı.';
+        } else if (msg) {
+          userError = msg;
+        }
+        return { user: null, error: userError };
       }
 
       const user: UserProfile = {
@@ -230,18 +205,8 @@ export class SupabaseService {
       this.currentUser = user;
       return { user };
     } catch (err: any) {
-      // Offline fallback: Network unavailable or DNS error
-      console.warn('Network unavailable during signin, falling back to local user:', err.message);
-      const localUser: UserProfile = {
-        id: `local_user_${Date.now()}`,
-        email: cleanEmail,
-        fullName: 'Ali Çelebi',
-        targetScore: 85,
-        isGuest: false,
-        createdAt: new Date().toISOString(),
-      };
-      this.currentUser = localUser;
-      return { user: localUser };
+      console.warn('Network error during signin:', err.message);
+      return { user: null, error: 'Sunucuya bağlanılamadı. Lütfen internet bağlantınızı kontrol edin.' };
     }
   }
 
@@ -289,17 +254,7 @@ export class SupabaseService {
       const isAvailable = await AppleAuthentication.isAvailableAsync();
 
       if (!isAvailable) {
-        // Fallback for Android or iOS Simulator where Apple Auth is unavailable
-        const appleUser: UserProfile = {
-          id: `apple_${Date.now()}`,
-          email: 'ali.celebi@icloud.com',
-          fullName: 'Ali Çelebi',
-          targetScore: 85,
-          isGuest: false,
-          createdAt: new Date().toISOString(),
-        };
-        this.currentUser = appleUser;
-        return { user: appleUser };
+        return { user: null, error: 'Apple ile Giriş bu cihazda desteklenmiyor.' };
       }
 
       const credential = await AppleAuthentication.signInAsync({
@@ -309,17 +264,38 @@ export class SupabaseService {
         ],
       });
 
-      let fullName = 'Ali Çelebi';
-      if (credential.fullName?.givenName) {
-        fullName = `${credential.fullName.givenName} ${credential.fullName.familyName || ''}`.trim();
+      // 1. Extract name from Apple credential if available
+      const given = credential.fullName?.givenName?.trim() || '';
+      const family = credential.fullName?.familyName?.trim() || '';
+      let detectedName = [given, family].filter(Boolean).join(' ').trim();
+
+      // 2. If Apple returned null/empty (subsequent logins), check existing SQLite session
+      if (!detectedName) {
+        try {
+          const savedSession = await dbService.getUserSession();
+          if (
+            savedSession &&
+            savedSession.fullName &&
+            savedSession.fullName !== 'Misafir Öğrenci' &&
+            savedSession.fullName !== 'Öğrenci' &&
+            savedSession.fullName !== 'YDS Öğrencisi'
+          ) {
+            detectedName = savedSession.fullName;
+          }
+        } catch (_) {}
       }
 
-      const email = credential.email || 'ali.celebi@icloud.com';
+      // 3. Fallback name if none found: Ali Rıza Çelebi
+      if (!detectedName) {
+        detectedName = 'Ali Rıza Çelebi';
+      }
+
+      const email = credential.email || 'apple.user@privaterelay.appleid.com';
 
       const user: UserProfile = {
         id: credential.user || `apple_${Date.now()}`,
         email: email,
-        fullName: fullName || 'Ali Çelebi',
+        fullName: detectedName,
         targetScore: 85,
         isGuest: false,
         createdAt: new Date().toISOString(),
@@ -331,55 +307,18 @@ export class SupabaseService {
       if (err.code === 'ERR_REQUEST_CANCELED' || err.message?.includes('canceled')) {
         return { user: null, error: 'Apple girişi iptal edildi.' };
       }
-      console.warn('Apple auth error, falling back:', err);
-      // Safe fallback
-      const appleUser: UserProfile = {
-        id: `apple_${Date.now()}`,
-        email: 'ali.celebi@icloud.com',
-        fullName: 'Ali Çelebi',
-        targetScore: 85,
-        isGuest: false,
-        createdAt: new Date().toISOString(),
-      };
-      this.currentUser = appleUser;
-      return { user: appleUser };
+      return { user: null, error: err?.message || 'Apple ile giriş yapılırken bir hata oluştu.' };
     }
   }
 
   /**
-   * Sign In with Google (OAuth with Instant Native Fallback)
+   * Sign In with Google (OAuth)
    */
   static async signInWithGoogle(): Promise<{ user: UserProfile | null; error?: string }> {
-    try {
-      const redirectUrl = AuthSession.makeRedirectUri({
-        scheme: 'ydspratik',
-        path: 'auth/callback',
-      });
-
-      // Seamless, instant Google login for Ali Çelebi
-      const googleUser: UserProfile = {
-        id: `google_${Date.now()}`,
-        email: 'ali.celebi@gmail.com',
-        fullName: 'Ali Çelebi',
-        targetScore: 85,
-        isGuest: false,
-        createdAt: new Date().toISOString(),
-      };
-      this.currentUser = googleUser;
-      return { user: googleUser };
-    } catch (err: any) {
-      console.warn('Google sign-in error:', err);
-      const googleUser: UserProfile = {
-        id: `google_${Date.now()}`,
-        email: 'ali.celebi@gmail.com',
-        fullName: 'Ali Çelebi',
-        targetScore: 85,
-        isGuest: false,
-        createdAt: new Date().toISOString(),
-      };
-      this.currentUser = googleUser;
-      return { user: googleUser };
-    }
+    return {
+      user: null,
+      error: 'Google ile giriş şu anda devre dışıdır. Lütfen Apple ile Giriş veya E-posta yöntemini kullanınız.',
+    };
   }
 
   /**
@@ -388,9 +327,9 @@ export class SupabaseService {
   static signInAsGuest(): UserProfile {
     const guestUser: UserProfile = {
       id: `guest_${Date.now()}`,
-      email: 'ali@ydspratik.app',
-      fullName: 'Ali',
-      targetScore: 85,
+      email: '',
+      fullName: 'Misafir Öğrenci',
+      targetScore: 80,
       isGuest: true,
       createdAt: new Date().toISOString(),
     };

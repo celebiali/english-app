@@ -239,16 +239,25 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
               <>
                 <Sparkles size={18} color={colors.textOnBrand} />
                 <Text style={[styles.ctaButtonText, { color: colors.textOnBrand }]}>
-                  7 Gün Ücretsiz Denemeyi Başlat
+                  {plans.find((p) => p.id === selectedPlanId)?.title || 'Pro'} — 7 Gün Ücretsiz Başla
                 </Text>
               </>
             )}
           </TouchableOpacity>
 
-          {/* SUBTEXT / RESTORE & LEGAL */}
-          <Text style={[styles.trialNoticeText, { color: colors.textSecondary }]}>
-            İlk 7 gün tamamen ücretsizdir. Dilediğiniz zaman App Store üzerinden tek dokunuşla iptal edebilirsiniz.
-          </Text>
+          {/* AUTO-RENEWABLE SUBSCRIPTION DISCLOSURE (APPLE GUIDELINE 3.1.2) */}
+          <View style={[styles.disclosureCard, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
+            <Text style={[styles.disclosureHeading, { color: colors.text }]}>
+              Abonelik ve Otomatik Yenileme Şartları:
+            </Text>
+            <Text style={[styles.disclosureBody, { color: colors.textSecondary }]}>
+              • İlk 7 gün tamamen ücretsiz denemedir.{'\n'}
+              • Deneme süresi sonunda abonelik, {plans.find((p) => p.id === selectedPlanId)?.originalPrice || 599} ₺ ({plans.find((p) => p.id === selectedPlanId)?.durationMonths || 6} Ay) tutarında otomatik olarak yenilenir.{'\n'}
+              • Ödeme, satın alma onayı ile Apple Kimliği (iTunes) hesabınızdan tahsil edilir.{'\n'}
+              • Abonelik, cari sürenin bitiminden en az 24 saat önce iptal edilmediği takdirde otomatik yenilenir.{'\n'}
+              • Aboneliğinizi App Store Hesap Ayarlarınızdan dilediğiniz an yönetebilir veya iptal edebilirsiniz.
+            </Text>
+          </View>
 
           <TouchableOpacity
             style={styles.restoreBtn}
@@ -270,9 +279,9 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
 
           <View style={styles.legalLinksRow}>
             <TouchableOpacity
-              onPress={() => Linking.openURL(ENV_CONFIG.LEGAL.APPLE_STANDARD_EULA_URL)}
+              onPress={() => Linking.openURL(ENV_CONFIG.LEGAL.TERMS_URL)}
             >
-              <Text style={[styles.legalLinkText, { color: colors.textSecondary }]}>
+              <Text style={[styles.legalLinkText, { color: colors.brand }]}>
                 Kullanım Şartları (EULA)
               </Text>
             </TouchableOpacity>
@@ -280,7 +289,7 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
             <TouchableOpacity
               onPress={() => Linking.openURL(ENV_CONFIG.LEGAL.PRIVACY_URL)}
             >
-              <Text style={[styles.legalLinkText, { color: colors.textSecondary }]}>
+              <Text style={[styles.legalLinkText, { color: colors.brand }]}>
                 Gizlilik Politikası
               </Text>
             </TouchableOpacity>
@@ -435,6 +444,21 @@ const styles = StyleSheet.create({
   ctaButtonText: {
     fontSize: 15,
     fontWeight: '800',
+  },
+  disclosureCard: {
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    marginBottom: 12,
+  },
+  disclosureHeading: {
+    fontSize: 11.5,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  disclosureBody: {
+    fontSize: 10.5,
+    lineHeight: 15,
   },
   trialNoticeText: {
     fontSize: 11.5,

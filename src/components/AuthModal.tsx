@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Alert,
   ScrollView,
+  Platform,
 } from 'react-native';
 import {
   GraduationCap,
@@ -99,18 +100,6 @@ export const AuthModal: React.FC<Props> = ({ visible, onClose }) => {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    setIsLoading(true);
-    const res = await SupabaseService.signInWithGoogle();
-    setIsLoading(false);
-    if (res.user) {
-      await setUserProfile(res.user);
-      onClose();
-    } else if (res.error) {
-      Alert.alert('Google Girişi', res.error);
-    }
-  };
-
   const handleGuestContinue = async () => {
     const guestUser = SupabaseService.signInAsGuest();
     await setUserProfile(guestUser);
@@ -139,31 +128,22 @@ export const AuthModal: React.FC<Props> = ({ visible, onClose }) => {
           </TouchableOpacity>
         </View>
 
-        {/* Social Apple & Google Quick Auth */}
-        <View style={styles.socialRow}>
-          <TouchableOpacity
-            style={[styles.socialBtnApple, { backgroundColor: colors.isDark ? '#FFFFFF' : '#000000' }]}
-            onPress={handleAppleLogin}
-            activeOpacity={0.85}
-          >
-            <Text style={[styles.appleIcon, { color: colors.isDark ? '#000000' : '#FFFFFF' }]}></Text>
-            <Text style={[styles.socialBtnTextApple, { color: colors.isDark ? '#000000' : '#FFFFFF' }]}>Apple</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.socialBtnGoogle,
-              { backgroundColor: colors.cardBackground, borderColor: colors.border },
-            ]}
-            onPress={handleGoogleLogin}
-            activeOpacity={0.85}
-          >
-            <View style={[styles.googleGLogo, { backgroundColor: colors.brand }]}>
-              <Text style={[styles.googleGText, { color: colors.textOnBrand }]}>G</Text>
-            </View>
-            <Text style={[styles.socialBtnTextGoogle, { color: colors.text }]}>Google</Text>
-          </TouchableOpacity>
-        </View>
+        {/* Social Auth Buttons (Apple Sign In) */}
+        {Platform.OS === 'ios' && (
+          <View style={styles.socialRow}>
+            <TouchableOpacity
+              style={[
+                styles.socialBtnApple,
+                { backgroundColor: colors.isDark ? '#FFFFFF' : '#000000', flex: 1 },
+              ]}
+              onPress={handleAppleLogin}
+              activeOpacity={0.85}
+            >
+              <Text style={[styles.appleIcon, { color: colors.isDark ? '#000000' : '#FFFFFF' }]}></Text>
+              <Text style={[styles.socialBtnTextApple, { color: colors.isDark ? '#000000' : '#FFFFFF' }]}>Apple ile Giriş Yap</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         {/* Divider */}
         <View style={styles.dividerRow}>

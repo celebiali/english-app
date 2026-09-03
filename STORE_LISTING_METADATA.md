@@ -72,16 +72,24 @@ YDS, YÖKDİL, YDT ve akademik İngilizce metinleri rahatça anlamanın en temel
 - İlerlemenizi dilediğiniz zaman bulut ile senkronize etme imkanı
 
 YDS ve YÖKDİL hazırlık sürecinde kelime dağarcığınızı sağlamlaştırmak ve soru çözme pratiği kazanmak için YDS Pratik ile hemen başlayın!
+
+---
+ABONELİK VE OTOMATİK YENİLEME BİLGİLERİ (YDS Pratik Pro):
+- 6 Aylık Hazırlık Paketi (7 Gün Ücretsiz Deneme, ardından 599,00 ₺ / 6 Ay)
+- 12 Aylık Sınırsız VIP (7 Gün Ücretsiz Deneme, ardından 1.099,00 ₺ / 12 Ay)
+
+• Satın alma onayı ile ödeme Apple Kimliği hesabınızdan tahsil edilir.
+• Abonelik, cari sürenin bitiminden en az 24 saat önce iptal edilmediği takdirde otomatik yenilenir.
+• Aboneliklerinizi App Store Hesap Ayarlarınızdan dilediğiniz zaman yönetebilir ve iptal edebilirsiniz.
+• Kullanım Şartları (EULA): https://english-app-three-azure.vercel.app/terms.html
+• Gizlilik Politikası: https://english-app-three-azure.vercel.app/privacy.html
 ```
 
-### 8. Sürüm Yenilikleri (What's New in Version 1.0.0)
+### 8. Sürüm Yenilikleri (What's New in Version 1.0.1)
 ```text
-YDS Pratik'in ilk sürümü yayında! 
-- 5 Kademeli Leitner aralıklı tekrar sistemi
-- 7.000+ Akademik kelime sözlüğü
-- Günlük soru pratikleri (Paragraf, Cloze, Cümle, Dil Bilgisi)
-- 80 Soruluk deneme sınavları ve detaylı analiz
-- Gece modu ve kişiselleştirilebilir çalışma hedefleri
+- Giriş deneyimi ve kullanıcı profili iyileştirildi.
+- Apple ile Giriş entegrasyonu güçlendirildi.
+- Performans geliştirmeleri ve kararlılık güncellemeleri yapıldı.
 ```
 
 ### 9. Destek, Gizlilik ve Şartlar URL'leri (URLs)
@@ -97,11 +105,12 @@ YDS Pratik'in ilk sürümü yayında!
 * **İnceleme Notu (Notes for Reviewer):**
 ```text
 Sayın İnceleme Uzmanı,
-1. Uygulama herhangi bir zorunlu giriş gerektirmeden tam fonksiyonel olarak test edilebilir. Giriş ekranının altındaki "Kayıt Olmadan Misafir Olarak Devam Et" butonuna basarak tüm özelliklere doğrudan erişebilirsiniz.
+1. Uygulama herhangi bir zorunlu giriş gerektirmeden tam fonksiyonel olarak test edilebilir. Giriş ekranının altındaki "Daha Sonra Hesap Oluştur" butonuna basarak tüm özelliklere misafir modunda doğrudan erişebilirsiniz.
 2. Giriş akışını test etmek isterseniz yukarıda belirtilen demo test hesabını kullanabilirsiniz:
    E-posta: apple.review@ydspratik.com
    Şifre: YdsTest2026!
-3. Tüm kelime havuzu (7000+ kelime), soru bankası ve deneme sınavları cihazdaki yerel SQLite veri tabanı üzerinde çevrimdışı (offline) olarak da eksiksiz çalışmaktadır.
+3. Guideline 3.1.2 gereğince uygulama içi abonelik ekranında ("YDS Pratik Pro" Paywall) ve Kullanım Şartları (EULA) sayfasında tüm abonelik fiyatlandırmaları, 7 günlük ücretsiz deneme koşulları, otomatik yenileme şartları ve iptal adımları açıkça eklenmiştir.
+4. Tüm kelime havuzu (7000+ kelime), soru bankası ve deneme sınavları çevrimdışı (offline) olarak da eksiksiz çalışmaktadır.
 ```
 
 

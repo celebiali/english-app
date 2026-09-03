@@ -13,6 +13,7 @@ import {
   Platform,
   BackHandler,
   Linking,
+  TextInput,
 } from 'react-native';
 import {
   X,
@@ -31,6 +32,7 @@ import {
   HelpCircle,
   ExternalLink,
   Crown,
+  Pencil,
 } from 'lucide-react-native';
 import { useThemeStore, FontSizeValue } from '../store/useThemeStore';
 import { useLearningStore } from '../store/useLearningStore';
@@ -74,6 +76,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
     resetAllProgress,
     deleteUserAccount,
     getUserAccessStatus,
+    updateUserFullName,
   } = useLearningStore();
 
   const accessStatus = getUserAccessStatus();
@@ -82,6 +85,25 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
   const [selectedHour, setSelectedHour] = useState(21);
   const [isSyncing, setIsSyncing] = useState(false);
   const [lastSyncTime, setLastSyncTime] = useState<string>('Bugün, 10:42');
+
+  // Edit Name Modal
+  const [isEditNameModalOpen, setIsEditNameModalOpen] = useState(false);
+  const [editedName, setEditedName] = useState('');
+
+  const handleOpenEditName = () => {
+    setEditedName(userProfile?.fullName || '');
+    setIsEditNameModalOpen(true);
+  };
+
+  const handleSaveName = async () => {
+    if (!editedName.trim()) {
+      Alert.alert('Uyarı', 'Lütfen geçerli bir ad giriniz.');
+      return;
+    }
+    await updateUserFullName(editedName.trim());
+    setIsEditNameModalOpen(false);
+    Alert.alert('Başarılı ✨', 'Profil adınız başarıyla güncellendi.');
+  };
 
   // Modals visibility
   const [isFontSizeModalOpen, setIsFontSizeModalOpen] = useState(false);
@@ -194,24 +216,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
     }, 800);
   };
 
-  const handleResetProgress = () => {
-    Alert.alert(
-      'İlerlemeyi Sıfırla',
-      'Tüm kelime hafıza kutularınız (Aralıklı Tekrar), çözülen soru ve deneme geçmişiniz, hata kasanız ve günlük seriniz sıfırlanacaktır. Bu işlem geri alınamaz.\n\nDevam etmek istiyor musunuz?',
-      [
-        { text: 'Vazgeç', style: 'cancel' },
-        {
-          text: 'Evet, Sıfırla',
-          style: 'destructive',
-          onPress: async () => {
-            await resetAllProgress();
-            Alert.alert('Başarılı', 'Tüm öğrenme ilerlemeniz başarıyla sıfırlandı.');
-          },
-        },
-      ]
-    );
-  };
-
   const handleDeleteAccount = () => {
     Alert.alert(
       'Hesabımı Sil',
@@ -274,6 +278,13 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
                 <Text style={[styles.accountNameText, { color: colors.text }]} numberOfLines={1}>
                   {userProfile.fullName || 'YDS Öğrencisi'}
                 </Text>
+                <TouchableOpacity
+                  onPress={handleOpenEditName}
+                  style={[styles.editNameBtn, { backgroundColor: colors.brandLight }]}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                >
+                  <Pencil size={12} color={colors.brand} />
+                </TouchableOpacity>
                 {userProfile.isPro && (
                   <View style={[styles.accountStatusBadge, { backgroundColor: colors.brandLight }]}>
                     <Text style={[styles.accountStatusText, { color: colors.brand }]}>
@@ -282,6 +293,15 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
                   </View>
                 )}
               </View>
+              {userProfile.email ? (
+                <Text style={[styles.accountEmailText, { color: colors.textSecondary }]} numberOfLines={1}>
+                  {userProfile.email}
+                </Text>
+              ) : (
+                <Text style={[styles.accountEmailText, { color: colors.textSecondary }]}>
+                  {userProfile.isGuest ? 'Misafir Hesap' : 'Apple Girişi'}
+                </Text>
+              )}
             </View>
 
             <TouchableOpacity
@@ -585,7 +605,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
 
           {/* Senkronize Et */}
           <TouchableOpacity
-            style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}
+            style={[
+              styles.rowItem,
+              userProfile ? { borderBottomWidth: 1, borderBottomColor: colors.border } : null,
+            ]}
             onPress={handleSyncData}
             activeOpacity={0.7}
           >
@@ -596,24 +619,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
               </Text>
             </View>
             <RefreshCw size={16} color={colors.textSecondary} />
-          </TouchableOpacity>
-
-          {/* İlerlemeyi Sıfırla */}
-          <TouchableOpacity
-            style={[
-              styles.rowItem,
-              userProfile ? { borderBottomWidth: 1, borderBottomColor: colors.border } : null,
-            ]}
-            onPress={handleResetProgress}
-            activeOpacity={0.7}
-          >
-            <View>
-              <Text style={[styles.rowLabelDanger, { color: colors.error }]}>Tüm İlerlemeyi Sıfırla</Text>
-              <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
-                Kelime kutuları, çözülen sorular ve seriyi sıfırlar
-              </Text>
-            </View>
-            <RotateCcw size={16} color={colors.error} />
           </TouchableOpacity>
 
           {/* Hesabımı Sil */}
@@ -1159,6 +1164,63 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
         visible={isSubscriptionModalOpen}
         onClose={() => setIsSubscriptionModalOpen(false)}
       />
+
+      {/* EDIT NAME MODAL */}
+      <Modal
+        visible={isEditNameModalOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsEditNameModalOpen(false)}
+      >
+        <View style={styles.nameModalOverlay}>
+          <View style={[styles.nameModalCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+            <View style={styles.nameModalHeader}>
+              <Text style={[styles.nameModalTitle, { color: colors.text }]}>Adınızı Güncelleyin</Text>
+              <TouchableOpacity
+                onPress={() => setIsEditNameModalOpen(false)}
+                style={[styles.nameModalCloseBtn, { backgroundColor: colors.subtleBackground }]}
+              >
+                <X size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
+            <Text style={[styles.nameModalSubtitle, { color: colors.textSecondary }]}>
+              Uygulama içinde ve raporlarınızda görünecek adınızı giriniz.
+            </Text>
+
+            <TextInput
+              style={[
+                styles.nameInput,
+                {
+                  backgroundColor: colors.subtleBackground,
+                  color: colors.text,
+                  borderColor: colors.border,
+                },
+              ]}
+              value={editedName}
+              onChangeText={setEditedName}
+              placeholder="Adınız Soyadınız"
+              placeholderTextColor={colors.textSecondary}
+              autoFocus
+              autoCapitalize="words"
+            />
+
+            <View style={styles.nameModalActions}>
+              <TouchableOpacity
+                style={[styles.nameModalCancelBtn, { backgroundColor: colors.subtleBackground }]}
+                onPress={() => setIsEditNameModalOpen(false)}
+              >
+                <Text style={[styles.nameModalCancelText, { color: colors.textSecondary }]}>Vazgeç</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.nameModalSaveBtn, { backgroundColor: colors.brand }]}
+                onPress={handleSaveName}
+              >
+                <Text style={[styles.nameModalSaveText, { color: colors.textOnBrand }]}>Kaydet</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -1509,6 +1571,86 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     flexShrink: 1,
   },
+  editNameBtn: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  nameModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.55)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  nameModalCard: {
+    width: '100%',
+    maxWidth: 380,
+    borderRadius: 24,
+    padding: 22,
+    borderWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  nameModalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 6,
+  },
+  nameModalTitle: {
+    fontSize: 18,
+    fontWeight: '800',
+  },
+  nameModalCloseBtn: {
+    padding: 6,
+    borderRadius: 16,
+  },
+  nameModalSubtitle: {
+    fontSize: 13,
+    lineHeight: 18,
+    marginBottom: 16,
+  },
+  nameInput: {
+    borderWidth: 1.5,
+    borderRadius: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: 15,
+    fontWeight: '600',
+    marginBottom: 20,
+  },
+  nameModalActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  nameModalCancelBtn: {
+    flex: 1,
+    paddingVertical: 13,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  nameModalCancelText: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  nameModalSaveBtn: {
+    flex: 1.5,
+    paddingVertical: 13,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  nameModalSaveText: {
+    fontSize: 14,
+    fontWeight: '800',
+  },
   accountStatusBadge: {
     paddingHorizontal: 7,
     paddingVertical: 2,
@@ -1520,6 +1662,7 @@ const styles = StyleSheet.create({
   },
   accountEmailText: {
     fontSize: 12.5,
+    marginTop: 2,
   },
   accountTargetText: {
     fontSize: 12,

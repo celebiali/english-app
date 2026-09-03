@@ -458,49 +458,30 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
           <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
         </View>
 
-        {/* SOCIAL SIGN IN (APPLE & GOOGLE) AT THE BOTTOM */}
-        <View style={styles.socialAuthRow}>
-          {/* Apple Sign-In Button */}
-          <TouchableOpacity
-            style={[
-              styles.socialButton,
-              styles.appleButton,
-              { backgroundColor: colors.isDark ? '#FFFFFF' : '#000000' },
-            ]}
-            onPress={handleAppleSignIn}
-            disabled={isLoading}
-            activeOpacity={0.85}
-          >
-            <AppleIcon size={18} color={colors.isDark ? '#000000' : '#FFFFFF'} />
-            <Text
+        {/* APPLE SIGN IN (NATIVE & SECURE) */}
+        {Platform.OS === 'ios' && (
+          <View style={styles.socialAuthRow}>
+            <TouchableOpacity
               style={[
-                styles.socialButtonText,
-                { color: colors.isDark ? '#000000' : '#FFFFFF' },
+                styles.appleFullButton,
+                { backgroundColor: colors.isDark ? '#FFFFFF' : '#000000' },
               ]}
+              onPress={handleAppleSignIn}
+              disabled={isLoading}
+              activeOpacity={0.85}
             >
-              Apple
-            </Text>
-          </TouchableOpacity>
-
-          {/* Google Sign-In Button */}
-          <TouchableOpacity
-            style={[
-              styles.socialButton,
-              styles.googleButton,
-              {
-                backgroundColor: colors.cardBackground,
-                borderColor: colors.border,
-                shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
-              },
-            ]}
-            onPress={handleGoogleSignIn}
-            disabled={isLoading}
-            activeOpacity={0.85}
-          >
-            <GoogleIcon size={18} />
-            <Text style={[styles.socialButtonText, { color: colors.text }]}>Google</Text>
-          </TouchableOpacity>
-        </View>
+              <AppleIcon size={19} color={colors.isDark ? '#000000' : '#FFFFFF'} />
+              <Text
+                style={[
+                  styles.appleFullButtonText,
+                  { color: colors.isDark ? '#000000' : '#FFFFFF' },
+                ]}
+              >
+                Apple ile Giriş Yap
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         {/* GUEST ACCESS (OFFLINE & DEMO FRIENDLY) */}
         <TouchableOpacity
@@ -717,6 +698,23 @@ const styles = StyleSheet.create({
     gap: 8,
     height: 48,
     borderRadius: 14,
+  },
+  appleFullButton: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    height: 50,
+    borderRadius: 14,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  appleFullButtonText: {
+    fontSize: 15,
+    fontWeight: '700',
   },
   appleButton: {
     shadowOffset: { width: 0, height: 2 },

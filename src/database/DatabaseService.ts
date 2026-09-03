@@ -1559,6 +1559,21 @@ class DatabaseService {
     }
   }
 
+  async updateUserFullName(fullName: string): Promise<void> {
+    if (!this.isNative) {
+      if (this.memoryDb.userSession) {
+        this.memoryDb.userSession.fullName = fullName;
+      }
+      return;
+    }
+
+    try {
+      await this.dbInstance.runAsync(`UPDATE user_session SET full_name = ?`, [fullName]);
+    } catch (err) {
+      console.warn('Failed to update full name in SQLite:', err);
+    }
+  }
+
   async getComprehensivePerformanceStats(): Promise<PerformanceStats> {
     if (!this.isNative) {
       let totalSolved = 0, totalCorrect = 0, totalMistakes = 0;

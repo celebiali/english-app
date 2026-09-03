@@ -3,7 +3,7 @@
     "name": "YDS Pratik",
     "slug": "ydspratik",
     "scheme": "ydspratik",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -15,7 +15,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.celebi.ydspratik",
-      "buildNumber": "3",
+      "buildNumber": "4",
       "supportsTablet": true,
       "requireFullScreen": true,
       "infoPlist": {
@@ -34,6 +34,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4d94b850-1c75-4cbf-967a-969d9063c736"
+      }
+    },
+    "owner": "alicelebii"
   }
 }

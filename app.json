@@ -26,7 +26,7 @@
     },
     "android": {
       "package": "com.celebi.ydspratik",
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1E40AF"
@@ -40,6 +40,17 @@
         "projectId": "4d94b850-1c75-4cbf-967a-969d9063c736"
       }
     },
-    "owner": "alicelebii"
+    "owner": "alicelebii",
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 36
+          }
+        }
+      ]
+    ]
   }
 }

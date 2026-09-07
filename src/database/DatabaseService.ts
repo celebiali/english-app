@@ -375,33 +375,38 @@ class DatabaseService {
       return filtered.slice(0, limit);
     }
 
-    let query = `SELECT * FROM questions WHERE status = 'ACTIVE'`;
-    const params: any[] = [];
+    try {
+      let query = `SELECT * FROM questions WHERE status = 'ACTIVE'`;
+      const params: any[] = [];
 
-    if (userId) {
-      query += ` AND (user_id = ? OR user_id IS NULL)`;
-      params.push(userId);
-    }
-
-    if (type) {
-      if (type === 'SKILL_DIALOGUE') {
-        query += ` AND type IN ('SKILL_DIALOGUE', 'RESTATEMENT', 'TRANSLATION', 'VOCABULARY_GRAMMAR')`;
-      } else {
-        query += ` AND type = ?`;
-        params.push(type);
+      if (userId) {
+        query += ` AND (user_id = ? OR user_id IS NULL)`;
+        params.push(userId);
       }
-    }
 
-    if (userId) {
-      query += ` ORDER BY CASE WHEN user_id = ? THEN 0 ELSE 1 END, id ASC LIMIT ?`;
-      params.push(userId, limit);
-    } else {
-      query += ` ORDER BY id ASC LIMIT ?`;
-      params.push(limit);
-    }
+      if (type) {
+        if (type === 'SKILL_DIALOGUE') {
+          query += ` AND type IN ('SKILL_DIALOGUE', 'RESTATEMENT', 'TRANSLATION', 'VOCABULARY_GRAMMAR')`;
+        } else {
+          query += ` AND type = ?`;
+          params.push(type);
+        }
+      }
 
-    const rows = await this.dbInstance.getAllAsync(query, params);
-    return rows.map((r: any) => this.mapRowToQuestion(r));
+      if (userId) {
+        query += ` ORDER BY CASE WHEN user_id = ? THEN 0 ELSE 1 END, id ASC LIMIT ?`;
+        params.push(userId, limit);
+      } else {
+        query += ` ORDER BY id ASC LIMIT ?`;
+        params.push(limit);
+      }
+
+      const rows = await this.dbInstance.getAllAsync(query, params);
+      return (rows || []).map((r: any) => this.mapRowToQuestion(r));
+    } catch (err) {
+      console.warn('getActiveQuestionsByType query error, falling back:', err);
+      return [];
+    }
   }
 
   /**
@@ -1150,7 +1155,7 @@ class DatabaseService {
         category: r.category,
         subcategory: r.subcategory,
         level: r.level,
-        synonyms: r.synonyms ? JSON.parse(r.synonyms) : [],
+        synonyms: this.safeParseJson(r.synonyms, []),
         example_sentence: r.example_sentence,
         example_translation: r.example_translation,
         etymology_note: r.etymology_note,
@@ -1199,7 +1204,7 @@ class DatabaseService {
       category: r.category,
       subcategory: r.subcategory,
       level: r.level,
-      synonyms: r.synonyms ? JSON.parse(r.synonyms) : [],
+      synonyms: this.safeParseJson(r.synonyms, []),
       example_sentence: r.example_sentence,
       example_translation: r.example_translation,
       etymology_note: r.etymology_note,
@@ -1472,7 +1477,7 @@ class DatabaseService {
         category: r.category,
         subcategory: r.subcategory,
         level: r.level,
-        synonyms: r.synonyms ? JSON.parse(r.synonyms) : [],
+        synonyms: this.safeParseJson(r.synonyms, []),
         example_sentence: r.example_sentence,
         example_translation: r.example_translation,
         etymology_note: r.etymology_note,
@@ -1513,7 +1518,7 @@ class DatabaseService {
       category: r.category,
       subcategory: r.subcategory,
       level: r.level,
-      synonyms: r.synonyms ? JSON.parse(r.synonyms) : [],
+      synonyms: this.safeParseJson(r.synonyms, []),
       example_sentence: r.example_sentence,
       example_translation: r.example_translation,
       etymology_note: r.etymology_note,
@@ -2029,6 +2034,16 @@ class DatabaseService {
       status: r.status,
       created_at: r.created_at,
     };
+  }
+
+  private safeParseJson<T>(val: any, fallback: T): T {
+    if (!val) return fallback;
+    if (typeof val !== 'string') return val;
+    try {
+      return JSON.parse(val) as T;
+    } catch (_) {
+      return fallback;
+    }
   }
 }
 

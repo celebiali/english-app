@@ -10,11 +10,18 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { CheckCircle2, XCircle, ArrowRight, HelpCircle, Volume2 } from 'lucide-react-native';
-import * as Speech from 'expo-speech';
 import { CardWord } from '../types';
 import { TurengService, TurengWordDetail } from '../services/TurengService';
 import { AIService } from '../services/AIService';
 import { useThemeStore } from '../store/useThemeStore';
+
+// Safe dynamic native module resolution to prevent launch crashes on binaries without ExpoSpeech linked
+let SpeechModule: any = null;
+try {
+  SpeechModule = require('expo-speech');
+} catch (e) {
+  // Native module not linked in current binary
+}
 
 export interface CardComponentProps {
   cardWord: CardWord;
@@ -122,11 +129,15 @@ export const CardComponent: React.FC<CardComponentProps> = ({
 
   const handleSpeak = () => {
     try {
-      Speech.stop();
-      Speech.speak(cardWord.word, {
-        language: 'en-US',
-        rate: 0.88,
-      });
+      if (SpeechModule && typeof SpeechModule.speak === 'function') {
+        SpeechModule.stop();
+        SpeechModule.speak(cardWord.word, {
+          language: 'en-US',
+          rate: 0.88,
+        });
+      } else {
+        console.warn('Native speech module is not available in this binary build.');
+      }
     } catch (e) {
       console.warn('Speech error:', e);
     }

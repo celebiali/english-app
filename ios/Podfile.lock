@@ -44,6 +44,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - ExpoSpeech (12.0.2):
+    - ExpoModulesCore
   - ExpoSQLite (14.0.6):
     - ExpoModulesCore
     - "sqlite3 (~> 3.45.3+1)"
@@ -1249,6 +1251,7 @@ DEPENDENCIES:
   - ExpoFont (from `../node_modules/expo-font/ios`)
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
+  - ExpoSpeech (from `../node_modules/expo-speech/ios`)
   - ExpoSQLite (from `../node_modules/expo-sqlite/ios`)
   - ExpoWebBrowser (from `../node_modules/expo-web-browser/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -1342,6 +1345,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-keep-awake/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core"
+  ExpoSpeech:
+    :path: "../node_modules/expo-speech/ios"
   ExpoSQLite:
     :path: "../node_modules/expo-sqlite/ios"
   ExpoWebBrowser:
@@ -1470,6 +1475,7 @@ SPEC CHECKSUMS:
   ExpoFont: 38dddf823e32740c2a9f37c926a33aeca736b5c4
   ExpoKeepAwake: dd02e65d49f1cfd9194640028ae2857e536eb1c9
   ExpoModulesCore: 9ac73e2f60e0ea1d30137ca96cfc8c2aa34ef2b2
+  ExpoSpeech: f17507715159aac594682a91239c53ab4593329f
   ExpoSQLite: 9ed0c4fb3b432f68dee65e795ccd630a7cfabd3c
   ExpoWebBrowser: cf10afe886891ab495877dada977fe6c269614a4
   FBLazyVector: ac12dc084d1c8ec4cc4d7b3cf1b0ebda6dab85af

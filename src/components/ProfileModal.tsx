@@ -203,7 +203,7 @@ export const ProfileModal: React.FC<Props> = ({ visible, onClose, onOpenAuth }) 
                   activeOpacity={0.7}
                 >
                   <Trash2 size={16} color={colors.error} />
-                  <Text style={[styles.deleteAccountBtnText, { color: colors.error }]}>Hesabımı ve Verilerimi Sil</Text>
+                  <Text style={[styles.deleteAccountBtnText, { color: colors.error }]}>Hesabımı Sil</Text>
                 </TouchableOpacity>
               </View>
             )}

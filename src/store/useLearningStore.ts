@@ -94,6 +94,7 @@ interface LearningState {
   setTaskGoals: (goals: Partial<TaskGoalsConfig>) => Promise<void>;
 
   // Daily Tasks Actions
+  checkAndReplenishDailyAIQuestions: (userId?: string) => Promise<void>;
   loadDailyTasks: (force?: boolean) => Promise<void>;
   answerDailyQuestion: (question: QuestionItem, selectedOption: OptionKey) => Promise<boolean>;
   generateFreshAIQuestions: (type: YdsQuestionType) => Promise<void>;
@@ -314,6 +315,9 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     } else {
       await dbService.clearUserSession();
     }
+
+    // Refresh daily questions for the current active user
+    await get().loadDailyTasks(true);
   },
 
   getUserAccessStatus: (): UserAccessStatus => {
@@ -389,29 +393,27 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   },
 
   updateUserTargetScore: async (score: number) => {
-    const current = get().userProfile;
-    if (current) {
-      const updated: UserProfile = { ...current, targetScore: score };
-      set({ userProfile: updated });
-      SupabaseService.setCurrentUser(updated);
-      await dbService.saveUserSession(updated);
+    const profile = get().userProfile;
+    if (profile) {
+      const updated: UserProfile = { ...profile, targetScore: score };
+      await get().setUserProfile(updated);
     }
   },
 
   updateUserFullName: async (name: string) => {
-    const current = get().userProfile;
-    if (current) {
-      const cleanName = name.trim();
-      const updated: UserProfile = { ...current, fullName: cleanName };
-      set({ userProfile: updated });
-      SupabaseService.setCurrentUser(updated);
-      await dbService.saveUserSession(updated);
+    const profile = get().userProfile;
+    if (profile) {
+      const updated: UserProfile = { ...profile, fullName: name.trim() };
+      await get().setUserProfile(updated);
     }
   },
 
   setDailyQuestionTarget: (target: number) => {
-    set({ dailyQuestionTarget: target });
-    get().loadDailyTasks(true);
+    const clamped = Math.max(10, Math.min(100, target));
+    set({ dailyQuestionTarget: clamped });
+    // Recalculate distributed category goals
+    const goals = get().taskGoals;
+    dbService.saveUserTaskGoals(goals);
   },
 
   setTaskGoals: async (newGoals: Partial<TaskGoalsConfig>) => {
@@ -434,11 +436,37 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   // ==========================================
   // DAILY TASKS & DYNAMIC POOL
   // ==========================================
+
+  checkAndReplenishDailyAIQuestions: async (userId?: string) => {
+    try {
+      const currentUserId = userId || SupabaseService.getCurrentUser()?.id || 'local_user';
+      const todayStr = new Date().toISOString().split('T')[0];
+      const hasGeneratedToday = await dbService.hasGeneratedQuestionsForToday(currentUserId, todayStr);
+
+      if (!hasGeneratedToday) {
+        const { taskGoals } = get();
+        const batch = await AIService.generateDailyBatchForUser(taskGoals, currentUserId, todayStr);
+        if (batch.length > 0) {
+          await dbService.insertBatchQuestions(batch, currentUserId, todayStr);
+          await dbService.setLastAIGenerationDate(todayStr);
+        }
+      }
+    } catch (err) {
+      console.warn('Daily AI replenishment error:', err);
+    }
+  },
+
   loadDailyTasks: async (force = false) => {
     try {
       const { taskGoals } = get();
+      const currentUser = SupabaseService.getCurrentUser();
+      const userId = currentUser?.id || 'local_user';
+
+      // Automatically check and replenish user's daily questions if new day
+      await get().checkAndReplenishDailyAIQuestions(userId);
+
       const todayProg = await dbService.getDailyTaskProgressToday(taskGoals);
-      const activeQs = await dbService.getDailyTaskQuestions(taskGoals);
+      const activeQs = await dbService.getDailyTaskQuestions(taskGoals, userId);
       set({
         dailyTasksProgress: todayProg,
         activeDailyQuestions: activeQs,

@@ -184,6 +184,15 @@ class DatabaseService {
     try {
       await this.dbInstance.execAsync(`ALTER TABLE user_settings ADD COLUMN skills_goal INTEGER DEFAULT 14;`);
     } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE questions ADD COLUMN user_id TEXT;`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE questions ADD COLUMN generation_date DATE;`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE user_settings ADD COLUMN last_ai_generation_date DATE;`);
+    } catch (_) {}
 
     // Seed default folders
     try {
@@ -306,12 +315,16 @@ class DatabaseService {
 
   /**
    * Fetches active questions for daily tasks according to dynamic category goals.
+   * User-scoped: prioritizes questions belonging to this user or fallback to initial pool.
    */
-  async getDailyTaskQuestions(goals: TaskGoalsConfig = { paragraph: 8, cloze: 5, sentence: 8, skills: 14 }): Promise<QuestionItem[]> {
-    const paragraphs = await this.getActiveQuestionsByType('PARAGRAPH', goals.paragraph);
-    const clozes = await this.getActiveQuestionsByType('CLOZE_TEST', goals.cloze);
-    const sentences = await this.getActiveQuestionsByType('SENTENCE_COMPLETION', goals.sentence);
-    const skills = await this.getActiveQuestionsByType('SKILL_DIALOGUE', goals.skills);
+  async getDailyTaskQuestions(
+    goals: TaskGoalsConfig = { paragraph: 8, cloze: 5, sentence: 8, skills: 14 },
+    userId?: string
+  ): Promise<QuestionItem[]> {
+    const paragraphs = await this.getActiveQuestionsByType('PARAGRAPH', goals.paragraph, userId);
+    const clozes = await this.getActiveQuestionsByType('CLOZE_TEST', goals.cloze, userId);
+    const sentences = await this.getActiveQuestionsByType('SENTENCE_COMPLETION', goals.sentence, userId);
+    const skills = await this.getActiveQuestionsByType('SKILL_DIALOGUE', goals.skills, userId);
 
     return [...paragraphs, ...clozes, ...sentences, ...skills];
   }
@@ -320,10 +333,22 @@ class DatabaseService {
    * Fetches active questions for daily tasks by question type.
    * Only returns questions with status = 'ACTIVE'.
    * Correctly answered questions disappear from this active query!
+   * Scoped to specific userId, prioritizing user's customized questions.
    */
-  async getActiveQuestionsByType(type?: YdsQuestionType, limit: number = 20): Promise<QuestionItem[]> {
+  async getActiveQuestionsByType(
+    type?: YdsQuestionType,
+    limit: number = 20,
+    userId?: string
+  ): Promise<QuestionItem[]> {
     if (!this.isNative) {
-      let filtered = Array.from(this.memoryDb.questions.values()).filter((q) => q.status === 'ACTIVE');
+      let filtered = Array.from(this.memoryDb.questions.values()).filter((q) => {
+        if (q.status !== 'ACTIVE') return false;
+        if (userId) {
+          return q.user_id === userId || !q.user_id;
+        }
+        return true;
+      });
+
       if (type) {
         if (type === 'SKILL_DIALOGUE') {
           filtered = filtered.filter(
@@ -337,11 +362,26 @@ class DatabaseService {
           filtered = filtered.filter((q) => q.type === type);
         }
       }
+
+      if (userId) {
+        filtered.sort((a, b) => {
+          const aUser = a.user_id === userId ? 0 : 1;
+          const bUser = b.user_id === userId ? 0 : 1;
+          if (aUser !== bUser) return aUser - bUser;
+          return a.id - b.id;
+        });
+      }
+
       return filtered.slice(0, limit);
     }
 
     let query = `SELECT * FROM questions WHERE status = 'ACTIVE'`;
     const params: any[] = [];
+
+    if (userId) {
+      query += ` AND (user_id = ? OR user_id IS NULL)`;
+      params.push(userId);
+    }
 
     if (type) {
       if (type === 'SKILL_DIALOGUE') {
@@ -352,8 +392,13 @@ class DatabaseService {
       }
     }
 
-    query += ` ORDER BY id ASC LIMIT ?`;
-    params.push(limit);
+    if (userId) {
+      query += ` ORDER BY CASE WHEN user_id = ? THEN 0 ELSE 1 END, id ASC LIMIT ?`;
+      params.push(userId, limit);
+    } else {
+      query += ` ORDER BY id ASC LIMIT ?`;
+      params.push(limit);
+    }
 
     const rows = await this.dbInstance.getAllAsync(query, params);
     return rows.map((r: any) => this.mapRowToQuestion(r));
@@ -409,9 +454,11 @@ class DatabaseService {
     }
 
     const res = await this.dbInstance.runAsync(
-      `INSERT INTO questions (type, title, passage, question_number, question_text, option_a, option_b, option_c, option_d, option_e, correct_option, explanation, subtopic, difficulty, source, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO questions (user_id, generation_date, type, title, passage, question_number, question_text, option_a, option_b, option_c, option_d, option_e, correct_option, explanation, subtopic, difficulty, source, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
+        item.user_id || null,
+        item.generation_date || null,
         item.type,
         item.title || null,
         item.passage || null,
@@ -432,6 +479,134 @@ class DatabaseService {
     );
 
     return res.lastInsertRowId;
+  }
+
+  /**
+   * Checks whether questions have already been generated for this specific user today
+   */
+  async hasGeneratedQuestionsForToday(userId: string, dateStr: string): Promise<boolean> {
+    if (!this.isNative) {
+      return Array.from(this.memoryDb.questions.values()).some(
+        (q) => q.user_id === userId && q.generation_date === dateStr
+      );
+    }
+
+    try {
+      const row: any = await this.dbInstance.getFirstAsync(
+        `SELECT COUNT(*) as cnt FROM questions WHERE user_id = ? AND generation_date = ?`,
+        [userId, dateStr]
+      );
+      return row ? row.cnt > 0 : false;
+    } catch (e) {
+      console.warn('Error checking hasGeneratedQuestionsForToday:', e);
+      return false;
+    }
+  }
+
+  /**
+   * Inserts an entire daily batch of questions for a specific user into SQLite atomically
+   */
+  async insertBatchQuestions(
+    questions: Array<Omit<QuestionItem, 'id'>>,
+    userId: string,
+    generationDate: string
+  ): Promise<number[]> {
+    const insertedIds: number[] = [];
+
+    if (!this.isNative) {
+      for (const q of questions) {
+        const id = await this.memoryDb.insertQuestion({
+          ...q,
+          user_id: userId,
+          generation_date: generationDate,
+        });
+        insertedIds.push(id);
+      }
+      return insertedIds;
+    }
+
+    await this.dbInstance.withTransactionAsync(async () => {
+      for (const item of questions) {
+        const res = await this.dbInstance.runAsync(
+          `INSERT INTO questions (
+            user_id, generation_date, type, title, passage, question_number,
+            question_text, option_a, option_b, option_c, option_d, option_e,
+            correct_option, explanation, subtopic, difficulty, source, status
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            userId,
+            generationDate,
+            item.type,
+            item.title || null,
+            item.passage || null,
+            item.question_number || null,
+            item.question_text,
+            item.options.A,
+            item.options.B,
+            item.options.C,
+            item.options.D,
+            item.options.E,
+            item.correct_option,
+            item.explanation,
+            item.subtopic || null,
+            item.difficulty || 'YDS_EXAM',
+            item.source || 'AI Günlük İkmal',
+            'ACTIVE',
+          ]
+        );
+        insertedIds.push(res.lastInsertRowId);
+      }
+    });
+
+    return insertedIds;
+  }
+
+  /**
+   * Reads last AI question generation date
+   */
+  async getLastAIGenerationDate(userId?: string): Promise<string | null> {
+    if (!this.isNative) {
+      return (this.memoryDb as any).lastAiGenerationDate || null;
+    }
+
+    try {
+      if (userId) {
+        const qRow: any = await this.dbInstance.getFirstAsync(
+          `SELECT generation_date FROM questions WHERE user_id = ? ORDER BY id DESC LIMIT 1`,
+          [userId]
+        );
+        if (qRow && qRow.generation_date) {
+          return qRow.generation_date;
+        }
+      }
+
+      const row: any = await this.dbInstance.getFirstAsync(
+        `SELECT last_ai_generation_date FROM user_settings WHERE id = 1`
+      );
+      return row?.last_ai_generation_date || null;
+    } catch (e) {
+      console.warn('Error reading last_ai_generation_date:', e);
+      return null;
+    }
+  }
+
+  /**
+   * Updates last AI question generation date
+   */
+  async setLastAIGenerationDate(dateStr: string): Promise<void> {
+    if (!this.isNative) {
+      (this.memoryDb as any).lastAiGenerationDate = dateStr;
+      return;
+    }
+
+    try {
+      await this.dbInstance.runAsync(
+        `UPDATE user_settings SET last_ai_generation_date = ? WHERE id = 1`,
+        [dateStr]
+      );
+    } catch (e) {
+      console.warn('Error updating last_ai_generation_date:', e);
+    }
   }
 
   // ==========================================
@@ -1125,23 +1300,41 @@ class DatabaseService {
       const currentBox = currentProgress ? currentProgress.box : 1;
 
       if (currentBox === 0 || currentBox === 1) {
+        // Günlük kutu doğru -> Haftalık kutu (7 gün sonra)
         newBox = 2;
         nextReviewAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
         newStatus = 'REVIEWING';
       } else if (currentBox === 2) {
+        // Haftalık kutu doğru -> Aylık kutu (30 gün sonra)
         newBox = 3;
         nextReviewAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
         newStatus = 'MASTERED';
       } else {
+        // Aylık kutu doğru -> Kalıcı Hafıza pekiştirme (90 gün sonra)
         newBox = 3;
-        nextReviewAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+        nextReviewAt = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000);
         newStatus = 'MASTERED';
       }
     } else {
       incorrectCount += 1;
-      newBox = 0;
-      nextReviewAt = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-      newStatus = 'LEARNING';
+      const currentBox = currentProgress ? currentProgress.box : 1;
+
+      if (currentBox === 3) {
+        // Aylık kutudaki yanlış -> Haftalık kutuya kademeli düşer (7 gün sonra)
+        newBox = 2;
+        nextReviewAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+        newStatus = 'REVIEWING';
+      } else if (currentBox === 2) {
+        // Haftalık kutudaki yanlış -> Günlük kutuya düşer (1 gün sonra)
+        newBox = 1;
+        nextReviewAt = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+        newStatus = 'LEARNING';
+      } else {
+        // Günlük kutudaki yanlış -> Bilene kadar günlük kutuda kalır (1 gün sonra)
+        newBox = 1;
+        nextReviewAt = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+        newStatus = 'LEARNING';
+      }
     }
 
     const updatedProg: WordProgress = {
@@ -1188,74 +1381,122 @@ class DatabaseService {
   }
 
   async getWordsForDailyBatch(newWordsLimit: number = 25): Promise<CardWord[]> {
+    const computeBadgeInfo = (progBox: number, nextReviewAtStr?: string | null) => {
+      const now = Date.now();
+      let daysOverdue = 0;
+      if (nextReviewAtStr) {
+        const dueTime = new Date(nextReviewAtStr).getTime();
+        if (now > dueTime) {
+          daysOverdue = Math.max(0, Math.floor((now - dueTime) / (24 * 60 * 60 * 1000)));
+        }
+      }
+
+      if (progBox === 2) {
+        return { badgeText: '📅 Haftalık Tekrar', daysOverdue };
+      }
+      if (progBox === 3) {
+        return { badgeText: '🏆 Aylık Tekrar', daysOverdue };
+      }
+      if (daysOverdue > 1) {
+        return { badgeText: '⏳ Geciken Tekrar', daysOverdue };
+      }
+      return { badgeText: '🔄 Dünden Tekrar', daysOverdue };
+    };
+
     if (!this.isNative) {
       const allWords = Array.from(this.memoryDb.words.values());
-      const reviewWords: CardWord[] = [];
+      const reviewCandidates: { word: WordItem; prog: WordProgress; daysOverdue: number; badgeText: string }[] = [];
       const newWords: CardWord[] = [];
+      const now = Date.now();
 
       for (const w of allWords) {
         const prog = this.memoryDb.progress.get(w.id);
-        const isDue = !prog?.next_review_at || new Date(prog.next_review_at).getTime() <= Date.now();
-        if (prog && (prog.box === 0 || prog.box === 1) && isDue) {
-          reviewWords.push({
-            ...w,
-            progress: prog,
-            cardType: 'REVIEW',
-            reviewBox: prog.box,
-            isCooldown: false,
-          });
-        } else if (!prog && !w.is_custom) {
+        if (prog) {
+          const dueTime = prog.next_review_at ? new Date(prog.next_review_at).getTime() : 0;
+          if (dueTime <= now) {
+            const { badgeText, daysOverdue } = computeBadgeInfo(prog.box, prog.next_review_at);
+            reviewCandidates.push({ word: w, prog, daysOverdue, badgeText });
+          }
+        } else if (!w.is_custom) {
           if (newWords.length < newWordsLimit) {
             newWords.push({
               ...w,
               cardType: 'NEW',
+              reviewBadgeText: '✨ Günün Yeni Kelimesi',
               isCooldown: false,
             });
           }
         }
       }
+
+      // Vadesi en çok gecikenleri en öne al
+      reviewCandidates.sort((a, b) => {
+        const tA = a.prog.next_review_at ? new Date(a.prog.next_review_at).getTime() : 0;
+        const tB = b.prog.next_review_at ? new Date(b.prog.next_review_at).getTime() : 0;
+        return tA - tB;
+      });
+
+      // Seans başına aşırı yüklemeyi önlemek için en fazla 25 tekrar al
+      const maxReviewLimit = 25;
+      const selectedReviews = reviewCandidates.slice(0, maxReviewLimit);
+
+      const reviewWords: CardWord[] = selectedReviews.map(({ word: w, prog, daysOverdue, badgeText }) => ({
+        ...w,
+        progress: prog,
+        cardType: 'REVIEW',
+        reviewBox: prog.box,
+        reviewBadgeText: badgeText,
+        daysOverdue,
+        isCooldown: false,
+      }));
+
       return [...reviewWords, ...newWords];
     }
 
-    // 1. Fetch DUE REVIEW words waiting in Box 0 or Box 1 (Must be due for review, excluding words added today)
+    // 1. Vadesi gelmiş kelimeleri tüm kutulardan (Günlük, Haftalık, Aylık) çek (Maks 25 adet)
     const reviewRows = await this.dbInstance.getAllAsync(
       `SELECT w.*, p.box as prog_box, p.status as prog_status, p.correct_count as prog_correct, p.incorrect_count as prog_incorrect, p.last_reviewed_at as prog_last_reviewed, p.next_review_at as prog_next_review, p.box_entry_date as prog_entry_date
        FROM words w
        INNER JOIN user_word_progress p ON w.id = p.word_id
-       WHERE (p.box = 0 OR p.box = 1)
-         AND (p.next_review_at IS NULL OR p.next_review_at <= datetime('now'))
-       ORDER BY p.last_reviewed_at ASC`
+       WHERE (p.next_review_at IS NULL OR p.next_review_at <= datetime('now'))
+       ORDER BY p.next_review_at ASC
+       LIMIT 25`
     );
 
-    const reviewWords: CardWord[] = reviewRows.map((r: any) => ({
-      id: r.id,
-      word: r.word,
-      meaning: r.meaning,
-      category: r.category,
-      subcategory: r.subcategory,
-      level: r.level,
-      synonyms: r.synonyms ? JSON.parse(r.synonyms) : [],
-      example_sentence: r.example_sentence,
-      example_translation: r.example_translation,
-      etymology_note: r.etymology_note,
-      is_custom: r.is_custom === 1,
-      cardType: 'REVIEW',
-      reviewBox: r.prog_box,
-      progress: {
+    const reviewWords: CardWord[] = reviewRows.map((r: any) => {
+      const { badgeText, daysOverdue } = computeBadgeInfo(r.prog_box, r.prog_next_review);
+      return {
         id: r.id,
-        word_id: r.id,
-        box: r.prog_box,
-        status: r.prog_status,
-        correct_count: r.prog_correct,
-        incorrect_count: r.prog_incorrect,
-        last_reviewed_at: r.prog_last_reviewed,
-        next_review_at: r.prog_next_review,
-        box_entry_date: r.prog_entry_date,
-      },
-      isCooldown: false,
-    }));
+        word: r.word,
+        meaning: r.meaning,
+        category: r.category,
+        subcategory: r.subcategory,
+        level: r.level,
+        synonyms: r.synonyms ? JSON.parse(r.synonyms) : [],
+        example_sentence: r.example_sentence,
+        example_translation: r.example_translation,
+        etymology_note: r.etymology_note,
+        is_custom: r.is_custom === 1,
+        cardType: 'REVIEW',
+        reviewBox: r.prog_box,
+        reviewBadgeText: badgeText,
+        daysOverdue,
+        progress: {
+          id: r.id,
+          word_id: r.id,
+          box: r.prog_box,
+          status: r.prog_status,
+          correct_count: r.prog_correct,
+          incorrect_count: r.prog_incorrect,
+          last_reviewed_at: r.prog_last_reviewed,
+          next_review_at: r.prog_next_review,
+          box_entry_date: r.prog_entry_date,
+        },
+        isCooldown: false,
+      };
+    });
 
-    // 2. Fetch GUARANTEED 25 BRAND NEW UNSEEN words from official curriculum
+    // 2. Garantili olarak her gün 25 YENİ hiç görülmemiş kelimeyi getir
     const newRows = await this.dbInstance.getAllAsync(
       `SELECT w.* FROM words w
        LEFT JOIN user_word_progress p ON w.id = p.word_id
@@ -1278,17 +1519,37 @@ class DatabaseService {
       etymology_note: r.etymology_note,
       is_custom: r.is_custom === 1,
       cardType: 'NEW',
+      reviewBadgeText: '✨ Günün Yeni Kelimesi',
       isCooldown: false,
     }));
 
-    // Return due review words first, followed by the full quota of 25 new words
     return [...reviewWords, ...newWords];
   }
 
   async getStreakCount(): Promise<number> {
-    if (!this.isNative) return this.memoryDb.streak.count;
-    const res = await this.dbInstance.getFirstAsync(`SELECT streak_count FROM user_settings WHERE id = 1`);
-    return res?.streak_count || 1;
+    const todayStr = new Date().toISOString().split('T')[0];
+    const yesterday = new Date(Date.now() - 86400000);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+    if (!this.isNative) {
+      const lastDate = this.memoryDb.streak.lastDate;
+      if (lastDate === todayStr || lastDate === yesterdayStr) {
+        return this.memoryDb.streak.count;
+      }
+      return 0;
+    }
+
+    const row = await this.dbInstance.getFirstAsync(
+      `SELECT last_active_date, streak_count FROM user_settings WHERE id = 1`
+    );
+    const lastActive = row?.last_active_date;
+    const count = row?.streak_count || 0;
+
+    // Eğer son aktif gün bugün veya dün ise seri geçerlidir; aksi takdirde 0 gün olmalıdır
+    if (lastActive === todayStr || lastActive === yesterdayStr) {
+      return count;
+    }
+    return 0;
   }
 
   async checkAndUpdateDailyStreak(): Promise<number> {
@@ -1313,13 +1574,13 @@ class DatabaseService {
     const row = await this.dbInstance.getFirstAsync(
       `SELECT last_active_date, streak_count FROM user_settings WHERE id = 1`
     );
-    let count = row?.streak_count || 1;
+    let count = row?.streak_count || 0;
     const lastActive = row?.last_active_date;
 
     if (lastActive === todayStr) {
-      return count;
+      return count > 0 ? count : 1;
     } else if (lastActive === yesterdayStr) {
-      count += 1;
+      count = (count > 0 ? count : 1) + 1;
     } else {
       count = 1;
     }
@@ -1746,6 +2007,8 @@ class DatabaseService {
   private mapRowToQuestion(r: any): QuestionItem {
     return {
       id: r.id,
+      user_id: r.user_id || undefined,
+      generation_date: r.generation_date || undefined,
       type: r.type,
       title: r.title,
       passage: r.passage,

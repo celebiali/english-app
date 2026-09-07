@@ -72,7 +72,7 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
       [
         { text: 'İptal', style: 'cancel' },
         {
-          text: 'Hesabımı ve Verilerimi Sil',
+          text: 'Hesabımı Sil',
           style: 'destructive',
           onPress: async () => {
             await deleteUserAccount();

@@ -58,8 +58,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
     setIsSystemFontSize,
     fontFamily,
     setFontFamily,
-    autoNightMode,
-    setAutoNightMode,
     colors,
   } = useThemeStore();
 
@@ -242,7 +240,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
       {/* TOP HEADER BAR */}
       <View style={[styles.headerBar, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
         <View style={styles.headerSpacer} />
-        <Text style={[styles.headerTitle, { color: colors.text }]}>Ayarlar</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>Profil</Text>
         <TouchableOpacity style={styles.closeBtn} onPress={onBack} activeOpacity={0.7}>
           <X size={22} color={colors.text} />
         </TouchableOpacity>
@@ -293,15 +291,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
                   </View>
                 )}
               </View>
-              {userProfile.email ? (
-                <Text style={[styles.accountEmailText, { color: colors.textSecondary }]} numberOfLines={1}>
-                  {userProfile.email}
-                </Text>
-              ) : (
-                <Text style={[styles.accountEmailText, { color: colors.textSecondary }]}>
-                  {userProfile.isGuest ? 'Misafir Hesap' : 'Apple Girişi'}
-                </Text>
-              )}
             </View>
 
             <TouchableOpacity
@@ -510,17 +499,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
           GÖRÜNÜM & YAZI
         </Text>
         <View style={[styles.groupedCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
-          {/* Otomatik Gece Modu */}
-          <View style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}>
-            <Text style={[styles.rowLabel, { color: colors.text }]}>Otomatik Gece Modu</Text>
-            <Switch
-              value={autoNightMode}
-              onValueChange={setAutoNightMode}
-              trackColor={{ false: colors.border, true: colors.brand }}
-              thumbColor="#FFFFFF"
-            />
-          </View>
-
           {/* Yazı Boyutu */}
           <TouchableOpacity
             style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}
@@ -629,7 +607,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
               activeOpacity={0.7}
             >
               <View>
-                <Text style={[styles.rowLabelDanger, { color: colors.error }]}>Hesabımı ve Verilerimi Sil</Text>
+                <Text style={[styles.rowLabelDanger, { color: colors.error }]}>Hesabımı Sil</Text>
                 <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
                   Hesabınızı ve bulut kayıtlarınızı kalıcı olarak siler
                 </Text>
@@ -682,7 +660,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
 
           {/* Destek ve Yardım */}
           <TouchableOpacity
-            style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}
+            style={styles.rowItem}
             onPress={() => openUrlSafely('https://english-app-three-azure.vercel.app/support.html', 'Destek ve Yardım')}
             activeOpacity={0.7}
           >
@@ -697,22 +675,16 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
             </View>
             <ExternalLink size={16} color={colors.textSecondary} />
           </TouchableOpacity>
-
-          {/* Uygulama Sürümü */}
-          <View style={styles.rowItem}>
-            <View>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>Uygulama Sürümü</Text>
-              <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
-                YDS Pratik v1.0.0 (Build 1) · Çevrimdışı Destekli
-              </Text>
-            </View>
-            <View style={{ paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8, backgroundColor: colors.brandLight }}>
-              <Text style={{ fontSize: 11, fontWeight: '800', color: colors.brand }}>v1.0.0</Text>
-            </View>
-          </View>
         </View>
 
-        <View style={{ height: 40 }} />
+        {/* UYGULAMA SÜRÜMÜ FOOTER */}
+        <View style={styles.versionFooter}>
+          <Text style={[styles.versionFooterText, { color: colors.textSecondary }]}>
+            YDS Pratik v1.0.0 (Build 1) · Çevrimdışı Destekli
+          </Text>
+        </View>
+
+        <View style={{ height: 28 }} />
       </ScrollView>
 
       {/* MODAL 1: YAZI BOYUTU */}
@@ -1821,5 +1793,16 @@ const styles = StyleSheet.create({
   saveGoalsBtnText: {
     fontSize: 15,
     fontWeight: '800',
+  },
+  versionFooter: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 24,
+    marginBottom: 4,
+  },
+  versionFooterText: {
+    fontSize: 12,
+    fontWeight: '500',
+    letterSpacing: 0.2,
   },
 });

@@ -200,8 +200,8 @@ export const WordVaultScreen: React.FC = () => {
                 <Text style={[styles.boxTitle, { color: colors.text }]}>Günlük Tekrar & 25 Yeni Kelime</Text>
                 <Text style={[styles.boxSub, { color: colors.textSecondary }]}>
                   {sessionWords.some((w) => w.cardType === 'REVIEW')
-                    ? `${sessionWords.filter((w) => w.cardType === 'REVIEW').length} dünden tekrar + ${sessionWords.filter((w) => w.cardType !== 'REVIEW').length} yeni kelime`
-                    : 'Günün 25 yeni kelimesi + dünden kalanlar'}
+                    ? `${sessionWords.filter((w) => w.cardType === 'REVIEW').length} tekrar + ${sessionWords.filter((w) => w.cardType !== 'REVIEW').length} yeni kelime`
+                    : 'Günün 25 yeni kelimesi + bekleyen tekrarlar'}
                 </Text>
               </View>
               <View style={[styles.boxCountPill, { backgroundColor: colors.brandLight }]}>

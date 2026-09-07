@@ -588,7 +588,12 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({ onOpenMistak
         activeOpacity={0.8}
       >
         <View style={[styles.homeMistakeBadge, { backgroundColor: colors.brandLight }]}>
-          <Text style={[styles.homeMistakeBadgeText, { color: colors.brand }]}>{mistakes.length}</Text>
+          <Text style={[styles.homeMistakeBadgeNumber, { color: colors.brand }]}>
+            {mistakes.length}
+          </Text>
+          <Text style={[styles.homeMistakeBadgeLabel, { color: colors.brand }]}>
+            Soru
+          </Text>
         </View>
         <View style={{ flex: 1 }}>
           <View style={styles.homeMistakeTitleRow}>
@@ -839,15 +844,21 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   homeMistakeBadge: {
-    width: 42,
-    height: 42,
-    borderRadius: 12,
+    width: 46,
+    height: 46,
+    borderRadius: 13,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  homeMistakeBadgeText: {
-    fontSize: 15,
+  homeMistakeBadgeNumber: {
+    fontSize: 16,
     fontWeight: '900',
+    lineHeight: 18,
+  },
+  homeMistakeBadgeLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    marginTop: 1,
   },
   homeMistakeTitleRow: {
     flexDirection: 'row',

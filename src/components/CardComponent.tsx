@@ -9,7 +9,8 @@ import {
   Keyboard,
   ActivityIndicator,
 } from 'react-native';
-import { CheckCircle2, XCircle, ArrowRight, HelpCircle } from 'lucide-react-native';
+import { CheckCircle2, XCircle, ArrowRight, HelpCircle, Volume2 } from 'lucide-react-native';
+import * as Speech from 'expo-speech';
 import { CardWord } from '../types';
 import { TurengService, TurengWordDetail } from '../services/TurengService';
 import { AIService } from '../services/AIService';
@@ -119,6 +120,18 @@ export const CardComponent: React.FC<CardComponentProps> = ({
     onAnswer(isCorrectAnswer);
   };
 
+  const handleSpeak = () => {
+    try {
+      Speech.stop();
+      Speech.speak(cardWord.word, {
+        language: 'en-US',
+        rate: 0.88,
+      });
+    } catch (e) {
+      console.warn('Speech error:', e);
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* FLASH WRAP */}
@@ -150,13 +163,26 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                         : { color: colors.brand, fontWeight: '800' },
                     ]}
                   >
-                    {cardWord.cardType === 'REVIEW' ? '🔄 Dünden Tekrar' : '✨ Günün Yeni Kelimesi'}
+                    {cardWord.reviewBadgeText || (cardWord.cardType === 'REVIEW' ? '🔄 Aralıklı Tekrar' : '✨ Günün Yeni Kelimesi')}
                   </Text>
                 </View>
               </View>
 
               <View style={styles.wordCenterBox}>
-                <Text style={[styles.flashWord, { color: colors.text }]}>{cardWord.word}</Text>
+                <View style={styles.wordAudioRow}>
+                  <Text style={[styles.flashWord, { color: colors.text }]}>{cardWord.word}</Text>
+                  <TouchableOpacity
+                    onPress={(e) => {
+                      e.stopPropagation();
+                      handleSpeak();
+                    }}
+                    style={[styles.audioBtn, { backgroundColor: colors.brandLight }]}
+                    hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                    activeOpacity={0.7}
+                  >
+                    <Volume2 size={20} color={colors.brand} />
+                  </TouchableOpacity>
+                </View>
                 <Text style={[styles.flashPhon, { color: colors.textSecondary }]}>
                   {cardWord.etymology_note || turengDetail?.phonetic || 'akademik kelime'}
                 </Text>
@@ -170,7 +196,20 @@ export const CardComponent: React.FC<CardComponentProps> = ({
             /* BACK FACE (ACADEMIC DEFINITIONS & EXAMPLES) */
             <View style={[styles.flashBack, { backgroundColor: colors.cardBackground }]}>
               <View style={styles.fbHeaderRow}>
-                <Text style={[styles.fbWordTitle, { color: colors.text }]}>{cardWord.word}</Text>
+                <View style={styles.fbWordAudioRow}>
+                  <Text style={[styles.fbWordTitle, { color: colors.text }]}>{cardWord.word}</Text>
+                  <TouchableOpacity
+                    onPress={(e) => {
+                      e.stopPropagation();
+                      handleSpeak();
+                    }}
+                    style={[styles.audioBtnSmall, { backgroundColor: colors.brandLight }]}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                    activeOpacity={0.7}
+                  >
+                    <Volume2 size={16} color={colors.brand} />
+                  </TouchableOpacity>
+                </View>
                 <View
                   style={[
                     styles.cardTypeBadge,
@@ -187,7 +226,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                         : { color: colors.brand, fontWeight: '800' },
                     ]}
                   >
-                    {cardWord.cardType === 'REVIEW' ? '🔄 Günlük Tekrar' : '✨ Kelime Anlamı'}
+                    {cardWord.reviewBadgeText ? `${cardWord.reviewBadgeText}` : (cardWord.cardType === 'REVIEW' ? '🔄 Tekrar' : '✨ Kelime Anlamı')}
                   </Text>
                 </View>
               </View>
@@ -359,12 +398,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 20,
   },
+  wordAudioRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    marginBottom: 8,
+  },
+  audioBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   flashWord: {
     fontSize: 32,
     fontWeight: '900',
     letterSpacing: -0.5,
     textAlign: 'center',
-    marginBottom: 8,
   },
   flashPhon: {
     fontSize: 14,
@@ -389,6 +441,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  fbWordAudioRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  audioBtnSmall: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   fbWordTitle: {
     fontSize: 16,

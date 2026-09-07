@@ -102,14 +102,15 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
   };
 
   const proFeatures = [
-    'Tam 80 soruluk gerçek master deneme sınavları',
-    'ÖSYM çeldirici tuzaklarını deşifre eden AI koçluğu',
-    'Kişiselleştirilmiş zayıf nokta soru üretimi',
-    'Hata Kasası ile yanlış soruları kalıcı telafi',
+    '80 Soruluk Gerçek Master Deneme Sınavları',
+    'ÖSYM Çeldiricilerini Deşifre Eden AI Koçluğu',
+    'Kişisel Hata Kasası ve Zayıf Nokta Analizi',
   ];
 
+  const currentPlan = plans.find((p) => p.id === selectedPlanId) || plans[0];
+
   return (
-    <SmoothBottomSheet visible={visible} onClose={onClose} height="88%">
+    <SmoothBottomSheet visible={visible} onClose={onClose} height="85%">
       <View style={{ flex: 1, backgroundColor: colors.cardBackground }}>
         <ScrollView
           style={[styles.container, { backgroundColor: colors.cardBackground }]}
@@ -147,7 +148,7 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
             {proFeatures.map((feat, index) => (
               <View key={index} style={styles.featureRow}>
                 <View style={[styles.checkCircle, { backgroundColor: colors.brandLight }]}>
-                  <Check size={13} color={colors.brand} strokeWidth={3} />
+                  <Check size={12} color={colors.brand} strokeWidth={3} />
                 </View>
                 <Text style={[styles.featureRowText, { color: colors.text }]}>{feat}</Text>
               </View>
@@ -202,10 +203,10 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
                       </View>
                     </View>
 
-                    <View style={{ flex: 1, paddingHorizontal: 8 }}>
+                    <View style={{ flex: 1, paddingHorizontal: 10 }}>
                       <Text style={[styles.planName, { color: colors.text }]}>{plan.title}</Text>
                       <Text style={[styles.planDesc, { color: colors.textSecondary }]}>
-                        {plan.durationMonths} Ay Tam Erişim
+                        {plan.durationMonths} Ay Sınırsız Erişim
                       </Text>
                     </View>
 
@@ -214,7 +215,7 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
                         {plan.originalPrice} ₺
                       </Text>
                       <Text style={[styles.planSubprice, { color: colors.textSecondary }]}>
-                        ~{plan.monthlyPrice} ₺ / ay
+                        ~{plan.monthlyPrice} ₺/ay
                       </Text>
                     </View>
                   </View>
@@ -239,26 +240,22 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
               <>
                 <Sparkles size={18} color={colors.textOnBrand} />
                 <Text style={[styles.ctaButtonText, { color: colors.textOnBrand }]}>
-                  {plans.find((p) => p.id === selectedPlanId)?.title || 'Pro'} — 7 Gün Ücretsiz Başla
+                  7 Gün Ücretsiz Dene ve Başla
                 </Text>
               </>
             )}
           </TouchableOpacity>
 
-          {/* AUTO-RENEWABLE SUBSCRIPTION DISCLOSURE (APPLE GUIDELINE 3.1.2) */}
-          <View style={[styles.disclosureCard, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
-            <Text style={[styles.disclosureHeading, { color: colors.text }]}>
-              Abonelik ve Otomatik Yenileme Şartları:
-            </Text>
-            <Text style={[styles.disclosureBody, { color: colors.textSecondary }]}>
-              • İlk 7 gün tamamen ücretsiz denemedir.{'\n'}
-              • Deneme süresi sonunda abonelik, {plans.find((p) => p.id === selectedPlanId)?.originalPrice || 599} ₺ ({plans.find((p) => p.id === selectedPlanId)?.durationMonths || 6} Ay) tutarında otomatik olarak yenilenir.{'\n'}
-              • Ödeme, satın alma onayı ile Apple Kimliği (iTunes) hesabınızdan tahsil edilir.{'\n'}
-              • Abonelik, cari sürenin bitiminden en az 24 saat önce iptal edilmediği takdirde otomatik yenilenir.{'\n'}
-              • Aboneliğinizi App Store Hesap Ayarlarınızdan dilediğiniz an yönetebilir veya iptal edebilirsiniz.
-            </Text>
-          </View>
+          <Text style={[styles.trialNoticeText, { color: colors.textSecondary }]}>
+            7 gün tamamen ücretsiz • Dilediğin an kolayca iptal et
+          </Text>
 
+          {/* ELEGANT APPLE SUBSCRIPTION DISCLAIMER (GUIDELINE 3.1.2) */}
+          <Text style={[styles.disclaimerText, { color: colors.textSecondary }]}>
+            Deneme süresi bitiminde seçilen paket ({currentPlan.originalPrice} ₺ / {currentPlan.durationMonths} Ay) otomatik olarak yenilenir. Aboneliğinizi dilediğiniz an App Store Hesap Ayarları üzerinden yönetebilir veya iptal edebilirsiniz.
+          </Text>
+
+          {/* RESTORE PURCHASES */}
           <TouchableOpacity
             style={styles.restoreBtn}
             onPress={handleRestorePurchases}
@@ -269,27 +266,28 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
               <ActivityIndicator size="small" color={colors.brand} />
             ) : (
               <>
-                <RotateCcw size={13} color={colors.brand} />
-                <Text style={[styles.restoreBtnText, { color: colors.brand }]}>
-                  Satın Alımları Geri Yükle (Restore Purchases)
+                <RotateCcw size={13} color={colors.textSecondary} />
+                <Text style={[styles.restoreBtnText, { color: colors.textSecondary }]}>
+                  Satın Alımları Geri Yükle
                 </Text>
               </>
             )}
           </TouchableOpacity>
 
+          {/* LEGAL LINKS */}
           <View style={styles.legalLinksRow}>
             <TouchableOpacity
               onPress={() => Linking.openURL(ENV_CONFIG.LEGAL.TERMS_URL)}
             >
-              <Text style={[styles.legalLinkText, { color: colors.brand }]}>
+              <Text style={[styles.legalLinkText, { color: colors.textSecondary }]}>
                 Kullanım Şartları (EULA)
               </Text>
             </TouchableOpacity>
-            <Text style={{ color: colors.textSecondary }}>•</Text>
+            <Text style={{ color: colors.textSecondary, fontSize: 10 }}>•</Text>
             <TouchableOpacity
               onPress={() => Linking.openURL(ENV_CONFIG.LEGAL.PRIVACY_URL)}
             >
-              <Text style={[styles.legalLinkText, { color: colors.brand }]}>
+              <Text style={[styles.legalLinkText, { color: colors.textSecondary }]}>
                 Gizlilik Politikası
               </Text>
             </TouchableOpacity>
@@ -306,14 +304,14 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 20,
-    paddingBottom: 36,
+    paddingBottom: 28,
   },
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 10,
-    marginTop: 4,
+    marginBottom: 8,
+    marginTop: 2,
   },
   proBadge: {
     flexDirection: 'row',
@@ -324,7 +322,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   proBadgeText: {
-    fontSize: 11.5,
+    fontSize: 11,
     fontWeight: '800',
     letterSpacing: 0.5,
   },
@@ -333,20 +331,20 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   heroSection: {
-    marginBottom: 16,
+    marginBottom: 14,
   },
   heroTitle: {
-    fontSize: 24,
+    fontSize: 23,
     fontWeight: '900',
     marginBottom: 4,
   },
   heroSubtitle: {
-    fontSize: 13.5,
+    fontSize: 13,
     fontWeight: '500',
   },
   featureList: {
-    gap: 10,
-    marginBottom: 20,
+    gap: 8,
+    marginBottom: 16,
   },
   featureRow: {
     flexDirection: 'row',
@@ -354,38 +352,40 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   checkCircle: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
   featureRowText: {
-    fontSize: 13,
+    fontSize: 12.5,
     fontWeight: '600',
     flex: 1,
   },
   plansContainer: {
     gap: 10,
-    marginBottom: 18,
+    marginBottom: 16,
+    marginTop: 4,
   },
   planCard: {
-    borderWidth: 2,
-    borderRadius: 16,
-    padding: 14,
+    borderWidth: 1.5,
+    borderRadius: 14,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
     position: 'relative',
   },
   planBadge: {
     position: 'absolute',
-    top: -10,
-    right: 14,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-    borderRadius: 10,
+    top: -9,
+    right: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 2.5,
+    borderRadius: 8,
   },
   planBadgeText: {
-    fontSize: 10,
-    fontWeight: '900',
+    fontSize: 9.5,
+    fontWeight: '800',
     letterSpacing: 0.3,
   },
   planContentRow: {
@@ -397,93 +397,84 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   planRadioCircle: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
   planRadioInner: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
   },
   planName: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '800',
   },
   planDesc: {
-    fontSize: 11.5,
+    fontSize: 11,
     fontWeight: '500',
     marginTop: 2,
   },
   planPrice: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '900',
   },
   planSubprice: {
-    fontSize: 11,
+    fontSize: 10.5,
     fontWeight: '600',
-    marginTop: 2,
+    marginTop: 1,
   },
   ctaButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    paddingVertical: 15,
+    paddingVertical: 14,
     borderRadius: 14,
-    marginBottom: 10,
+    marginBottom: 6,
     shadowColor: '#4762BD',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.2,
     shadowRadius: 8,
-    elevation: 4,
+    elevation: 3,
   },
   ctaButtonText: {
     fontSize: 15,
     fontWeight: '800',
   },
-  disclosureCard: {
-    padding: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    marginBottom: 12,
-  },
-  disclosureHeading: {
-    fontSize: 11.5,
-    fontWeight: '700',
-    marginBottom: 4,
-  },
-  disclosureBody: {
-    fontSize: 10.5,
-    lineHeight: 15,
-  },
   trialNoticeText: {
     fontSize: 11.5,
+    fontWeight: '600',
     textAlign: 'center',
-    lineHeight: 16,
+    marginBottom: 10,
+  },
+  disclaimerText: {
+    fontSize: 10.5,
+    textAlign: 'center',
+    lineHeight: 14.5,
     marginBottom: 12,
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
   },
   restoreBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    paddingVertical: 8,
-    marginBottom: 12,
+    paddingVertical: 6,
+    marginBottom: 8,
   },
   restoreBtnText: {
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: 11.5,
+    fontWeight: '600',
   },
   legalLinksRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 12,
+    gap: 10,
   },
   legalLinkText: {
     fontSize: 11,

@@ -59,6 +59,8 @@ export interface CardWord extends WordItem {
   isCooldown?: boolean;
   cardType?: 'NEW' | 'REVIEW';
   reviewBox?: number;
+  reviewBadgeText?: string;
+  daysOverdue?: number;
 }
 
 export interface DailyStats {
@@ -109,6 +111,8 @@ export type OptionKey = 'A' | 'B' | 'C' | 'D' | 'E';
 
 export interface QuestionItem {
   id: number;
+  user_id?: string;
+  generation_date?: string;
   type: YdsQuestionType;
   title?: string;
   passage?: string;          // Academic passage for Reading or Cloze test

@@ -56,13 +56,16 @@ CREATE TABLE IF NOT EXISTS user_settings (
   paragraph_goal INTEGER DEFAULT 8,
   cloze_goal INTEGER DEFAULT 5,
   sentence_goal INTEGER DEFAULT 8,
-  skills_goal INTEGER DEFAULT 14
+  skills_goal INTEGER DEFAULT 14,
+  last_ai_generation_date DATE
 );
 `;
 
 export const CREATE_QUESTIONS_TABLE = `
 CREATE TABLE IF NOT EXISTS questions (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id TEXT,
+  generation_date DATE,
   type TEXT NOT NULL,
   title TEXT,
   passage TEXT,

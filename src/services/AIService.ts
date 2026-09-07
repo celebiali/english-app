@@ -1,4 +1,4 @@
-import { QuestionItem, YdsQuestionType, OptionKey, WordItem, AIMistakeAnalysis, YdsTrapType } from '../types';
+import { QuestionItem, YdsQuestionType, OptionKey, WordItem, AIMistakeAnalysis, YdsTrapType, TaskGoalsConfig } from '../types';
 import { ENV_CONFIG } from '../config/env';
 import { INITIAL_YDS_QUESTIONS } from './YdsQuestionBank';
 import { dbService } from '../database/DatabaseService';
@@ -538,6 +538,74 @@ Respond ONLY with a valid JSON array of ${validCount} objects.`;
     }
 
     return questions;
+  }
+
+  /**
+   * Generates a tailored daily batch of questions for a specific user based on their chosen category counts:
+   * - paragraph count: taskGoals.paragraph (e.g. 8)
+   * - cloze count: taskGoals.cloze (e.g. 5)
+   * - sentence count: taskGoals.sentence (e.g. 8)
+   * - skills count: taskGoals.skills (e.g. 14)
+   * Scoped to specific userId and generationDate with unique user+date seeding.
+   */
+  static async generateDailyBatchForUser(
+    taskGoals: TaskGoalsConfig,
+    userId: string,
+    generationDate: string
+  ): Promise<Array<Omit<QuestionItem, 'id'>>> {
+    const results: Array<Omit<QuestionItem, 'id'>> = [];
+
+    // 1. Group bank questions by 4 primary YDS categories
+    const paragraphs = INITIAL_YDS_QUESTIONS.filter((q) => q.type === 'PARAGRAPH');
+    const clozes = INITIAL_YDS_QUESTIONS.filter((q) => q.type === 'CLOZE_TEST');
+    const sentences = INITIAL_YDS_QUESTIONS.filter((q) => q.type === 'SENTENCE_COMPLETION');
+    const skills = INITIAL_YDS_QUESTIONS.filter(
+      (q) =>
+        q.type === 'SKILL_DIALOGUE' ||
+        q.type === 'RESTATEMENT' ||
+        q.type === 'TRANSLATION' ||
+        q.type === 'VOCABULARY_GRAMMAR'
+    );
+
+    // Deterministic hash based on user and date so every user and every day is uniquely offset
+    let hash = 0;
+    const seed = `${userId}_${generationDate}`;
+    for (let i = 0; i < seed.length; i++) {
+      hash = (hash << 5) - hash + seed.charCodeAt(i);
+      hash |= 0;
+    }
+    const absHash = Math.abs(hash);
+
+    const pullCategoryQuestions = (
+      pool: Omit<QuestionItem, 'id'>[],
+      targetCount: number,
+      categoryLabel: string
+    ): Array<Omit<QuestionItem, 'id'>> => {
+      if (pool.length === 0 || targetCount <= 0) return [];
+      const items: Array<Omit<QuestionItem, 'id'>> = [];
+      const startOffset = absHash % pool.length;
+
+      for (let i = 0; i < targetCount; i++) {
+        const base = pool[(startOffset + i) % pool.length];
+        items.push({
+          ...base,
+          user_id: userId,
+          generation_date: generationDate,
+          question_number: i + 1,
+          source: `AI Günlük İkmal (${categoryLabel})`,
+          status: 'ACTIVE',
+        });
+      }
+      return items;
+    };
+
+    const pQuestions = pullCategoryQuestions(paragraphs, taskGoals.paragraph, 'Paragraf');
+    const cQuestions = pullCategoryQuestions(clozes, taskGoals.cloze, 'Cloze Test');
+    const sQuestions = pullCategoryQuestions(sentences, taskGoals.sentence, 'Cümle Tamamlama');
+    const skQuestions = pullCategoryQuestions(skills, taskGoals.skills, 'Sınav Becerileri');
+
+    results.push(...pQuestions, ...cQuestions, ...sQuestions, ...skQuestions);
+    return results;
   }
 
   /**

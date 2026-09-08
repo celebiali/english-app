@@ -42,6 +42,7 @@ import { SupabaseService } from '../services/SupabaseService';
 import { AuthModal } from './AuthModal';
 import { LegalSheetModal } from './LegalSheetModal';
 import { SubscriptionModal } from './SubscriptionModal';
+import { SubscriptionDetailScreen } from './SubscriptionDetailScreen';
 
 interface SettingsScreenProps {
   onBack: () => void;
@@ -110,17 +111,22 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
   const [isGoalsModalOpen, setIsGoalsModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
+  const [isSubscriptionDetailOpen, setIsSubscriptionDetailOpen] = useState(false);
   const [legalSheetTab, setLegalSheetTab] = useState<'PRIVACY' | 'TERMS' | null>(null);
 
   // Android hardware back button handler
   useEffect(() => {
     const onBackPress = () => {
+      if (isSubscriptionDetailOpen) {
+        setIsSubscriptionDetailOpen(false);
+        return true;
+      }
       onBack();
       return true;
     };
     const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
     return () => subscription.remove();
-  }, [onBack]);
+  }, [onBack, isSubscriptionDetailOpen]);
 
   const openUrlSafely = async (url: string, title: string) => {
     try {
@@ -232,6 +238,14 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
       ]
     );
   };
+
+  if (isSubscriptionDetailOpen) {
+    return (
+      <SubscriptionDetailScreen
+        onBack={() => setIsSubscriptionDetailOpen(false)}
+      />
+    );
+  }
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
@@ -345,8 +359,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
             },
           ]}
           onPress={() => {
-            console.log('[SettingsScreen] Opening SubscriptionModal...');
-            setIsSubscriptionModalOpen(true);
+            console.log('[SettingsScreen] Opening SubscriptionDetailScreen...');
+            setIsSubscriptionDetailOpen(true);
           }}
           activeOpacity={0.85}
         >
@@ -365,13 +379,27 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
             </View>
 
             <View style={{ flex: 1 }}>
-              <Text style={[styles.rowLabel, { color: colors.text, fontWeight: '800' }]}>
-                {userProfile?.isPro ? '👑 YDS Pratik Pro Aktif' : '💎 YDS Pratik Pro'}
-              </Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+                <Text style={[styles.rowLabel, { color: colors.text, fontWeight: '800' }]}>
+                  {userProfile?.isPro ? '👑 YDS Pratik Pro' : '💎 YDS Pratik Pro & Paketler'}
+                </Text>
+                <View
+                  style={{
+                    backgroundColor: userProfile?.isPro ? '#22C55E' : colors.accentWarm,
+                    paddingHorizontal: 6,
+                    paddingVertical: 2,
+                    borderRadius: 4,
+                  }}
+                >
+                  <Text style={{ color: '#FFFFFF', fontSize: 10, fontWeight: '800' }}>
+                    {userProfile?.isPro ? 'AKTİF' : '7 GÜN ÜCRETSİZ DENE'}
+                  </Text>
+                </View>
+              </View>
               <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
                 {userProfile?.isPro
-                  ? 'Tüm 80 soruluk denemeler ve AI koçluğu sınırsız açık'
-                  : '7 Gün Ücretsiz Deneyin · Sınav Koçu & Master Denemeler'}
+                  ? 'Abonelik detayları, yenilenme tarihi ve paket yönetimi'
+                  : 'Master denemeler, AI soru koçluğu, fiyatlar ve ödeme'}
               </Text>
             </View>
 

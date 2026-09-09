@@ -22,7 +22,7 @@ export const AppLogo: React.FC<AppLogoProps> = ({
   return (
     <View
       style={[
-        styles.container,
+        styles.shadowWrapper,
         {
           width: size,
           height: size,
@@ -30,7 +30,17 @@ export const AppLogo: React.FC<AppLogoProps> = ({
         },
       ]}
     >
-      <Svg width={size} height={size} viewBox="0 0 1024 1024">
+      <View
+        style={[
+          styles.innerClip,
+          {
+            width: size,
+            height: size,
+            borderRadius: borderRadius,
+          },
+        ]}
+      >
+        <Svg width={size} height={size} viewBox="0 0 1024 1024">
         <Defs>
           {/* Background gradient with brand blue */}
           <LinearGradient id="logoBg" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -51,10 +61,10 @@ export const AppLogo: React.FC<AppLogoProps> = ({
             <Stop offset="100%" stopColor="#DBEAFE" />
           </LinearGradient>
 
-          {/* Check badge green gradient */}
+          {/* Check badge blue gradient */}
           <LinearGradient id="logoBadge" x1="0%" y1="0%" x2="100%" y2="100%">
-            <Stop offset="0%" stopColor="#34D399" />
-            <Stop offset="100%" stopColor="#059669" />
+            <Stop offset="0%" stopColor="#60A5FA" />
+            <Stop offset="100%" stopColor="#1D4ED8" />
           </LinearGradient>
         </Defs>
 
@@ -143,17 +153,21 @@ export const AppLogo: React.FC<AppLogoProps> = ({
           />
         </G>
       </Svg>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    overflow: 'hidden',
+  shadowWrapper: {
     shadowColor: '#2563EB',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.28,
-    shadowRadius: 14,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.35,
+    shadowRadius: 18,
+    elevation: 10,
+    backgroundColor: 'transparent',
+  },
+  innerClip: {
+    overflow: 'hidden',
   },
 });

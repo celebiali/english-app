@@ -26,6 +26,7 @@ import {
   Layers,
   Tag,
   ExternalLink,
+  X,
 } from 'lucide-react-native';
 import { SUBSCRIPTION_PLANS, PromoCodeService, PromoCodeInfo } from '../services/PromoCodeService';
 import { ApplePurchaseService } from '../services/ApplePurchaseService';
@@ -50,6 +51,7 @@ export const SubscriptionDetailScreen: React.FC<Props> = ({ onBack }) => {
   const [appliedPromo, setAppliedPromo] = useState<PromoCodeInfo | null>(null);
   const [promoError, setPromoError] = useState<string | null>(null);
   const [isValidatingPromo, setIsValidatingPromo] = useState<boolean>(false);
+  const [isPromoExpanded, setIsPromoExpanded] = useState<boolean>(false);
 
   const basePlans = SUBSCRIPTION_PLANS.filter((p) => p.id === 'plan_6m' || p.id === 'plan_12m');
   const plans = PromoCodeService.getCalculatedPlans(appliedPromo).filter(
@@ -72,6 +74,7 @@ export const SubscriptionDetailScreen: React.FC<Props> = ({ onBack }) => {
       if (match) {
         setAppliedPromo(match);
         setPromoError(null);
+        setIsPromoExpanded(false);
         Alert.alert('Harika! 🎉', `%${match.discountPercent} indirim uygulandı (${match.code})`);
       } else {
         setPromoError('Geçersiz veya süresi dolmuş kupon kodu.');
@@ -109,7 +112,7 @@ export const SubscriptionDetailScreen: React.FC<Props> = ({ onBack }) => {
 
         Alert.alert(
           'Tebrikler! 👑',
-          '7 Günlük Ücretsiz Denemeniz ve YDS Pratik Pro üyeliğiniz aktif edildi. Tüm denemeler ve AI koçluğu kullanımınıza açıldı.',
+          '7 Günlük Ücretsiz Denemeniz ve Dil Sınavı Hazırlık Pro üyeliğiniz aktif edildi. Tüm denemeler ve AI koçluğu kullanımınıza açıldı.',
           [{ text: 'Hemen Kullan', onPress: onBack }]
         );
       } else if (result.error) {
@@ -139,7 +142,7 @@ export const SubscriptionDetailScreen: React.FC<Props> = ({ onBack }) => {
         }
         Alert.alert('Başarılı! 🎉', 'Mevcut Apple aboneliğiniz başarıyla geri yüklendi.');
       } else {
-        Alert.alert('Bilgi', 'Apple hesabınıza bağlı aktif bir YDS Pratik aboneliği bulunamadı.');
+        Alert.alert('Bilgi', 'Apple hesabınıza bağlı aktif bir Dil Sınavı Hazırlık aboneliği bulunamadı.');
       }
     } catch (e: any) {
       Alert.alert('Hata', e?.message || 'Satın alımlar geri yüklenemedi.');
@@ -176,19 +179,22 @@ export const SubscriptionDetailScreen: React.FC<Props> = ({ onBack }) => {
       {/* HEADER NAV */}
       <View style={[styles.header, { borderBottomColor: colors.border, backgroundColor: colors.cardBackground }]}>
         <TouchableOpacity
-          style={[styles.backBtn, { backgroundColor: colors.subtleBackground }]}
+          style={styles.backIconButton}
           onPress={onBack}
           activeOpacity={0.7}
           hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+          accessibilityLabel="Geri"
         >
           <ArrowLeft size={20} color={colors.text} />
-          <Text style={[styles.backBtnText, { color: colors.text }]}>Geri</Text>
         </TouchableOpacity>
 
-        <Text style={[styles.headerTitle, { color: colors.text }]}>YDS Pratik Pro</Text>
+        <View style={styles.headerCenter}>
+          <Crown size={15} color="#F59E0B" />
+          <Text style={[styles.headerTitle, { color: colors.text }]}>Dil Sınavı Hazırlık Pro</Text>
+        </View>
 
         <TouchableOpacity
-          style={styles.headerRightAction}
+          style={[styles.headerRestorePill, { backgroundColor: colors.subtleBackground }]}
           onPress={handleRestorePurchases}
           disabled={isRestoring}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
@@ -196,7 +202,10 @@ export const SubscriptionDetailScreen: React.FC<Props> = ({ onBack }) => {
           {isRestoring ? (
             <ActivityIndicator size="small" color={colors.brand} />
           ) : (
-            <Text style={[styles.headerRestoreText, { color: colors.brand }]}>Geri Yükle</Text>
+            <>
+              <RotateCcw size={12} color={colors.textSecondary} />
+              <Text style={[styles.headerRestoreText, { color: colors.textSecondary }]}>Geri Yükle</Text>
+            </>
           )}
         </TouchableOpacity>
       </View>
@@ -208,9 +217,9 @@ export const SubscriptionDetailScreen: React.FC<Props> = ({ onBack }) => {
       >
         {/* ACTIVE PRO STATUS BANNER (IF USER IS PRO) */}
         {userProfile?.isPro && (
-          <View style={[styles.activeProCard, { backgroundColor: colors.isDark ? '#1E293B' : '#F0FDF4', borderColor: '#22C55E' }]}>
+          <View style={[styles.activeProCard, { backgroundColor: colors.isDark ? '#1E293B' : '#EFF6FF', borderColor: colors.brand }]}>
             <View style={styles.activeProHeader}>
-              <View style={[styles.activeProBadge, { backgroundColor: '#22C55E' }]}>
+              <View style={[styles.activeProBadge, { backgroundColor: colors.brand }]}>
                 <Crown size={14} color="#FFFFFF" />
                 <Text style={styles.activeProBadgeText}>PRO ÜYESİNİZ</Text>
               </View>
@@ -226,55 +235,56 @@ export const SubscriptionDetailScreen: React.FC<Props> = ({ onBack }) => {
           </View>
         )}
 
-        {/* HERO BANNER */}
+        {/* HERO BANNER - COMPACT */}
         <View style={[styles.heroCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
           <View style={[styles.crownIconCircle, { backgroundColor: colors.brandLight }]}>
-            <Crown size={28} color={colors.brand} />
+            <Crown size={22} color={colors.brand} />
           </View>
 
           <Text style={[styles.heroTitle, { color: colors.text }]}>
             Hedeflediğin Puanı Şansa Bırakma
           </Text>
           <Text style={[styles.heroSubtitle, { color: colors.textSecondary }]}>
-            Yapay zeka soru koçluğu, gerçek sınav simülasyonları ve çeldirici analizleriyle YDS/YÖKDİL'i ilk seferde geç.
+            Yapay zeka koçluğu, gerçek sınav simülasyonları ve çeldirici analizleriyle YDS/YÖKDİL'i ilk seferde geç.
           </Text>
 
-          <View style={styles.guaranteeRow}>
-            <ShieldCheck size={16} color={colors.brand} />
+          <View style={[styles.guaranteeRow, { backgroundColor: colors.subtleBackground }]}>
+            <ShieldCheck size={13} color={colors.brand} />
             <Text style={[styles.guaranteeText, { color: colors.textSecondary }]}>
-              7 Günlük Ücretsiz Deneme • İstediğin an App Store'dan iptal et
+              7 Gün Ücretsiz Deneme • İstediğin an App Store'dan iptal et
             </Text>
           </View>
         </View>
 
-        {/* FEATURES GRID / LIST */}
+        {/* COMPACT PRO ADVANTAGES */}
         <View style={styles.sectionHeaderRow}>
           <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>
             PRO İLE GELEN AVANTAJLAR
           </Text>
         </View>
 
-        <View style={styles.featuresContainer}>
+        <View style={[styles.featuresCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
           {proFeatures.map((item, idx) => {
             const IconComp = item.icon;
+            const isLast = idx === proFeatures.length - 1;
             return (
               <View
                 key={idx}
                 style={[
-                  styles.featureCard,
-                  { backgroundColor: colors.cardBackground, borderColor: colors.border },
+                  styles.featureRow,
+                  !isLast && { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
                 ]}
               >
                 <View style={[styles.featureIconBox, { backgroundColor: colors.brandLight }]}>
-                  <IconComp size={20} color={colors.brand} />
+                  <IconComp size={15} color={colors.brand} />
                 </View>
-                <View style={{ flex: 1 }}>
+                <View style={styles.featureTextCol}>
                   <Text style={[styles.featureTitle, { color: colors.text }]}>{item.title}</Text>
-                  <Text style={[styles.featureDesc, { color: colors.textSecondary }]}>
+                  <Text style={[styles.featureDesc, { color: colors.textSecondary }]} numberOfLines={1}>
                     {item.desc}
                   </Text>
                 </View>
-                <CheckCircle2 size={18} color={colors.brand} />
+                <CheckCircle2 size={16} color={colors.brand} />
               </View>
             );
           })}
@@ -338,7 +348,7 @@ export const SubscriptionDetailScreen: React.FC<Props> = ({ onBack }) => {
                     )}
                   </View>
 
-                  <View style={{ flex: 1, paddingHorizontal: 12 }}>
+                  <View style={{ flex: 1, paddingHorizontal: 10 }}>
                     <Text style={[styles.planTitle, { color: colors.text }]}>{plan.title}</Text>
                     <Text style={[styles.planSubtitle, { color: colors.textSecondary }]}>
                       {plan.subtitle}
@@ -355,75 +365,103 @@ export const SubscriptionDetailScreen: React.FC<Props> = ({ onBack }) => {
                     </Text>
                   </View>
                 </View>
-
-                {/* Plan Highlights */}
-                <View style={[styles.planBullets, { borderTopColor: colors.border }]}>
-                  {plan.features.slice(0, 3).map((feat, fIdx) => (
-                    <View key={fIdx} style={styles.bulletRow}>
-                      <Check size={12} color={colors.brand} strokeWidth={3} />
-                      <Text style={[styles.bulletText, { color: colors.textSecondary }]}>
-                        {feat}
-                      </Text>
-                    </View>
-                  ))}
-                </View>
               </TouchableOpacity>
             );
           })}
         </View>
 
-        {/* PROMO / COUPON CODE SECTION */}
-        <View
-          style={[
-            styles.promoCard,
-            { backgroundColor: colors.cardBackground, borderColor: colors.border },
-          ]}
-        >
-          <View style={styles.promoHeader}>
-            <Tag size={16} color={colors.brand} />
-            <Text style={[styles.promoTitle, { color: colors.text }]}>İndirim Kuponu / Kod</Text>
-          </View>
-
-          <View style={styles.promoInputRow}>
-            <TextInput
-              style={[
-                styles.promoInput,
-                {
-                  backgroundColor: colors.subtleBackground,
-                  color: colors.text,
-                  borderColor: promoError ? '#EF4444' : colors.border,
-                },
-              ]}
-              placeholder="Örn: YDS20"
-              placeholderTextColor={colors.textSecondary}
-              value={promoCodeInput}
-              onChangeText={(text) => {
-                setPromoCodeInput(text.toUpperCase());
-                setPromoError(null);
-              }}
-              autoCapitalize="characters"
-              autoCorrect={false}
-            />
+        {/* PROMO / COUPON CODE SECTION (COLLAPSIBLE / ON-DEMAND) */}
+        {appliedPromo ? (
+          <View
+            style={[
+              styles.appliedPromoBadge,
+              { backgroundColor: colors.isDark ? '#1E293B' : '#EFF6FF', borderColor: colors.brand },
+            ]}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flex: 1 }}>
+              <Tag size={14} color={colors.brand} />
+              <Text style={[styles.appliedPromoText, { color: colors.brand }]}>
+                %{appliedPromo.discountPercent} Kupon İndirimi ({appliedPromo.code})
+              </Text>
+            </View>
             <TouchableOpacity
-              style={[styles.promoApplyBtn, { backgroundColor: colors.brand }]}
-              onPress={handleApplyPromoCode}
-              disabled={isValidatingPromo}
+              onPress={() => {
+                setAppliedPromo(null);
+                setPromoCodeInput('');
+              }}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              style={styles.appliedPromoRemoveBtn}
             >
-              {isValidatingPromo ? (
-                <ActivityIndicator size="small" color={colors.textOnBrand} />
-              ) : (
-                <Text style={[styles.promoApplyBtnText, { color: colors.textOnBrand }]}>Uygula</Text>
-              )}
+              <Text style={styles.appliedPromoRemoveText}>Kaldır</Text>
             </TouchableOpacity>
           </View>
+        ) : isPromoExpanded ? (
+          <View
+            style={[
+              styles.promoCard,
+              { backgroundColor: colors.cardBackground, borderColor: colors.border },
+            ]}
+          >
+            <View style={styles.promoHeader}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                <Tag size={14} color={colors.brand} />
+                <Text style={[styles.promoTitle, { color: colors.text }]}>İndirim Kuponu Ekle</Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => setIsPromoExpanded(false)}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <X size={16} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
 
-          {promoError && <Text style={styles.promoErrorText}>{promoError}</Text>}
-          {appliedPromo && (
-            <Text style={styles.promoSuccessText}>
-              ✓ %{appliedPromo.discountPercent} Kupon İndirimi Uygulandı!
+            <View style={styles.promoInputRow}>
+              <TextInput
+                style={[
+                  styles.promoInput,
+                  {
+                    backgroundColor: colors.subtleBackground,
+                    color: colors.text,
+                    borderColor: promoError ? '#EF4444' : colors.border,
+                  },
+                ]}
+                placeholder="Örn: YDS20"
+                placeholderTextColor={colors.textSecondary}
+                value={promoCodeInput}
+                onChangeText={(text) => {
+                  setPromoCodeInput(text.toUpperCase());
+                  setPromoError(null);
+                }}
+                autoCapitalize="characters"
+                autoCorrect={false}
+              />
+              <TouchableOpacity
+                style={[styles.promoApplyBtn, { backgroundColor: colors.brand }]}
+                onPress={handleApplyPromoCode}
+                disabled={isValidatingPromo}
+              >
+                {isValidatingPromo ? (
+                  <ActivityIndicator size="small" color={colors.textOnBrand} />
+                ) : (
+                  <Text style={[styles.promoApplyBtnText, { color: colors.textOnBrand }]}>Uygula</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+
+            {promoError && <Text style={styles.promoErrorText}>{promoError}</Text>}
+          </View>
+        ) : (
+          <TouchableOpacity
+            style={styles.promoToggleBtn}
+            onPress={() => setIsPromoExpanded(true)}
+            activeOpacity={0.7}
+          >
+            <Tag size={13} color={colors.brand} />
+            <Text style={[styles.promoToggleText, { color: colors.brand }]}>
+              İndirim kodun mu var? Kupon Ekle
             </Text>
-          )}
-        </View>
+          </TouchableOpacity>
+        )}
 
         {/* PRIMARY CTA / ACTION BUTTON */}
         <TouchableOpacity
@@ -439,7 +477,7 @@ export const SubscriptionDetailScreen: React.FC<Props> = ({ onBack }) => {
             <ActivityIndicator color={colors.textOnBrand} />
           ) : (
             <>
-              <Sparkles size={18} color={colors.textOnBrand} />
+              <Sparkles size={17} color={colors.textOnBrand} />
               <Text style={[styles.ctaButtonText, { color: colors.textOnBrand }]}>
                 7 Gün Ücretsiz Dene ve Başla
               </Text>
@@ -516,163 +554,174 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 10,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
-  backBtn: {
+  backIconButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerCenter: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-  },
-  backBtnText: {
-    fontSize: 14,
-    fontWeight: '600',
   },
   headerTitle: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '700',
   },
-  headerRightAction: {
-    paddingVertical: 6,
-    paddingHorizontal: 8,
+  headerRestorePill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingVertical: 5,
+    paddingHorizontal: 9,
+    borderRadius: 12,
   },
   headerRestoreText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '600',
   },
   scroll: {
     flex: 1,
   },
   scrollContent: {
-    padding: 16,
-    paddingBottom: 40,
+    padding: 14,
+    paddingBottom: 32,
   },
   activeProCard: {
     borderRadius: 12,
-    padding: 14,
+    padding: 12,
     borderWidth: 1,
-    marginBottom: 16,
+    marginBottom: 12,
   },
   activeProHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 6,
+    marginBottom: 4,
   },
   activeProBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 8,
+    gap: 4,
+    paddingHorizontal: 7,
     paddingVertical: 3,
-    borderRadius: 6,
+    borderRadius: 5,
   },
   activeProBadgeText: {
     color: '#FFFFFF',
-    fontSize: 11,
+    fontSize: 10.5,
     fontWeight: '800',
   },
   activeProStatusText: {
-    fontSize: 12,
+    fontSize: 11.5,
     fontWeight: '500',
   },
   activeProDesc: {
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: 12,
+    lineHeight: 16,
   },
   heroCard: {
-    borderRadius: 16,
-    padding: 20,
+    borderRadius: 14,
+    padding: 14,
     alignItems: 'center',
     borderWidth: 1,
-    marginBottom: 20,
+    marginBottom: 14,
   },
   crownIconCircle: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 12,
+    marginBottom: 8,
   },
   heroTitle: {
-    fontSize: 20,
+    fontSize: 17,
     fontWeight: '800',
     textAlign: 'center',
-    marginBottom: 6,
-    letterSpacing: -0.3,
+    marginBottom: 4,
+    letterSpacing: -0.2,
   },
   heroSubtitle: {
-    fontSize: 13,
+    fontSize: 12,
     textAlign: 'center',
-    lineHeight: 19,
-    marginBottom: 14,
+    lineHeight: 16.5,
+    marginBottom: 10,
     paddingHorizontal: 8,
   },
   guaranteeRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    marginTop: 4,
+    gap: 5,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 20,
   },
   guaranteeText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '500',
   },
   sectionHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 10,
-    paddingHorizontal: 4,
+    marginBottom: 8,
+    paddingHorizontal: 2,
   },
   sectionTitle: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '700',
-    letterSpacing: 0.6,
+    letterSpacing: 0.5,
   },
   sectionBadge: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '700',
   },
-  featuresContainer: {
-    gap: 10,
-    marginBottom: 24,
-  },
-  featureCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
+  featuresCard: {
     borderRadius: 12,
     borderWidth: 1,
-    gap: 12,
+    marginBottom: 16,
+    overflow: 'hidden',
+  },
+  featureRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 9,
+    paddingHorizontal: 12,
+    gap: 10,
   },
   featureIconBox: {
-    width: 38,
-    height: 38,
-    borderRadius: 10,
+    width: 30,
+    height: 30,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  featureTextCol: {
+    flex: 1,
+  },
   featureTitle: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '700',
-    marginBottom: 2,
+    marginBottom: 1,
   },
   featureDesc: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: 11,
+    lineHeight: 14,
   },
   plansList: {
-    gap: 12,
-    marginBottom: 20,
+    gap: 8,
+    marginBottom: 12,
   },
   planCard: {
-    borderRadius: 14,
-    padding: 16,
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
     position: 'relative',
     overflow: 'hidden',
   },
@@ -680,76 +729,99 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderBottomLeftRadius: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderBottomLeftRadius: 8,
   },
   planBadgeText: {
     color: '#FFFFFF',
-    fontSize: 10,
+    fontSize: 9.5,
     fontWeight: '800',
   },
   planCardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
   },
   radioCircle: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
   radioInner: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: 9,
+    height: 9,
+    borderRadius: 4.5,
   },
   planTitle: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '800',
   },
   planSubtitle: {
-    fontSize: 11,
-    marginTop: 2,
+    fontSize: 10.5,
+    marginTop: 1,
   },
   planPrice: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '800',
   },
   planMonthly: {
-    fontSize: 11,
+    fontSize: 10.5,
     marginTop: 1,
   },
-  planBullets: {
-    borderTopWidth: StyleSheet.hairlineWidth,
-    paddingTop: 8,
-    gap: 4,
-  },
-  bulletRow: {
+  promoToggleBtn: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 6,
+    paddingVertical: 8,
+    marginBottom: 12,
   },
-  bulletText: {
+  promoToggleText: {
+    fontSize: 12,
+    fontWeight: '600',
+    textDecorationLine: 'underline',
+  },
+  appliedPromoBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 7,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginBottom: 12,
+  },
+  appliedPromoText: {
+    color: '#2563EB',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  appliedPromoRemoveBtn: {
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+  },
+  appliedPromoRemoveText: {
+    color: '#EF4444',
     fontSize: 11,
+    fontWeight: '600',
   },
   promoCard: {
-    borderRadius: 12,
-    padding: 14,
+    borderRadius: 10,
+    padding: 10,
     borderWidth: 1,
-    marginBottom: 20,
+    marginBottom: 12,
   },
   promoHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    marginBottom: 10,
+    justifyContent: 'space-between',
+    marginBottom: 8,
   },
   promoTitle: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '700',
   },
   promoInputRow: {
@@ -758,91 +830,85 @@ const styles = StyleSheet.create({
   },
   promoInput: {
     flex: 1,
-    height: 40,
+    height: 36,
     borderRadius: 8,
     borderWidth: 1,
-    paddingHorizontal: 12,
-    fontSize: 13,
+    paddingHorizontal: 10,
+    fontSize: 12,
     fontWeight: '600',
   },
   promoApplyBtn: {
-    paddingHorizontal: 14,
-    height: 40,
+    paddingHorizontal: 12,
+    height: 36,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
   promoApplyBtnText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '700',
   },
   promoErrorText: {
     color: '#EF4444',
     fontSize: 11,
-    marginTop: 6,
-  },
-  promoSuccessText: {
-    color: '#10B981',
-    fontSize: 11,
-    fontWeight: '600',
-    marginTop: 6,
+    marginTop: 4,
   },
   ctaButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    height: 52,
-    borderRadius: 14,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 4,
-    marginBottom: 8,
+    height: 48,
+    borderRadius: 12,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.18,
+    shadowRadius: 6,
+    elevation: 3,
+    marginBottom: 6,
   },
   ctaButtonText: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '800',
     letterSpacing: 0.2,
   },
   trialNotice: {
-    fontSize: 11,
+    fontSize: 10.5,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   legalBox: {
     borderTopWidth: StyleSheet.hairlineWidth,
-    paddingTop: 16,
+    paddingTop: 14,
     alignItems: 'center',
   },
   disclaimerText: {
-    fontSize: 11,
-    lineHeight: 16,
+    fontSize: 10.5,
+    lineHeight: 15,
     textAlign: 'center',
-    marginBottom: 14,
+    marginBottom: 12,
   },
   restoreBtn: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    marginBottom: 12,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    marginBottom: 10,
   },
   restoreRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 5,
   },
   restoreBtnText: {
-    fontSize: 12,
+    fontSize: 11.5,
     fontWeight: '600',
     textDecorationLine: 'underline',
   },
   legalLinksRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 10,
   },
   legalLinkText: {
-    fontSize: 12,
+    fontSize: 11.5,
     fontWeight: '600',
     textDecorationLine: 'underline',
   },

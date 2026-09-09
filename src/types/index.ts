@@ -21,8 +21,10 @@ export interface VocabFolder {
   icon: string;
   is_system?: boolean;
   category_type?: CategoryType;
+  level_filter?: string;
   word_count?: number;
   learned_count?: number;
+  is_completed?: boolean;
   created_at?: string;
 }
 
@@ -38,6 +40,8 @@ export interface WordItem {
   example_sentence?: string;
   example_translation?: string;
   etymology_note?: string;
+  part_of_speech?: string;
+  image_url?: string;
   is_custom?: boolean;
   created_at?: string;
 }
@@ -252,6 +256,7 @@ export interface TaskGoalsConfig {
   cloze: number;
   sentence: number;
   skills: number;
+  words?: number;
 }
 
 export interface DailyTaskGoal {
@@ -287,6 +292,10 @@ export interface UserProfile {
   subscriptionPlanId?: string;
   appliedPromoCode?: string;
   createdAt: string;
+  kvkkAccepted?: boolean;
+  kvkkAcceptedAt?: string;
+  termsAccepted?: boolean;
+  termsAcceptedAt?: string;
 }
 
 // ==========================================

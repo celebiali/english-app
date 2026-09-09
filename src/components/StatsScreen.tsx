@@ -15,6 +15,7 @@ import {
   CheckCircle2,
   FileText,
   GraduationCap,
+  Zap,
 } from 'lucide-react-native';
 import { useLearningStore } from '../store/useLearningStore';
 import { useThemeStore } from '../store/useThemeStore';
@@ -27,6 +28,8 @@ interface Props {
 export const StatsScreen: React.FC<Props> = ({ onOpenMistakes }) => {
   const {
     streakCount,
+    questionStreakCount,
+    vocabStreakCount,
     boxSummary,
     mistakes,
     dictionaryWords,
@@ -77,7 +80,7 @@ export const StatsScreen: React.FC<Props> = ({ onOpenMistakes }) => {
       <View style={styles.header}>
         <Text style={[styles.pageTitle, { color: colors.text }]}>Performans & Analiz</Text>
         <Text style={[styles.pageSubtitle, { color: colors.textSecondary }]}>
-          YDS hazırlık sürecinin canlı ve dinamik verileri
+          Sınav hazırlık sürecinin canlı ve dinamik verileri
         </Text>
       </View>
 
@@ -96,8 +99,25 @@ export const StatsScreen: React.FC<Props> = ({ onOpenMistakes }) => {
           <View style={[styles.metricIconBox, { backgroundColor: colors.brandLight }]}>
             <Flame size={16} color={colors.brand} />
           </View>
-          <Text style={[styles.metricValue, { color: colors.text }]}>{streakCount || 1} Gün</Text>
-          <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>Günlük Seri</Text>
+          <Text style={[styles.metricValue, { color: colors.text }]}>{questionStreakCount} Gün</Text>
+          <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>Soru Serisi</Text>
+        </View>
+
+        <View
+          style={[
+            styles.metricCard,
+            {
+              backgroundColor: colors.cardBackground,
+              borderColor: colors.border,
+              shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
+            },
+          ]}
+        >
+          <View style={[styles.metricIconBox, { backgroundColor: colors.accentWarmLight }]}>
+            <Zap size={16} color={colors.accentWarm} />
+          </View>
+          <Text style={[styles.metricValue, { color: colors.text }]}>{vocabStreakCount} Gün</Text>
+          <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>Kelime Serisi</Text>
         </View>
 
         <View
@@ -132,23 +152,6 @@ export const StatsScreen: React.FC<Props> = ({ onOpenMistakes }) => {
           </View>
           <Text style={[styles.metricValue, { color: colors.text }]}>{totalQuestionsSolved}</Text>
           <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>Çözülen Soru</Text>
-        </View>
-
-        <View
-          style={[
-            styles.metricCard,
-            {
-              backgroundColor: colors.cardBackground,
-              borderColor: colors.border,
-              shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
-            },
-          ]}
-        >
-          <View style={[styles.metricIconBox, { backgroundColor: colors.brandLight }]}>
-            <BookOpen size={16} color={colors.brand} />
-          </View>
-          <Text style={[styles.metricValue, { color: colors.text }]}>{totalWordsStudied}</Text>
-          <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>Ezber Kelime</Text>
         </View>
       </View>
 
@@ -353,11 +356,13 @@ export const StatsScreen: React.FC<Props> = ({ onOpenMistakes }) => {
 
       <View style={[styles.boxesCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
         <View style={styles.boxesRow}>
-          <View style={[styles.boxCol, { backgroundColor: colors.subtleBackground }]}>
-            <Text style={[styles.boxColNum, { color: colors.text }]}>{boxSummary.specialPoolCount || 0}</Text>
-            <Text style={[styles.boxColTitle, { color: colors.text }]}>Tekrar</Text>
-            <Text style={[styles.boxColSub, { color: colors.textSecondary }]}>Dünden Kalan</Text>
-          </View>
+          {Boolean(boxSummary.specialPoolCount && boxSummary.specialPoolCount > 0) && (
+            <View style={[styles.boxCol, { backgroundColor: colors.subtleBackground }]}>
+              <Text style={[styles.boxColNum, { color: colors.text }]}>{boxSummary.specialPoolCount}</Text>
+              <Text style={[styles.boxColTitle, { color: colors.text }]}>Tekrar</Text>
+              <Text style={[styles.boxColSub, { color: colors.textSecondary }]}>Dünden Kalan</Text>
+            </View>
+          )}
           <View style={[styles.boxCol, { backgroundColor: colors.brandLight }]}>
             <Text style={[styles.boxColNum, { color: colors.brand }]}>{boxSummary.dailyBoxCount || 25}</Text>
             <Text style={[styles.boxColTitle, { color: colors.brand }]}>Günlük</Text>

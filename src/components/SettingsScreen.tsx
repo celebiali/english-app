@@ -51,8 +51,6 @@ interface SettingsScreenProps {
 
 export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAuth }) => {
   const {
-    theme,
-    setTheme,
     fontSize,
     setFontSize,
     isSystemFontSize,
@@ -200,9 +198,16 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
         streakCount
       );
       if (success) {
+        const streakInfo =
+          streakCount > 1
+            ? `${streakCount} günlük seriyi koruma bildirimi`
+            : streakCount === 1
+            ? '2. gün serisini yakalama bildirimi'
+            : 'çalışma serisi başlatma hatırlatıcısı';
+
         Alert.alert(
           'Bildirimler Aktif Edildi 🔔',
-          `• Sabah 09:00: Günlük kelime seti\n• Akşam ${selectedHour}:00: ${dailyQuestionTarget} soruluk hedef ve ${streakCount} günlük seriyi koruma bildirimi`
+          `• Sabah 09:00: Günlük kelime seti\n• Akşam ${selectedHour}:00: ${dailyQuestionTarget} soruluk hedef ve ${streakInfo}`
         );
       }
     } else {
@@ -255,7 +260,15 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
       <View style={[styles.headerBar, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
         <View style={styles.headerSpacer} />
         <Text style={[styles.headerTitle, { color: colors.text }]}>Profil</Text>
-        <TouchableOpacity style={styles.closeBtn} onPress={onBack} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.closeBtn}
+          onPress={() => {
+            console.log('[SettingsScreen] close pressed');
+            onBack();
+          }}
+          hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+          activeOpacity={0.6}
+        >
           <X size={22} color={colors.text} />
         </TouchableOpacity>
       </View>
@@ -352,8 +365,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
             styles.groupedCard,
             {
               backgroundColor: colors.cardBackground,
-              borderColor: userProfile?.isPro ? colors.brand : colors.accentWarm,
-              borderWidth: 1.5,
+              borderColor: userProfile?.isPro 
+                ? (colors.isDark ? 'rgba(59, 130, 246, 0.5)' : colors.brand)
+                : colors.border,
+              borderWidth: 1,
               padding: 16,
               marginBottom: 20,
             },
@@ -370,132 +385,52 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
                 width: 44,
                 height: 44,
                 borderRadius: 22,
-                backgroundColor: userProfile?.isPro ? colors.brandLight : colors.accentWarmLight,
+                backgroundColor: userProfile?.isPro ? colors.brandLight : colors.subtleBackground,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Crown size={22} color={userProfile?.isPro ? colors.brand : colors.accentWarm} />
+              <Crown size={22} color={userProfile?.isPro ? colors.brand : colors.textSecondary} />
             </View>
 
             <View style={{ flex: 1 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 2 }}>
-                <Text style={[styles.rowLabel, { color: colors.text, fontWeight: '800' }]}>
-                  {userProfile?.isPro ? '👑 YDS Pratik Pro' : '💎 YDS Pratik Pro & Paketler'}
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 6, marginBottom: 2 }}>
+                <Text style={[styles.rowLabel, { color: colors.text, fontWeight: '800', fontSize: 15, flex: 1 }]} numberOfLines={1}>
+                  {userProfile?.isPro ? '👑 Pro Üyelik' : '💎 Pro Üyelik'}
                 </Text>
-                <View
-                  style={{
-                    backgroundColor: userProfile?.isPro ? '#22C55E' : colors.accentWarm,
-                    paddingHorizontal: 6,
-                    paddingVertical: 2,
-                    borderRadius: 4,
-                  }}
-                >
-                  <Text style={{ color: '#FFFFFF', fontSize: 10, fontWeight: '800' }}>
-                    {userProfile?.isPro ? 'AKTİF' : '7 GÜN ÜCRETSİZ DENE'}
-                  </Text>
-                </View>
+                {userProfile?.isPro && (
+                  <View
+                    style={{
+                      backgroundColor: colors.brand,
+                      paddingHorizontal: 8,
+                      paddingVertical: 3,
+                      borderRadius: 6,
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: '#FFFFFF',
+                        fontSize: 9.5,
+                        fontWeight: '800',
+                        letterSpacing: 0.3,
+                      }}
+                    >
+                      AKTİF
+                    </Text>
+                  </View>
+                )}
               </View>
-              <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
+              <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]} numberOfLines={2}>
                 {userProfile?.isPro
                   ? 'Abonelik detayları, yenilenme tarihi ve paket yönetimi'
-                  : 'Master denemeler, AI soru koçluğu, fiyatlar ve ödeme'}
+                  : 'Master denemeler, AI koçluk ve tüm paketler'}
               </Text>
             </View>
 
             <ChevronRight size={18} color={colors.textSecondary} />
           </View>
         </TouchableOpacity>
-
-        {/* SECTION: TEMA */}
-        <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
-          TEMA
-        </Text>
-        <View style={[styles.themeCardContainer, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
-          <View style={styles.themeGrid}>
-            {/* Açık Tema */}
-            <TouchableOpacity
-              style={styles.themeOptionItem}
-              onPress={() => setTheme('light')}
-              activeOpacity={0.8}
-            >
-              <View
-                style={[
-                  styles.deviceFrame,
-                  styles.deviceFrameLight,
-                  { borderColor: theme === 'light' ? colors.brand : colors.border },
-                ]}
-              >
-                <View style={[styles.deviceScreen, { backgroundColor: '#F8FAFC' }]}>
-                  <View style={[styles.deviceHeaderBarLight, { backgroundColor: '#E2E8F0' }]} />
-                  <View style={[styles.deviceLineLight, { backgroundColor: '#E2E8F0' }]} />
-                  <View style={[styles.deviceLineLight, { backgroundColor: '#E2E8F0' }]} />
-                  <View style={[styles.deviceLineLight, { backgroundColor: '#E2E8F0', width: '60%' }]} />
-                </View>
-              </View>
-              <Text style={[styles.themeLabel, { color: colors.text }]}>Açık</Text>
-              <View style={[styles.radioOuter, { borderColor: theme === 'light' ? colors.brand : colors.border }]}>
-                {theme === 'light' && <View style={[styles.radioInner, { backgroundColor: colors.brand }]} />}
-              </View>
-            </TouchableOpacity>
-
-            {/* Koyu Tema */}
-            <TouchableOpacity
-              style={styles.themeOptionItem}
-              onPress={() => setTheme('dark')}
-              activeOpacity={0.8}
-            >
-              <View
-                style={[
-                  styles.deviceFrame,
-                  styles.deviceFrameDark,
-                  { borderColor: theme === 'dark' ? colors.brand : colors.border },
-                ]}
-              >
-                <View style={[styles.deviceScreen, { backgroundColor: '#0B0F19' }]}>
-                  <View style={[styles.deviceHeaderBarDark, { backgroundColor: '#1C2538' }]} />
-                  <View style={[styles.deviceLineDark, { backgroundColor: '#2E3D59' }]} />
-                  <View style={[styles.deviceLineDark, { backgroundColor: '#2E3D59' }]} />
-                  <View style={[styles.deviceLineDark, { backgroundColor: '#2E3D59', width: '60%' }]} />
-                </View>
-              </View>
-              <Text style={[styles.themeLabel, { color: colors.text }]}>Koyu</Text>
-              <View style={[styles.radioOuter, { borderColor: theme === 'dark' ? colors.brand : colors.border }]}>
-                {theme === 'dark' && <View style={[styles.radioInner, { backgroundColor: colors.brand }]} />}
-              </View>
-            </TouchableOpacity>
-
-            {/* Sistem Teması */}
-            <TouchableOpacity
-              style={styles.themeOptionItem}
-              onPress={() => setTheme('system')}
-              activeOpacity={0.8}
-            >
-              <View
-                style={[
-                  styles.deviceFrame,
-                  styles.deviceFrameSystem,
-                  { borderColor: theme === 'system' ? colors.brand : colors.border },
-                ]}
-              >
-                <View style={styles.deviceScreenSplit}>
-                  <View style={[styles.deviceHalfLight, { backgroundColor: '#F8FAFC' }]}>
-                    <View style={[styles.deviceLineLight, { backgroundColor: '#E2E8F0' }]} />
-                    <View style={[styles.deviceLineLight, { backgroundColor: '#E2E8F0' }]} />
-                  </View>
-                  <View style={[styles.deviceHalfDark, { backgroundColor: '#0B0F19' }]}>
-                    <View style={[styles.deviceLineDark, { backgroundColor: '#2E3D59' }]} />
-                    <View style={[styles.deviceLineDark, { backgroundColor: '#2E3D59' }]} />
-                  </View>
-                </View>
-              </View>
-              <Text style={[styles.themeLabel, { color: colors.text }]}>Sistem</Text>
-              <View style={[styles.radioOuter, { borderColor: theme === 'system' ? colors.brand : colors.border }]}>
-                {theme === 'system' && <View style={[styles.radioInner, { backgroundColor: colors.brand }]} />}
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
 
         {/* SECTION: ÇALIŞMA HEDEFLERİ */}
         <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
@@ -508,14 +443,14 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
             activeOpacity={0.7}
           >
             <View style={{ flex: 1 }}>
-              <Text style={[styles.rowLabel, { color: colors.text }]}>Günlük Soru Dağılımı</Text>
+              <Text style={[styles.rowLabel, { color: colors.text }]}>Günlük Çalışma Hedefleri</Text>
               <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
-                Paragraf, Cloze, Cümle, Diyalog hedefleri
+                Soru dağılımı ve kelime hedefleri
               </Text>
             </View>
             <View style={styles.rowRight}>
               <Text style={[styles.rowValue, { color: colors.brand, fontWeight: '700' }]}>
-                {(taskGoals?.paragraph || 8) + (taskGoals?.cloze || 5) + (taskGoals?.sentence || 8) + (taskGoals?.skills || 14)} Soru / Gün
+                {(taskGoals?.paragraph || 8) + (taskGoals?.cloze || 5) + (taskGoals?.sentence || 8) + (taskGoals?.skills || 14)} Soru • {taskGoals?.words || 25} Kelime
               </Text>
               <ChevronRight size={16} color={colors.textSecondary} />
             </View>
@@ -708,7 +643,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
         {/* UYGULAMA SÜRÜMÜ FOOTER */}
         <View style={styles.versionFooter}>
           <Text style={[styles.versionFooterText, { color: colors.textSecondary }]}>
-            YDS Pratik v1.0.0 (Build 1) · Çevrimdışı Destekli
+            Dil Sınavı Hazırlık v1.0.0 (Build 1) · Çevrimdışı Destekli
           </Text>
         </View>
 
@@ -1011,10 +946,13 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
 
             {/* Toplam Özet Rozeti */}
             <View style={[styles.goalsSummaryCard, { backgroundColor: colors.brandLight, borderColor: colors.brandLightBorder }]}>
-              <Text style={[styles.goalsSummaryLabel, { color: colors.brand }]}>TOPLAM GÜNLÜK HEDEF</Text>
+              <Text style={[styles.goalsSummaryLabel, { color: colors.brand }]}>GÜNLÜK HEDEFLER ÖZETİ</Text>
               <Text style={[styles.goalsSummaryNumber, { color: colors.brand }]}>
                 {(taskGoals?.paragraph || 8) + (taskGoals?.cloze || 5) + (taskGoals?.sentence || 8) + (taskGoals?.skills || 14)}
-                <Text style={{ fontSize: 16, fontWeight: '700' }}> Soru / Gün</Text>
+                <Text style={{ fontSize: 16, fontWeight: '700' }}> Soru</Text>
+                <Text style={{ fontSize: 16, fontWeight: '400', color: colors.textSecondary }}> • </Text>
+                {taskGoals?.words || 25}
+                <Text style={{ fontSize: 16, fontWeight: '700' }}> Kelime</Text>
               </Text>
             </View>
 
@@ -1024,9 +962,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
               <View style={[styles.goalRowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}>
                 <View style={styles.goalInfo}>
                   <Text style={styles.goalEmoji}>📖</Text>
-                  <View>
-                    <Text style={[styles.goalTitle, { color: colors.text }]}>Paragraf Soruları</Text>
-                    <Text style={[styles.goalSub, { color: colors.textSecondary }]}>Okuma & Anlama (Önerilen: 8)</Text>
+                  <View style={styles.goalTextWrapper}>
+                    <Text style={[styles.goalTitle, { color: colors.text }]} numberOfLines={1}>Paragraf Soruları</Text>
+                    <Text style={[styles.goalSub, { color: colors.textSecondary }]} numberOfLines={1}>Okuma & Anlama (Önerilen: 8)</Text>
                   </View>
                 </View>
                 <View style={styles.goalStepperContainer}>
@@ -1052,9 +990,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
               <View style={[styles.goalRowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}>
                 <View style={styles.goalInfo}>
                   <Text style={styles.goalEmoji}>📝</Text>
-                  <View>
-                    <Text style={[styles.goalTitle, { color: colors.text }]}>Cloze Test Soruları</Text>
-                    <Text style={[styles.goalSub, { color: colors.textSecondary }]}>Paragraf İçi Boşluk (Önerilen: 5)</Text>
+                  <View style={styles.goalTextWrapper}>
+                    <Text style={[styles.goalTitle, { color: colors.text }]} numberOfLines={1}>Cloze Test Soruları</Text>
+                    <Text style={[styles.goalSub, { color: colors.textSecondary }]} numberOfLines={1}>Paragraf Boşluk (Önerilen: 5)</Text>
                   </View>
                 </View>
                 <View style={styles.goalStepperContainer}>
@@ -1080,9 +1018,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
               <View style={[styles.goalRowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}>
                 <View style={styles.goalInfo}>
                   <Text style={styles.goalEmoji}>🔗</Text>
-                  <View>
-                    <Text style={[styles.goalTitle, { color: colors.text }]}>Cümle Tamamlama</Text>
-                    <Text style={[styles.goalSub, { color: colors.textSecondary }]}>Bağlaç & Mantık (Önerilen: 8)</Text>
+                  <View style={styles.goalTextWrapper}>
+                    <Text style={[styles.goalTitle, { color: colors.text }]} numberOfLines={1}>Cümle Tamamlama</Text>
+                    <Text style={[styles.goalSub, { color: colors.textSecondary }]} numberOfLines={1}>Bağlaç & Mantık (Önerilen: 8)</Text>
                   </View>
                 </View>
                 <View style={styles.goalStepperContainer}>
@@ -1105,12 +1043,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
               </View>
 
               {/* Diyalog & Dil Bilgisi */}
-              <View style={styles.goalRowItem}>
+              <View style={[styles.goalRowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}>
                 <View style={styles.goalInfo}>
                   <Text style={styles.goalEmoji}>💬</Text>
-                  <View>
-                    <Text style={[styles.goalTitle, { color: colors.text }]}>Diyalog & Dil Bilgisi</Text>
-                    <Text style={[styles.goalSub, { color: colors.textSecondary }]}>Gramer, Çeviri (Önerilen: 14)</Text>
+                  <View style={styles.goalTextWrapper}>
+                    <Text style={[styles.goalTitle, { color: colors.text }]} numberOfLines={1}>Diyalog & Dil Bilgisi</Text>
+                    <Text style={[styles.goalSub, { color: colors.textSecondary }]} numberOfLines={1}>Gramer, Çeviri (Önerilen: 14)</Text>
                   </View>
                 </View>
                 <View style={styles.goalStepperContainer}>
@@ -1125,6 +1063,34 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
                   <TouchableOpacity
                     style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
                     onPress={() => setTaskGoals({ skills: Math.min(30, (taskGoals?.skills || 14) + 1) })}
+                    activeOpacity={0.7}
+                  >
+                    <Plus size={15} color={colors.text} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              {/* Günlük Kelime Hedefi */}
+              <View style={styles.goalRowItem}>
+                <View style={styles.goalInfo}>
+                  <Text style={styles.goalEmoji}>📚</Text>
+                  <View style={styles.goalTextWrapper}>
+                    <Text style={[styles.goalTitle, { color: colors.text }]} numberOfLines={1}>Günlük Kelime Hedefi</Text>
+                    <Text style={[styles.goalSub, { color: colors.textSecondary }]} numberOfLines={1}>Leitner Havuzu (Önerilen: 25)</Text>
+                  </View>
+                </View>
+                <View style={styles.goalStepperContainer}>
+                  <TouchableOpacity
+                    style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
+                    onPress={() => setTaskGoals({ words: Math.max(5, (taskGoals?.words || 25) - 5) })}
+                    activeOpacity={0.7}
+                  >
+                    <Minus size={15} color={colors.text} />
+                  </TouchableOpacity>
+                  <Text style={[styles.goalStepperValue, { color: colors.brand }]}>{taskGoals?.words || 25}</Text>
+                  <TouchableOpacity
+                    style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
+                    onPress={() => setTaskGoals({ words: Math.min(100, (taskGoals?.words || 25) + 5) })}
                     activeOpacity={0.7}
                   >
                     <Plus size={15} color={colors.text} />
@@ -1725,9 +1691,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     flex: 1,
+    marginRight: 10,
   },
   goalEmoji: {
     fontSize: 22,
+  },
+  goalTextWrapper: {
+    flex: 1,
+    justifyContent: 'center',
   },
   goalTitle: {
     fontSize: 14.5,
@@ -1741,6 +1712,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    flexShrink: 0,
   },
   goalStepperBtn: {
     width: 32,

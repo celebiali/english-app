@@ -46,7 +46,7 @@ class MemoryDatabase {
   folders: Map<string, VocabFolder> = new Map();
   examHistory: ExamScoreCard[] = [];
   userSession: UserProfile | null = null;
-  taskGoals: TaskGoalsConfig = { paragraph: 8, cloze: 5, sentence: 8, skills: 14 };
+  taskGoals: TaskGoalsConfig = { paragraph: 8, cloze: 5, sentence: 8, skills: 14, words: 25 };
   dailyTaskStats: Map<string, {
     paragraphCompleted: number;
     clozeCompleted: number;
@@ -54,26 +54,20 @@ class MemoryDatabase {
     skillsCompleted: number;
     vocabCompleted: number;
   }> = new Map();
-  streak: { count: number; lastDate: string } = { count: 1, lastDate: new Date().toISOString().split('T')[0] };
+  questionStreak: { count: number; lastDate: string } = { count: 0, lastDate: '' };
+  vocabStreak: { count: number; lastDate: string } = { count: 0, lastDate: '' };
+  streak: { count: number; lastDate: string } = { count: 0, lastDate: '' };
+  activeStudyFolderId: string = 'sys_conn';
   autoWordId = 1;
   autoQuestionId = 1;
   autoMistakeId = 1;
 
   async init() {
     if (this.folders.size === 0) {
-      this.folders.set('sys_vocab', {
-        id: 'sys_vocab',
-        name: 'YDS Kelime Havuzu',
-        description: 'A1 - C1 Seviye Temel ve İleri Kelimeler',
-        color: '#4F46E5',
-        icon: 'BookOpen',
-        is_system: true,
-        category_type: 'VOCABULARY',
-      });
       this.folders.set('sys_conn', {
         id: 'sys_conn',
         name: 'Bağlaçlar ve Yapılar',
-        description: 'Zaman, Zıtlık, Sebep ve Koşul Bağlaçları',
+        description: 'Zaman, Zıtlık, Sebep ve Koşul Bağlaçları (127 Kelime)',
         color: '#0EA5E9',
         icon: 'Link',
         is_system: true,
@@ -82,7 +76,7 @@ class MemoryDatabase {
       this.folders.set('sys_root', {
         id: 'sys_root',
         name: 'Etimoloji ve Kökler',
-        description: 'Latin & Grek Kökler, Ön ve Son Ekler',
+        description: 'Latin & Grek Kökler, Ön ve Son Ekler (215 Kelime)',
         color: '#8B5CF6',
         icon: 'Dna',
         is_system: true,
@@ -91,17 +85,47 @@ class MemoryDatabase {
       this.folders.set('sys_idiom', {
         id: 'sys_idiom',
         name: 'Deyimler ve Kalıplar',
-        description: 'Oxford YDS Sık Kullanılan Kalıp İfadeler',
+        description: 'Oxford YDS Sık Kullanılan Kalıp İfadeler (1054 İfade)',
         color: '#F59E0B',
         icon: 'MessageSquareQuote',
         is_system: true,
         category_type: 'IDIOM',
       });
+      this.folders.set('sys_vocab_a', {
+        id: 'sys_vocab_a',
+        name: 'A1 - A2 Temel Kelimeler',
+        description: 'Başlangıç ve Temel Seviye Kelimeler (3300+ Kelime)',
+        color: '#2563EB',
+        icon: 'BookOpen',
+        is_system: true,
+        category_type: 'VOCABULARY',
+        level_filter: 'A1,A2',
+      });
+      this.folders.set('sys_vocab_b', {
+        id: 'sys_vocab_b',
+        name: 'B1 - B2 YDS Odak Kelimeler',
+        description: 'Orta ve İleri Orta YDS Sınav Kelimeleri (3800+ Kelime)',
+        color: '#4F46E5',
+        icon: 'Sparkles',
+        is_system: true,
+        category_type: 'VOCABULARY',
+        level_filter: 'B1,B2',
+      });
+      this.folders.set('sys_vocab_c', {
+        id: 'sys_vocab_c',
+        name: 'C1 İleri Akademik Kelimeler',
+        description: 'Üst Seviye Akademik Makale ve Paragraf Kelimeleri (1800+ Kelime)',
+        color: '#EC4899',
+        icon: 'GraduationCap',
+        is_system: true,
+        category_type: 'VOCABULARY',
+        level_filter: 'C1',
+      });
       this.folders.set('custom_default', {
         id: 'custom_default',
         name: 'Özel Kelime Defterim',
         description: 'Eklediğim tüm özel kelimeler',
-        color: '#10B981',
+        color: '#F97316',
         icon: 'Star',
         is_system: false,
       });
@@ -170,6 +194,9 @@ class DatabaseService {
       await this.dbInstance.execAsync(`ALTER TABLE daily_stats ADD COLUMN sentence_completed INTEGER DEFAULT 0;`);
     } catch (_) {}
     try {
+      await this.dbInstance.execAsync(`ALTER TABLE daily_stats ADD COLUMN skills_completed INTEGER DEFAULT 0;`);
+    } catch (_) {}
+    try {
       await this.dbInstance.execAsync(`DELETE FROM exam_history WHERE (correct_count + wrong_count) = 0;`);
     } catch (_) {}
     try {
@@ -191,38 +218,235 @@ class DatabaseService {
       await this.dbInstance.execAsync(`ALTER TABLE questions ADD COLUMN generation_date DATE;`);
     } catch (_) {}
     try {
+      await this.dbInstance.execAsync(`ALTER TABLE questions ADD COLUMN difficulty TEXT DEFAULT 'YDS_EXAM';`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE questions ADD COLUMN source TEXT;`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE questions ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP;`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE mistake_vault ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP;`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE mistake_vault ADD COLUMN reviewed_at DATETIME;`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE user_session ADD COLUMN applied_promo_code TEXT;`);
+    } catch (_) {}
+    try {
       await this.dbInstance.execAsync(`ALTER TABLE user_settings ADD COLUMN last_ai_generation_date DATE;`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE user_settings ADD COLUMN question_streak_count INTEGER DEFAULT 0;`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE user_settings ADD COLUMN last_question_date DATE;`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE user_settings ADD COLUMN vocab_streak_count INTEGER DEFAULT 0;`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE user_settings ADD COLUMN last_vocab_date DATE;`);
+    } catch (_) {}
+
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE user_settings ADD COLUMN active_study_folder_id TEXT DEFAULT 'sys_conn';`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE vocab_folders ADD COLUMN level_filter TEXT;`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE words ADD COLUMN part_of_speech TEXT;`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE words ADD COLUMN image_url TEXT;`);
+    } catch (_) {}
+
+    // Reset streak if user has 0 completed activity
+    try {
+      await this.dbInstance.execAsync(`
+        UPDATE user_settings 
+        SET 
+          streak_count = 0, last_active_date = NULL,
+          question_streak_count = 0, last_question_date = NULL,
+          vocab_streak_count = 0, last_vocab_date = NULL
+        WHERE id = 1 AND (
+          (SELECT COUNT(*) FROM questions WHERE status != 'ACTIVE') = 0 
+          AND (SELECT COUNT(*) FROM user_word_progress WHERE correct_count > 0 OR incorrect_count > 0) = 0
+          AND (SELECT COUNT(*) FROM daily_stats WHERE (paragraph_completed + cloze_completed + sentence_completed + skills_completed + new_words_learned + words_reviewed) > 0) = 0
+        );
+      `);
+    } catch (_) {}
+
+    // Update default folder color from green to blue
+    try {
+      await this.dbInstance.execAsync(`UPDATE vocab_folders SET color = '#2563EB' WHERE id = 'sys_vocab_a' AND color = '#10B981';`);
     } catch (_) {}
 
     // Seed default folders
-    try {
-      await this.dbInstance.runAsync(
-        `INSERT OR IGNORE INTO vocab_folders (id, name, description, color, icon, is_system, category_type) VALUES
-         ('sys_vocab', 'YDS Kelime Havuzu', 'A1 - C1 Seviye Temel ve İleri Kelimeler', '#4F46E5', 'BookOpen', 1, 'VOCABULARY'),
-         ('sys_conn', 'Bağlaçlar ve Yapılar', 'Zaman, Zıtlık, Sebep ve Koşul Bağlaçları', '#0EA5E9', 'Link', 1, 'CONNECTOR'),
-         ('sys_root', 'Etimoloji ve Kökler', 'Latin & Grek Kökler, Ön ve Son Ekler', '#8B5CF6', 'Dna', 1, 'PREFIX_ROOT'),
-         ('sys_idiom', 'Deyimler ve Kalıplar', 'Oxford YDS Sık Kullanılan Kalıp İfadeler', '#F59E0B', 'MessageSquareQuote', 1, 'IDIOM'),
-         ('custom_default', 'Özel Kelime Defterim', 'Eklediğim tüm özel kelimeler', '#10B981', 'Star', 0, NULL)`
-      );
-    } catch (_) {}
+    await this.seedDefaultFoldersIfEmpty();
 
     await this.dbInstance.runAsync(
-      `INSERT OR IGNORE INTO user_settings (id, daily_limit, current_level, last_active_date, streak_count, paragraph_goal, cloze_goal, sentence_goal, skills_goal) VALUES (1, 25, 'A1', date('now'), 1, 8, 5, 8, 14)`
+      `INSERT OR IGNORE INTO user_settings (id, daily_limit, current_level, last_active_date, streak_count, question_streak_count, last_question_date, vocab_streak_count, last_vocab_date, paragraph_goal, cloze_goal, sentence_goal, skills_goal, active_study_folder_id) VALUES (1, 25, 'A1', NULL, 0, 0, NULL, 0, NULL, 8, 5, 8, 14, 'sys_conn')`
     );
   }
 
   /**
-   * Reads user's dynamic daily question task goals
+   * Guaranteed seeding of system vocabulary folders
+   */
+  async seedDefaultFoldersIfEmpty(): Promise<void> {
+    const defaultFolders = [
+      {
+        id: 'sys_conn',
+        name: 'Bağlaçlar ve Yapılar',
+        description: 'Zaman, Zıtlık, Sebep ve Koşul Bağlaçları (127 Kelime)',
+        color: '#0EA5E9',
+        icon: 'Link',
+        is_system: 1,
+        category_type: 'CONNECTOR',
+        level_filter: null,
+      },
+      {
+        id: 'sys_root',
+        name: 'Etimoloji ve Kökler',
+        description: 'Latin & Grek Kökler, Ön ve Son Ekler (215 Kelime)',
+        color: '#8B5CF6',
+        icon: 'Dna',
+        is_system: 1,
+        category_type: 'PREFIX_ROOT',
+        level_filter: null,
+      },
+      {
+        id: 'sys_idiom',
+        name: 'Deyimler ve Kalıplar',
+        description: 'Oxford YDS Sık Kullanılan Kalıp İfadeler (1054 İfade)',
+        color: '#F59E0B',
+        icon: 'MessageSquareQuote',
+        is_system: 1,
+        category_type: 'IDIOM',
+        level_filter: null,
+      },
+      {
+        id: 'sys_vocab_a',
+        name: 'A1 - A2 Temel Kelimeler',
+        description: 'Başlangıç ve Temel Seviye Kelimeler (3300+ Kelime)',
+        color: '#2563EB',
+        icon: 'BookOpen',
+        is_system: 1,
+        category_type: 'VOCABULARY',
+        level_filter: 'A1,A2',
+      },
+      {
+        id: 'sys_vocab_b',
+        name: 'B1 - B2 YDS Odak Kelimeler',
+        description: 'Orta ve İleri Orta YDS Sınav Kelimeleri (3800+ Kelime)',
+        color: '#4F46E5',
+        icon: 'Sparkles',
+        is_system: 1,
+        category_type: 'VOCABULARY',
+        level_filter: 'B1,B2',
+      },
+      {
+        id: 'sys_vocab_c',
+        name: 'C1 İleri Akademik Kelimeler',
+        description: 'Üst Seviye Akademik Makale ve Paragraf Kelimeleri (1800+ Kelime)',
+        color: '#EC4899',
+        icon: 'GraduationCap',
+        is_system: 1,
+        category_type: 'VOCABULARY',
+        level_filter: 'C1',
+      },
+      {
+        id: 'custom_default',
+        name: 'Özel Kelime Defterim',
+        description: 'Eklediğim tüm özel kelimeler',
+        color: '#F97316',
+        icon: 'Star',
+        is_system: 0,
+        category_type: null,
+        level_filter: null,
+      },
+    ];
+
+    if (!this.isNative) {
+      for (const f of defaultFolders) {
+        if (!this.memoryDb.folders.has(f.id)) {
+          this.memoryDb.folders.set(f.id, {
+            id: f.id,
+            name: f.name,
+            description: f.description,
+            color: f.color,
+            icon: f.icon,
+            is_system: f.is_system === 1,
+            category_type: f.category_type as any,
+            level_filter: f.level_filter || undefined,
+          });
+        }
+      }
+      return;
+    }
+
+    // Clean up old single sys_vocab if it exists
+    try {
+      await this.dbInstance.runAsync(`DELETE FROM vocab_folders WHERE id = 'sys_vocab'`);
+    } catch (_) {}
+
+    for (const f of defaultFolders) {
+      try {
+        await this.dbInstance.runAsync(
+          `INSERT OR IGNORE INTO vocab_folders (id, name, description, color, icon, is_system, category_type, level_filter)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          [f.id, f.name, f.description, f.color, f.icon, f.is_system, f.category_type, f.level_filter]
+        );
+      } catch (err) {
+        console.warn('Error inserting folder:', f.id, err);
+      }
+    }
+  }
+
+  async getActiveStudyFolderId(): Promise<string> {
+    if (!this.isNative) {
+      return this.memoryDb.activeStudyFolderId || 'custom_default';
+    }
+    try {
+      const row: any = await this.dbInstance.getFirstAsync(
+        `SELECT active_study_folder_id FROM user_settings WHERE id = 1`
+      );
+      return row?.active_study_folder_id || 'custom_default';
+    } catch (e) {
+      return 'custom_default';
+    }
+  }
+
+  async setActiveStudyFolderId(folderId: string): Promise<void> {
+    if (!this.isNative) {
+      this.memoryDb.activeStudyFolderId = folderId;
+      return;
+    }
+    try {
+      await this.dbInstance.runAsync(
+        `UPDATE user_settings SET active_study_folder_id = ? WHERE id = 1`,
+        [folderId]
+      );
+    } catch (e) {
+      console.warn('Failed to update active study folder id:', e);
+    }
+  }
+
+  /**
+   * Reads user's dynamic daily question & vocabulary task goals
    */
   async getUserTaskGoals(): Promise<TaskGoalsConfig> {
-    const defaultGoals: TaskGoalsConfig = { paragraph: 8, cloze: 5, sentence: 8, skills: 14 };
+    const defaultGoals: TaskGoalsConfig = { paragraph: 8, cloze: 5, sentence: 8, skills: 14, words: 25 };
     if (!this.isNative) {
       return this.memoryDb.taskGoals || defaultGoals;
     }
 
     try {
       const row: any = await this.dbInstance.getFirstAsync(
-        `SELECT paragraph_goal, cloze_goal, sentence_goal, skills_goal FROM user_settings WHERE id = 1`
+        `SELECT paragraph_goal, cloze_goal, sentence_goal, skills_goal, daily_limit FROM user_settings WHERE id = 1`
       );
       if (row) {
         return {
@@ -230,6 +454,7 @@ class DatabaseService {
           cloze: Number(row.cloze_goal) || 5,
           sentence: Number(row.sentence_goal) || 8,
           skills: Number(row.skills_goal) || 14,
+          words: Number(row.daily_limit) || 25,
         };
       }
     } catch (e) {
@@ -239,18 +464,19 @@ class DatabaseService {
   }
 
   /**
-   * Saves user's dynamic daily question task goals
+   * Saves user's dynamic daily question & vocabulary task goals
    */
   async saveUserTaskGoals(goals: TaskGoalsConfig): Promise<void> {
+    const wordsGoal = goals.words !== undefined ? goals.words : (this.memoryDb.taskGoals?.words || 25);
     if (!this.isNative) {
-      this.memoryDb.taskGoals = { ...goals };
+      this.memoryDb.taskGoals = { ...goals, words: wordsGoal };
       return;
     }
 
     try {
       await this.dbInstance.runAsync(
-        `UPDATE user_settings SET paragraph_goal = ?, cloze_goal = ?, sentence_goal = ?, skills_goal = ? WHERE id = 1`,
-        [goals.paragraph, goals.cloze, goals.sentence, goals.skills]
+        `UPDATE user_settings SET paragraph_goal = ?, cloze_goal = ?, sentence_goal = ?, skills_goal = ?, daily_limit = ? WHERE id = 1`,
+        [goals.paragraph, goals.cloze, goals.sentence, goals.skills, wordsGoal]
       );
     } catch (e) {
       console.warn('Failed to save user task goals in SQLite:', e);
@@ -753,7 +979,14 @@ class DatabaseService {
       return list.map((f) => {
         let matchingWords: WordWithProgress[] = [];
         if (f.is_system && f.category_type) {
-          matchingWords = allWords.filter((w) => w.category === f.category_type);
+          if (f.level_filter) {
+            const allowed = f.level_filter.split(',').map((s) => s.trim());
+            matchingWords = allWords.filter(
+              (w) => w.category === f.category_type && allowed.includes(w.level || '')
+            );
+          } else {
+            matchingWords = allWords.filter((w) => w.category === f.category_type);
+          }
         } else if (f.id === 'custom_default') {
           matchingWords = allWords.filter(
             (w) => w.is_custom || (w.subcategory && !['VOCABULARY', 'CONNECTOR', 'PREFIX_ROOT', 'IDIOM'].includes(w.subcategory))
@@ -762,10 +995,12 @@ class DatabaseService {
           matchingWords = allWords.filter((w) => w.subcategory === f.name);
         }
         const learned = matchingWords.filter((w) => w.box !== null && w.box > 1).length;
+        const isCompleted = matchingWords.length > 0 && learned >= matchingWords.length;
         return {
           ...f,
           word_count: matchingWords.length,
           learned_count: learned,
+          is_completed: isCompleted,
         };
       });
     }
@@ -783,12 +1018,20 @@ class DatabaseService {
         icon: r.icon,
         is_system: r.is_system === 1,
         category_type: r.category_type,
+        level_filter: r.level_filter || undefined,
         created_at: r.created_at,
       };
 
       let matchingWords: WordWithProgress[] = [];
       if (folder.is_system && folder.category_type) {
-        matchingWords = allWords.filter((w) => w.category === folder.category_type);
+        if (folder.level_filter) {
+          const allowed = folder.level_filter.split(',').map((s) => s.trim());
+          matchingWords = allWords.filter(
+            (w) => w.category === folder.category_type && allowed.includes(w.level || '')
+          );
+        } else {
+          matchingWords = allWords.filter((w) => w.category === folder.category_type);
+        }
       } else if (folder.id === 'custom_default') {
         matchingWords = allWords.filter(
           (w) => w.is_custom || (w.subcategory && !['VOCABULARY', 'CONNECTOR', 'PREFIX_ROOT', 'IDIOM'].includes(w.subcategory))
@@ -797,11 +1040,13 @@ class DatabaseService {
         matchingWords = allWords.filter((w) => w.subcategory === folder.name);
       }
       const learned = matchingWords.filter((w) => w.box !== null && w.box > 1).length;
+      const isCompleted = matchingWords.length > 0 && learned >= matchingWords.length;
 
       return {
         ...folder,
         word_count: matchingWords.length,
         learned_count: learned,
+        is_completed: isCompleted,
       };
     });
   }
@@ -991,6 +1236,96 @@ class DatabaseService {
     }
   }
 
+  /**
+   * Search dictionary across English words and Turkish meanings.
+   * Matches prefix first, then containment.
+   */
+  async searchDictionary(query: string, limit: number = 50): Promise<WordItem[]> {
+    const clean = (query || '').trim().toLowerCase();
+    if (!clean) {
+      // Return popular or starter academic words
+      if (!this.isNative) {
+        return Array.from(this.memoryDb.words.values()).slice(0, limit);
+      }
+      try {
+        const rows: any[] = await this.dbInstance.getAllAsync(
+          `SELECT * FROM words ORDER BY id ASC LIMIT ?`,
+          [limit]
+        );
+        return rows.map((r) => ({
+          ...r,
+          is_custom: r.is_custom === 1,
+          synonyms: r.synonyms ? JSON.parse(r.synonyms) : [],
+        }));
+      } catch (err) {
+        return [];
+      }
+    }
+
+    if (!this.isNative) {
+      const results: WordItem[] = [];
+      for (const w of this.memoryDb.words.values()) {
+        if (
+          w.word.toLowerCase().includes(clean) ||
+          w.meaning.toLowerCase().includes(clean)
+        ) {
+          results.push(w);
+          if (results.length >= limit) break;
+        }
+      }
+      return results;
+    }
+
+    try {
+      const rows: any[] = await this.dbInstance.getAllAsync(
+        `SELECT * FROM words 
+         WHERE LOWER(word) LIKE ? OR LOWER(meaning) LIKE ? 
+         ORDER BY 
+           CASE 
+             WHEN LOWER(word) = ? THEN 1
+             WHEN LOWER(word) LIKE ? THEN 2
+             WHEN LOWER(meaning) LIKE ? THEN 3
+             ELSE 4
+           END,
+           LENGTH(word) ASC
+         LIMIT ?`,
+        [`%${clean}%`, `%${clean}%`, clean, `${clean}%`, `${clean}%`, limit]
+      );
+
+      return rows.map((r) => {
+        let synonyms: string[] = [];
+        try {
+          if (r.synonyms) synonyms = JSON.parse(r.synonyms);
+        } catch (_) {}
+        return {
+          ...r,
+          is_custom: r.is_custom === 1,
+          synonyms,
+        };
+      });
+    } catch (err) {
+      console.warn('searchDictionary error:', err);
+      return [];
+    }
+  }
+
+  /**
+   * Add a word from dictionary to a specific practice folder
+   */
+  async addWordToFolder(
+    word: Partial<WordItem>,
+    folderName: string,
+    imageUrl?: string
+  ): Promise<number> {
+    const targetFolder = (folderName || 'Özel Kelime Defterim').trim();
+    return await this.insertCustomWord({
+      ...word,
+      subcategory: targetFolder,
+      folder_name: targetFolder,
+      image_url: imageUrl || word.image_url,
+    });
+  }
+
   async deleteCustomWord(wordId: number): Promise<void> {
     if (!this.isNative) {
       this.memoryDb.words.delete(wordId);
@@ -1021,6 +1356,43 @@ class DatabaseService {
   // ==========================================
   // VOCABULARY & LEITNER EXISTING METHODS
   // ==========================================
+
+  async purgeNonCustomWords(): Promise<number> {
+    if (!this.isNative) {
+      let deleted = 0;
+      for (const [id, w] of Array.from(this.memoryDb.words.entries())) {
+        if (!w.is_custom && w.subcategory !== 'Özel Kelimeler') {
+          this.memoryDb.words.delete(id);
+          this.memoryDb.progress.delete(id);
+          deleted++;
+        }
+      }
+      return deleted;
+    }
+
+    try {
+      await this.dbInstance.runAsync(
+        `DELETE FROM words WHERE (is_custom IS NULL OR is_custom = 0) AND (subcategory IS NULL OR subcategory != 'Özel Kelimeler')`
+      );
+      await this.dbInstance.runAsync(
+        `DELETE FROM user_word_progress WHERE word_id NOT IN (SELECT id FROM words)`
+      );
+      // Clean up old multi-level system folders to leave single folder
+      await this.dbInstance.runAsync(
+        `DELETE FROM vocab_folders WHERE id IN ('sys_conn', 'sys_root', 'sys_idiom', 'sys_vocab_a', 'sys_vocab_b', 'sys_vocab_c')`
+      );
+      const existing = await this.dbInstance.getFirstAsync(`SELECT id FROM vocab_folders WHERE id = 'custom_default'`);
+      if (!existing) {
+        await this.dbInstance.runAsync(
+          `INSERT INTO vocab_folders (id, name, description, color, icon, is_system, category_type)
+           VALUES ('custom_default', 'Kelimelerim', 'Özel Eklenen Kelimeler', '#2563EB', 'Folder', 0, 'CUSTOM')`
+        );
+      }
+    } catch (e) {
+      console.warn('Error purging non-custom words:', e);
+    }
+    return 1;
+  }
 
   async getWordCount(): Promise<number> {
     if (!this.isNative) return this.memoryDb.words.size;
@@ -1084,7 +1456,9 @@ class DatabaseService {
       this.memoryDb.mistakes.clear();
       this.memoryDb.examHistory = [];
       this.memoryDb.dailyTaskStats.clear();
-      this.memoryDb.streak = { count: 1, lastDate: new Date().toISOString().split('T')[0] };
+      this.memoryDb.questionStreak = { count: 0, lastDate: '' };
+      this.memoryDb.vocabStreak = { count: 0, lastDate: '' };
+      this.memoryDb.streak = { count: 0, lastDate: '' };
       for (const q of this.memoryDb.questions.values()) {
         q.status = 'ACTIVE';
       }
@@ -1099,7 +1473,11 @@ class DatabaseService {
         await this.dbInstance.runAsync(`DELETE FROM daily_stats`);
         await this.dbInstance.runAsync(`UPDATE questions SET status = 'ACTIVE'`);
         await this.dbInstance.runAsync(
-          `UPDATE user_settings SET streak_count = 1, last_active_date = date('now') WHERE id = 1`
+          `UPDATE user_settings SET 
+            streak_count = 0, last_active_date = NULL,
+            question_streak_count = 0, last_question_date = NULL,
+            vocab_streak_count = 0, last_vocab_date = NULL
+           WHERE id = 1`
         );
       });
     } catch (e) {
@@ -1259,8 +1637,8 @@ class DatabaseService {
     };
   }
 
-  async getDailyLearningQueue(limit: number = 25): Promise<CardWord[]> {
-    return await this.getWordsForDailyBatch(limit);
+  async getDailyLearningQueue(limit: number = 25, folderId?: string): Promise<CardWord[]> {
+    return await this.getWordsForDailyBatch(limit, folderId);
   }
 
   async getAllWordsWithStatus(): Promise<WordWithProgress[]> {
@@ -1385,7 +1763,9 @@ class DatabaseService {
     return updatedProg;
   }
 
-  async getWordsForDailyBatch(newWordsLimit: number = 25): Promise<CardWord[]> {
+  async getWordsForDailyBatch(newWordsLimit: number = 25, folderId?: string): Promise<CardWord[]> {
+    const targetFolderId = folderId || (await this.getActiveStudyFolderId());
+
     const computeBadgeInfo = (progBox: number, nextReviewAtStr?: string | null) => {
       const now = Date.now();
       let daysOverdue = 0;
@@ -1396,33 +1776,74 @@ class DatabaseService {
         }
       }
 
+      if (progBox === 1) {
+        return { badgeText: '🔄 Dünden Tekrar (1 Gün)', daysOverdue };
+      }
       if (progBox === 2) {
-        return { badgeText: '📅 Haftalık Tekrar', daysOverdue };
+        return { badgeText: '📅 Haftalık Tekrar (7 Gün)', daysOverdue };
       }
       if (progBox === 3) {
-        return { badgeText: '🏆 Aylık Tekrar', daysOverdue };
+        return { badgeText: '🏆 Aylık Tekrar (30 Gün)', daysOverdue };
       }
-      if (daysOverdue > 1) {
-        return { badgeText: '⏳ Geciken Tekrar', daysOverdue };
-      }
-      return { badgeText: '🔄 Dünden Tekrar', daysOverdue };
+      return { badgeText: '🔄 Aralıklı Tekrar', daysOverdue };
     };
 
     if (!this.isNative) {
+      await this.memoryDb.init();
+      const targetFolder = this.memoryDb.folders.get(targetFolderId) || null;
+      const isMatchingFolder = (w: WordItem): boolean => {
+        if (!targetFolder) return true;
+        if (targetFolder.id === 'custom_default') {
+          return !!w.is_custom || (!!w.subcategory && !['VOCABULARY', 'CONNECTOR', 'PREFIX_ROOT', 'IDIOM'].includes(w.subcategory));
+        }
+        if (targetFolder.is_system && targetFolder.category_type) {
+          if (targetFolder.level_filter) {
+            const allowed = targetFolder.level_filter.split(',').map((s) => s.trim());
+            return w.category === targetFolder.category_type && allowed.includes(w.level || '');
+          }
+          return w.category === targetFolder.category_type;
+        }
+        return w.subcategory === targetFolder.name;
+      };
+
       const allWords = Array.from(this.memoryDb.words.values());
       const reviewCandidates: { word: WordItem; prog: WordProgress; daysOverdue: number; badgeText: string }[] = [];
-      const newWords: CardWord[] = [];
       const now = Date.now();
 
+      // Vadesi gelmiş kelimeleri TÜM klasörlerden tara
       for (const w of allWords) {
         const prog = this.memoryDb.progress.get(w.id);
-        if (prog) {
-          const dueTime = prog.next_review_at ? new Date(prog.next_review_at).getTime() : 0;
+        if (prog && prog.next_review_at) {
+          const dueTime = new Date(prog.next_review_at).getTime();
           if (dueTime <= now) {
             const { badgeText, daysOverdue } = computeBadgeInfo(prog.box, prog.next_review_at);
             reviewCandidates.push({ word: w, prog, daysOverdue, badgeText });
           }
-        } else if (!w.is_custom) {
+        }
+      }
+
+      reviewCandidates.sort((a, b) => {
+        const tA = a.prog.next_review_at ? new Date(a.prog.next_review_at).getTime() : 0;
+        const tB = b.prog.next_review_at ? new Date(b.prog.next_review_at).getTime() : 0;
+        return tA - tB;
+      });
+
+      const reviewWords: CardWord[] = reviewCandidates.map(({ word: w, prog, daysOverdue, badgeText }) => ({
+        ...w,
+        progress: prog,
+        cardType: 'REVIEW',
+        reviewBox: prog.box,
+        reviewBadgeText: badgeText,
+        daysOverdue,
+        isCooldown: false,
+      }));
+
+      // Hedef aktif klasörden 25 YENİ kelime seç
+      const targetFolderWords = allWords.filter(isMatchingFolder);
+      const newWords: CardWord[] = [];
+      for (const w of targetFolderWords) {
+        const prog = this.memoryDb.progress.get(w.id);
+        if (!prog) {
           if (newWords.length < newWordsLimit) {
             newWords.push({
               ...w,
@@ -1434,39 +1855,45 @@ class DatabaseService {
         }
       }
 
-      // Vadesi en çok gecikenleri en öne al
-      reviewCandidates.sort((a, b) => {
-        const tA = a.prog.next_review_at ? new Date(a.prog.next_review_at).getTime() : 0;
-        const tB = b.prog.next_review_at ? new Date(b.prog.next_review_at).getTime() : 0;
-        return tA - tB;
-      });
-
-      // Seans başına aşırı yüklemeyi önlemek için en fazla 25 tekrar al
-      const maxReviewLimit = 25;
-      const selectedReviews = reviewCandidates.slice(0, maxReviewLimit);
-
-      const reviewWords: CardWord[] = selectedReviews.map(({ word: w, prog, daysOverdue, badgeText }) => ({
-        ...w,
-        progress: prog,
-        cardType: 'REVIEW',
-        reviewBox: prog.box,
-        reviewBadgeText: badgeText,
-        daysOverdue,
-        isCooldown: false,
-      }));
-
       return [...reviewWords, ...newWords];
     }
 
-    // 1. Vadesi gelmiş kelimeleri tüm kutulardan (Günlük, Haftalık, Aylık) çek (Maks 25 adet)
-    const reviewRows = await this.dbInstance.getAllAsync(
-      `SELECT w.*, p.box as prog_box, p.status as prog_status, p.correct_count as prog_correct, p.incorrect_count as prog_incorrect, p.last_reviewed_at as prog_last_reviewed, p.next_review_at as prog_next_review, p.box_entry_date as prog_entry_date
-       FROM words w
-       INNER JOIN user_word_progress p ON w.id = p.word_id
-       WHERE (p.next_review_at IS NULL OR p.next_review_at <= datetime('now'))
-       ORDER BY p.next_review_at ASC
-       LIMIT 25`
+    // Native SQLite implementation
+    const targetFolder: any = await this.dbInstance.getFirstAsync(
+      `SELECT * FROM vocab_folders WHERE id = ?`,
+      [targetFolderId]
     );
+
+    let folderFilterSql = '';
+    let folderParams: any[] = [];
+
+    if (targetFolder) {
+      if (targetFolder.id === 'custom_default') {
+        folderFilterSql = `(w.is_custom = 1 OR (w.subcategory IS NOT NULL AND w.subcategory NOT IN ('VOCABULARY', 'CONNECTOR', 'PREFIX_ROOT', 'IDIOM')))`;
+      } else if (targetFolder.is_system === 1 && targetFolder.category_type) {
+        if (targetFolder.level_filter) {
+          const levels = targetFolder.level_filter.split(',').map((s: string) => s.trim());
+          const placeholders = levels.map(() => '?').join(',');
+          folderFilterSql = `w.category = ? AND w.level IN (${placeholders})`;
+          folderParams = [targetFolder.category_type, ...levels];
+        } else {
+          folderFilterSql = `w.category = ?`;
+          folderParams = [targetFolder.category_type];
+        }
+      } else {
+        folderFilterSql = `w.subcategory = ?`;
+        folderParams = [targetFolder.name];
+      }
+    }
+
+    // 1. Vadesi gelmiş kelimeleri TÜM klasörlerden çek (7 ve 30 günlük süresi dolanlar)
+    const reviewSql = `SELECT w.*, p.box as prog_box, p.status as prog_status, p.correct_count as prog_correct, p.incorrect_count as prog_incorrect, p.last_reviewed_at as prog_last_reviewed, p.next_review_at as prog_next_review, p.box_entry_date as prog_entry_date
+         FROM words w
+         INNER JOIN user_word_progress p ON w.id = p.word_id
+         WHERE p.next_review_at IS NOT NULL AND p.next_review_at <= datetime('now')
+         ORDER BY p.next_review_at ASC`;
+
+    const reviewRows = await this.dbInstance.getAllAsync(reviewSql);
 
     const reviewWords: CardWord[] = reviewRows.map((r: any) => {
       const { badgeText, daysOverdue } = computeBadgeInfo(r.prog_box, r.prog_next_review);
@@ -1501,15 +1928,21 @@ class DatabaseService {
       };
     });
 
-    // 2. Garantili olarak her gün 25 YENİ hiç görülmemiş kelimeyi getir
-    const newRows = await this.dbInstance.getAllAsync(
-      `SELECT w.* FROM words w
-       LEFT JOIN user_word_progress p ON w.id = p.word_id
-       WHERE p.id IS NULL AND (w.is_custom IS NULL OR w.is_custom = 0)
-       ORDER BY w.id ASC
-       LIMIT ?`,
-      [newWordsLimit]
-    );
+    // 2. Garantili olarak hedef klasörden YENİ hiç görülmemiş kelimeleri getir
+    const newSql = folderFilterSql
+      ? `SELECT w.* FROM words w
+         LEFT JOIN user_word_progress p ON w.id = p.word_id
+         WHERE p.id IS NULL AND (${folderFilterSql})
+         ORDER BY w.id ASC
+         LIMIT ?`
+      : `SELECT w.* FROM words w
+         LEFT JOIN user_word_progress p ON w.id = p.word_id
+         WHERE p.id IS NULL AND (w.is_custom IS NULL OR w.is_custom = 0)
+         ORDER BY w.id ASC
+         LIMIT ?`;
+
+    const newParams = [...folderParams, newWordsLimit];
+    const newRows = await this.dbInstance.getAllAsync(newSql, newParams);
 
     const newWords: CardWord[] = newRows.map((r: any) => ({
       id: r.id,
@@ -1531,71 +1964,200 @@ class DatabaseService {
     return [...reviewWords, ...newWords];
   }
 
-  async getStreakCount(): Promise<number> {
+  // ==========================================
+  // SEPARATE QUESTION & VOCAB STREAKS
+  // ==========================================
+
+  async getQuestionStreakCount(): Promise<number> {
     const todayStr = new Date().toISOString().split('T')[0];
     const yesterday = new Date(Date.now() - 86400000);
     const yesterdayStr = yesterday.toISOString().split('T')[0];
 
     if (!this.isNative) {
-      const lastDate = this.memoryDb.streak.lastDate;
+      if (!this.memoryDb.questionStreak || this.memoryDb.questionStreak.count <= 0) return 0;
+      const lastDate = this.memoryDb.questionStreak.lastDate;
       if (lastDate === todayStr || lastDate === yesterdayStr) {
-        return this.memoryDb.streak.count;
+        return this.memoryDb.questionStreak.count;
       }
       return 0;
     }
 
-    const row = await this.dbInstance.getFirstAsync(
-      `SELECT last_active_date, streak_count FROM user_settings WHERE id = 1`
-    );
-    const lastActive = row?.last_active_date;
-    const count = row?.streak_count || 0;
+    try {
+      // Check if user has answered any questions
+      const qRow: any = await this.dbInstance.getFirstAsync(
+        `SELECT COUNT(*) as answered_count FROM questions WHERE status != 'ACTIVE'`
+      );
+      if (!qRow || qRow.answered_count === 0) {
+        await this.dbInstance.runAsync(
+          `UPDATE user_settings SET question_streak_count = 0, last_question_date = NULL WHERE id = 1`
+        ).catch(() => {});
+        return 0;
+      }
 
-    // Eğer son aktif gün bugün veya dün ise seri geçerlidir; aksi takdirde 0 gün olmalıdır
-    if (lastActive === todayStr || lastActive === yesterdayStr) {
-      return count;
+      const row: any = await this.dbInstance.getFirstAsync(
+        `SELECT last_question_date, question_streak_count FROM user_settings WHERE id = 1`
+      );
+      const lastQuestionDate = row?.last_question_date;
+      const count = Number(row?.question_streak_count) || 0;
+
+      if (lastQuestionDate === todayStr || lastQuestionDate === yesterdayStr) {
+        return count;
+      }
+      return 0;
+    } catch (e) {
+      console.warn('Failed to get question streak from SQLite:', e);
+      return 0;
     }
-    return 0;
   }
 
-  async checkAndUpdateDailyStreak(): Promise<number> {
+  async checkAndUpdateQuestionStreak(): Promise<number> {
     const todayStr = new Date().toISOString().split('T')[0];
     const yesterday = new Date(Date.now() - 86400000);
     const yesterdayStr = yesterday.toISOString().split('T')[0];
 
     if (!this.isNative) {
-      const lastDate = this.memoryDb.streak.lastDate;
+      const lastDate = this.memoryDb.questionStreak.lastDate;
       if (lastDate === todayStr) {
-        return this.memoryDb.streak.count;
+        return Math.max(1, this.memoryDb.questionStreak.count);
       } else if (lastDate === yesterdayStr) {
-        this.memoryDb.streak.count += 1;
-        this.memoryDb.streak.lastDate = todayStr;
+        this.memoryDb.questionStreak.count = (this.memoryDb.questionStreak.count || 0) + 1;
+        this.memoryDb.questionStreak.lastDate = todayStr;
       } else {
-        this.memoryDb.streak.count = 1;
-        this.memoryDb.streak.lastDate = todayStr;
+        this.memoryDb.questionStreak.count = 1;
+        this.memoryDb.questionStreak.lastDate = todayStr;
       }
-      return this.memoryDb.streak.count;
+      this.memoryDb.streak = { ...this.memoryDb.questionStreak };
+      return this.memoryDb.questionStreak.count;
     }
 
-    const row = await this.dbInstance.getFirstAsync(
-      `SELECT last_active_date, streak_count FROM user_settings WHERE id = 1`
-    );
-    let count = row?.streak_count || 0;
-    const lastActive = row?.last_active_date;
+    try {
+      const row: any = await this.dbInstance.getFirstAsync(
+        `SELECT last_question_date, question_streak_count FROM user_settings WHERE id = 1`
+      );
+      let count = Number(row?.question_streak_count) || 0;
+      const lastDate = row?.last_question_date;
 
-    if (lastActive === todayStr) {
-      return count > 0 ? count : 1;
-    } else if (lastActive === yesterdayStr) {
-      count = (count > 0 ? count : 1) + 1;
-    } else {
-      count = 1;
+      if (lastDate === todayStr) {
+        count = Math.max(1, count);
+      } else if (lastDate === yesterdayStr) {
+        count = (count > 0 ? count : 0) + 1;
+      } else {
+        count = 1;
+      }
+
+      await this.dbInstance.runAsync(
+        `UPDATE user_settings SET last_question_date = ?, question_streak_count = ?, last_active_date = ?, streak_count = ? WHERE id = 1`,
+        [todayStr, count, todayStr, count]
+      );
+
+      return count;
+    } catch (e) {
+      console.warn('Failed to update question streak in SQLite:', e);
+      return 1;
+    }
+  }
+
+  async getVocabStreakCount(): Promise<number> {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const yesterday = new Date(Date.now() - 86400000);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+    if (!this.isNative) {
+      if (!this.memoryDb.vocabStreak || this.memoryDb.vocabStreak.count <= 0) return 0;
+      const lastDate = this.memoryDb.vocabStreak.lastDate;
+      if (lastDate === todayStr || lastDate === yesterdayStr) {
+        return this.memoryDb.vocabStreak.count;
+      }
+      return 0;
     }
 
-    await this.dbInstance.runAsync(
-      `UPDATE user_settings SET last_active_date = ?, streak_count = ? WHERE id = 1`,
-      [todayStr, count]
-    );
+    try {
+      // Check if user has practiced any words
+      const vRow: any = await this.dbInstance.getFirstAsync(
+        `SELECT COUNT(*) as practiced_count FROM user_word_progress WHERE correct_count > 0 OR incorrect_count > 0`
+      );
+      if (!vRow || vRow.practiced_count === 0) {
+        await this.dbInstance.runAsync(
+          `UPDATE user_settings SET vocab_streak_count = 0, last_vocab_date = NULL WHERE id = 1`
+        ).catch(() => {});
+        return 0;
+      }
 
-    return count;
+      const row: any = await this.dbInstance.getFirstAsync(
+        `SELECT last_vocab_date, vocab_streak_count FROM user_settings WHERE id = 1`
+      );
+      const lastVocabDate = row?.last_vocab_date;
+      const count = Number(row?.vocab_streak_count) || 0;
+
+      if (lastVocabDate === todayStr || lastVocabDate === yesterdayStr) {
+        return count;
+      }
+      return 0;
+    } catch (e) {
+      console.warn('Failed to get vocab streak from SQLite:', e);
+      return 0;
+    }
+  }
+
+  async checkAndUpdateVocabStreak(): Promise<number> {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const yesterday = new Date(Date.now() - 86400000);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+    if (!this.isNative) {
+      const lastDate = this.memoryDb.vocabStreak.lastDate;
+      if (lastDate === todayStr) {
+        return Math.max(1, this.memoryDb.vocabStreak.count);
+      } else if (lastDate === yesterdayStr) {
+        this.memoryDb.vocabStreak.count = (this.memoryDb.vocabStreak.count || 0) + 1;
+        this.memoryDb.vocabStreak.lastDate = todayStr;
+      } else {
+        this.memoryDb.vocabStreak.count = 1;
+        this.memoryDb.vocabStreak.lastDate = todayStr;
+      }
+      return this.memoryDb.vocabStreak.count;
+    }
+
+    try {
+      const row: any = await this.dbInstance.getFirstAsync(
+        `SELECT last_vocab_date, vocab_streak_count FROM user_settings WHERE id = 1`
+      );
+      let count = Number(row?.vocab_streak_count) || 0;
+      const lastDate = row?.last_vocab_date;
+
+      if (lastDate === todayStr) {
+        count = Math.max(1, count);
+      } else if (lastDate === yesterdayStr) {
+        count = (count > 0 ? count : 0) + 1;
+      } else {
+        count = 1;
+      }
+
+      await this.dbInstance.runAsync(
+        `UPDATE user_settings SET last_vocab_date = ?, vocab_streak_count = ? WHERE id = 1`,
+        [todayStr, count]
+      );
+
+      // Also record to daily_stats for words_reviewed
+      await this.dbInstance.runAsync(
+        `INSERT INTO daily_stats (study_date, words_reviewed) VALUES (?, 1)
+         ON CONFLICT(study_date) DO UPDATE SET words_reviewed = words_reviewed + 1`,
+        [todayStr]
+      ).catch(() => {});
+
+      return count;
+    } catch (e) {
+      console.warn('Failed to update vocab streak in SQLite:', e);
+      return 1;
+    }
+  }
+
+  async getStreakCount(): Promise<number> {
+    return await this.getQuestionStreakCount();
+  }
+
+  async checkAndUpdateDailyStreak(): Promise<number> {
+    return await this.checkAndUpdateQuestionStreak();
   }
 
   // ==========================================

@@ -34,8 +34,8 @@ const SEED_PROMO_CODES: Record<string, PromoCodeInfo> = {
   YDS20: {
     code: 'YDS20',
     discountPercent: 20,
-    teacherName: 'YDS Pratik Özel',
-    channelName: 'YDS Pratik Resmi İndirim',
+    teacherName: 'Dil Sınavı Hazırlık Özel',
+    channelName: 'Dil Sınavı Hazırlık Resmi İndirim',
     commissionPercent: 0,
     isValid: true,
   },

@@ -6,18 +6,19 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Platform,
 } from 'react-native';
 import {
   Sparkles,
   ChevronLeft,
   BookOpen,
-  Lock,
   Crown,
 } from 'lucide-react-native';
 import { useLearningStore } from '../store/useLearningStore';
 import { useThemeStore } from '../store/useThemeStore';
 import { QuestionCard } from './QuestionCard';
 import { AITestGeneratorModal } from './AITestGeneratorModal';
+import { AITestFeatureModal } from './AITestFeatureModal';
 import { SmoothBottomSheet } from './SmoothBottomSheet';
 import { SubscriptionModal } from './SubscriptionModal';
 import {
@@ -26,7 +27,13 @@ import {
 } from '../services/YdsExamCatalog';
 import { QuestionItem, OptionKey } from '../types';
 
-export const MockExamScreen: React.FC = () => {
+export interface MockExamScreenProps {
+  onExamActiveChange?: (isActive: boolean) => void;
+}
+
+export const MockExamScreen: React.FC<MockExamScreenProps> = ({
+  onExamActiveChange,
+}) => {
   const { colors } = useThemeStore();
   const {
     currentExam,
@@ -42,10 +49,12 @@ export const MockExamScreen: React.FC = () => {
     finishMockExam,
     resetExam,
     isFeatureLocked,
+    isExamAccessible,
   } = useLearningStore();
 
   const [isGridModalOpen, setIsGridModalOpen] = useState(false);
   const [isAIGeneratorOpen, setIsAIGeneratorOpen] = useState(false);
+  const [isAIFeatureIntroOpen, setIsAIFeatureIntroOpen] = useState(false);
   const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
   const [catalogFilter, setCatalogFilter] = useState<'ALL' | 'MASTER' | 'ADVANCED' | 'AI'>('ALL');
   const [selectedResultToView, setSelectedResultToView] = useState<any>(null);
@@ -55,20 +64,18 @@ export const MockExamScreen: React.FC = () => {
   const [reviewQuestionIndex, setReviewQuestionIndex] = useState(0);
   const [isReviewGridOpen, setIsReviewGridOpen] = useState(false);
 
-  // Check if any question prior to current index has been marked/answered
-  const hasAnsweredPreviousExamQuestion = useMemo(() => {
-    if (!examState || examState.currentQuestionIndex === 0) return false;
-    for (let i = 0; i < examState.currentQuestionIndex; i++) {
-      if (examState.userAnswers[i]) {
-        return true;
+  // Find nearest previous unanswered (blank) question index in active exam
+  const prevUnansweredExamIndex = useMemo(() => {
+    if (!examState || examState.currentQuestionIndex === 0) return -1;
+    for (let i = examState.currentQuestionIndex - 1; i >= 0; i--) {
+      if (!examState.userAnswers[i]) {
+        return i;
       }
     }
-    return false;
+    return -1;
   }, [examState?.currentQuestionIndex, examState?.userAnswers]);
 
-  const isExamPrevDisabled = examState
-    ? examState.currentQuestionIndex === 0 || !hasAnsweredPreviousExamQuestion
-    : true;
+  const isExamPrevDisabled = prevUnansweredExamIndex === -1;
 
   // Timer interval for active exam
   useEffect(() => {
@@ -167,6 +174,16 @@ export const MockExamScreen: React.FC = () => {
   });
 
   const activeScoreCard = examScoreCard || selectedResultToView;
+
+  // Active exam / review / scorecard state to notify parent for hiding bottom bar & top header
+  const isExamActive = Boolean(currentExam || activeScoreCard || isReviewingExam);
+
+  useEffect(() => {
+    onExamActiveChange?.(isExamActive);
+    return () => {
+      onExamActiveChange?.(false);
+    };
+  }, [isExamActive, onExamActiveChange]);
 
   // Grade Theme & Colors
   const getGradeTheme = (grade: string) => {
@@ -630,7 +647,11 @@ export const MockExamScreen: React.FC = () => {
                   isExamPrevDisabled && styles.examNavBtnDisabled,
                 ]}
                 disabled={isExamPrevDisabled}
-                onPress={() => selectExamQuestion(examState.currentQuestionIndex - 1)}
+                onPress={() => {
+                  if (prevUnansweredExamIndex !== -1) {
+                    selectExamQuestion(prevUnansweredExamIndex);
+                  }
+                }}
                 activeOpacity={0.7}
               >
                 <Text style={[styles.examNavBtnText, { color: isExamPrevDisabled ? colors.textSecondary : colors.text }]}>
@@ -758,7 +779,7 @@ export const MockExamScreen: React.FC = () => {
           style={[styles.aiCustomPill, { backgroundColor: colors.brandLight }]}
           onPress={() => {
             if (isFeatureLocked('AI_GENERATOR')) {
-              setIsSubscriptionModalOpen(true);
+              setIsAIFeatureIntroOpen(true);
               return;
             }
             setIsAIGeneratorOpen(true);
@@ -853,35 +874,12 @@ export const MockExamScreen: React.FC = () => {
         </TouchableOpacity>
       </ScrollView>
 
-      {/* TRIAL EXPIRED WARNING BANNER */}
-      {isFeatureLocked('EXAM') && (
-        <TouchableOpacity
-          style={[styles.lockWarningBanner, { backgroundColor: colors.cardBackground, borderColor: colors.brand }]}
-          onPress={() => setIsSubscriptionModalOpen(true)}
-          activeOpacity={0.85}
-        >
-          <View style={[styles.lockBannerIconCircle, { backgroundColor: colors.brandLight }]}>
-            <Lock size={18} color={colors.brand} />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text style={[styles.lockBannerTitle, { color: colors.text }]}>
-              Deneme Sınavları Pro Üyelik Gerektirir
-            </Text>
-            <Text style={[styles.lockBannerSub, { color: colors.textSecondary }]}>
-              7 günlük ücretsiz denemeniz sona erdi. 80 soruluk denemelere devam etmek için paketinizi seçin.
-            </Text>
-          </View>
-          <View style={[styles.lockBannerBtn, { backgroundColor: colors.brand }]}>
-            <Text style={[styles.lockBannerBtnText, { color: colors.textOnBrand }]}>İncele</Text>
-          </View>
-        </TouchableOpacity>
-      )}
-
       {/* EXAM CARDS LIST */}
       <View style={styles.examCardsList}>
         {filteredExams.map((exam) => {
           const isAI = exam.tag === 'AI Özel';
-          const isLocked = isFeatureLocked('EXAM');
+          const isFreeExam = YdsExamCatalogService.isExamFree(exam.id);
+          const isLocked = !isExamAccessible(exam.id);
 
           // Real scores from database examHistory (only valid answered exams)
           const realResult = (examHistory || []).find(
@@ -903,10 +901,30 @@ export const MockExamScreen: React.FC = () => {
                 },
               ]}
               onPress={() => {
+                if (realResult) {
+                  Alert.alert(
+                    'Sınav Tamamlandı',
+                    `Bu deneme sınavını daha önce tamamladınız.\n\nAlınan Puan: ${realResult.ydsScore.toFixed(2)} (Seviye: ${realResult.levelGrade})\n\nGerçek sınav simülasyonu gereği her deneme sınavı yalnızca 1 kez çözülebilir. Sonuç karnenizi ve soru çözümlerinizi incelemek ister misiniz?`,
+                    [
+                      { text: 'Kapat', style: 'cancel' },
+                      {
+                        text: 'Karnemi İncele',
+                        onPress: () => setSelectedResultToView(realResult),
+                      },
+                    ]
+                  );
+                  return;
+                }
+
                 if (isLocked) {
+                  if (isAI) {
+                    setIsAIFeatureIntroOpen(true);
+                    return;
+                  }
                   setIsSubscriptionModalOpen(true);
                   return;
                 }
+
                 startExamFromCatalog(exam.id);
               }}
               activeOpacity={0.85}
@@ -940,6 +958,16 @@ export const MockExamScreen: React.FC = () => {
                       </Text>
                     </View>
                   </>
+                ) : isFreeExam && isFeatureLocked('EXAM') ? (
+                  <View style={[styles.freeBadgePill, { backgroundColor: colors.successLight }]}>
+                    <Sparkles size={11} color={colors.success} />
+                    <Text style={[styles.freeBadgePillText, { color: colors.success }]}>ÜCRETSİZ</Text>
+                  </View>
+                ) : isLocked ? (
+                  <View style={[styles.proBadgePill, { backgroundColor: colors.accentWarmLight }]}>
+                    <Crown size={11} color={colors.accentWarm} />
+                    <Text style={[styles.proBadgePillText, { color: colors.accentWarm }]}>PRO</Text>
+                  </View>
                 ) : (
                   <>
                     <Text style={[styles.scorePillVal, { color: colors.textSecondary }]}>—</Text>
@@ -1004,6 +1032,17 @@ export const MockExamScreen: React.FC = () => {
           })()}
         </View>
       )}
+
+      <AITestFeatureModal
+        visible={isAIFeatureIntroOpen}
+        onClose={() => setIsAIFeatureIntroOpen(false)}
+        onUpgradePress={() => {
+          setIsAIFeatureIntroOpen(false);
+          setTimeout(() => {
+            setIsSubscriptionModalOpen(true);
+          }, 300);
+        }}
+      />
 
       <AITestGeneratorModal
         visible={isAIGeneratorOpen}
@@ -1134,6 +1173,32 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '800',
   },
+  proBadgePill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 8,
+  },
+  proBadgePillText: {
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 0.4,
+  },
+  freeBadgePill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 8,
+  },
+  freeBadgePillText: {
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 0.4,
+  },
   lastResultSection: {
     marginTop: 20,
   },
@@ -1250,7 +1315,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingTop: 12,
+    paddingBottom: Platform.OS === 'ios' ? 26 : 14,
     borderTopWidth: 1,
   },
   examNavBtn: {
@@ -1549,40 +1615,5 @@ const styles = StyleSheet.create({
   emptyReviewText: {
     fontSize: 14,
     fontWeight: '600',
-  },
-  lockWarningBanner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    borderWidth: 1.5,
-    borderRadius: 16,
-    padding: 14,
-    marginHorizontal: 20,
-    marginBottom: 16,
-  },
-  lockBannerIconCircle: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  lockBannerTitle: {
-    fontSize: 13.5,
-    fontWeight: '800',
-    marginBottom: 3,
-  },
-  lockBannerSub: {
-    fontSize: 11.5,
-    lineHeight: 15,
-  },
-  lockBannerBtn: {
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-    borderRadius: 10,
-  },
-  lockBannerBtnText: {
-    fontSize: 12,
-    fontWeight: '800',
   },
 });

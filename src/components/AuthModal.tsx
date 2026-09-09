@@ -20,11 +20,13 @@ import {
   UserCheck,
   Eye,
   EyeOff,
+  Check,
 } from 'lucide-react-native';
 import { SupabaseService } from '../services/SupabaseService';
 import { useLearningStore } from '../store/useLearningStore';
 import { useThemeStore } from '../store/useThemeStore';
 import { SmoothBottomSheet } from './SmoothBottomSheet';
+import { LegalSheetModal } from './LegalSheetModal';
 
 interface Props {
   visible: boolean;
@@ -42,8 +44,41 @@ export const AuthModal: React.FC<Props> = ({ visible, onClose }) => {
   const [targetScore, setTargetScore] = useState(80);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+  const [isLegalModalOpen, setIsLegalModalOpen] = useState(false);
+  const [legalModalTab, setLegalModalTab] = useState<'PRIVACY' | 'TERMS'>('PRIVACY');
 
   const targetScoreOptions = [60, 70, 80, 90];
+
+  const handleCheckboxPress = () => {
+    if (isTermsAccepted) {
+      setIsTermsAccepted(false);
+    } else {
+      setLegalModalTab('TERMS');
+      setIsLegalModalOpen(true);
+    }
+  };
+
+  const handleModeChange = (newMode: 'LOGIN' | 'REGISTER') => {
+    if (newMode === mode) return;
+    setMode(newMode);
+    setEmail('');
+    setPassword('');
+    setFullName('');
+    setShowPassword(false);
+    setIsTermsAccepted(false);
+  };
+
+  React.useEffect(() => {
+    if (!visible) {
+      setEmail('');
+      setPassword('');
+      setFullName('');
+      setShowPassword(false);
+      setMode('LOGIN');
+      setIsTermsAccepted(false);
+    }
+  }, [visible]);
 
   const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
@@ -76,7 +111,7 @@ export const AuthModal: React.FC<Props> = ({ visible, onClose }) => {
     }
 
     setIsLoading(true);
-    const res = await SupabaseService.signUp(email, password, fullName, targetScore);
+    const res = await SupabaseService.signUp(email, password, fullName, targetScore, true);
     setIsLoading(false);
 
     if (res.user) {
@@ -116,7 +151,7 @@ export const AuthModal: React.FC<Props> = ({ visible, onClose }) => {
               <GraduationCap size={22} color={colors.textOnBrand} strokeWidth={2.4} />
             </View>
             <View>
-              <Text style={[styles.appTitle, { color: colors.text }]}>YDS Pratik</Text>
+              <Text style={[styles.appTitle, { color: colors.text }]}>PratikDil</Text>
               <Text style={[styles.appSubtitle, { color: colors.textSecondary }]}>Bulut Eşitleme & Sınav Motoru</Text>
             </View>
           </View>
@@ -159,7 +194,7 @@ export const AuthModal: React.FC<Props> = ({ visible, onClose }) => {
               styles.tabBtn,
               mode === 'LOGIN' && [styles.activeTabBtn, { backgroundColor: colors.cardBackground }],
             ]}
-            onPress={() => setMode('LOGIN')}
+            onPress={() => handleModeChange('LOGIN')}
             activeOpacity={0.7}
           >
             <Text
@@ -178,7 +213,7 @@ export const AuthModal: React.FC<Props> = ({ visible, onClose }) => {
               styles.tabBtn,
               mode === 'REGISTER' && [styles.activeTabBtn, { backgroundColor: colors.cardBackground }],
             ]}
-            onPress={() => setMode('REGISTER')}
+            onPress={() => handleModeChange('REGISTER')}
             activeOpacity={0.7}
           >
             <Text
@@ -322,56 +357,98 @@ export const AuthModal: React.FC<Props> = ({ visible, onClose }) => {
             </View>
           )}
 
+          {/* REGISTER CHECKBOX CONSENT (KVKK & EULA COMPLIANCE) */}
+          {mode === 'REGISTER' && (
+            <View style={styles.termsConsentRow}>
+              <TouchableOpacity
+                style={styles.checkboxTouchable}
+                onPress={handleCheckboxPress}
+                activeOpacity={0.7}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <View
+                  style={[
+                    styles.checkboxBox,
+                    {
+                      borderColor: isTermsAccepted ? colors.brand : colors.border,
+                      backgroundColor: isTermsAccepted ? colors.brand : 'transparent',
+                    },
+                  ]}
+                >
+                  {isTermsAccepted && <Check size={14} color={colors.textOnBrand} strokeWidth={3} />}
+                </View>
+              </TouchableOpacity>
+
+              <Text style={[styles.termsConsentText, { color: colors.textSecondary }]}>
+                <Text
+                  style={[styles.termsLinkText, { color: colors.brand }]}
+                  onPress={() => {
+                    setLegalModalTab('TERMS');
+                    setIsLegalModalOpen(true);
+                  }}
+                  suppressHighlighting={false}
+                >
+                  Kullanıcı Sözleşmesi
+                </Text>
+                'ni ve{' '}
+                <Text
+                  style={[styles.termsLinkText, { color: colors.brand }]}
+                  onPress={() => {
+                    setLegalModalTab('PRIVACY');
+                    setIsLegalModalOpen(true);
+                  }}
+                  suppressHighlighting={false}
+                >
+                  KVKK Aydınlatma Metni & Gizlilik Politikası
+                </Text>
+                'nı okudum, kabul ediyorum.
+              </Text>
+            </View>
+          )}
+
           {/* Action Submit Button */}
           <TouchableOpacity
-            style={[styles.primaryActionBtn, { backgroundColor: colors.brand }]}
+            style={[
+              styles.primaryActionBtn,
+              {
+                backgroundColor: colors.brand,
+                opacity: (mode === 'REGISTER' && !isTermsAccepted) || isLoading ? 0.45 : 1,
+              },
+            ]}
             onPress={mode === 'LOGIN' ? handleLogin : handleRegister}
-            disabled={isLoading}
+            disabled={(mode === 'REGISTER' && !isTermsAccepted) || isLoading}
             activeOpacity={0.85}
           >
             {isLoading ? (
               <ActivityIndicator color={colors.textOnBrand} />
             ) : (
-              <>
-                <Text style={[styles.primaryActionBtnText, { color: colors.textOnBrand }]}>
-                  {mode === 'LOGIN' ? 'Giriş Yap' : 'Hesap Oluştur'}
-                </Text>
-                <ArrowRight size={18} color={colors.textOnBrand} />
-              </>
+              <Text style={[styles.primaryActionBtnText, { color: colors.textOnBrand }]}>
+                {mode === 'LOGIN' ? 'Giriş Yap' : 'Kaydet'}
+              </Text>
             )}
           </TouchableOpacity>
 
-          {/* Guest / Reviewer Skip Button */}
+          {/* Guest / Reviewer Skip Link (Discreet text link) */}
           <TouchableOpacity
-            style={[
-              styles.guestBtn,
-              { backgroundColor: colors.brandLight, borderColor: colors.brandLightBorder },
-            ]}
+            style={styles.guestLink}
             onPress={handleGuestContinue}
-            activeOpacity={0.8}
+            activeOpacity={0.7}
           >
-            <UserCheck size={16} color={colors.brand} />
-            <Text style={[styles.guestBtnText, { color: colors.brand }]}>Kayıt Olmadan Misafir Olarak Devam Et ➔</Text>
-          </TouchableOpacity>
-
-          {/* Privacy & Terms Note */}
-          <Text style={[styles.legalNote, { color: colors.textSecondary }]}>
-            Devam ederek{' '}
-            <Text
-              style={[styles.legalLink, { color: colors.brand }]}
-              onPress={() =>
-                Alert.alert(
-                  'Kullanım Şartları & Gizlilik',
-                  'YDS Pratik uygulamasını kullanarak KVKK ve Gizlilik Politikası şartlarını kabul etmiş sayılırsınız.'
-                )
-              }
-            >
-              Kullanım Koşulları ve Gizlilik Politikası
+            <Text style={[styles.guestLinkText, { color: colors.textSecondary }]}>
+              Giriş yapmadan uygulamayı keşfet
             </Text>
-            'nı kabul etmiş olursunuz.
-          </Text>
+          </TouchableOpacity>
         </ScrollView>
       </View>
+
+      {/* LEGAL & EULA IN-APP BOTTOM SHEET MODAL */}
+      <LegalSheetModal
+        visible={isLegalModalOpen}
+        onClose={() => setIsLegalModalOpen(false)}
+        initialTab={legalModalTab}
+        onAccept={() => setIsTermsAccepted(true)}
+        showAcceptButton={mode === 'REGISTER'}
+      />
     </SmoothBottomSheet>
   );
 };
@@ -574,19 +651,16 @@ const styles = StyleSheet.create({
     fontSize: 14.5,
     fontWeight: '800',
   },
-  guestBtn: {
-    flexDirection: 'row',
+  guestLink: {
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-    borderWidth: 1,
-    paddingVertical: 12,
-    borderRadius: 16,
-    marginTop: 10,
+    paddingVertical: 14,
+    marginTop: 6,
   },
-  guestBtnText: {
-    fontSize: 12.5,
-    fontWeight: '800',
+  guestLinkText: {
+    fontSize: 13,
+    fontWeight: '600',
+    textDecorationLine: 'underline',
   },
   legalNote: {
     fontSize: 11,
@@ -596,5 +670,33 @@ const styles = StyleSheet.create({
   },
   legalLink: {
     fontWeight: '700',
+  },
+  termsConsentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 6,
+    marginBottom: 4,
+    paddingHorizontal: 2,
+  },
+  checkboxTouchable: {
+    padding: 2,
+  },
+  checkboxBox: {
+    width: 20,
+    height: 20,
+    borderRadius: 6,
+    borderWidth: 1.8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  termsConsentText: {
+    fontSize: 12,
+    lineHeight: 17,
+    flex: 1,
+  },
+  termsLinkText: {
+    fontWeight: '700',
+    textDecorationLine: 'underline',
   },
 });

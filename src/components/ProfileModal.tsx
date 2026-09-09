@@ -210,7 +210,7 @@ export const ProfileModal: React.FC<Props> = ({ visible, onClose, onOpenAuth }) 
 
             {/* App Info Footer */}
             <View style={styles.appInfoFooter}>
-              <Text style={[styles.appInfoText, { color: colors.textSecondary }]}>YDS Pratik v1.0.0 (Build 1)</Text>
+              <Text style={[styles.appInfoText, { color: colors.textSecondary }]}>Dil Sınavı Hazırlık v1.0.0 (Build 1)</Text>
               <Text style={[styles.appInfoSubtext, { color: colors.textMuted }]}>App Store & Google Play Store Uyumlu Sürüm</Text>
             </View>
           </ScrollView>

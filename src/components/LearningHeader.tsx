@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { Flame, GraduationCap, Sparkles, User } from 'lucide-react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
+import { Flame, User } from 'lucide-react-native';
 import { AppTab, useLearningStore } from '../store/useLearningStore';
 import { useThemeStore } from '../store/useThemeStore';
+import { AppLogo } from './AppLogo';
 
 export interface LearningHeaderProps {
   activeTab: AppTab;
@@ -12,50 +13,42 @@ export interface LearningHeaderProps {
 
 export const LearningHeader: React.FC<LearningHeaderProps> = ({
   activeTab,
-  streakCount = 1,
+  streakCount,
   onOpenProfile,
 }) => {
-  const { userProfile, dailyTasksProgress, dailyQuestionTarget } = useLearningStore();
+  const { userProfile, streakCount: storeStreak } = useLearningStore();
   const { colors } = useThemeStore();
 
-  const totalCompleted =
-    dailyTasksProgress.paragraphCompleted +
-    dailyTasksProgress.clozeCompleted +
-    dailyTasksProgress.sentenceCompleted +
-    dailyTasksProgress.skillsCompleted;
-
-  const target = dailyQuestionTarget || 35;
+  const effectiveStreak = streakCount !== undefined ? streakCount : storeStreak;
 
   const getTabInfo = (tab: AppTab) => {
     switch (tab) {
       case 'TASKS':
-        return { title: 'Günlük Görevler', subtitle: `${totalCompleted}/${target} Soru Tamamlandı` };
+        return { title: 'Günlük Görevler', subtitle: 'Soru & Kelime Pratiği' };
       case 'EXAM':
-        return { title: '180 Dk Deneme', subtitle: '80 Soru Gerçek Simülasyon' };
+        return { title: 'Denemeler', subtitle: '80 Soru Gerçek Simülasyon' };
       case 'MISTAKES':
-        return { title: 'Hata Defteri', subtitle: 'AI Çözüm & Çeldirici Analizi' };
+        return { title: 'Hata Defteri', subtitle: 'AI Çözüm Analizi' };
       case 'VOCAB':
-        return { title: 'Kelime Havuzu', subtitle: 'Aralıklı Tekrar Sistemi' };
+        return { title: 'Kelime Havuzu', subtitle: 'Kurslar & Alıştırmalar' };
+      case 'STATS':
+        return { title: 'Gelişim & Analiz', subtitle: 'Performans Raporu' };
+      default:
+        return { title: 'PratikDil', subtitle: 'YDS & Sınav Hazırlık' };
     }
   };
 
   const info = getTabInfo(activeTab);
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
+    <View style={[styles.container, { backgroundColor: colors.background, borderBottomColor: colors.border }]}>
       <View style={styles.headerRow}>
         {/* Left Side: Brand Logo & Title */}
         <View style={styles.brandContainer}>
-          <View style={[styles.logoBadge, { backgroundColor: colors.brand }]}>
-            <GraduationCap size={20} color={colors.textOnBrand} strokeWidth={2.2} />
-          </View>
+          <AppLogo size={36} borderRadius={10} />
           <View>
             <View style={styles.titleRow}>
-              <Text style={[styles.appTitle, { color: colors.text }]}>YDS Pratik</Text>
-              <View style={[styles.aiTag, { backgroundColor: colors.brandLight, borderColor: colors.brandLightBorder }]}>
-                <Sparkles size={10} color={colors.brand} />
-                <Text style={[styles.aiTagText, { color: colors.brand }]}>PRO AI</Text>
-              </View>
+              <Text style={[styles.appTitle, { color: colors.text }]}>PratikDil</Text>
             </View>
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{info.title}</Text>
           </View>
@@ -63,16 +56,57 @@ export const LearningHeader: React.FC<LearningHeaderProps> = ({
 
         {/* Right Side: Streak Badge & Profile Avatar */}
         <View style={styles.headerRightActions}>
-          <View style={[styles.streakBadge, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
-            <Flame size={15} color={colors.accentWarm} fill={colors.accentWarm} />
-            <Text style={[styles.streakText, { color: colors.text }]}>{streakCount} Gün</Text>
-          </View>
+          <TouchableOpacity
+            style={[
+              styles.streakBadge,
+              {
+                backgroundColor: colors.isDark ? 'rgba(249, 115, 22, 0.12)' : '#FFF7ED',
+                borderColor: colors.isDark ? 'rgba(249, 115, 22, 0.28)' : '#FED7AA',
+              },
+            ]}
+            activeOpacity={0.7}
+            hitSlop={{ top: 10, bottom: 10, left: 6, right: 6 }}
+            onPress={() => {
+              if (effectiveStreak <= 0) {
+                Alert.alert(
+                  '🔥 Günlük Seri',
+                  `Henüz aktif bir serin yok.\n\nBugün soru çözerek veya kelime çalışarak ilk gün serini başlatabilirsin! 🚀`
+                );
+              } else if (effectiveStreak === 1) {
+                Alert.alert(
+                  '🔥 Günlük Seri (1. Gün)',
+                  `Bugünkü çalışmanı yaptın ve 1. gün serisini başlattın! 👏\n\nYarın da çalışarak 2 günlük gerçek serini oluştur.`
+                );
+              } else {
+                Alert.alert(
+                  '🔥 Günlük Seri',
+                  `${effectiveStreak} gündür aralıksız çalışıyorsun!\n\nHer gün düzenli pratik yaparak serini koru ve sınav hedefine adım adım yaklaş.`
+                );
+              }
+            }}
+          >
+            <Flame size={14} color="#EA580C" fill="#EA580C" />
+            <Text style={[styles.streakText, { color: colors.isDark ? '#FB923C' : '#C2410C' }]}>
+              {effectiveStreak} Gün
+            </Text>
+          </TouchableOpacity>
 
           {onOpenProfile && (
             <TouchableOpacity
-              style={[styles.profileBtn, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}
-              onPress={onOpenProfile}
-              activeOpacity={0.8}
+              style={[
+                styles.profileBtn,
+                {
+                  backgroundColor: colors.cardBackground,
+                  borderColor: colors.border,
+                  shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
+                },
+              ]}
+              onPress={() => {
+                console.log('[LearningHeader] Profile pressed');
+                onOpenProfile();
+              }}
+              hitSlop={{ top: 12, bottom: 12, left: 10, right: 12 }}
+              activeOpacity={0.7}
             >
               {userProfile ? (
                 <View style={[styles.avatarMini, { backgroundColor: colors.brand }]}>
@@ -81,7 +115,7 @@ export const LearningHeader: React.FC<LearningHeaderProps> = ({
                   </Text>
                 </View>
               ) : (
-                <User size={18} color={colors.textSecondary} />
+                <User size={17} color={colors.textSecondary} />
               )}
             </TouchableOpacity>
           )}
@@ -93,10 +127,10 @@ export const LearningHeader: React.FC<LearningHeaderProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 12,
-    paddingBottom: 12,
+    paddingTop: 8,
+    paddingBottom: 10,
     paddingHorizontal: 16,
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
   headerRow: {
     flexDirection: 'row',
@@ -128,19 +162,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '900',
     letterSpacing: -0.4,
-  },
-  aiTag: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 3,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 6,
-    borderWidth: 1,
-  },
-  aiTagText: {
-    fontSize: 9,
-    fontWeight: '800',
   },
   subtitle: {
     fontSize: 11,

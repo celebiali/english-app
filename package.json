@@ -1,7 +1,7 @@
 {
-  "name": "yds-vocabulary-spaced-repetition",
+  "name": "pratikdil",
   "version": "1.0.0",
-  "description": "YDS Vocabulary Spaced Repetition Mobile Application with SQLite and Leitner Box Engine",
+  "description": "PratikDil - YDS, YÖKDİL ve İngilizce Sınav Koçu, Deneme Sınavları ve Akıllı Kelime Pratiği",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start --host lan",

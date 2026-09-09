@@ -48,6 +48,8 @@ interface LearningState {
   isLoading: boolean;
   isInitialized: boolean;
   streakCount: number;
+  questionStreakCount: number;
+  vocabStreakCount: number;
 
   // Daily Tasks State
   taskGoals: TaskGoalsConfig;
@@ -80,6 +82,7 @@ interface LearningState {
   dictionaryWords: WordWithProgress[];
   vocabFolders: VocabFolder[];
   activeFolderId: string | null;
+  activeStudyFolderId: string;
   completedTodayCount: number;
   // User Auth & Profile
   userProfile: UserProfile | null;
@@ -127,6 +130,8 @@ interface LearningState {
   addCustomWordWithAI: (wordText: string, folderName?: string) => Promise<boolean>;
   loadVocabFolders: () => Promise<void>;
   setActiveFolderId: (id: string | null) => void;
+  setActiveStudyFolder: (folderId: string) => Promise<void>;
+  startSessionWithWords: (words: WordWithProgress[]) => void;
   createVocabFolder: (folder: { name: string; description?: string; color: string; icon: string }) => Promise<void>;
   updateVocabFolder: (id: string, updates: { name?: string; description?: string; color?: string; icon?: string }) => Promise<void>;
   deleteVocabFolder: (id: string) => Promise<void>;
@@ -138,7 +143,9 @@ interface LearningState {
   // Access Control & Apple Subscription Actions
   getUserAccessStatus: () => UserAccessStatus;
   isFeatureLocked: (feature: GatedFeature) => boolean;
+  isExamAccessible: (examId: string) => boolean;
   syncSubscriptionWithApple: () => Promise<void>;
+  setDailyLimit: (limit: number) => Promise<void>;
 }
 
 export const useLearningStore = create<LearningState>((set, get) => ({
@@ -146,6 +153,8 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   isLoading: true,
   isInitialized: false,
   streakCount: 0,
+  questionStreakCount: 0,
+  vocabStreakCount: 0,
 
   // Daily Tasks
   taskGoals: {
@@ -153,6 +162,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     cloze: 5,
     sentence: 8,
     skills: 14,
+    words: 25,
   },
   dailyQuestionTarget: 35,
   dailyTasksProgress: {
@@ -196,6 +206,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   dictionaryWords: [],
   vocabFolders: [],
   activeFolderId: null,
+  activeStudyFolderId: 'sys_conn',
   completedTodayCount: 0,
   userProfile: null,
 
@@ -208,16 +219,15 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       await dbService.initDatabase();
       await dbService.seedQuestionsIfEmpty();
 
-      const count = await dbService.getWordCount();
-      if (count < 7000) {
-        const seedData = DataParserService.getFullSeedDataset();
-        await dbService.resetAndSeedDatabase(seedData);
-      }
+      // Purge non-custom words so only user's custom words remain
+      await dbService.purgeNonCustomWords();
 
-      const streak = await dbService.getStreakCount();
+      const qStreak = await dbService.getQuestionStreakCount();
+      const vStreak = await dbService.getVocabStreakCount();
       const examHist = await dbService.getExamHistory();
       const savedUser = await dbService.getUserSession();
       const userGoals = await dbService.getUserTaskGoals();
+      const activeFolderId = await dbService.getActiveStudyFolderId();
       const totalTarget = userGoals.paragraph + userGoals.cloze + userGoals.sentence + userGoals.skills;
 
       if (savedUser) {
@@ -231,11 +241,15 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       }
 
       set({
-        streakCount: streak,
+        streakCount: qStreak,
+        questionStreakCount: qStreak,
+        vocabStreakCount: vStreak,
         examHistory: examHist,
         userProfile: savedUser,
         taskGoals: userGoals,
         dailyQuestionTarget: totalTarget,
+        dailyLimit: userGoals.words || 25,
+        activeStudyFolderId: activeFolderId || 'sys_conn',
       });
 
       // Initialize Apple StoreKit / RevenueCat in background
@@ -261,7 +275,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       await get().loadVocabSession();
 
       // Silently configure daily reminders in background ONLY IF already granted
-      NotificationService.scheduleIfPermitted(20, 0, totalTarget, streak).catch((nErr) => {
+      NotificationService.scheduleIfPermitted(20, 0, totalTarget, qStreak).catch((nErr) => {
         console.warn('Background notification init:', nErr);
       });
     } catch (e) {
@@ -372,6 +386,14 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     return !access.hasAccess;
   },
 
+  isExamAccessible: (examId: string): boolean => {
+    if (YdsExamCatalogService.isExamFree(examId)) {
+      return true;
+    }
+    const access = get().getUserAccessStatus();
+    return access.hasAccess;
+  },
+
   syncSubscriptionWithApple: async () => {
     try {
       const status = await ApplePurchaseService.checkSubscriptionStatus();
@@ -418,19 +440,36 @@ export const useLearningStore = create<LearningState>((set, get) => ({
 
   setTaskGoals: async (newGoals: Partial<TaskGoalsConfig>) => {
     const current = get().taskGoals;
+    const currentWords = current.words || get().dailyLimit || 25;
     const merged: TaskGoalsConfig = {
       paragraph: Math.max(1, Math.min(30, newGoals.paragraph ?? current.paragraph)),
       cloze: Math.max(1, Math.min(30, newGoals.cloze ?? current.cloze)),
       sentence: Math.max(1, Math.min(30, newGoals.sentence ?? current.sentence)),
       skills: Math.max(1, Math.min(30, newGoals.skills ?? current.skills)),
+      words: Math.max(5, Math.min(100, newGoals.words ?? currentWords)),
     };
     const total = merged.paragraph + merged.cloze + merged.sentence + merged.skills;
     await dbService.saveUserTaskGoals(merged);
     set({
       taskGoals: merged,
       dailyQuestionTarget: total,
+      dailyLimit: merged.words || 25,
     });
     await get().loadDailyTasks(true);
+  },
+
+  setDailyLimit: async (limit: number) => {
+    const clamped = Math.max(5, Math.min(100, limit));
+    const currentGoals = get().taskGoals;
+    const updatedGoals: TaskGoalsConfig = {
+      ...currentGoals,
+      words: clamped,
+    };
+    await dbService.saveUserTaskGoals(updatedGoals);
+    set({
+      dailyLimit: clamped,
+      taskGoals: updatedGoals,
+    });
   },
 
   // ==========================================
@@ -467,9 +506,14 @@ export const useLearningStore = create<LearningState>((set, get) => ({
 
       const todayProg = await dbService.getDailyTaskProgressToday(taskGoals);
       const activeQs = await dbService.getDailyTaskQuestions(taskGoals, userId);
+      const qStreak = await dbService.getQuestionStreakCount();
+      const vStreak = await dbService.getVocabStreakCount();
       set({
         dailyTasksProgress: todayProg,
         activeDailyQuestions: activeQs,
+        questionStreakCount: qStreak,
+        vocabStreakCount: vStreak,
+        streakCount: qStreak,
         currentDailyIndex: 0,
       });
     } catch (err) {
@@ -487,11 +531,12 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     // Update persistent daily task progress
     const updatedProg = await dbService.incrementDailyTaskProgress(question.type, taskGoals);
 
-    // Update real consecutive day streak
-    const updatedStreak = await dbService.checkAndUpdateDailyStreak();
+    // Update real consecutive day question streak
+    const updatedStreak = await dbService.checkAndUpdateQuestionStreak();
 
     set({
       dailyTasksProgress: updatedProg,
+      questionStreakCount: updatedStreak,
       streakCount: updatedStreak,
     });
 
@@ -543,6 +588,13 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   },
 
   startExamFromCatalog: async (examId: string) => {
+    const { examHistory } = get();
+    const alreadyCompleted = (examHistory || []).some((h) => h && h.examId === examId);
+    if (alreadyCompleted) {
+      // Sınav daha önce çözülmüş, tekrar çözülemez
+      return;
+    }
+
     const exam = YdsExamCatalogService.getFullExam(examId);
     const examState: ExamSessionState = {
       examId: exam.id,
@@ -750,11 +802,11 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   },
 
   loadVocabSession: async (force = false) => {
-    const { dailyLimit, sessionWords, currentVocabIndex } = get();
+    const { dailyLimit, sessionWords, currentVocabIndex, activeStudyFolderId } = get();
     let words = sessionWords;
 
     if (force || sessionWords.length === 0) {
-      words = await srEngine.loadDailyBatch(dailyLimit);
+      words = await srEngine.loadDailyBatch(dailyLimit, activeStudyFolderId);
     }
 
     const summary = await srEngine.fetchBoxSummary();
@@ -774,18 +826,30 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     });
   },
 
+  setActiveStudyFolder: async (folderId: string) => {
+    await dbService.setActiveStudyFolderId(folderId);
+    set({ activeStudyFolderId: folderId, currentVocabIndex: 0, sessionWords: [] });
+    await get().loadVocabSession(true);
+    await get().loadVocabFolders();
+  },
+
+  startSessionWithWords: (words: WordWithProgress[]) => {
+    set({ sessionWords: words, currentVocabIndex: 0 });
+  },
+
   answerCurrentVocabCard: async (isCorrect: boolean) => {
-    const { sessionWords, currentVocabIndex, dailyLimit } = get();
+    const { sessionWords, currentVocabIndex, dailyLimit, activeStudyFolderId } = get();
     const currentWord = sessionWords[currentVocabIndex];
     if (!currentWord) return;
 
     await srEngine.processAnswer(currentWord.id, isCorrect);
+    const updatedVocabStreak = await dbService.checkAndUpdateVocabStreak();
     const nextIdx = currentVocabIndex + 1;
     const summary = await srEngine.fetchBoxSummary();
 
     // Seamless continuous learning: when reaching end of loaded words, auto-fetch more words
     if (nextIdx >= sessionWords.length) {
-      const moreWords = await srEngine.loadDailyBatch(dailyLimit || 30);
+      const moreWords = await srEngine.loadDailyBatch(dailyLimit || 30, activeStudyFolderId);
       if (moreWords && moreWords.length > 0) {
         // Filter out already seen in this session to prevent duplicate immediate loops
         const existingIds = new Set(sessionWords.map((w) => w.id));
@@ -796,6 +860,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
           sessionWords: [...state.sessionWords, ...wordsToAdd],
           currentVocabIndex: nextIdx,
           boxSummary: summary,
+          vocabStreakCount: updatedVocabStreak,
           completedTodayCount: isCorrect ? state.completedTodayCount + 1 : state.completedTodayCount,
           dailyTasksProgress: {
             ...state.dailyTasksProgress,
@@ -809,6 +874,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     set((state) => ({
       currentVocabIndex: nextIdx,
       boxSummary: summary,
+      vocabStreakCount: updatedVocabStreak,
       completedTodayCount: isCorrect ? state.completedTodayCount + 1 : state.completedTodayCount,
       dailyTasksProgress: {
         ...state.dailyTasksProgress,
@@ -883,10 +949,13 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       await get().loadDailyTasks(true);
       await get().loadVocabSession(true);
       await get().loadMistakes();
-      const streak = await dbService.getStreakCount();
+      const qStreak = await dbService.getQuestionStreakCount();
+      const vStreak = await dbService.getVocabStreakCount();
       const examHist = await dbService.getExamHistory();
       set({
-        streakCount: streak,
+        streakCount: qStreak,
+        questionStreakCount: qStreak,
+        vocabStreakCount: vStreak,
         examHistory: examHist,
         currentDailyIndex: 0,
         currentVocabIndex: 0,
@@ -910,10 +979,13 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       await get().loadDailyTasks(true);
       await get().loadVocabSession(true);
       await get().loadMistakes();
-      const streak = await dbService.getStreakCount();
+      const qStreak = await dbService.getQuestionStreakCount();
+      const vStreak = await dbService.getVocabStreakCount();
       const examHist = await dbService.getExamHistory();
       set({
-        streakCount: streak,
+        streakCount: qStreak,
+        questionStreakCount: qStreak,
+        vocabStreakCount: vStreak,
         examHistory: examHist,
         userProfile: null,
         currentDailyIndex: 0,

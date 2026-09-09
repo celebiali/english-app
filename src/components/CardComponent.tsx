@@ -194,9 +194,11 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                     <Volume2 size={20} color={colors.brand} />
                   </TouchableOpacity>
                 </View>
-                <Text style={[styles.flashPhon, { color: colors.textSecondary }]}>
-                  {cardWord.etymology_note || turengDetail?.phonetic || 'akademik kelime'}
-                </Text>
+                {(cardWord.etymology_note || turengDetail?.phonetic) ? (
+                  <Text style={[styles.flashPhon, { color: colors.textSecondary }]}>
+                    {cardWord.etymology_note || turengDetail?.phonetic}
+                  </Text>
+                ) : null}
               </View>
 
               <View style={styles.bottomHintBox}>
@@ -355,27 +357,29 @@ export const CardComponent: React.FC<CardComponentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
     alignItems: 'center',
-    marginVertical: 4,
   },
   flashWrap: {
     width: '100%',
-    height: 330,
-    marginBottom: 14,
+    minHeight: 350,
+    marginBottom: 18,
   },
   flashCard: {
     flex: 1,
+    minHeight: 350,
     borderRadius: 24,
     borderWidth: 1.5,
     overflow: 'hidden',
     shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.05,
-    shadowRadius: 14,
-    elevation: 3,
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    elevation: 4,
   },
   flashFront: {
     flex: 1,
-    padding: 22,
+    minHeight: 350,
+    padding: 24,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
@@ -527,32 +531,32 @@ const styles = StyleSheet.create({
   // Input Area Styles
   inputContainer: {
     width: '100%',
-    gap: 8,
+    gap: 10,
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    borderWidth: 1.6,
-    borderRadius: 16,
+    gap: 10,
+    borderWidth: 1.5,
+    borderRadius: 18,
     padding: 6,
-    paddingLeft: 14,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 6,
+    paddingLeft: 16,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
     elevation: 2,
   },
   textInput: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '600',
-    paddingVertical: 8,
+    paddingVertical: 10,
   },
   submitBtn: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 18,
     paddingVertical: 12,
-    borderRadius: 12,
-    minWidth: 95,
+    borderRadius: 14,
+    minWidth: 100,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -560,7 +564,7 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   submitBtnText: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '800',
   },
   giveUpBtn: {

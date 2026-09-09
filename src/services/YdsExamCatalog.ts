@@ -11,6 +11,7 @@ export interface CatalogExamInfo {
   difficulty: 'STANDART' | 'ZOR' | 'AKADEMİK_PRO';
   tag: 'Master Deneme' | 'İleri Düzey' | 'Akademik Odak' | 'AI Özel';
   description: string;
+  isFree?: boolean;
 }
 
 export const EXAM_CATALOG: CatalogExamInfo[] = [
@@ -24,6 +25,7 @@ export const EXAM_CATALOG: CatalogExamInfo[] = [
     difficulty: 'AKADEMİK_PRO',
     tag: 'Master Deneme',
     description: 'Resmi sınav standartlarında hazırlanmış özgün 80 soru ve 180 dakika tam kapsamlı simülasyon.',
+    isFree: true,
   },
   {
     id: 'yds_master_2',
@@ -89,6 +91,15 @@ export class YdsExamCatalogService {
 
   static getCatalogItem(examId: string): CatalogExamInfo | undefined {
     return EXAM_CATALOG.find((e) => e.id === examId);
+  }
+
+  static isExamFree(examId: string): boolean {
+    const item = this.getCatalogItem(examId);
+    return Boolean(item?.isFree);
+  }
+
+  static getFreeExam(): CatalogExamInfo | undefined {
+    return EXAM_CATALOG.find((e) => e.isFree);
   }
 
   /**

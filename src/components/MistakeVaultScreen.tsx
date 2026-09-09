@@ -15,6 +15,7 @@ import {
   Check,
   ChevronLeft,
   Lock,
+  ShieldCheck,
 } from 'lucide-react-native';
 import { useLearningStore } from '../store/useLearningStore';
 import { useThemeStore } from '../store/useThemeStore';
@@ -115,18 +116,13 @@ export const MistakeVaultScreen: React.FC<MistakeVaultScreenProps> = ({ onBack, 
         <View style={styles.mvHeader}>
           {handleBack && (
             <TouchableOpacity
-              style={[
-                styles.inlineBackBtn,
-                {
-                  backgroundColor: colors.cardBackground,
-                  borderColor: colors.border,
-                  shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
-                },
-              ]}
+              style={styles.inlineBackBtn}
               onPress={handleBack}
               activeOpacity={0.7}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              accessibilityLabel="Geri"
             >
-              <ChevronLeft size={20} color={colors.brand} />
+              <ChevronLeft size={24} color={colors.text} strokeWidth={2.4} />
             </TouchableOpacity>
           )}
 
@@ -143,8 +139,8 @@ export const MistakeVaultScreen: React.FC<MistakeVaultScreenProps> = ({ onBack, 
           </View>
         </View>
 
-        {/* LOCKED NOTICE IF TRIAL EXPIRED */}
-        {isFeatureLocked('MISTAKES') && (
+        {/* LOCKED NOTICE IF TRIAL EXPIRED (Only when user actually has mistakes to review) */}
+        {isFeatureLocked('MISTAKES') && mistakes.length > 0 && (
           <TouchableOpacity
             style={[styles.lockWarningCard, { backgroundColor: colors.cardBackground, borderColor: colors.brand }]}
             onPress={() => setIsSubscriptionModalOpen(true)}
@@ -158,7 +154,7 @@ export const MistakeVaultScreen: React.FC<MistakeVaultScreenProps> = ({ onBack, 
                 Hata Defteri Pro Üyelik Gerektirir
               </Text>
               <Text style={[styles.lockCardSub, { color: colors.textSecondary }]}>
-                7 günlük ücretsiz denemeniz sona erdi. ÖSYM çeldirici analizleri ve zayıf nokta telafisine devam etmek için Pro'ya geçin.
+                ÖSYM çeldirici analizleri ve zayıf nokta telafisine devam etmek için Pro'ya geçin.
               </Text>
             </View>
             <View style={[styles.lockCardActionBtn, { backgroundColor: colors.brand }]}>
@@ -237,9 +233,26 @@ export const MistakeVaultScreen: React.FC<MistakeVaultScreenProps> = ({ onBack, 
           })
         ) : (
           <View style={styles.emptyState}>
-            <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>
-              Kayıtlı hata bulunmuyor. Denemelerde ve görevlerde yanlış yaptığın sorular otomatik olarak buraya eklenir.
+            <View style={[styles.emptyIconCircle, { backgroundColor: colors.brandLight }]}>
+              <ShieldCheck size={38} color={colors.brand} strokeWidth={2.2} />
+            </View>
+            <Text style={[styles.emptyTitle, { color: colors.text }]}>
+              Kayıtlı Hata Bulunmuyor
             </Text>
+            <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>
+              Harika gidiyorsun! Denemelerde ve günlük görevlerde yanlış yaptığın sorular otomatik olarak buraya eklenir ve yapay zeka çeldirici analiziyle zayıf noktalarını telafi etmeni sağlar.
+            </Text>
+            {handleBack && (
+              <TouchableOpacity
+                style={[styles.emptyActionBtn, { backgroundColor: colors.brand }]}
+                onPress={handleBack}
+                activeOpacity={0.8}
+              >
+                <Text style={[styles.emptyActionBtnText, { color: colors.textOnBrand }]}>
+                  Soru Çözümüne Başla
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         )}
       </ScrollView>
@@ -474,17 +487,10 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   inlineBackBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
+    padding: 4,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 6,
-    elevation: 2,
-    marginRight: 12,
+    marginRight: 10,
   },
   mvTitleRow: {
     flexDirection: 'row',
@@ -582,13 +588,45 @@ const styles = StyleSheet.create({
   emptyState: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 30,
-    marginTop: 40,
+    paddingHorizontal: 24,
+    paddingVertical: 36,
+    marginTop: 24,
+  },
+  emptyIconCircle: {
+    width: 76,
+    height: 76,
+    borderRadius: 38,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  emptyTitle: {
+    fontSize: 19,
+    fontWeight: '800',
+    marginBottom: 8,
+    textAlign: 'center',
+    letterSpacing: -0.3,
   },
   emptySubtitle: {
-    fontSize: 13,
+    fontSize: 13.5,
     textAlign: 'center',
-    lineHeight: 18,
+    lineHeight: 20,
+    maxWidth: 320,
+    marginBottom: 24,
+  },
+  emptyActionBtn: {
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 14,
+    shadowColor: '#2563EB',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  emptyActionBtnText: {
+    fontSize: 14,
+    fontWeight: '700',
   },
   bmSheetContent: {
     maxHeight: '88%',

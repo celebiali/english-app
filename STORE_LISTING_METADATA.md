@@ -1,4 +1,4 @@
-# 📱 YDS Pratik — App Store & Google Play Mağaza Listeleme Paketi (ASO)
+# 📱 Dil Sınavı Hazırlık — App Store & Google Play Mağaza Listeleme Paketi (ASO)
 
 ---
 
@@ -7,7 +7,7 @@
 ### 1. Uygulama Adı (App Name)
 > **Maksimum 30 Karakter**
 ```text
-YDS Pratik: Kelime & Sınav
+Dil Sınavı Hazırlık: Kelime & Sınav
 ```
 
 ### 2. Alt Başlık (Subtitle)
@@ -38,9 +38,9 @@ YDS, YÖKDİL ve YDT sınavlarına 5 kutulu Leitner aralıklı tekrar sistemi, 7
 ### 7. Tam Açıklama (Description)
 > **Maksimum 4000 Karakter**
 ```markdown
-Akademik İngilizce ve Sınav Kelimelerini Kalıcı Olarak Öğrenin: YDS Pratik!
+Akademik İngilizce ve Sınav Kelimelerini Kalıcı Olarak Öğrenin: Dil Sınavı Hazırlık!
 
-YDS, YÖKDİL, YDT ve akademik İngilizce metinleri rahatça anlamanın en temel şartı güçlü bir kelime haznesidir. YDS Pratik; klasik ezber yöntemleri yerine bilimsel "Aralıklı Tekrar Algoritması (Leitner Kutuları)" ile kelimeleri hafızanıza kalıcı olarak yerleştirir ve düzenli soru pratiği yapmanızı sağlar.
+YDS, YÖKDİL, YDT ve akademik İngilizce metinleri rahatça anlamanın en temel şartı güçlü bir kelime haznesidir. Dil Sınavı Hazırlık; klasik ezber yöntemleri yerine bilimsel "Aralıklı Tekrar Algoritması (Leitner Kutuları)" ile kelimeleri hafızanıza kalıcı olarak yerleştirir ve düzenli soru pratiği yapmanızı sağlar.
 
 ÖNE ÇIKAN ÖZELLİKLER:
 
@@ -71,10 +71,10 @@ YDS, YÖKDİL, YDT ve akademik İngilizce metinleri rahatça anlamanın en temel
 - İnternetsiz (Offline) tam çalışma desteği
 - İlerlemenizi dilediğiniz zaman bulut ile senkronize etme imkanı
 
-YDS ve YÖKDİL hazırlık sürecinde kelime dağarcığınızı sağlamlaştırmak ve soru çözme pratiği kazanmak için YDS Pratik ile hemen başlayın!
+YDS ve YÖKDİL hazırlık sürecinde kelime dağarcığınızı sağlamlaştırmak ve soru çözme pratiği kazanmak için Dil Sınavı Hazırlık ile hemen başlayın!
 
 ---
-ABONELİK VE OTOMATİK YENİLEME BİLGİLERİ (YDS Pratik Pro):
+ABONELİK VE OTOMATİK YENİLEME BİLGİLERİ (Dil Sınavı Hazırlık Pro):
 - 6 Aylık Hazırlık Paketi (7 Gün Ücretsiz Deneme, ardından 599,00 ₺ / 6 Ay)
 - 12 Aylık Sınırsız VIP (7 Gün Ücretsiz Deneme, ardından 1.099,00 ₺ / 12 Ay)
 
@@ -109,7 +109,7 @@ Sayın İnceleme Uzmanı,
 2. Giriş akışını test etmek isterseniz yukarıda belirtilen demo test hesabını kullanabilirsiniz:
    E-posta: apple.review@ydspratik.com
    Şifre: YdsTest2026!
-3. Guideline 3.1.2 gereğince uygulama içi abonelik ekranında ("YDS Pratik Pro" Paywall) ve Kullanım Şartları (EULA) sayfasında tüm abonelik fiyatlandırmaları, 7 günlük ücretsiz deneme koşulları, otomatik yenileme şartları ve iptal adımları açıkça eklenmiştir.
+3. Guideline 3.1.2 gereğince uygulama içi abonelik ekranında ("Dil Sınavı Hazırlık Pro" Paywall) ve Kullanım Şartları (EULA) sayfasında tüm abonelik fiyatlandırmaları, 7 günlük ücretsiz deneme koşulları, otomatik yenileme şartları ve iptal adımları açıkça eklenmiştir.
 4. Tüm kelime havuzu (7000+ kelime), soru bankası ve deneme sınavları çevrimdışı (offline) olarak da eksiksiz çalışmaktadır.
 ```
 
@@ -121,7 +121,7 @@ Sayın İnceleme Uzmanı,
 ### 1. Uygulama Adı (App Name)
 > **Maksimum 30 Karakter**
 ```text
-YDS Pratik: Kelime & Sınav
+Dil Sınavı Hazırlık: Kelime & Sınav
 ```
 
 ### 2. Kısa Açıklama (Short Description)

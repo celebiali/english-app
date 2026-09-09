@@ -50,8 +50,8 @@ export class NotificationService {
 
       if (Platform.OS === 'android') {
         await Notifications.setNotificationChannelAsync('yds_daily_reminders', {
-          name: 'YDS Günlük Çalışma Hatırlatıcıları',
-          description: 'Günlük soru hedefleri ve serinizi koruma bildirimleri',
+          name: 'Dil Sınavı Günlük Çalışma Hatırlatıcıları',
+          description: 'Günlük soru ve kelime hedefleri, serinizi koruma bildirimleri',
           importance: Notifications.AndroidImportance.HIGH,
           vibrationPattern: [0, 250, 250, 250],
           lightColor: '#2563EB',
@@ -59,7 +59,7 @@ export class NotificationService {
         });
 
         await Notifications.setNotificationChannelAsync('yds_vocab_reminders', {
-          name: 'YDS Kelime Bildirimleri',
+          name: 'Dil Sınavı Kelime Bildirimleri',
           description: 'Sabah kelime seti ve tekrar vakti hatırlatıcıları',
           importance: Notifications.AndroidImportance.DEFAULT,
           sound: 'default',
@@ -108,7 +108,7 @@ export class NotificationService {
       // 1. Morning Kickoff Reminder (09:00)
       await Notifications.scheduleNotificationAsync({
         content: {
-          title: 'Günün YDS Kelime Seti Hazır!',
+          title: 'Günün Kelime Seti Hazır! 📚',
           body: 'Güne taze Leitner kelime kartları ve aralıklı tekrarlar ile başlayın.',
           sound: 'default',
           data: { screen: 'VOCAB' },
@@ -121,10 +121,28 @@ export class NotificationService {
       });
 
       // 2. Evening Focus & Streak Protection Reminder
+      // Kullanıcının gerçek seri durumuna göre dinamik başlık ve açıklama:
+      // streakCount <= 0: Henüz seri yok -> "İlk Gün Serini Başlat! 🎯"
+      // streakCount === 1: 1 gün çalışılmış -> "2. Gün Serini Yakala! 🔥"
+      // streakCount > 1: Gerçek seri var -> "🔥 ${streakCount} Günlük Serini Koru!"
+      let eveningTitle = '🎯 Günlük Çalışma Hedefini Tamamla!';
+      let eveningBody = `Bugünkü ${dailyTarget} soruluk sınav hedefin seni bekliyor. Hemen başla, hedefine bir adım daha yaklaş!`;
+
+      if (streakCount <= 0) {
+        eveningTitle = '🎯 İlk Gün Serini Başlat!';
+        eveningBody = `Bugün birkaç soru veya kelime çözerek ilk serini yakala ve sınav hedefine doğru yola çık!`;
+      } else if (streakCount === 1) {
+        eveningTitle = '🔥 2. Gün Serisini Yakala!';
+        eveningBody = `Harika bir başlangıç yaptın! Bugünkü çalışmanı tamamlayarak serini 2 güne çıkar.`;
+      } else {
+        eveningTitle = `🔥 ${streakCount} Günlük Serini Koru!`;
+        eveningBody = `${streakCount} gündür harika gidiyorsun! Bugünkü çalışmanı tamamla ve serini kaybetme.`;
+      }
+
       await Notifications.scheduleNotificationAsync({
         content: {
-          title: `🔥 ${streakCount} Günlük Serini Koru!`,
-          body: `Bugünkü ${dailyTarget} soruluk YDS hedefin seni bekliyor. Hedefine ulaş ve serini kaybetme!`,
+          title: eveningTitle,
+          body: eveningBody,
           sound: 'default',
           data: { screen: 'TASKS' },
         },
@@ -159,7 +177,7 @@ export class NotificationService {
    * Triggers an immediate test notification to verify audio, vibration, and banner
    */
   static async sendTestNotification(
-    title: string = '🎯 YDS Pratik Bildirim Testi',
+    title: string = '🎯 Dil Sınavı Hazırlık Bildirim Testi',
     body: string = 'Harika! Günlük çalışma ve seri koruma bildirimleriniz başarıyla aktif edildi.'
   ): Promise<boolean> {
     const hasPermission = await this.requestPermissions();

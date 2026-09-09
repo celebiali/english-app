@@ -30,7 +30,7 @@ export const LegalSheetModal: React.FC<LegalSheetModalProps> = ({
   onClose,
   initialTab = 'PRIVACY',
   onAccept,
-  showAcceptButton = false,
+  showAcceptButton = Boolean(onAccept),
 }) => {
   const { colors } = useThemeStore();
   const [activeTab, setActiveTab] = useState<'PRIVACY' | 'TERMS'>(initialTab);
@@ -160,7 +160,7 @@ export const LegalSheetModal: React.FC<LegalSheetModalProps> = ({
               </View>
 
               <Text style={[styles.docTitle, { color: colors.text }]}>
-                YDS Pratik Gizlilik Politikası
+                Dil Sınavı Hazırlık Gizlilik Politikası
               </Text>
               <Text style={[styles.docSubtitle, { color: colors.textSecondary }]}>
                 Son Güncelleme: Eylül 2026
@@ -171,7 +171,7 @@ export const LegalSheetModal: React.FC<LegalSheetModalProps> = ({
                   1. Toplanan Veriler ve Amaç
                 </Text>
                 <Text style={[styles.bodyText, { color: colors.textSecondary }]}>
-                  YDS Pratik, kullanıcı deneyimini iyileştirmek, sınav koçluğu sağlamak ve kelime öğrenme ilerlemenizi takip etmek amacıyla sınırlı kişisel veri işler.
+                  Dil Sınavı Hazırlık, kullanıcı deneyimini iyileştirmek, sınav koçluğu sağlamak ve kelime öğrenme ilerlemenizi takip etmek amacıyla sınırlı kişisel veri işler.
                 </Text>
                 <Text style={[styles.bulletItem, { color: colors.textSecondary }]}>
                   • <Text style={{ fontWeight: '700', color: colors.text }}>Hesap Bilgileri:</Text> E-posta adresi, ad-soyad (kayıt olunması halinde).
@@ -232,7 +232,7 @@ export const LegalSheetModal: React.FC<LegalSheetModalProps> = ({
                   1. Lisansın Kapsamı
                 </Text>
                 <Text style={[styles.bodyText, { color: colors.textSecondary }]}>
-                  YDS Pratik, kullanıcılara Yabancı Dil Bilgisi Seviye Tespit Sınavı'na (YDS) ve YÖKDİL'e hazırlanmaları için şahsi, devredilemez ve münhasır olmayan bir kullanım lisansı sunar.
+                  Dil Sınavı Hazırlık, kullanıcılara yabancı dil sınavlarına (YDS, YÖKDİL, YKS-DİL vb.) hazırlanmaları için şahsi, devredilemez ve münhasır olmayan bir kullanım lisansı sunar.
                 </Text>
               </View>
 
@@ -241,7 +241,7 @@ export const LegalSheetModal: React.FC<LegalSheetModalProps> = ({
                   2. Fikri Mülkiyet Hakları
                 </Text>
                 <Text style={[styles.bodyText, { color: colors.textSecondary }]}>
-                  Uygulama içerisinde yer alan tüm soru havuzu, yapay zeka analiz motoru, kelime etimoloji açıklamaları, seslendirmeler ve arayüz tasarımları YDS Pratik'e aittir. İçeriklerin izinsiz kopyalanması, çoğaltılması veya ticari amaçla kullanımı yasaktır.
+                  Uygulama içerisinde yer alan tüm soru havuzu, yapay zeka analiz motoru, kelime etimoloji açıklamaları, seslendirmeler ve arayüz tasarımları Dil Sınavı Hazırlık'a aittir. İçeriklerin izinsiz kopyalanması, çoğaltılması veya ticari amaçla kullanımı yasaktır.
                 </Text>
               </View>
 
@@ -250,7 +250,7 @@ export const LegalSheetModal: React.FC<LegalSheetModalProps> = ({
                   3. Sorumluluk Reddi (Disclaimer)
                 </Text>
                 <Text style={[styles.bodyText, { color: colors.textSecondary }]}>
-                  YDS Pratik bağımsız bir sınav hazırlık uygulamasıdır; ÖSYM veya herhangi bir resmi devlet kurumu ile doğrudan bağlantısı veya temsilciliği bulunmamaktadır. Sınav başarı oranları kullanıcıların kişisel çalışma disiplinine bağlıdır.
+                  Dil Sınavı Hazırlık bağımsız bir sınav hazırlık uygulamasıdır; ÖSYM veya herhangi bir resmi devlet kurumu ile doğrudan bağlantısı veya temsilciliği bulunmamaktadır. Sınav başarı oranları kullanıcıların kişisel çalışma disiplinine bağlıdır.
                 </Text>
               </View>
 
@@ -276,7 +276,7 @@ export const LegalSheetModal: React.FC<LegalSheetModalProps> = ({
             >
               <Check size={18} color={colors.textOnBrand} />
               <Text style={[styles.acceptButtonText, { color: colors.textOnBrand }]}>
-                Okudum ve Kabul Ediyorum
+                Okudum, Onaylıyorum
               </Text>
             </TouchableOpacity>
           </View>

@@ -48,9 +48,11 @@ export class SupabaseService {
     email: string,
     password: string,
     fullName: string,
-    targetScore: number = 80
+    targetScore: number = 80,
+    kvkkAccepted: boolean = true
   ): Promise<{ user: UserProfile | null; error?: string }> {
     const cleanEmail = email.trim().toLowerCase();
+    const nowIso = new Date().toISOString();
 
     // 1. Instant check for Demo / Ali Account
     if (cleanEmail === 'apple.review@ydspratik.com' || cleanEmail === 'ali@ydspratik.com') {
@@ -60,7 +62,11 @@ export class SupabaseService {
         fullName: 'Ali Çelebi',
         targetScore: 90,
         isGuest: false,
-        createdAt: new Date().toISOString(),
+        createdAt: nowIso,
+        kvkkAccepted: true,
+        kvkkAcceptedAt: nowIso,
+        termsAccepted: true,
+        termsAcceptedAt: nowIso,
       };
       this.currentUser = demoUser;
       return { user: demoUser };
@@ -74,7 +80,11 @@ export class SupabaseService {
         fullName: fullName.trim() || 'Ali Çelebi',
         targetScore,
         isGuest: false,
-        createdAt: new Date().toISOString(),
+        createdAt: nowIso,
+        kvkkAccepted: true,
+        kvkkAcceptedAt: nowIso,
+        termsAccepted: true,
+        termsAcceptedAt: nowIso,
       };
       this.currentUser = localUser;
       return { user: localUser };
@@ -97,6 +107,10 @@ export class SupabaseService {
           data: {
             full_name: fullName.trim(),
             target_score: targetScore,
+            kvkk_accepted: kvkkAccepted,
+            kvkk_accepted_at: nowIso,
+            terms_accepted: kvkkAccepted,
+            terms_accepted_at: nowIso,
           },
         }),
       });
@@ -122,7 +136,11 @@ export class SupabaseService {
         fullName: data.user?.user_metadata?.full_name || fullName.trim() || 'Ali Çelebi',
         targetScore: data.user?.user_metadata?.target_score || targetScore,
         isGuest: false,
-        createdAt: new Date().toISOString(),
+        createdAt: nowIso,
+        kvkkAccepted: Boolean(data.user?.user_metadata?.kvkk_accepted ?? true),
+        kvkkAcceptedAt: data.user?.user_metadata?.kvkk_accepted_at || nowIso,
+        termsAccepted: Boolean(data.user?.user_metadata?.terms_accepted ?? true),
+        termsAcceptedAt: data.user?.user_metadata?.terms_accepted_at || nowIso,
       };
 
       this.currentUser = user;

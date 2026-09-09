@@ -184,7 +184,7 @@ export class AIService {
       E: question.options.E,
     });
 
-    const prompt = `Sen ÖSYM YDS Baş Soru Yazarı ve Akademik İngilizce Profesörüsün.
+    const prompt = `Sen ÖSYM Dil Sınavları (YDS, YÖKDİL) Baş Soru Yazarı ve Akademik İngilizce Profesörüsün.
 
 GİRDİ:
 - Soru Metni: ${question.passage ? `[Metin]: ${question.passage}\n[Soru]: ` : ''}${question.question_text}
@@ -287,7 +287,7 @@ DİL KURALI: JSON anahtarları İngilizce kalacak, tüm değerler Türkçe yazı
     };
     const questionTypeParam = qTypeMap[type] || 'reading_comprehension';
 
-    const prompt = `Sen ÖSYM YDS Baş Soru Yazarısın.
+    const prompt = `Sen ÖSYM Dil Sınavları (YDS, YÖKDİL) Baş Soru Yazarısın.
 
 GİRDİ:
 - CEFR Seviyesi: B2
@@ -303,20 +303,18 @@ GEÇERSİZ GİRDİ: CEFR seviyesi veya soru tipi geçersizse sadece şunu dönd�
 GÖREV:
 1. Konu tarih, bilim veya güncel olaylarla ilgiliyse, SADECE tartışmasız/yaygın bilinen genel bilgi kullan; spesifik tarih, sayı, isim, istatistik gerektiren iddialardan kaçın, gerekirse kurgusal bağlama çevir (gerçek kişi/şirket yerine "bir araştırma ekibi" gibi).
 2. CEFR B2-C1 seviyesine göre cümle uzunluğunu ayarla (~15-22 kelime/cümle akademik kelimeler).
-3. 5 şık (A-E) üret, sadece 1 tanesi tartışmasız doğru. "options" alanı MUTLAKA 5 anahtar (A,B,C,D,E) içermelidir.
-4. Her yanlış şık FARKLI bir çeldirici türünden olmalı: ["Tense Uyuşmazlığı","Kapsam Aşımı","Ters Nedensellik","Anlamca Yakın Kelime Tuzağı","Bağlaç Hatası","Referans Hatası","Aşırı Genelleme"]
-5. Doğru şıkkın hangi harfte (A-E) olacağını rastgele/dengeli seç; art arda üretimlerde hep aynı harfi doğru yapma.
-6. 5 şıktan hiçbiri birbirine anlamca çok yakın olmasın; her şık tek başına ayırt edilebilir olmalı.
-7. Soruyu tamamladıktan sonra kendi içinde tekrar oku: doğru şık dışındaki her şıkkın metinle çeliştiğini/mantıksal imkansız olduğunu doğrula; birden fazla şık savunulabilir görünüyorsa o şıkkı yeniden yaz.
-8. Metin tamamen özgün olsun, gerçek bir ÖSYM sorusunun parafrazı olmasın.
-
-DİL KURALI: JSON anahtarları İngilizce kalacak; "passage", "question", "options", "explanation" değerleri İngilizce; "distractor_types" ve "topic_tag" Türkçe olacak.
-
-ÇIKTI KURALLARI (KESİN):
-- Şemadaki hiçbir alan atlanamaz; "options" tam 5, "distractor_types" tam 4 (doğru şık hariç) anahtar içermeli.
-- JSON'u kapatmadan bitirme; passage ve explanation'ı öz tut ki JSON yarıda kesilmesin.
-- Sadece aşağıdaki JSON şemasıyla dön, başka metin ekleme.
-
+3. "correct_answer" ile belirlenen şıkkın tek ve tartışmasız doğru olduğunu kendi içinde doğrula.
+4. Çeldirici şıkların her biri için ÖSYM soru hazırlama kılavuzuna uygun tuzak tipleri belirle:
+   - "Tense Uyuşmazlığı": Yanlış zaman kalıbı
+   - "Kapsam Aşımı": Metinde/cümlede bahsedilmeyen genelleme veya daraltma
+   - "Ters Nedensellik": Sebep-sonuç ilişkisinin ters kurulması
+   - "Anlamca Yakın Kelime Tuzağı": Benzer görünen ama bağlama uymayan sözcük
+   - "Bağlaç/Bağlaç Anlamı Hatası": Yanlış bağlaç veya zıtlık/neden hatası
+   - "Referans (Zamir) Hatası": Gönderimde bulunulan özne/nesne ile uyuşmama
+   - "Aşırı Genelleme": always, never, purely, solely gibi kanıtsız aşırı iddialar
+   - "Diğer": Gramer veya anlamca uyumsuzluk
+5. Soru gövdesini ve 5 şıkkı (A-E) oluştur.
+6. JSON ÇIKTI FORMATI (Yalnızca bu JSON'ı döndür, başka hiçbir metin ekleme):
 {
   "passage": ${type === 'PARAGRAPH' ? '"Akademik okuma metni (120-170 kelime)..."' : '""'},
   "question": "Soru metni veya boşluklu cümle '----'",
@@ -324,7 +322,7 @@ DİL KURALI: JSON anahtarları İngilizce kalacak; "passage", "question", "optio
   "correct_answer": "A",
   "distractor_types": {"B":"Tense Uyuşmazlığı","C":"Kapsam Aşımı","D":"Ters Nedensellik","E":"Aşırı Genelleme"},
   "explanation": "Detailed explanation of why the correct option is right and others fail.",
-  "topic_tag": "Akademik YDS"
+  "topic_tag": "Akademik Dil Sınavı"
 }`;
 
     const generated = await this.callGeminiJSON<any>(
@@ -357,7 +355,7 @@ DİL KURALI: JSON anahtarları İngilizce kalacak; "passage", "question", "optio
         },
         correct_option: generated.correct_option as OptionKey,
         explanation: generated.explanation || 'Bu soru bağlamsal ve gramer kuralları açısından tek tutarlı seçeneği test eder.',
-        subtopic: generated.topic_tag || customTopic || 'Akademik YDS',
+        subtopic: generated.topic_tag || customTopic || 'Akademik Dil Sınavı',
         difficulty: 'YDS_EXAM',
         source: 'Gemini 1.5 Flash (ÖSYM Standardı)',
         status: 'ACTIVE',
@@ -370,7 +368,7 @@ DİL KURALI: JSON anahtarları İngilizce kalacak; "passage", "question", "optio
       const selected = bankMatches[Math.floor(Math.random() * bankMatches.length)];
       return {
         ...selected,
-        source: 'YDS Soru Havuzu (Doğrulanmış)',
+        source: 'Sınav Soru Havuzu (Doğrulanmış)',
         status: 'ACTIVE',
       };
     }
@@ -378,7 +376,7 @@ DİL KURALI: JSON anahtarları İngilizce kalacak; "passage", "question", "optio
     // Ultimate fallback for Sentence Completion
     return {
       type: type || 'SENTENCE_COMPLETION',
-      title: 'YDS Akademik Soru',
+      title: 'Akademik Sınav Sorusu',
       question_text: 'Had the international monetary fund intervened promptly during the initial phase of the liquidity crisis, ----.',
       options: {
         A: 'the subsequent economic recession across developing markets would have been substantially mitigated',
@@ -391,7 +389,7 @@ DİL KURALI: JSON anahtarları İngilizce kalacak; "passage", "question", "optio
       explanation: 'Soru kökünde "Had + Subject + V3" (Inversion Conditional Type 3) yapısı kullanılmıştır. Bu yapı geçmişte gerçekleşmemiş bir koşulu ifade ettiğinden, ana cümlede "would/could/might have + V3" zaman uyumu aranmalıdır. Bu kurala uyan tek seçenek A şıkkıdır.',
       subtopic: 'Conditional Type 3 (Inversion) & Tense Harmony',
       difficulty: 'YDS_EXAM',
-      source: 'YDS Soru Havuzu (Doğrulanmış)',
+      source: 'Sınav Soru Havuzu (Doğrulanmış)',
       status: 'ACTIVE',
     };
   }
@@ -475,7 +473,7 @@ SADECE aşağıdaki geçerli JSON formatında yanıt ver:
   static async generateDynamicAcademicWords(count: number = 25): Promise<Omit<WordItem, 'id'>[]> {
     const validCount = Math.min(50, Math.max(5, count));
 
-    const prompt = `You are the Chief Lexicographer for YDS Academic English exams.
+    const prompt = `You are the Chief Lexicographer for Academic English Exams (YDS, YÖKDİL, e-YDS).
 Generate a JSON array of ${validCount} high-frequency, authentic academic English words frequently tested in YDS, YÖKDİL, and e-YDS examinations (CEFR B2 and C1 levels).
 
 Each object must match this exact schema:
@@ -484,7 +482,7 @@ Each object must match this exact schema:
   "meaning": "Tureng standard academic Turkish meaning",
   "level": "B2" or "C1",
   "category": "VOCABULARY",
-  "subcategory": "AI Dynamic YDS Pool",
+  "subcategory": "AI Dinamik Kelime Havuzu",
   "synonyms": ["syn1", "syn2", "syn3"],
   "example_sentence": "Advanced formal academic sentence in English",
   "example_translation": "Akademik Türkçe çeviri",

@@ -51,13 +51,18 @@ CREATE TABLE IF NOT EXISTS user_settings (
   daily_limit INTEGER DEFAULT 25,
   current_level TEXT DEFAULT 'B1',
   last_active_date DATE,
-  streak_count INTEGER DEFAULT 1,
+  streak_count INTEGER DEFAULT 0,
   last_streak_date DATE,
+  question_streak_count INTEGER DEFAULT 0,
+  last_question_date DATE,
+  vocab_streak_count INTEGER DEFAULT 0,
+  last_vocab_date DATE,
   paragraph_goal INTEGER DEFAULT 8,
   cloze_goal INTEGER DEFAULT 5,
   sentence_goal INTEGER DEFAULT 8,
   skills_goal INTEGER DEFAULT 14,
-  last_ai_generation_date DATE
+  last_ai_generation_date DATE,
+  active_study_folder_id TEXT DEFAULT 'sys_conn'
 );
 `;
 
@@ -80,8 +85,9 @@ CREATE TABLE IF NOT EXISTS questions (
   explanation TEXT NOT NULL,
   subtopic TEXT,
   difficulty TEXT DEFAULT 'YDS_EXAM',
-  source TEXT DEFAULT 'YDS Question Bank',
+  source TEXT,
   status TEXT DEFAULT 'ACTIVE',
+  category_breakdown_json TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 `;
@@ -89,13 +95,15 @@ CREATE TABLE IF NOT EXISTS questions (
 export const CREATE_MISTAKE_VAULT_TABLE = `
 CREATE TABLE IF NOT EXISTS mistake_vault (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  question_id INTEGER NOT NULL,
-  user_selected_option TEXT NOT NULL,
+  question_id INTEGER NOT NULL UNIQUE,
+  user_selected_option TEXT,
+  mistake_type TEXT,
   ai_analysis_json TEXT,
-  is_reviewed INTEGER DEFAULT 0,
-  reviewed_at DATETIME,
+  added_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
+  reviewed_at DATETIME,
+  is_reviewed INTEGER DEFAULT 0,
+  FOREIGN KEY (question_id) REFERENCES questions(id)
 );
 `;
 
@@ -104,16 +112,16 @@ CREATE TABLE IF NOT EXISTS exam_history (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   exam_id TEXT NOT NULL,
   title TEXT NOT NULL,
-  total_questions INTEGER DEFAULT 80,
-  correct_count INTEGER DEFAULT 0,
-  wrong_count INTEGER DEFAULT 0,
-  empty_count INTEGER DEFAULT 0,
-  net_score REAL DEFAULT 0,
-  yds_score REAL DEFAULT 0,
-  level_grade TEXT DEFAULT 'C',
-  time_spent_seconds INTEGER DEFAULT 0,
-  category_breakdown_json TEXT,
-  completed_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  total_questions INTEGER NOT NULL,
+  correct_count INTEGER NOT NULL,
+  wrong_count INTEGER NOT NULL,
+  empty_count INTEGER NOT NULL,
+  net_score REAL NOT NULL,
+  yds_score REAL NOT NULL,
+  level_grade TEXT NOT NULL,
+  time_spent_seconds INTEGER NOT NULL,
+  completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  category_breakdown_json TEXT
 );
 `;
 
@@ -122,12 +130,13 @@ CREATE TABLE IF NOT EXISTS user_session (
   id TEXT PRIMARY KEY,
   email TEXT NOT NULL,
   full_name TEXT NOT NULL,
-  target_score INTEGER DEFAULT 80,
+  target_score INTEGER NOT NULL,
   is_guest INTEGER DEFAULT 0,
   is_pro INTEGER DEFAULT 0,
   pro_expires_at TEXT,
+  trial_expires_at TEXT,
+  subscription_plan_id TEXT,
   applied_promo_code TEXT,
-  provider TEXT DEFAULT 'email',
   token TEXT,
   created_at TEXT NOT NULL
 );
@@ -142,6 +151,7 @@ CREATE TABLE IF NOT EXISTS vocab_folders (
   icon TEXT NOT NULL,
   is_system INTEGER DEFAULT 0,
   category_type TEXT,
+  level_filter TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 `;

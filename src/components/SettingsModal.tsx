@@ -164,7 +164,7 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
               <View style={{ flex: 1 }}>
                 <View style={styles.proTitleRow}>
                   <Text style={[styles.proUpgradeTitle, { color: colors.brand }]}>
-                    {userProfile?.isPro ? '👑 YDS Pratik Pro Aktif' : '💎 YDS Pratik Pro Üyelik'}
+                    {userProfile?.isPro ? '👑 Dil Sınavı Hazırlık Pro Aktif' : '💎 Dil Sınavı Hazırlık Pro Üyelik'}
                   </Text>
                   <View style={[styles.proPromoBadge, { backgroundColor: colors.accentWarmLight }]}>
                     <Tag size={10} color={colors.accentWarm} />
@@ -267,7 +267,7 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
               onPress={() => {
                 Alert.alert(
                   'Gizlilik Politikası (Privacy Policy)',
-                  'YDS Pratik, kullanıcı gizliliğine saygı duyar. Çözdüğünüz sorular, kelime istatistikleriniz ve kullanıcı profiliniz yalnızca sınav başarınızı artırmak amacıyla işlenir. Verileriniz 3. taraflarla paylaşılmaz ve satılmaz. KVKK ve GDPR uyumludur.'
+                  'Dil Sınavı Hazırlık, kullanıcı gizliliğine saygı duyar. Çözdüğünüz sorular, kelime istatistikleriniz ve kullanıcı profiliniz yalnızca sınav başarınızı artırmak amacıyla işlenir. Verileriniz 3. taraflarla paylaşılmaz ve satılmaz. KVKK ve GDPR uyumludur.'
                 );
               }}
               activeOpacity={0.7}
@@ -286,7 +286,7 @@ export const SettingsModal: React.FC<Props> = ({ visible, onClose, onOpenAuth })
               onPress={() => {
                 Alert.alert(
                   'Kullanım Koşulları (Terms of Service / EULA)',
-                  'YDS Pratik uygulamasındaki tüm sınav materyalleri, soru bankaları ve AI içerikleri bireysel eğitim ve sınav hazırlığı amacıyla sunulmaktadır. Ticari olarak kopyalanamaz veya dağıtılamaz.'
+                  'Dil Sınavı Hazırlık uygulamasındaki tüm sınav materyalleri, soru bankaları ve AI içerikleri bireysel eğitim ve sınav hazırlığı amacıyla sunulmaktadır. Ticari olarak kopyalanamaz veya dağıtılamaz.'
                 );
               }}
               activeOpacity={0.7}

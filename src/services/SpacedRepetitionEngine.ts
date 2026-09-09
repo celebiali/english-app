@@ -5,8 +5,8 @@ export class SpacedRepetitionEngine {
   /**
    * Fetch today's 25 learning batch items in sequential level order (A1 -> C1)
    */
-  async loadDailyBatch(dailyLimit: number = 25): Promise<CardWord[]> {
-    const rawWords = await dbService.getDailyLearningQueue(dailyLimit);
+  async loadDailyBatch(dailyLimit: number = 25, folderId?: string): Promise<CardWord[]> {
+    const rawWords = await dbService.getDailyLearningQueue(dailyLimit, folderId);
 
     const cardWords: CardWord[] = rawWords.map((w) => {
       return {

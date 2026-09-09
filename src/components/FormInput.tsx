@@ -27,18 +27,53 @@ export const FormInput: React.FC<FormInputProps> = ({
   error,
   containerStyle,
   style,
+  placeholder,
+  value,
   ...textInputProps
 }) => {
   const { colors } = useThemeStore();
   const [isFocused, setIsFocused] = useState(false);
 
+  const displayLabel = label || placeholder || '';
+  const hasValue = value !== undefined && value !== null && value.toString().length > 0;
+  const isFloating = isFocused || hasValue;
+
   return (
     <View style={[styles.wrapper, containerStyle]}>
-      {(label || topRightElement) && (
-        <View style={styles.labelRow}>
-          {label && (
-            <Text style={[styles.label, { color: colors.text }]}>{label}</Text>
-          )}
+      {/* Floating Border Label Badge */}
+      {isFloating && displayLabel ? (
+        <View
+          style={[
+            styles.floatingBadge,
+            { backgroundColor: colors.cardBackground },
+          ]}
+          pointerEvents="none"
+        >
+          <Text
+            style={[
+              styles.floatingLabelText,
+              {
+                color: error
+                  ? colors.error
+                  : isFocused
+                  ? colors.brand
+                  : colors.textSecondary,
+              },
+            ]}
+          >
+            {displayLabel}
+          </Text>
+        </View>
+      ) : null}
+
+      {/* Top Right Element (e.g., Şifremi Unuttum?) positioned on top-right border */}
+      {topRightElement && (
+        <View
+          style={[
+            styles.topRightBadge,
+            { backgroundColor: colors.cardBackground },
+          ]}
+        >
           {topRightElement}
         </View>
       )}
@@ -48,7 +83,7 @@ export const FormInput: React.FC<FormInputProps> = ({
           styles.inputContainer,
           {
             backgroundColor: colors.cardBackground,
-            borderColor: isFocused ? colors.brand : colors.border,
+            borderColor: error ? colors.error : isFocused ? colors.brand : colors.border,
             borderWidth: isFocused ? 1.8 : 1.2,
           },
         ]}
@@ -63,6 +98,8 @@ export const FormInput: React.FC<FormInputProps> = ({
             },
             style,
           ]}
+          value={value}
+          placeholder={!isFloating ? displayLabel : ''}
           placeholderTextColor={colors.textMuted || colors.textSecondary}
           onFocus={(e) => {
             setIsFocused(true);
@@ -91,18 +128,30 @@ export const FormInput: React.FC<FormInputProps> = ({
 
 const styles = StyleSheet.create({
   wrapper: {
-    gap: 6,
+    position: 'relative',
+    marginTop: 6,
+    marginBottom: 4,
   },
-  labelRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 2,
+  floatingBadge: {
+    position: 'absolute',
+    top: -9,
+    left: 14,
+    paddingHorizontal: 6,
+    zIndex: 10,
+    borderRadius: 4,
   },
-  label: {
-    fontSize: 13,
+  floatingLabelText: {
+    fontSize: 11.5,
     fontWeight: '700',
-    letterSpacing: -0.2,
+    letterSpacing: -0.1,
+  },
+  topRightBadge: {
+    position: 'absolute',
+    top: -10,
+    right: 14,
+    paddingHorizontal: 6,
+    zIndex: 20,
+    borderRadius: 4,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -110,10 +159,7 @@ const styles = StyleSheet.create({
     height: 52,
     borderRadius: 16,
     paddingHorizontal: 14,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.03,
-    shadowRadius: 3,
-    elevation: 1,
+    position: 'relative',
   },
   iconContainer: {
     marginRight: 10,

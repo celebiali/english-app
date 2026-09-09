@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "YDS Pratik",
+    "name": "PratikDil",
     "slug": "ydspratik",
     "scheme": "ydspratik",
     "version": "1.0.1",
@@ -11,7 +11,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#4762BD"
+      "backgroundColor": "#F8FAFC"
     },
     "ios": {
       "bundleIdentifier": "com.celebi.ydspratik",
@@ -19,7 +19,7 @@
       "supportsTablet": true,
       "requireFullScreen": true,
       "infoPlist": {
-        "CFBundleDisplayName": "YDS Pratik",
+        "CFBundleDisplayName": "PratikDil",
         "UIRequiresFullScreen": true,
         "ITSAppUsesNonExemptEncryption": false
       }

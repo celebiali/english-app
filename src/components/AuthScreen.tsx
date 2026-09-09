@@ -27,6 +27,7 @@ import {
   KeyRound,
   X,
   Check,
+  Sparkles,
 } from 'lucide-react-native';
 import { SupabaseService } from '../services/SupabaseService';
 import { useLearningStore } from '../store/useLearningStore';
@@ -81,6 +82,25 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
   const openLegalModal = (tab: 'PRIVACY' | 'TERMS') => {
     setLegalModalTab(tab);
     setIsLegalModalOpen(true);
+  };
+
+  const handleCheckboxPress = () => {
+    if (isTermsAccepted) {
+      setIsTermsAccepted(false);
+    } else {
+      openLegalModal('TERMS');
+    }
+  };
+
+  const handleAuthModeChange = (newMode: 'LOGIN' | 'REGISTER') => {
+    if (newMode === authMode) return;
+    setAuthMode(newMode);
+    setEmail('');
+    setPassword('');
+    setFullName('');
+    setShowPassword(false);
+    setIsTermsAccepted(false);
+    Keyboard.dismiss();
   };
 
   const validateEmail = (val: string) => {
@@ -224,10 +244,10 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
       if (canOpen) {
         await Linking.openURL(url);
       } else {
-        Alert.alert('Gizlilik Politikası', 'YDS Pratik kişisel verilerinizi KVKK ve GDPR kapsamında korur. Bilgileriniz 3. taraflarla asla paylaşılmaz.');
+        Alert.alert('Gizlilik Politikası', 'Dil Sınavı Hazırlık kişisel verilerinizi KVKK ve GDPR kapsamında korur. Bilgileriniz 3. taraflarla asla paylaşılmaz.');
       }
     } catch {
-      Alert.alert('Gizlilik Politikası', 'YDS Pratik kişisel verilerinizi KVKK ve GDPR kapsamında korur. Bilgileriniz 3. taraflarla asla paylaşılmaz.');
+      Alert.alert('Gizlilik Politikası', 'Dil Sınavı Hazırlık kişisel verilerinizi KVKK ve GDPR kapsamında korur. Bilgileriniz 3. taraflarla asla paylaşılmaz.');
     }
   };
 
@@ -238,10 +258,10 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
       if (canOpen) {
         await Linking.openURL(url);
       } else {
-        Alert.alert('Kullanım Şartları (EULA)', 'Uygulamadaki tüm YDS materyalleri ve testler bireysel eğitim amaçlıdır.');
+        Alert.alert('Kullanım Şartları (EULA)', 'Uygulamadaki tüm sınav materyalleri ve testler bireysel eğitim amaçlıdır.');
       }
     } catch {
-      Alert.alert('Kullanım Şartları (EULA)', 'Uygulamadaki tüm YDS materyalleri ve testler bireysel eğitim amaçlıdır.');
+      Alert.alert('Kullanım Şartları (EULA)', 'Uygulamadaki tüm sınav materyalleri ve testler bireysel eğitim amaçlıdır.');
     }
   };
 
@@ -269,16 +289,22 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
             isKeyboardVisible && styles.heroSectionKeyboard,
           ]}
         >
-          <View style={[styles.logoBadgeContainer, isKeyboardVisible && { marginBottom: 4 }]}>
+          <View style={[styles.logoBadgeContainer, isKeyboardVisible && { marginBottom: 2 }]}>
             <AppLogo
-              size={isKeyboardVisible ? 36 : 62}
-              borderRadius={isKeyboardVisible ? 10 : 18}
+              size={isKeyboardVisible ? 40 : 72}
+              borderRadius={isKeyboardVisible ? 12 : 20}
             />
           </View>
           {!isKeyboardVisible && (
-            <Text style={[styles.appTitle, { color: colors.text }]}>
-              YDS Pratik
-            </Text>
+            <View style={styles.brandingTextWrap}>
+              <Text style={[styles.appTitleMain, { color: colors.text }]}>
+                Dil Sınavı Hazırlık
+              </Text>
+
+              <Text style={[styles.appSubtitle, { color: colors.textSecondary }]}>
+                Akademik Kelime & Sınav Hazırlığı
+              </Text>
+            </View>
           )}
         </View>
 
@@ -289,7 +315,7 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
               styles.tabBtn,
               authMode === 'LOGIN' && [styles.tabBtnActive, { backgroundColor: colors.cardBackground }],
             ]}
-            onPress={() => setAuthMode('LOGIN')}
+            onPress={() => handleAuthModeChange('LOGIN')}
             activeOpacity={0.8}
           >
             <Text
@@ -310,7 +336,7 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
               styles.tabBtn,
               authMode === 'REGISTER' && [styles.tabBtnActive, { backgroundColor: colors.cardBackground }],
             ]}
-            onPress={() => setAuthMode('REGISTER')}
+            onPress={() => handleAuthModeChange('REGISTER')}
             activeOpacity={0.8}
           >
             <Text
@@ -333,7 +359,6 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
             <FormInput
               label="Ad Soyad"
               icon={<User size={18} color={colors.textSecondary} />}
-              placeholder="Adınız Soyadınız"
               value={fullName}
               onChangeText={setFullName}
               autoCapitalize="words"
@@ -343,7 +368,6 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
           <FormInput
             label="E-Posta Adresi"
             icon={<Mail size={18} color={colors.textSecondary} />}
-            placeholder="E-posta adresinizi giriniz"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -354,26 +378,9 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
           <FormInput
             label="Şifre"
             icon={<Lock size={18} color={colors.textSecondary} />}
-            placeholder="••••••••"
             value={password}
             onChangeText={setPassword}
             secureTextEntry={!showPassword}
-            topRightElement={
-              authMode === 'LOGIN' ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    setForgotEmail(email);
-                    setIsForgotModalOpen(true);
-                  }}
-                  activeOpacity={0.7}
-                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                >
-                  <Text style={[styles.forgotPassText, { color: colors.brand }]}>
-                    Şifremi Unuttum?
-                  </Text>
-                </TouchableOpacity>
-              ) : undefined
-            }
             rightElement={
               <TouchableOpacity
                 onPress={() => setShowPassword(!showPassword)}
@@ -388,12 +395,31 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
             }
           />
 
-          {/* REGISTER CHECKBOX CONSENT (KVKK & EULA COMPLIANCE) */}
+          {/* DEDICATED FORGOT PASSWORD ROW (LOGIN MODE ONLY) */}
+          {authMode === 'LOGIN' && (
+            <View style={styles.forgotPasswordRow}>
+              <TouchableOpacity
+                onPress={() => {
+                  setForgotEmail(email);
+                  setIsForgotModalOpen(true);
+                }}
+                activeOpacity={0.7}
+                style={styles.forgotPasswordBtn}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <Text style={[styles.forgotPassText, { color: colors.brand }]}>
+                  Şifremi Unuttum?
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/* REGISTER CHECKBOX CONSENT (KVKK & SÖZLEŞME ONAY ALANI) */}
           {authMode === 'REGISTER' && (
             <View style={styles.termsConsentRow}>
               <TouchableOpacity
                 style={styles.checkboxTouchable}
-                onPress={() => setIsTermsAccepted(!isTermsAccepted)}
+                onPress={handleCheckboxPress}
                 activeOpacity={0.7}
                 hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
@@ -416,37 +442,40 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
                   onPress={() => openLegalModal('TERMS')}
                   suppressHighlighting={false}
                 >
-                  Kullanım Şartları
+                  Kullanıcı Sözleşmesi
                 </Text>
-                {' '}ve{' '}
+                'ni ve{' '}
                 <Text
                   style={[styles.termsLinkText, { color: colors.brand }]}
                   onPress={() => openLegalModal('PRIVACY')}
                   suppressHighlighting={false}
                 >
-                  Gizlilik Politikası
+                  KVKK Aydınlatma Metni & Gizlilik Politikası
                 </Text>
-                'nı okudum, onaylıyorum.
+                'nı okudum, kabul ediyorum.
               </Text>
             </View>
           )}
 
           {/* SUBMIT BUTTON */}
           <TouchableOpacity
-            style={[styles.submitButton, { backgroundColor: colors.brand }]}
+            style={[
+              styles.submitButton,
+              {
+                backgroundColor: colors.brand,
+                opacity: (authMode === 'REGISTER' && !isTermsAccepted) || isLoading ? 0.45 : 1,
+              },
+            ]}
             onPress={authMode === 'LOGIN' ? handleEmailLogin : handleEmailRegister}
-            disabled={isLoading}
+            disabled={(authMode === 'REGISTER' && !isTermsAccepted) || isLoading}
             activeOpacity={0.85}
           >
             {isLoading ? (
               <ActivityIndicator color={colors.textOnBrand} />
             ) : (
-              <>
-                <Text style={[styles.submitButtonText, { color: colors.textOnBrand }]}>
-                  {authMode === 'LOGIN' ? 'Giriş Yap' : 'Hesap Oluştur'}
-                </Text>
-                <ArrowRight size={18} color={colors.textOnBrand} />
-              </>
+              <Text style={[styles.submitButtonText, { color: colors.textOnBrand }]}>
+                {authMode === 'LOGIN' ? 'Giriş Yap' : 'Kaydet'}
+              </Text>
             )}
           </TouchableOpacity>
         </View>
@@ -454,7 +483,7 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
         {/* OR DIVIDER */}
         <View style={[styles.dividerRow, authMode === 'REGISTER' && styles.dividerRowRegister]}>
           <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
-          <Text style={[styles.dividerText, { color: colors.textSecondary }]}>veya şununla devam et</Text>
+          <Text style={[styles.dividerText, { color: colors.textSecondary }]}>veya</Text>
           <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
         </View>
 
@@ -477,47 +506,22 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
                   { color: colors.isDark ? '#000000' : '#FFFFFF' },
                 ]}
               >
-                Apple ile Giriş Yap
+                Apple ile Devam Et
               </Text>
             </TouchableOpacity>
           </View>
         )}
 
-        {/* GUEST ACCESS (OFFLINE & DEMO FRIENDLY) */}
+        {/* GUEST ACCESS (APPLE GUIDELINE 5.1.1 COMPLIANCE - DISCREET TEXT LINK) */}
         <TouchableOpacity
-          style={[styles.guestLinkContainer, authMode === 'REGISTER' && styles.guestLinkContainerRegister]}
+          style={styles.guestLink}
           onPress={handleGuestContinue}
-          activeOpacity={0.7}
-          hitSlop={{ top: 8, bottom: 8, left: 16, right: 16 }}
+          activeOpacity={0.65}
         >
           <Text style={[styles.guestLinkText, { color: colors.textSecondary }]}>
-            Daha Sonra Hesap Oluştur
+            Giriş yapmadan uygulamayı keşfet
           </Text>
         </TouchableOpacity>
-
-        {/* FOOTER POLICIES WITH BOTTOM SHEET MODAL */}
-        <View style={[styles.footerPolicies, authMode === 'REGISTER' && styles.footerPoliciesRegister]}>
-          <ShieldCheck size={14} color={colors.textSecondary} style={{ marginTop: 2 }} />
-          <Text style={[styles.footerPolicyText, { color: colors.textSecondary }]}>
-            Devam ederek{' '}
-            <Text
-              style={[styles.policyLink, { color: colors.brand }]}
-              onPress={() => openLegalModal('PRIVACY')}
-              suppressHighlighting={false}
-            >
-              Gizlilik Politikası
-            </Text>
-            'nı ve{' '}
-            <Text
-              style={[styles.policyLink, { color: colors.brand }]}
-              onPress={() => openLegalModal('TERMS')}
-              suppressHighlighting={false}
-            >
-              Kullanım Şartları (EULA)
-            </Text>
-            'nı kabul etmiş olursunuz.
-          </Text>
-        </View>
       </ScrollView>
     </KeyboardAvoidingView>
 
@@ -527,7 +531,7 @@ export const AuthScreen: React.FC<Props> = ({ onSuccess }) => {
         onClose={() => setIsLegalModalOpen(false)}
         initialTab={legalModalTab}
         onAccept={() => setIsTermsAccepted(true)}
-        showAcceptButton={authMode === 'REGISTER' && !isTermsAccepted}
+        showAcceptButton={authMode === 'REGISTER'}
       />
 
       {/* FORGOT PASSWORD MODAL */}
@@ -601,21 +605,32 @@ const styles = StyleSheet.create({
   heroSection: {
     alignItems: 'center',
     marginTop: 6,
-    marginBottom: 16,
+    marginBottom: 14,
   },
   heroSectionKeyboard: {
     marginTop: 0,
     marginBottom: 4,
   },
   logoBadgeContainer: {
-    marginBottom: 10,
+    marginBottom: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  appTitle: {
+  brandingTextWrap: {
+    alignItems: 'center',
+  },
+  appTitleMain: {
     fontSize: 24,
-    fontWeight: '900',
+    fontWeight: '800',
     letterSpacing: -0.5,
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  appSubtitle: {
+    fontSize: 13.5,
+    fontWeight: '500',
+    textAlign: 'center',
+    letterSpacing: -0.2,
   },
   tabContainer: {
     flexDirection: 'row',
@@ -645,8 +660,18 @@ const styles = StyleSheet.create({
   formContainerRegister: {
     gap: 10,
   },
+  forgotPasswordRow: {
+    alignItems: 'flex-end',
+    marginTop: -4,
+    marginBottom: 2,
+    paddingHorizontal: 2,
+  },
+  forgotPasswordBtn: {
+    paddingVertical: 4,
+    paddingHorizontal: 2,
+  },
   forgotPassText: {
-    fontSize: 12,
+    fontSize: 12.5,
     fontWeight: '700',
   },
   submitButton: {
@@ -733,15 +758,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
   },
-  guestLinkContainer: {
+  guestLink: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 14,
-    paddingVertical: 6,
-  },
-  guestLinkContainerRegister: {
-    marginTop: 10,
-    paddingVertical: 4,
+    paddingVertical: 14,
+    marginTop: 6,
+    marginBottom: 6,
   },
   guestLinkText: {
     fontSize: 13,

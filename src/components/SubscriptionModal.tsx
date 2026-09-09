@@ -63,7 +63,7 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
 
         Alert.alert(
           'Tebrikler! 👑',
-          '7 Günlük Ücretsiz Denemeniz ve YDS Pratik Pro üyeliğiniz aktif edildi. Tüm denemeler ve AI koçluğu kullanımınıza açıldı.',
+          '7 Günlük Ücretsiz Denemeniz ve Dil Sınavı Hazırlık Pro üyeliğiniz aktif edildi. Tüm denemeler ve AI koçluğu kullanımınıza açıldı.',
           [{ text: 'Hemen Başla', onPress: onClose }]
         );
       } else if (result.error) {
@@ -92,7 +92,7 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
         Alert.alert('Başarılı! 🎉', 'Mevcut Apple aboneliğiniz başarıyla geri yüklendi.');
         onClose();
       } else {
-        Alert.alert('Bilgi', 'Apple hesabınıza bağlı aktif bir YDS Pratik aboneliği bulunamadı.');
+        Alert.alert('Bilgi', 'Apple hesabınıza bağlı aktif bir Dil Sınavı Hazırlık aboneliği bulunamadı.');
       }
     } catch (e: any) {
       Alert.alert('Hata', e?.message || 'Satın alımlar geri yüklenemedi.');
@@ -136,7 +136,7 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
           {/* HERO */}
           <View style={styles.heroSection}>
             <Text style={[styles.heroTitle, { color: colors.text }]}>
-              YDS Pratik Pro
+              PratikDil Pro
             </Text>
             <Text style={[styles.heroSubtitle, { color: colors.textSecondary }]}>
               Hedef puanına ulaşmak için tüm kilitleri aç.

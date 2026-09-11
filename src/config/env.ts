@@ -15,8 +15,8 @@ export const ENV_CONFIG = {
 
   // Apple In-App Purchase Product IDs (App Store Connect ile birebir eşleşmeli)
   APPLE_PRODUCT_IDS: {
-    PLAN_6M: 'ydspratik_299_6m_7dt',   // 6 Aylık Hazırlık (299 TL - 7 Gün Ücretsiz Deneme)
-    PLAN_12M: 'ydspratik_499_12m_7dt', // 12 Aylık Sınırsız VIP (499 TL - 7 Gün Ücretsiz Deneme)
+    PLAN_6M: 'ydspratik_599_6m_7dt',   // 6 Aylık Hazırlık (App Store Connect'teki onaylı ID)
+    PLAN_12M: 'ydspratik_1099_12m_7dt', // 12 Aylık Sınırsız VIP (App Store Connect'teki onaylı ID)
   },
 
   // Apple App Store Yasal Bağlantıları (Guideline 3.1.2)

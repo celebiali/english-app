@@ -75,8 +75,8 @@ YDS ve YÖKDİL hazırlık sürecinde kelime dağarcığınızı sağlamlaştır
 
 ---
 ABONELİK VE OTOMATİK YENİLEME BİLGİLERİ (Dil Sınavı Hazırlık Pro):
-- 6 Aylık Hazırlık Paketi (7 Gün Ücretsiz Deneme, ardından 599,00 ₺ / 6 Ay)
-- 12 Aylık Sınırsız VIP (7 Gün Ücretsiz Deneme, ardından 1.099,00 ₺ / 12 Ay)
+- 6 Aylık Hazırlık Paketi (7 Gün Ücretsiz Deneme, ardından 299,00 ₺ / 6 Ay)
+- 12 Aylık Sınırsız VIP (7 Gün Ücretsiz Deneme, ardından 499,00 ₺ / 12 Ay)
 
 • Satın alma onayı ile ödeme Apple Kimliği hesabınızdan tahsil edilir.
 • Abonelik, cari sürenin bitiminden en az 24 saat önce iptal edilmediği takdirde otomatik yenilenir.

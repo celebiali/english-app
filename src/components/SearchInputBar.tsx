@@ -19,7 +19,7 @@ interface SearchInputBarProps {
 
 export const SearchInputBar: React.FC<SearchInputBarProps> = ({
   value,
-  placeholder = 'Sözlükte veya kelimelerimde ara...',
+  placeholder = 'Sözlükten kelime ara ve havuza ekle...',
   onSearch,
   debounceMs = 500,
   onSubmitEditing,

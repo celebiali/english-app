@@ -904,7 +904,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
         <View style={[styles.searchRowWrap, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
           <SearchInputBar
             value={folderSearchQuery}
-            placeholder="Kelimelerim içinde ara..."
+            placeholder="Kelimelerim içinde ara veya yeni ekle..."
             onSearch={setFolderSearchQuery}
             onSubmitEditing={setFolderSearchQuery}
             debounceMs={300}
@@ -1030,12 +1030,21 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
       <View style={[styles.searchRowWrap, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
         <SearchInputBar
           value={searchQuery}
-          placeholder="Sözlükte veya kelimelerimde ara..."
+          placeholder="Sözlükten kelime ara ve havuza ekle..."
           onSearch={setSearchQuery}
           onSubmitEditing={setSearchQuery}
           debounceMs={500}
         />
       </View>
+
+      {/* Quick Guide Tip Banner when idle */}
+      {searchQuery.trim().length === 0 && (
+        <View style={[styles.searchTipBanner, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
+          <Text style={[styles.searchTipText, { color: colors.textSecondary }]}>
+            💡 <Text style={{ fontWeight: '700', color: colors.brand }}>Kelime Eklemek İçin:</Text> Yukarıya İngilizce kelimeyi yazın, canlı sözlükten <Text style={{ fontWeight: '700', color: colors.brand }}>"+ Ekle"</Text> butonuna dokunun.
+          </Text>
+        </View>
+      )}
 
       {/* If User Is Searching: Show Search Results / Live Dictionary Result */}
       {searchQuery.trim().length > 0 ? (
@@ -2079,5 +2088,18 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 13,
     fontWeight: '600',
+  },
+  searchTipBanner: {
+    marginHorizontal: 16,
+    marginTop: 10,
+    marginBottom: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderRadius: 10,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  searchTipText: {
+    fontSize: 12.5,
+    lineHeight: 18,
   },
 });

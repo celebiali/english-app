@@ -26,6 +26,7 @@ import {
   CardWord,
 } from '../types';
 import { YdsQuestionBankService } from '../services/YdsQuestionBank';
+import { DataParserService } from '../services/DataParserService';
 
 export interface WordWithProgress extends WordItem {
   isStudied: boolean;
@@ -160,6 +161,7 @@ class DatabaseService {
         this.isNative = true;
         await this.execNativeSchema();
         await this.seedQuestionsIfEmpty();
+        await this.seedWordsIfEmpty();
         return;
       }
     } catch (e) {
@@ -168,6 +170,7 @@ class DatabaseService {
     this.isNative = false;
     await this.memoryDb.init();
     await this.seedQuestionsIfEmpty();
+    await this.seedWordsIfEmpty();
   }
 
   private async execNativeSchema(): Promise<void> {
@@ -541,6 +544,53 @@ class DatabaseService {
           }
         }
       });
+    }
+  }
+
+  /**
+   * Guaranteed seeding of base vocabulary dataset (Connectors, Roots, Academic Core)
+   */
+  async seedWordsIfEmpty(): Promise<void> {
+    const initialList = DataParserService.getFullSeedDataset();
+
+    if (!this.isNative) {
+      if (this.memoryDb.words.size < 50) {
+        for (const w of initialList) {
+          await this.memoryDb.insertWord(w);
+        }
+      }
+      return;
+    }
+
+    try {
+      const countRes: any = await this.dbInstance.getFirstAsync(`SELECT COUNT(*) as cnt FROM words`);
+      if (!countRes || countRes.cnt < 50) {
+        const CHUNK_SIZE = 50;
+        await this.dbInstance.withTransactionAsync(async () => {
+          for (let i = 0; i < initialList.length; i += CHUNK_SIZE) {
+            const chunk = initialList.slice(i, i + CHUNK_SIZE);
+            const placeholders = chunk.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?)`).join(', ');
+            const sql = `INSERT INTO words (word, meaning, category, subcategory, level, synonyms, example_sentence, example_translation, etymology_note) VALUES ${placeholders}`;
+            const params: any[] = [];
+            for (const w of chunk) {
+              params.push(
+                w.word,
+                w.meaning,
+                w.category || 'VOCABULARY',
+                w.subcategory || null,
+                w.level || 'B1',
+                w.synonyms ? JSON.stringify(w.synonyms) : null,
+                w.example_sentence || null,
+                w.example_translation || null,
+                w.etymology_note || null
+              );
+            }
+            await this.dbInstance.runAsync(sql, params);
+          }
+        });
+      }
+    } catch (e) {
+      console.warn('Failed to seed words in SQLite:', e);
     }
   }
 
@@ -1874,17 +1924,44 @@ class DatabaseService {
       const targetFolderWords = allWords.filter(isMatchingFolder);
       const newWords: CardWord[] = [];
       if (remainingSlots > 0) {
+        // 1. Önce kullanıcının yeni eklediği ve henüz çalışmadığı özel kelimeleri ekle
+        const customUnstudied = allWords.filter((w) => w.is_custom && !this.memoryDb.progress.get(w.id));
+        for (const w of customUnstudied) {
+          if (newWords.length < remainingSlots) {
+            newWords.push({
+              ...w,
+              cardType: 'NEW',
+              reviewBadgeText: '⭐ Yeni Eklenen Kelimen',
+              isCooldown: false,
+            });
+          }
+        }
+
+        // 2. Kalan yer varsa aktif klasörden ekle
         for (const w of targetFolderWords) {
+          if (newWords.length >= remainingSlots) break;
           const prog = this.memoryDb.progress.get(w.id);
-          if (!prog) {
-            if (newWords.length < remainingSlots) {
-              newWords.push({
-                ...w,
-                cardType: 'NEW',
-                reviewBadgeText: '✨ Günün Yeni Kelimesi',
-                isCooldown: false,
-              });
-            }
+          if (!prog && !newWords.some((nw) => nw.id === w.id)) {
+            newWords.push({
+              ...w,
+              cardType: 'NEW',
+              reviewBadgeText: '✨ Günün Yeni Kelimesi',
+              isCooldown: false,
+            });
+          }
+        }
+
+        // 3. Hâlâ yer varsa genel kelime havuzundan tamamla
+        for (const w of allWords) {
+          if (newWords.length >= remainingSlots) break;
+          const prog = this.memoryDb.progress.get(w.id);
+          if (!prog && !newWords.some((nw) => nw.id === w.id)) {
+            newWords.push({
+              ...w,
+              cardType: 'NEW',
+              reviewBadgeText: '✨ Günün Yeni Kelimesi',
+              isCooldown: false,
+            });
           }
         }
       }
@@ -1963,27 +2040,24 @@ class DatabaseService {
       };
     });
 
-    // 2. Kalan kontenjan varsa hedef klasörden YENİ hiç görülmemiş kelimeleri getir
+    // 2. Kalan kontenjan varsa:
+    // ADIM A: Önce kullanıcının yeni eklediği ve henüz çalışmadığı özel kelimeleri (is_custom = 1) en başa al!
+    // ADIM B: Aktif klasörden doldur
+    // ADIM C: Hâlâ yer varsa genel kelimelerden tamamla
     const remainingSlots = Math.max(0, newWordsLimit - reviewWords.length);
     let newWords: CardWord[] = [];
 
     if (remainingSlots > 0) {
-      const newSql = folderFilterSql
-        ? `SELECT w.* FROM words w
-           LEFT JOIN user_word_progress p ON w.id = p.word_id
-           WHERE p.id IS NULL AND (${folderFilterSql})
-           ORDER BY w.id ASC
-           LIMIT ?`
-        : `SELECT w.* FROM words w
-           LEFT JOIN user_word_progress p ON w.id = p.word_id
-           WHERE p.id IS NULL AND (w.is_custom IS NULL OR w.is_custom = 0)
-           ORDER BY w.id ASC
-           LIMIT ?`;
-
-      const newParams = [...folderParams, remainingSlots];
-      const newRows = await this.dbInstance.getAllAsync(newSql, newParams);
-
-      newWords = newRows.map((r: any) => ({
+      // ADIM A: Özel eklenen ve henüz çalışılmamış kelimeler
+      const customUnstudiedSql = `
+        SELECT w.* FROM words w
+        LEFT JOIN user_word_progress p ON w.id = p.word_id
+        WHERE p.id IS NULL AND w.is_custom = 1
+        ORDER BY w.id DESC
+        LIMIT ?
+      `;
+      const customRows = await this.dbInstance.getAllAsync(customUnstudiedSql, [remainingSlots]);
+      const customWords: CardWord[] = customRows.map((r: any) => ({
         id: r.id,
         word: r.word,
         meaning: r.meaning,
@@ -1994,11 +2068,84 @@ class DatabaseService {
         example_sentence: r.example_sentence,
         example_translation: r.example_translation,
         etymology_note: r.etymology_note,
-        is_custom: r.is_custom === 1,
+        is_custom: true,
         cardType: 'NEW',
-        reviewBadgeText: '✨ Günün Yeni Kelimesi',
+        reviewBadgeText: '⭐ Yeni Eklenen Kelimen',
         isCooldown: false,
       }));
+      newWords.push(...customWords);
+
+      const afterCustomSlots = Math.max(0, remainingSlots - customWords.length);
+      if (afterCustomSlots > 0) {
+        const customIds = customRows.map((r: any) => r.id);
+        const excludeCustomClause = customIds.length > 0 ? `AND w.id NOT IN (${customIds.join(',')})` : '';
+
+        // ADIM B: Aktif klasördeki yeni kelimeler
+        const newSql = folderFilterSql
+          ? `SELECT w.* FROM words w
+             LEFT JOIN user_word_progress p ON w.id = p.word_id
+             WHERE p.id IS NULL AND (${folderFilterSql}) ${excludeCustomClause}
+             ORDER BY w.id ASC
+             LIMIT ?`
+          : `SELECT w.* FROM words w
+             LEFT JOIN user_word_progress p ON w.id = p.word_id
+             WHERE p.id IS NULL AND (w.is_custom IS NULL OR w.is_custom = 0) ${excludeCustomClause}
+             ORDER BY w.id ASC
+             LIMIT ?`;
+
+        const newParams = [...folderParams, afterCustomSlots];
+        const newRows = await this.dbInstance.getAllAsync(newSql, newParams);
+
+        const folderBatch: CardWord[] = newRows.map((r: any) => ({
+          id: r.id,
+          word: r.word,
+          meaning: r.meaning,
+          category: r.category,
+          subcategory: r.subcategory,
+          level: r.level,
+          synonyms: this.safeParseJson(r.synonyms, []),
+          example_sentence: r.example_sentence,
+          example_translation: r.example_translation,
+          etymology_note: r.etymology_note,
+          is_custom: r.is_custom === 1,
+          cardType: 'NEW',
+          reviewBadgeText: '✨ Günün Yeni Kelimesi',
+          isCooldown: false,
+        }));
+        newWords.push(...folderBatch);
+
+        // ADIM C: Hâlâ kontenjan kaldıysa genel kelimelerden tamamla
+        const afterFolderSlots = Math.max(0, afterCustomSlots - folderBatch.length);
+        if (afterFolderSlots > 0) {
+          const allFetchedIds = [...customIds, ...newRows.map((r: any) => r.id)];
+          const excludeAllClause = allFetchedIds.length > 0 ? `AND w.id NOT IN (${allFetchedIds.join(',')})` : '';
+          const fallbackSql = `
+            SELECT w.* FROM words w
+            LEFT JOIN user_word_progress p ON w.id = p.word_id
+            WHERE p.id IS NULL ${excludeAllClause}
+            ORDER BY w.id ASC
+            LIMIT ?
+          `;
+          const fallbackRows = await this.dbInstance.getAllAsync(fallbackSql, [afterFolderSlots]);
+          const fallbackBatch: CardWord[] = fallbackRows.map((r: any) => ({
+            id: r.id,
+            word: r.word,
+            meaning: r.meaning,
+            category: r.category,
+            subcategory: r.subcategory,
+            level: r.level,
+            synonyms: this.safeParseJson(r.synonyms, []),
+            example_sentence: r.example_sentence,
+            example_translation: r.example_translation,
+            etymology_note: r.etymology_note,
+            is_custom: r.is_custom === 1,
+            cardType: 'NEW',
+            reviewBadgeText: '✨ Günün Yeni Kelimesi',
+            isCooldown: false,
+          }));
+          newWords.push(...fallbackBatch);
+        }
+      }
     }
 
     return [...reviewWords, ...newWords].slice(0, newWordsLimit);

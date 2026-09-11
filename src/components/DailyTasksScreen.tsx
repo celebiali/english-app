@@ -260,11 +260,8 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
   ];
 
   const handleStartVocab = async () => {
-    let words = sessionWords;
-    if (!words || words.length === 0 || words.length > (vocabGoal || 25)) {
-      await loadVocabSession(true);
-      words = useLearningStore.getState().sessionWords;
-    }
+    await loadVocabSession(true);
+    useLearningStore.setState({ currentVocabIndex: 0 });
     setVocabStudyIndex(0);
     setIsVocabStudySlider(true);
     setIsVocabSolvingMode(true);
@@ -322,6 +319,50 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
   if (isVocabSolvingMode) {
     const dailyBatchWords = (sessionWords || []).slice(0, vocabGoal || 25);
 
+    // If there are no words to study at all:
+    if (dailyBatchWords.length === 0) {
+      return (
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
+          <View style={[styles.practiceTopBar, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
+            <TouchableOpacity
+              style={styles.backBtn}
+              onPress={() => {
+                setIsVocabSolvingMode(false);
+                loadDailyTasks();
+              }}
+              hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+            >
+              <X size={22} color={colors.text} />
+            </TouchableOpacity>
+            <View style={styles.practiceTitleCenter}>
+              <Text style={[styles.practiceTitle, { color: colors.text }]}>
+                Günün Kelime Alıştırması
+              </Text>
+            </View>
+            <View style={{ width: 32 }} />
+          </View>
+          <View style={styles.sessionFinishedCenter}>
+            <Text style={{ fontSize: 42, marginBottom: 12 }}>📚</Text>
+            <Text style={[styles.finishedTitleText, { color: colors.text, textAlign: 'center' }]}>
+              Çalışılacak Kelime Bulunamadı
+            </Text>
+            <Text style={[styles.finishedSubText, { color: colors.textSecondary, textAlign: 'center', marginHorizontal: 20 }]}>
+              Kelime havuzunuzda şu anda yeni veya tekrarı gelmiş kelime bulunmuyor. Sözlükten yeni kelimeler arayıp ekleyerek hemen alıştırma yapabilirsiniz.
+            </Text>
+            <TouchableOpacity
+              style={[styles.finishBtn, { backgroundColor: colors.brand, marginTop: 20 }]}
+              onPress={() => {
+                setIsVocabSolvingMode(false);
+                loadDailyTasks();
+              }}
+            >
+              <Text style={styles.finishBtnText}>Görevlere Dön</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    }
+
     // Phase 1: Study Slider Phase (Kelimeleri Tanıma / Kart İnceleme)
     if (isVocabStudySlider && dailyBatchWords.length > 0) {
       const currentStudyWord = dailyBatchWords[vocabStudyIndex] || dailyBatchWords[0];
@@ -337,6 +378,7 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
             if (!isLastCard) {
               setVocabStudyIndex((prev) => prev + 1);
             } else {
+              useLearningStore.setState({ currentVocabIndex: 0 });
               setIsVocabStudySlider(false);
             }
           }}

@@ -26,6 +26,11 @@ import { AuthModal } from './src/components/AuthModal';
 import { AppLogo } from './src/components/AppLogo';
 import { LearningHeader } from './src/components/LearningHeader';
 
+import * as SplashScreen from 'expo-splash-screen';
+
+// Prevent native splash screen from auto-hiding before store initialization completes
+SplashScreen.preventAutoHideAsync().catch(() => {});
+
 export default function App() {
   const {
     activeTab,
@@ -63,9 +68,10 @@ export default function App() {
 
   useEffect(() => {
     if (!isLoading && isInitialized) {
+      SplashScreen.hideAsync().catch(() => {});
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 350,
+        duration: 250,
         useNativeDriver: true,
       }).start();
     }
@@ -73,24 +79,9 @@ export default function App() {
 
   if (isLoading || !isInitialized) {
     return (
-      <SafeAreaView style={[styles.loadingContainer, { backgroundColor: colors.background }]}>
+      <View style={[styles.loadingContainer, { backgroundColor: colors.background }]}>
         <StatusBar barStyle={colors.isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
-        <View style={styles.splashContent}>
-          <AppLogo size={88} borderRadius={22} />
-
-          <View style={styles.splashTitleRow}>
-            <Text style={[styles.splashTitleMain, { color: colors.text }]}>Dil Sınavı Hazırlık</Text>
-          </View>
-
-          <Text style={[styles.splashSubtitle, { color: colors.textSecondary }]}>
-            Akademik Kelime & Sınav Hazırlığı
-          </Text>
-
-          <View style={styles.splashSpinnerContainer}>
-            <ActivityIndicator size="small" color={colors.brand} />
-          </View>
-        </View>
-      </SafeAreaView>
+      </View>
     );
   }
 

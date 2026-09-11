@@ -14,10 +14,14 @@ import {
   ArrowRight,
   Check,
   Target,
+  X,
+  CheckCircle2,
 } from 'lucide-react-native';
 import { useLearningStore, getTaskGoals } from '../store/useLearningStore';
 import { useThemeStore } from '../store/useThemeStore';
 import { QuestionCard } from './QuestionCard';
+import { LearnMatchWordCard } from './LearnMatchWordCard';
+import { CardComponent } from './CardComponent';
 import { YdsQuestionType, QuestionItem, OptionKey } from '../types';
 
 interface DailyTasksScreenProps {
@@ -41,9 +45,12 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
     setActiveTab,
     loadDailyTasks,
     loadVocabSession,
+    resetVocabSession,
     completedTodayCount,
     dailyLimit,
     sessionWords,
+    currentVocabIndex,
+    answerCurrentVocabCard,
     dictionaryWords,
   } = useLearningStore();
 
@@ -60,12 +67,17 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<YdsQuestionType | 'ALL'>('ALL');
   const [isSolvingMode, setIsSolvingMode] = useState<boolean>(false);
 
+  // Dedicated Daily 25 Words Solving Mode
+  const [isVocabSolvingMode, setIsVocabSolvingMode] = useState<boolean>(false);
+  const [isVocabStudySlider, setIsVocabStudySlider] = useState<boolean>(true);
+  const [vocabStudyIndex, setVocabStudyIndex] = useState<number>(0);
+
   useEffect(() => {
-    onSolvingModeChange?.(isSolvingMode);
+    onSolvingModeChange?.(isSolvingMode || isVocabSolvingMode);
     return () => {
       onSolvingModeChange?.(false);
     };
-  }, [isSolvingMode, onSolvingModeChange]);
+  }, [isSolvingMode, isVocabSolvingMode, onSolvingModeChange]);
   const [solverIndex, setSolverIndex] = useState<number>(0);
   const [dailyAnswers, setDailyAnswers] = useState<Record<string, OptionKey>>({});
 
@@ -171,8 +183,8 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
   const totalVaultWords = (dictionaryWords || []).length;
   // If user has words in their vault, goal cannot exceed available words; otherwise fallback to dailyLimit
   const vocabGoal = totalVaultWords > 0
-    ? Math.min(dailyLimit || 20, totalVaultWords)
-    : (dailyLimit || 20);
+    ? Math.min(dailyLimit || 25, totalVaultWords)
+    : (dailyLimit || 25);
 
   // Authoritative completed count from SQLite and store
   const actualVocabDone = Math.max(
@@ -247,6 +259,17 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
     },
   ];
 
+  const handleStartVocab = async () => {
+    let words = sessionWords;
+    if (!words || words.length === 0) {
+      await loadVocabSession(true);
+      words = useLearningStore.getState().sessionWords;
+    }
+    setVocabStudyIndex(0);
+    setIsVocabStudySlider(true);
+    setIsVocabSolvingMode(true);
+  };
+
   const handleCardPress = (task: typeof tasksList[0]) => {
     const isDone = task.completed >= task.goal;
     if (task.isVocab) {
@@ -260,7 +283,7 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
         });
         return;
       }
-      setActiveTab('VOCAB');
+      handleStartVocab();
       return;
     }
 
@@ -292,6 +315,126 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
     }
     handleStartCategory('ALL');
   };
+
+  // =========================================================================
+  // VIEW: DEDICATED DAILY VOCABULARY SESSION (GÜNÜN 25 KELİMESİ)
+  // =========================================================================
+  if (isVocabSolvingMode) {
+    // Phase 1: Study Slider Phase (Kelimeleri Tanıma / Kart İnceleme)
+    if (isVocabStudySlider && sessionWords && sessionWords.length > 0) {
+      const currentStudyWord = sessionWords[vocabStudyIndex] || sessionWords[0];
+      const isLastCard = vocabStudyIndex >= sessionWords.length - 1;
+
+      return (
+        <LearnMatchWordCard
+          word={currentStudyWord}
+          currentIndex={vocabStudyIndex}
+          totalCards={sessionWords.length}
+          nextButtonText={isLastCard ? 'Alıştırmaya Başla 🚀' : 'Sonraki'}
+          onNext={() => {
+            if (!isLastCard) {
+              setVocabStudyIndex((prev) => prev + 1);
+            } else {
+              setIsVocabStudySlider(false);
+            }
+          }}
+          onPrev={
+            vocabStudyIndex > 0
+              ? () => {
+                  setVocabStudyIndex((prev) => Math.max(0, prev - 1));
+                }
+              : undefined
+          }
+          onClose={() => {
+            setIsVocabSolvingMode(false);
+            loadDailyTasks();
+          }}
+        />
+      );
+    }
+
+    // Phase 2: Practice Quiz Phase (Aktif Hatırlama & Tureng / AI Kontrolü)
+    const currentCard = sessionWords?.[currentVocabIndex] || null;
+    const isFinished = currentVocabIndex >= (sessionWords?.length || 0);
+    const totalCount = sessionWords?.length || 0;
+    const progressPercent = totalCount > 0 ? Math.min(100, Math.round(((currentVocabIndex + 1) / totalCount) * 100)) : 0;
+
+    return (
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={[styles.practiceTopBar, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => {
+              setIsVocabSolvingMode(false);
+              loadDailyTasks();
+            }}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+            accessibilityLabel="Kapat"
+          >
+            <X size={22} color={colors.text} />
+          </TouchableOpacity>
+          <View style={styles.practiceTitleCenter}>
+            <Text style={[styles.practiceTitle, { color: colors.text }]}>
+              Günün Kelime Alıştırması
+            </Text>
+            {totalCount > 0 && !isFinished && (
+              <Text style={[styles.practiceCounterText, { color: colors.textSecondary }]}>
+                {currentVocabIndex + 1} / {totalCount}
+              </Text>
+            )}
+          </View>
+          <View style={{ width: 32 }} />
+        </View>
+
+        {totalCount > 0 && !isFinished && (
+          <View style={[styles.practiceProgressBarTrack, { backgroundColor: colors.subtleBackground }]}>
+            <View
+              style={[
+                styles.practiceProgressBarFill,
+                { width: `${progressPercent}%`, backgroundColor: colors.brand },
+              ]}
+            />
+          </View>
+        )}
+
+        {!isFinished && currentCard ? (
+          <ScrollView
+            contentContainerStyle={styles.practiceScrollContent}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
+            <CardComponent
+              cardWord={currentCard}
+              onAnswer={async (isCorrect) => {
+                await answerCurrentVocabCard(isCorrect);
+              }}
+              cardIndex={currentVocabIndex}
+              totalCards={sessionWords.length || 0}
+            />
+          </ScrollView>
+        ) : (
+          <View style={styles.sessionFinishedCenter}>
+            <CheckCircle2 size={54} color="#10B981" />
+            <Text style={[styles.finishedTitleText, { color: colors.text }]}>
+              Harika! Günün Kelime Hedefi Tamamlandı 🎉
+            </Text>
+            <Text style={[styles.finishedSubText, { color: colors.textSecondary }]}>
+              Bugünkü kelimeler hafıza kutularına başarıyla kaydedildi.
+            </Text>
+            <TouchableOpacity
+              style={[styles.finishBtn, { backgroundColor: colors.brand }]}
+              onPress={() => {
+                setIsVocabSolvingMode(false);
+                loadDailyTasks();
+              }}
+            >
+              <Text style={styles.finishBtnText}>Görevlere Dön</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    );
+  }
 
   // =========================================================================
   // VIEW 2: DEDICATED QUESTION SOLVER VIEW (SCREEN 2)
@@ -1040,6 +1183,71 @@ const styles = StyleSheet.create({
   },
   modalSecondaryBtnText: {
     fontSize: 13,
+    fontWeight: '700',
+  },
+  // Practice Screen Styles
+  practiceTopBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+  },
+  practiceTitleCenter: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 2,
+  },
+  practiceTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  practiceCounterText: {
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  practiceProgressBarTrack: {
+    width: '100%',
+    height: 3,
+  },
+  practiceProgressBarFill: {
+    height: '100%',
+  },
+  practiceScrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 36,
+    justifyContent: 'center',
+  },
+  sessionFinishedCenter: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 32,
+  },
+  finishedTitleText: {
+    fontSize: 20,
+    fontWeight: '800',
+    marginTop: 16,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  finishedSubText: {
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 24,
+  },
+  finishBtn: {
+    paddingHorizontal: 28,
+    paddingVertical: 12,
+    borderRadius: 14,
+  },
+  finishBtnText: {
+    color: '#FFFFFF',
+    fontSize: 15,
     fontWeight: '700',
   },
 });

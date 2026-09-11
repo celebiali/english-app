@@ -46,6 +46,20 @@ export const AddFolderModal: React.FC<AddFolderModalProps> = ({
       return;
     }
 
+    const { vocabFolders } = useLearningStore.getState();
+    const isDuplicate = (vocabFolders || []).some(
+      (f) =>
+        f.name.trim().toLowerCase() === trimmed.toLowerCase() &&
+        (!folderToEdit || f.id !== folderToEdit.id)
+    );
+    if (isDuplicate) {
+      Alert.alert(
+        'Aynı İsimde Klasör Var',
+        `"${trimmed}" adında bir klasör zaten mevcut. Lütfen farklı bir isim girin.`
+      );
+      return;
+    }
+
     if (folderToEdit) {
       await updateVocabFolder(folderToEdit.id, {
         name: trimmed,

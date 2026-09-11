@@ -3,11 +3,11 @@ export type WordLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1';
 export type CategoryType = 'VOCABULARY' | 'CONNECTOR' | 'PREFIX_ROOT' | 'IDIOM';
 
 /**
- * Box Systems (Kutu Sistemi):
- * 0: Özel Tekrar Havuzu (Wrong pool - 24-hour review cooldown)
- * 1: Günlük Kutu (25 daily words + yesterday's expired cooldown words)
- * 2: Haftalık Kutu (Passed daily box; requires 7-day retention test)
- * 3: Aylık Kutu (Mastered pool; reviewed monthly / archived)
+ * Box Systems (Kutu Sistemi - 1, 3, 7 Gün Bilimsel Aralıklı Tekrar):
+ * 0: Yanlış Havuzu (24 saatlik soğuma süresi)
+ * 1: Günlük Kutu (1. Gün - Başlangıç / Öğrenme)
+ * 2: Pekiştirme Kutusu (3. Gün - 3 gün sonra aralıklı kontrol)
+ * 3: Kalıcı Hafıza Kutusu (7. Gün - 7 gün sonra test edilip Tamamlandı / Mastered olur)
  */
 export type BoxType = 0 | 1 | 2 | 3;
 

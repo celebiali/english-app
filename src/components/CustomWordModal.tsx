@@ -35,7 +35,7 @@ export const CustomWordModal: React.FC<Props> = ({
   initialFolderId = null,
   onOpenAddFolder,
 }) => {
-  const { loadVocabSession, vocabFolders } = useLearningStore();
+  const { loadVocabSession, loadDailyTasks, vocabFolders } = useLearningStore();
   const { colors } = useThemeStore();
 
   const userFolders = (vocabFolders || []).filter((f) => !f.is_system);
@@ -120,29 +120,50 @@ export const CustomWordModal: React.FC<Props> = ({
       return;
     }
 
-    await dbService.insertCustomWord({
-      word: wordText.trim(),
-      meaning: meaning.trim(),
-      category: 'VOCABULARY',
-      subcategory: selectedFolderName,
-      level: 'B2',
-      example_sentence: exampleSentence.trim() || undefined,
-      example_translation: exampleTranslation.trim() || undefined,
-    });
+    const wordToSave = wordText.trim();
+    const meaningToSave = meaning.trim();
+    const folderToSave = selectedFolderName;
+    const sentenceToSave = exampleSentence.trim() || undefined;
+    const translationToSave = exampleTranslation.trim() || undefined;
 
-    await loadVocabSession();
+    const { dictionaryWords } = useLearningStore.getState();
+    const isDuplicate = (dictionaryWords || []).some(
+      (w) =>
+        w.word.trim().toLowerCase() === wordToSave.toLowerCase() &&
+        (w.subcategory || '').trim().toLowerCase() === folderToSave.toLowerCase()
+    );
 
-    // Reset fields
+    if (isDuplicate) {
+      Alert.alert(
+        'Kelime Zaten Ekli',
+        `"${wordToSave}" kelimesi "${folderToSave}" klasörünüzde zaten mevcut.`
+      );
+      return;
+    }
+
+    // Reset fields & close modal immediately for instant UI response
     setWordText('');
     setMeaning('');
     setExampleSentence('');
     setExampleTranslation('');
     onClose();
 
-    Alert.alert(
-      'Kelime Eklendi! ⭐',
-      `"${wordText.trim()}" kelimesi "${selectedFolderName}" klasörünüze kaydedildi.`
-    );
+    try {
+      await dbService.insertCustomWord({
+        word: wordToSave,
+        meaning: meaningToSave,
+        category: 'VOCABULARY',
+        subcategory: folderToSave,
+        level: 'B2',
+        example_sentence: sentenceToSave,
+        example_translation: translationToSave,
+      });
+
+      await loadVocabSession(true);
+      await loadDailyTasks();
+    } catch (err) {
+      console.warn('Error saving custom word:', err);
+    }
   };
 
   return (

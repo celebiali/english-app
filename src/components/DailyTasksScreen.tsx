@@ -13,6 +13,7 @@ import {
   ChevronLeft,
   ArrowRight,
   Check,
+  Target,
 } from 'lucide-react-native';
 import { useLearningStore, getTaskGoals } from '../store/useLearningStore';
 import { useThemeStore } from '../store/useThemeStore';
@@ -39,22 +40,25 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
     answerDailyQuestion,
     setActiveTab,
     loadDailyTasks,
+    loadVocabSession,
     completedTodayCount,
     dailyLimit,
     sessionWords,
+    dictionaryWords,
   } = useLearningStore();
 
   const { colors } = useThemeStore();
 
+  useEffect(() => {
+    loadDailyTasks();
+    if (!dictionaryWords || dictionaryWords.length === 0) {
+      loadVocabSession();
+    }
+  }, []);
+
   // Dynamic Selected Category in Dashboard (ALL, PARAGRAPH, CLOZE_TEST, SENTENCE_COMPLETION, SKILL_DIALOGUE)
   const [selectedCategory, setSelectedCategory] = useState<YdsQuestionType | 'ALL'>('ALL');
   const [isSolvingMode, setIsSolvingMode] = useState<boolean>(false);
-
-  // Slider State for Dual Goals (Soru & Kelime)
-  const { width: windowWidth } = useWindowDimensions();
-  const heroScrollRef = useRef<ScrollView>(null);
-  const [activeHeroIndex, setActiveHeroIndex] = useState<number>(0);
-  const cardWidth = Math.round(windowWidth - 40);
 
   useEffect(() => {
     onSolvingModeChange?.(isSolvingMode);
@@ -71,6 +75,7 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
     description: string;
     badgeEmoji: string;
     badgeCount: string;
+    isVocab?: boolean;
   } | null>(null);
 
   // Filtered active questions based on category selection
@@ -120,6 +125,7 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
   };
 
   const handleAnswerQuestion = (question: QuestionItem, opt: OptionKey) => {
+    if (dailyAnswers[question.id]) return;
     setDailyAnswers((prev) => ({ ...prev, [question.id]: opt }));
     answerDailyQuestion(question, opt);
   };
@@ -162,10 +168,18 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
       q.type === 'VOCABULARY_GRAMMAR'
   ).length;
 
-  const newWordsCount = sessionWords.filter((w) => w.cardType === 'NEW').length;
-  const reviewWordsCount = sessionWords.filter((w) => w.cardType === 'REVIEW').length;
-  const vocabGoal = sessionWords.length > 0 ? sessionWords.length : (dailyLimit || 25);
-  const vocabCompleted = Math.min(vocabGoal, completedTodayCount || 0);
+  const totalVaultWords = (dictionaryWords || []).length;
+  // If user has words in their vault, goal cannot exceed available words; otherwise fallback to dailyLimit
+  const vocabGoal = totalVaultWords > 0
+    ? Math.min(dailyLimit || 20, totalVaultWords)
+    : (dailyLimit || 20);
+
+  // Authoritative completed count from SQLite and store
+  const actualVocabDone = Math.max(
+    dailyTasksProgress?.vocabCompleted || 0,
+    completedTodayCount || 0
+  );
+  const vocabCompleted = Math.min(vocabGoal, actualVocabDone);
   const vocabCompletionPercentage = vocabGoal > 0 ? Math.min(100, Math.round((vocabCompleted / vocabGoal) * 100)) : 0;
 
   const tasksList = [
@@ -224,9 +238,7 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
     {
       id: 'VOCABULARY',
       type: undefined,
-      title: reviewWordsCount > 0
-        ? `Günün Kelimeleri\n(${newWordsCount} Yeni + ${reviewWordsCount} Tekrar)`
-        : 'Günün Kelime\nHedefi',
+      title: 'Günün Kelime\nHedefi',
       iconEmoji: '🔤',
       completed: vocabCompleted,
       goal: vocabGoal,
@@ -240,10 +252,11 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
     if (task.isVocab) {
       if (isDone) {
         setCompletedModalInfo({
-          title: `Günün Kelime Hedefi Tamamlandı! 🎉`,
-          description: `Bugünkü ${task.goal} kelimelik aralıklı tekrar çalışmasını başarıyla bitirdin. Yarın yeni kelimelerle hafızanı güçlendirmeye devam edeceğiz! 🚀`,
+          title: 'Kelime Hedefi Tamamlandı',
+          description: `Bugünkü ${task.goal} kelimelik hedefini tamamladın.`,
           badgeEmoji: '🔤',
           badgeCount: `${task.goal} / ${task.goal}`,
+          isVocab: true,
         });
         return;
       }
@@ -253,10 +266,11 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
 
     if (isDone) {
       setCompletedModalInfo({
-        title: `${task.title.replace('\n', ' ')} Tamamlandı! 🎉`,
-        description: `Bugünkü ${task.goal} soruluk hedefini başarıyla bitirdin. Bu bölüm için yeni sorular yarın yüklenecektir, yarın tekrar gel! 🚀`,
+        title: `${task.title.replace('\n', ' ')} Tamamlandı`,
+        description: `Bugünkü ${task.goal} soruluk hedefini tamamladın.`,
         badgeEmoji: task.iconEmoji,
         badgeCount: `${task.goal} / ${task.goal}`,
+        isVocab: false,
       });
       return;
     }
@@ -268,10 +282,11 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
   const handleArenaPress = () => {
     if (remainingCount === 0 || activeDailyQuestions.length === 0) {
       setCompletedModalInfo({
-        title: 'Tüm Günlük Hedef Tamamlandı! 🏆',
-        description: `Tebrikler! Bugünkü ${dailyGoalTotal} soruluk YDS soru kotanı %100 başarıyla tamamladın. Yeni soru seti için yarın tekrar gel!`,
+        title: 'Günlük Hedef Tamamlandı',
+        description: `Bugünkü ${dailyGoalTotal} soruluk soru kotanı tamamladın.`,
         badgeEmoji: '🎯',
         badgeCount: `${dailyGoalTotal} / ${dailyGoalTotal}`,
+        isVocab: false,
       });
       return;
     }
@@ -360,195 +375,6 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      {/* 🎯 GÜNLÜK HEDEFLER SLIDER (SORU & KELİME) */}
-      <View style={styles.heroSliderContainer}>
-        <ScrollView
-          ref={heroScrollRef}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          nestedScrollEnabled
-          decelerationRate="fast"
-          snapToInterval={cardWidth}
-          snapToAlignment="start"
-          scrollEventThrottle={16}
-          style={{ width: cardWidth }}
-          contentContainerStyle={{ flexDirection: 'row', width: cardWidth * 2 }}
-          onScroll={(e) => {
-            const offsetX = e.nativeEvent.contentOffset.x;
-            const index = Math.round(offsetX / (cardWidth || 1));
-            if (index !== activeHeroIndex && (index === 0 || index === 1)) {
-              setActiveHeroIndex(index);
-            }
-          }}
-          onMomentumScrollEnd={(e) => {
-            const offsetX = e.nativeEvent.contentOffset.x;
-            const index = Math.round(offsetX / (cardWidth || 1));
-            setActiveHeroIndex(index);
-          }}
-        >
-          {/* KART 1: GÜNLÜK SORU HEDEFİ */}
-          <View
-            style={[
-              styles.heroBanner,
-              {
-                width: cardWidth,
-                backgroundColor: colors.cardBackground,
-                borderColor: colors.border,
-                shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
-              },
-            ]}
-          >
-            <View style={styles.heroHeaderRow}>
-              <View style={styles.heroHeaderTitleGroup}>
-                <View style={[styles.heroGoalDot, { backgroundColor: colors.brand }]} />
-                <Text style={[styles.heroGoalLabel, { color: colors.brand }]}>GÜNLÜK SORU HEDEFİ</Text>
-              </View>
-
-              {questionStreakCount >= 2 && (
-                <View style={[styles.streakPill, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
-                  <Text style={[styles.streakPillText, { color: colors.textSecondary }]}>🔥 {questionStreakCount} Gün Seri</Text>
-                </View>
-              )}
-            </View>
-
-            <View style={styles.heroTargetMainRow}>
-              <Text style={[styles.heroTargetText, { color: colors.text }]}>{dailyGoalTotal} Soru</Text>
-              <View style={[styles.heroPercentBadge, { backgroundColor: colors.brandLight }]}>
-                <Text style={[styles.heroPercentText, { color: colors.brand }]}>%{completionPercentage}</Text>
-              </View>
-            </View>
-
-            {/* Progress Bar Track */}
-            <View style={[styles.heroProgressTrack, { backgroundColor: colors.subtleBackground }]}>
-              <View
-                style={[
-                  styles.heroProgressFill,
-                  { width: `${completionPercentage}%`, backgroundColor: colors.brand },
-                ]}
-              />
-            </View>
-
-            {/* Bottom Sub Info */}
-            <View style={styles.heroBottomRow}>
-              <Text style={[styles.heroCompletedInfo, { color: colors.textSecondary }]}>
-                {totalCompleted} / {dailyGoalTotal} Çözüldü
-              </Text>
-              {remainingCount === 0 && (
-                <Text style={[styles.heroRemainingInfo, { color: colors.success }]}>
-                  Hedef Tamamlandı 🎉
-                </Text>
-              )}
-            </View>
-          </View>
-
-          {/* KART 2: GÜNLÜK KELİME HEDEFİ */}
-          <TouchableOpacity
-            style={[
-              styles.heroBanner,
-              {
-                width: cardWidth,
-                backgroundColor: colors.cardBackground,
-                borderColor: colors.border,
-                shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
-              },
-            ]}
-            onPress={() => setActiveTab('VOCAB')}
-            activeOpacity={0.9}
-          >
-            <View style={styles.heroHeaderRow}>
-              <View style={styles.heroHeaderTitleGroup}>
-                <View style={[styles.heroGoalDot, { backgroundColor: colors.accentWarm }]} />
-                <Text style={[styles.heroGoalLabel, { color: colors.accentWarm }]}>GÜNLÜK KELİME HEDEFİ</Text>
-              </View>
-
-              {vocabStreakCount >= 2 && (
-                <View style={[styles.streakPill, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}>
-                  <Text style={[styles.streakPillText, { color: colors.textSecondary }]}>⚡ {vocabStreakCount} Gün Seri</Text>
-                </View>
-              )}
-            </View>
-
-            <View style={styles.heroTargetMainRow}>
-              <View>
-                <Text style={[styles.heroTargetText, { color: colors.text }]}>{vocabGoal} Kelime</Text>
-                {reviewWordsCount > 0 ? (
-                  <Text style={[styles.heroSubDetailText, { color: colors.textSecondary }]}>
-                    {newWordsCount} Yeni + {reviewWordsCount} Tekrar
-                  </Text>
-                ) : null}
-              </View>
-              <View style={[styles.heroPercentBadge, { backgroundColor: colors.accentWarmLight }]}>
-                <Text style={[styles.heroPercentText, { color: colors.accentWarm }]}>%{vocabCompletionPercentage}</Text>
-              </View>
-            </View>
-
-            {/* Progress Bar Track */}
-            <View style={[styles.heroProgressTrack, { backgroundColor: colors.subtleBackground }]}>
-              <View
-                style={[
-                  styles.heroProgressFill,
-                  { width: `${vocabCompletionPercentage}%`, backgroundColor: colors.accentWarm },
-                ]}
-              />
-            </View>
-
-            {/* Bottom Sub Info */}
-            <View style={styles.heroBottomRow}>
-              <Text style={[styles.heroCompletedInfo, { color: colors.textSecondary }]}>
-                {vocabCompleted} / {vocabGoal} Çalışıldı
-              </Text>
-              {vocabCompleted >= vocabGoal ? (
-                <Text style={[styles.heroRemainingInfo, { color: colors.success }]}>
-                  Hedef Tamamlandı 🎉
-                </Text>
-              ) : (
-                <Text style={[styles.heroActionHint, { color: colors.accentWarm }]}>
-                  Kelimelere Git →
-                </Text>
-              )}
-            </View>
-          </TouchableOpacity>
-        </ScrollView>
-
-        {/* PAGINATION INDICATOR (Pill Dots) */}
-        <View style={styles.heroPaginationRow}>
-          <TouchableOpacity
-            onPress={() => {
-              heroScrollRef.current?.scrollTo({ x: 0, animated: true });
-              setActiveHeroIndex(0);
-            }}
-            activeOpacity={0.7}
-            style={styles.heroPaginationTouchArea}
-          >
-            <View
-              style={[
-                styles.heroPaginationDot,
-                activeHeroIndex === 0
-                  ? [styles.heroPaginationDotActive, { backgroundColor: colors.brand }]
-                  : { backgroundColor: colors.border },
-              ]}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              heroScrollRef.current?.scrollTo({ x: cardWidth, animated: true });
-              setActiveHeroIndex(1);
-            }}
-            activeOpacity={0.7}
-            style={styles.heroPaginationTouchArea}
-          >
-            <View
-              style={[
-                styles.heroPaginationDot,
-                activeHeroIndex === 1
-                  ? [styles.heroPaginationDotActive, { backgroundColor: colors.accentWarm }]
-                  : { backgroundColor: colors.border },
-              ]}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
 
       {/* SECTION: GÜNLÜK GÖREVLER */}
       <View style={styles.sectionTitleRow}>
@@ -585,18 +411,11 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
                   <View style={{ flex: 1, marginLeft: 12 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                       <Text style={[styles.mTitleFull, { color: colors.text }]}>{task.title}</Text>
-                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                        {vocabStreakCount >= 2 && (
-                          <View style={[styles.vocabStreakPill, { backgroundColor: colors.accentWarmLight }]}>
-                            <Text style={[styles.vocabStreakText, { color: colors.accentWarm }]}>⚡ {vocabStreakCount} Gün Seri</Text>
-                          </View>
-                        )}
-                        {isDone && (
-                          <View style={[styles.mDoneBadge, { backgroundColor: colors.brandLight }]}>
-                            <Check size={12} color={colors.brand} strokeWidth={3} />
-                          </View>
-                        )}
-                      </View>
+                      {vocabStreakCount >= 2 && (
+                        <View style={[styles.vocabStreakPill, { backgroundColor: colors.accentWarmLight }]}>
+                          <Text style={[styles.vocabStreakText, { color: colors.accentWarm }]}>⚡ {vocabStreakCount} Gün Seri</Text>
+                        </View>
+                      )}
                     </View>
                     <Text style={[styles.mCount, { color: colors.textSecondary }]}>
                       {isDone ? `${task.goal} / ${task.goal} kelime hafızaya alındı` : `${task.completed} / ${task.goal} kelime çalışıldı`}
@@ -708,14 +527,14 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
             <Text style={[styles.modalTitle, { color: colors.text }]}>{completedModalInfo?.title}</Text>
             <Text style={[styles.modalDesc, { color: colors.textSecondary }]}>{completedModalInfo?.description}</Text>
 
-            {questionStreakCount > 0 && (
+            {!completedModalInfo?.isVocab && questionStreakCount > 0 && (
               <View style={[styles.modalStreakPill, { backgroundColor: colors.accentWarmLight }]}>
-                <Text style={[styles.modalStreakText, { color: colors.accentWarm }]}>🔥 {questionStreakCount} Günlük Soru Serisi Korundu</Text>
+                <Text style={[styles.modalStreakText, { color: colors.accentWarm }]}>🔥 {questionStreakCount} Günlük Seri</Text>
               </View>
             )}
 
             <View style={styles.modalButtonsRow}>
-              {mistakes.length > 0 && onOpenMistakes && (
+              {!completedModalInfo?.isVocab && mistakes.length > 0 && onOpenMistakes && (
                 <TouchableOpacity
                   style={[styles.modalSecondaryBtn, { borderColor: colors.border, backgroundColor: colors.subtleBackground }]}
                   onPress={() => {
@@ -733,7 +552,7 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
                 onPress={() => setCompletedModalInfo(null)}
                 activeOpacity={0.85}
               >
-                <Text style={[styles.modalPrimaryBtnText, { color: colors.textOnBrand }]}>Tamam, Harika!</Text>
+                <Text style={[styles.modalPrimaryBtnText, { color: colors.textOnBrand }]}>Tamam</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -797,92 +616,94 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 36,
   },
-  heroBanner: {
-    borderRadius: 22,
+  compactHeroCard: {
+    borderRadius: 20,
     borderWidth: 1,
     padding: 16,
+    marginBottom: 16,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.04,
     shadowRadius: 12,
     elevation: 2,
   },
-  heroSliderContainer: {
-    width: '100%',
-    marginBottom: 4,
-  },
-  heroPaginationRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 4,
-    marginTop: 6,
-    marginBottom: 2,
-  },
-  heroPaginationTouchArea: {
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  heroPaginationDot: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
-  },
-  heroPaginationDotActive: {
-    width: 22,
-    height: 7,
-    borderRadius: 4,
-  },
-  heroActionHint: {
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  heroHeaderRow: {
+  compactHeroHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginBottom: 12,
   },
-  heroHeaderTitleGroup: {
+  compactHeroBadgeGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
   },
-  heroGoalDot: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
+  compactHeroIconBox: {
+    width: 26,
+    height: 26,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  heroGoalLabel: {
+  compactHeroLabel: {
     fontSize: 11,
     fontWeight: '800',
     letterSpacing: 0.8,
   },
-  heroTargetMainRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  heroTargetText: {
-    fontSize: 22,
-    fontWeight: '900',
-    letterSpacing: -0.5,
-  },
-  heroSubDetailText: {
-    fontSize: 12,
-    fontWeight: '600',
-    marginTop: 2,
-  },
-  heroPercentBadge: {
+  compactHeroPercentPill: {
     paddingHorizontal: 9,
     paddingVertical: 3.5,
     borderRadius: 8,
   },
-  heroPercentText: {
+  compactHeroPercentText: {
     fontSize: 12,
     fontWeight: '800',
+  },
+  compactHeroMainRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  compactHeroStatGroup: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 6,
+  },
+  compactHeroNumber: {
+    fontSize: 26,
+    fontWeight: '900',
+    letterSpacing: -0.5,
+  },
+  compactHeroTotal: {
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  compactHeroUnit: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  compactHeroProgressTrack: {
+    height: 8,
+    borderRadius: 4,
+    overflow: 'hidden',
+    marginBottom: 10,
+  },
+  compactHeroProgressFill: {
+    height: '100%',
+    borderRadius: 4,
+  },
+  compactHeroFooterRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  compactHeroFooterText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  compactHeroDoneText: {
+    fontSize: 12,
+    fontWeight: '700',
   },
   streakPill: {
     paddingHorizontal: 9,
@@ -892,29 +713,6 @@ const styles = StyleSheet.create({
   },
   streakPillText: {
     fontSize: 11,
-    fontWeight: '700',
-  },
-  heroProgressTrack: {
-    height: 8,
-    borderRadius: 4,
-    overflow: 'hidden',
-    marginBottom: 10,
-  },
-  heroProgressFill: {
-    height: '100%',
-    borderRadius: 4,
-  },
-  heroBottomRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  heroCompletedInfo: {
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  heroRemainingInfo: {
-    fontSize: 12,
     fontWeight: '700',
   },
   sectionTitleRow: {

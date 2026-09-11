@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import {
   StyleSheet,
   View,
@@ -11,6 +11,8 @@ import {
   Platform,
   ScrollView,
   Alert,
+  PanResponder,
+  Keyboard,
 } from 'react-native';
 import {
   X,
@@ -26,7 +28,6 @@ import {
   BookOpen,
   Sparkles,
   Trash2,
-  Pencil,
 } from 'lucide-react-native';
 import * as Speech from 'expo-speech';
 import { useThemeStore } from '../store/useThemeStore';
@@ -42,6 +43,188 @@ import { SearchInputBar } from './SearchInputBar';
 import { CustomWordModal } from './CustomWordModal';
 import { AddFolderModal } from './AddFolderModal';
 
+// =========================================================================
+// SWIPEABLE WORD ROW COMPONENT (Sola kaydırarak silme)
+// =========================================================================
+interface SwipeableWordRowProps {
+  item: WordWithProgress;
+  colors: any;
+  progress: {
+    percentage: number;
+    color: string;
+    isCompleted: boolean;
+    statusText?: string;
+    isDue?: boolean;
+  };
+  canDelete?: boolean;
+  onPress: () => void;
+  onSpeak: () => void;
+  onDelete?: () => void;
+}
+
+const SwipeableWordRow: React.FC<SwipeableWordRowProps> = ({
+  item,
+  colors,
+  progress,
+  canDelete = true,
+  onPress,
+  onSpeak,
+  onDelete,
+}) => {
+  const translateX = useRef(new Animated.Value(0)).current;
+  const isActionTriggeredRef = useRef(false);
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponderCapture: (_, gestureState) => {
+        if (!canDelete || !onDelete) return false;
+        // Only capture horizontal swipes leftward
+        return Math.abs(gestureState.dx) > 15 && Math.abs(gestureState.dy) < 12;
+      },
+      onPanResponderGrant: () => {
+        isActionTriggeredRef.current = false;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        if (!canDelete || !onDelete) return;
+        // Sadece sola kaydırmaya izin ver (dx < 0), max -100px
+        if (gestureState.dx < 0) {
+          translateX.setValue(Math.max(-100, gestureState.dx));
+        } else {
+          translateX.setValue(0);
+        }
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (!canDelete || !onDelete) return;
+        if (gestureState.dx < -55 && !isActionTriggeredRef.current) {
+          isActionTriggeredRef.current = true;
+          // Reveal the red delete background, then trigger confirmation alert
+          Animated.spring(translateX, {
+            toValue: -80,
+            useNativeDriver: true,
+            bounciness: 4,
+          }).start(() => {
+            onDelete();
+            // Reset position smoothly
+            Animated.timing(translateX, {
+              toValue: 0,
+              duration: 250,
+              useNativeDriver: true,
+            }).start();
+          });
+        } else {
+          // Snap back to zero
+          Animated.spring(translateX, {
+            toValue: 0,
+            useNativeDriver: true,
+            bounciness: 8,
+          }).start();
+        }
+      },
+      onPanResponderTerminate: () => {
+        Animated.spring(translateX, {
+          toValue: 0,
+          useNativeDriver: true,
+        }).start();
+      },
+    })
+  ).current;
+
+  return (
+    <View style={styles.swipeRowWrapper}>
+      {/* Kırmızı Arka Plan (Sil Butonu - Sadece silinebilir kelimelerde göster) */}
+      {canDelete && onDelete && (
+        <TouchableOpacity
+          style={styles.swipeDeleteBackground}
+          onPress={onDelete}
+          activeOpacity={0.85}
+        >
+          <Trash2 size={20} color="#FFFFFF" strokeWidth={2.2} />
+          <Text style={styles.swipeDeleteText}>Sil</Text>
+        </TouchableOpacity>
+      )}
+
+      {/* Ön Kart (Kelime Bilgisi) */}
+      <Animated.View
+        style={[
+          styles.swipeFrontCard,
+          {
+            backgroundColor: colors.cardBackground,
+            borderBottomColor: colors.border,
+            transform: canDelete && onDelete ? [{ translateX }] : undefined,
+          },
+        ]}
+        {...(canDelete && onDelete ? panResponder.panHandlers : {})}
+      >
+        <TouchableOpacity
+          style={styles.swipeCardInnerTouchable}
+          onPress={onPress}
+          activeOpacity={0.7}
+        >
+          {/* Sol Taraf: Kelime ve Türkçe Anlamı */}
+          <View style={styles.wordInfoLeft}>
+            <View style={styles.wordTitleRow}>
+              <Text style={[styles.wordTitle, { color: colors.text }]}>
+                {item.word}
+              </Text>
+              <TouchableOpacity
+                onPress={onSpeak}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                style={styles.speakerBtn}
+              >
+                <Volume2 size={15} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={[styles.wordMeaning, { color: colors.textSecondary }]}
+              numberOfLines={1}
+            >
+              {item.meaning}
+            </Text>
+          </View>
+
+          {/* Sağ Taraf: Leitner İlerleme Çubuğu (%0, %33, %66, %100 + Tik) */}
+          <View style={styles.progressContainerRight}>
+            {progress.isCompleted ? (
+              <View style={styles.completedRow}>
+                <View style={[styles.trackBar, { backgroundColor: colors.subtleBackground }]}>
+                  <View style={[styles.fillBar, { width: '100%', backgroundColor: '#10B981' }]} />
+                </View>
+                <View style={styles.checkCircle}>
+                  <Check size={12} color="#FFFFFF" strokeWidth={3} />
+                </View>
+              </View>
+            ) : (
+              <View style={styles.progressColRight}>
+                <View style={[styles.trackBar, { backgroundColor: colors.subtleBackground }]}>
+                  <View
+                    style={[
+                      styles.fillBar,
+                      {
+                        width: `${progress.percentage}%`,
+                        backgroundColor: progress.color,
+                      },
+                    ]}
+                  />
+                </View>
+                {progress.statusText ? (
+                  <Text
+                    style={[
+                      styles.progressStatusText,
+                      { color: progress.isDue ? colors.brand : colors.textSecondary },
+                    ]}
+                  >
+                    {progress.statusText}
+                  </Text>
+                ) : null}
+              </View>
+            )}
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
+    </View>
+  );
+};
+
 export interface WordVaultScreenProps {
   onPracticeActiveChange?: (isActive: boolean) => void;
 }
@@ -54,6 +237,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     currentVocabIndex,
     loadVocabSession,
     loadVocabFolders,
+    loadDailyTasks,
     answerCurrentVocabCard,
     resetVocabSession,
     startSessionWithWords,
@@ -64,12 +248,25 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
   // Single Folder state: null = Folder View, 'custom_default' = Inside Folder
   const [isInsideFolder, setIsInsideFolder] = useState(false);
   const [isEditFolderModalOpen, setIsEditFolderModalOpen] = useState(false);
+  const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
+  const [selectedFolderId, setSelectedFolderId] = useState<string>('custom_default');
+
+  // All custom user folders
+  const userFolders = useMemo(() => {
+    if (!vocabFolders || vocabFolders.length === 0) return [];
+    return vocabFolders.filter((f) => !f.is_system);
+  }, [vocabFolders]);
 
   // Active folder name and object
   const currentFolder = useMemo(() => {
-    return vocabFolders?.find((f) => f.id === 'custom_default') || vocabFolders?.[0] || null;
-  }, [vocabFolders]);
-  const currentFolderName = currentFolder?.name || 'Kelimelerim';
+    return (
+      userFolders.find((f) => f.id === selectedFolderId) ||
+      userFolders.find((f) => f.id === 'custom_default') ||
+      userFolders[0] ||
+      null
+    );
+  }, [userFolders, selectedFolderId]);
+  const currentFolderName = currentFolder?.name || 'Özel Kelime Defterim';
 
   // Search & Filter state
   const [searchQuery, setSearchQuery] = useState('');
@@ -110,10 +307,17 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     loadVocabFolders();
   }, []);
 
-  // Fast live dictionary API search when user searches at root
+  // Dictionary API search when user stops typing or submits search
   useEffect(() => {
     const clean = searchQuery.trim().toLowerCase();
     if (!clean || clean.length < 2) {
+      setApiResult(null);
+      setIsSearchingApi(false);
+      return;
+    }
+
+    // Input validation: word must only contain English letters, hyphens, and spaces
+    if (!/^[a-zA-Z\s'-]+$/.test(clean)) {
       setApiResult(null);
       setIsSearchingApi(false);
       return;
@@ -130,21 +334,30 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
       return;
     }
 
+    let isMounted = true;
     setIsSearchingApi(true);
-    const timer = setTimeout(async () => {
-      try {
-        if (/^[a-zA-Z\s'-]+$/.test(clean)) {
-          const res = await DictionaryApiService.lookupWord(clean);
+
+    DictionaryApiService.lookupWord(clean)
+      .then((res) => {
+        if (isMounted) {
           setApiResult(res);
         }
-      } catch {
-        setApiResult(null);
-      } finally {
-        setIsSearchingApi(false);
-      }
-    }, 180);
+      })
+      .catch(() => {
+        if (isMounted) {
+          setApiResult(null);
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsSearchingApi(false);
+        }
+      });
 
-    return () => clearTimeout(timer);
+    return () => {
+      isMounted = false;
+      setIsSearchingApi(false);
+    };
   }, [searchQuery, dictionaryWords]);
 
   // Load deep detail for selected word modal
@@ -201,18 +414,56 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
   // Direct add word from search to custom words list (Sadece temiz Türkçe karşılığı)
   const handleAddWordDirectly = async (wordToAdd: RichDictionaryResult | WordWithProgress) => {
     try {
-      if ('isFromApi' in wordToAdd) {
-        const item = DictionaryApiService.convertToWordItem(wordToAdd);
-        item.meaning = (wordToAdd.primaryTurkish || wordToAdd.allTurkishMeanings[0] || '').trim();
-        await dbService.insertCustomWord(item);
-      } else {
-        await dbService.insertCustomWord(wordToAdd);
+      const targetFolderName =
+        currentFolder && currentFolder.id !== 'custom_default'
+          ? currentFolder.name
+          : 'Özel Kelimeler';
+
+      const wordTextToAdd = ('isFromApi' in wordToAdd ? wordToAdd.word : wordToAdd.word).trim();
+
+      // Check if word already exists in this folder
+      const isAlreadyInFolder = (dictionaryWords || []).some((w) => {
+        const matchesWord = w.word.trim().toLowerCase() === wordTextToAdd.toLowerCase();
+        if (!matchesWord) return false;
+        if (targetFolderName === 'Özel Kelimeler') {
+          return (
+            !w.subcategory ||
+            w.subcategory === 'Özel Kelimeler' ||
+            w.subcategory === 'Özel Kelime Defterim' ||
+            w.subcategory === 'Kelimelerim'
+          );
+        }
+        return (w.subcategory || '').trim().toLowerCase() === targetFolderName.toLowerCase();
+      });
+
+      if (isAlreadyInFolder) {
+        showToast(`"${wordTextToAdd}" zaten "${targetFolderName}" klasörünüzde kayıtlı.`);
+        return;
       }
-      await loadVocabSession(true);
+
+      // Anında arayüzü temizle ve klavyeyi kapat (Sıfır gecikme)
       setSelectedWord(null);
       setSearchQuery('');
       setApiResult(null);
-      showToast(`"${wordToAdd.word}" eklendi! ✅`);
+      setIsSearchingApi(false);
+      Keyboard.dismiss();
+
+      if ('isFromApi' in wordToAdd) {
+        const item = DictionaryApiService.convertToWordItem(wordToAdd);
+        item.meaning = (wordToAdd.primaryTurkish || wordToAdd.allTurkishMeanings[0] || '').trim();
+        item.subcategory = targetFolderName;
+        item.folder_name = targetFolderName;
+        await dbService.insertCustomWord(item);
+      } else {
+        const wordCopy = { ...wordToAdd };
+        wordCopy.subcategory = targetFolderName;
+        wordCopy.folder_name = targetFolderName;
+        await dbService.insertCustomWord(wordCopy);
+      }
+
+      await loadVocabSession(true);
+      await loadDailyTasks();
+      showToast(`"${wordTextToAdd}" listenize eklendi! ⭐`);
     } catch (err) {
       console.warn('Error adding word:', err);
     }
@@ -231,8 +482,8 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
           onPress: async () => {
             try {
               await deleteWord(word.id);
+              await loadVocabFolders();
               setSelectedWord(null);
-              showToast(`"${word.word}" listenizden kaldırıldı. 🗑️`);
             } catch (err) {
               console.warn('Kelime silinirken hata:', err);
             }
@@ -242,32 +493,149 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     );
   };
 
+  // Open create folder modal with empty folder validation
+  // "üst üste klasör açamasın mesela içinde kelime olmayan 1 tane klasör varsa yenisini ekleyemesin"
+  const handleOpenCreateFolder = () => {
+    const emptyFolder = (userFolders || []).find((f) => {
+      if (f.id === 'custom_default' && userFolders.length === 1) {
+        return totalCount === 0;
+      }
+      return (f.word_count || 0) === 0;
+    });
+
+    if (emptyFolder) {
+      Alert.alert(
+        'Yeni Klasör Eklenemez',
+        `"${emptyFolder.name}" klasörünüzde henüz hiç kelime bulunmuyor.\n\nİçinde kelime olmayan bir klasör varken yeni klasör oluşturamazsınız. Lütfen önce mevcut klasörünüze en az 1 kelime ekleyin.`,
+        [{ text: 'Tamam', style: 'default' }]
+      );
+      return;
+    }
+
+    setIsCreateFolderModalOpen(true);
+  };
+
   // Calculate Leitner Box Progress:
   // Günlük: %0
   // Haftalık: %33
   // Aylık: %66
   // Bittiğinde: %100 Yeşil + Tik ✅
+  const parseSqliteDate = (dateStr?: string | null): number | null => {
+    if (!dateStr) return null;
+    const direct = new Date(dateStr).getTime();
+    if (!isNaN(direct)) return direct;
+    const normalized = dateStr.replace(' ', 'T') + 'Z';
+    const normTime = new Date(normalized).getTime();
+    if (!isNaN(normTime)) return normTime;
+    return null;
+  };
+
   const getBoxProgressInfo = (word: WordWithProgress) => {
     const box = word.box || 0;
     const isMastered = box >= 3 && ((word.correctCount || 0) >= 2 || word.status === 'MASTERED');
 
     if (isMastered) {
-      return { percentage: 100, color: '#10B981', isCompleted: true };
+      return { percentage: 100, color: '#10B981', isCompleted: true, statusText: 'Tamamlandı', isDue: false };
     }
+
+    const reviewTimestamp = parseSqliteDate(word.nextReviewAt);
+    const diffMs = reviewTimestamp ? reviewTimestamp - Date.now() : 0;
+    const daysRemaining = diffMs > 0 ? Math.ceil(diffMs / (1000 * 60 * 60 * 24)) : 0;
+    const isDue = reviewTimestamp !== null && diffMs <= 0;
+
     if (box === 3) {
-      return { percentage: 66, color: '#10B981', isCompleted: false };
+      return {
+        percentage: 66,
+        color: '#10B981',
+        isCompleted: false,
+        statusText: isDue ? '⚡ Tekrar' : `${daysRemaining > 0 ? daysRemaining : 7}g beklemede ⏳`,
+        isDue,
+      };
     }
     if (box === 2) {
-      return { percentage: 33, color: '#3B82F6', isCompleted: false };
+      return {
+        percentage: 33,
+        color: '#3B82F6',
+        isCompleted: false,
+        statusText: isDue ? '⚡ Tekrar' : `${daysRemaining > 0 ? daysRemaining : 3}g beklemede ⏳`,
+        isDue,
+      };
     }
     // Box 0 or 1 (Günlük / Yeni)
-    return { percentage: 0, color: colors.border, isCompleted: false };
+    return {
+      percentage: 0,
+      color: colors.border,
+      isCompleted: false,
+      statusText: '1. Gün',
+      isDue: true,
+    };
   };
 
-  // User's words in this single folder
+  // Helper to determine if a word is active/due for practice
+  const isWordActiveForPractice = useCallback((word: WordWithProgress): boolean => {
+    const box = word.box || 0;
+    const isMastered = box >= 3 && ((word.correctCount || 0) >= 2 || word.status === 'MASTERED');
+
+    // Mastered (%100 completed) words are finished
+    if (isMastered) return false;
+
+    // Box 0 or 1: New / Daily words waiting to be learned
+    if (box <= 1) {
+      return true;
+    }
+
+    // Box 2 (Haftalık / 3. Gün) and Box 3 (Aylık / 7. Gün):
+    // SADECE tekrar randevu tarihi geldiyse veya geçmişse aktiftir!
+    if (word.nextReviewAt) {
+      const reviewTime = parseSqliteDate(word.nextReviewAt);
+      if (reviewTime !== null) {
+        return reviewTime <= Date.now();
+      }
+    }
+
+    // Box 2 ve Box 3'teki kelimeler randevu tarihi yoksa veya henüz gelmediyse AKTİF DEĞİLDİR (beklemededir)
+    return false;
+  }, []);
+
+  // Check if a word is a user-added custom word
+  const isCustomWord = useCallback((w: WordWithProgress) => {
+    return Boolean(
+      w.is_custom ||
+      (w.subcategory && !['VOCABULARY', 'CONNECTOR', 'PREFIX_ROOT', 'IDIOM'].includes(w.subcategory))
+    );
+  }, []);
+
+  // All custom words added by user across any folder
+  const allUserCustomWords = useMemo(() => {
+    return (dictionaryWords || []).filter(isCustomWord);
+  }, [dictionaryWords, isCustomWord]);
+
+  // User's words in this active folder
   const customWordsList = useMemo(() => {
-    return dictionaryWords || [];
-  }, [dictionaryWords]);
+    if (!allUserCustomWords) return [];
+    if (!currentFolder) return allUserCustomWords;
+
+    const otherCustomFolderNames = (userFolders || [])
+      .filter((f) => f.id !== currentFolder.id)
+      .map((f) => f.name.toLowerCase());
+
+    if (currentFolder.id === 'custom_default') {
+      return allUserCustomWords.filter(
+        (w) =>
+          !w.subcategory ||
+          w.subcategory === 'Özel Kelimeler' ||
+          w.subcategory === 'Özel Kelime Defterim' ||
+          w.subcategory === 'Kelimelerim' ||
+          !otherCustomFolderNames.includes(w.subcategory.toLowerCase())
+      );
+    }
+
+    return allUserCustomWords.filter(
+      (w) =>
+        (w.subcategory && w.subcategory.toLowerCase() === currentFolder.name.toLowerCase()) ||
+        ((w as any).folder_name && (w as any).folder_name.toLowerCase() === currentFolder.name.toLowerCase())
+    );
+  }, [allUserCustomWords, currentFolder, userFolders]);
 
   // Filtered words inside the single folder
   const filteredFolderWords = useMemo(() => {
@@ -293,6 +661,13 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     return list;
   }, [customWordsList, filterMode, folderSearchQuery]);
 
+  // Active (due) words inside the current folder view
+  const activeFilteredWords = useMemo(() => {
+    return filteredFolderWords.filter(isWordActiveForPractice);
+  }, [filteredFolderWords, isWordActiveForPractice]);
+
+  const activeFilteredCount = activeFilteredWords.length;
+
   // Global search results across custom words
   const globalSearchResults = useMemo(() => {
     const clean = searchQuery.trim().toLowerCase();
@@ -312,13 +687,28 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
   const progressPct = totalCount > 0 ? Math.round((monthlyCount / totalCount) * 100) : 0;
 
   // Handle start practice: kelimeleri önce telaffuzu, örnek cümlesi ve Türkçesiyle slider ile göster
+  // SADECE AKTİF (vadesi gelmiş / yeni) kelimeleri çalıştırır; haftalık veya aylık beklemedeki kelimeler KESİNLİKLE gelmez!
   const handleStartPractice = () => {
-    const wordsToPractice = filteredFolderWords.length > 0 ? filteredFolderWords : customWordsList;
-    if (wordsToPractice.length === 0) {
-      showToast('Çalışılacak kelime bulunamadı. Lütfen kelime ekleyin.');
+    const activePool = (filteredFolderWords.length > 0 ? filteredFolderWords : customWordsList).filter(isWordActiveForPractice);
+
+    if (activePool.length === 0) {
+      if (monthlyCount === totalCount && totalCount > 0) {
+        Alert.alert(
+          'Tüm Kelimeler Tamamlandı 🏆',
+          'Tebrikler! Bu klasördeki tüm kelimeleri başarıyla öğrendiniz ve kalıcı hafızaya aldınız.',
+          [{ text: 'Tamam', style: 'default' }]
+        );
+      } else {
+        Alert.alert(
+          'Bugünkü Çalışma Tamamlandı 🎉',
+          'Bu klasördeki tüm kelimeler aralıklı tekrar kutularına (3. Gün / 7. Gün) aktarıldı.\n\nKelimelerin hafızada kalıcı hale gelmesi için bekleme süresi dolana kadar yeni bir çalışma gerekmemektedir. Tekrar randevu günü geldiğinde buton otomatik olarak tekrar aktifleşecektir.',
+          [{ text: 'Tamam', style: 'default' }]
+        );
+      }
       return;
     }
-    startSessionWithWords(wordsToPractice);
+
+    startSessionWithWords(activePool);
     setStudyCardIndex(0);
     setIsStudySliderActive(true);
     setIsPracticeActive(false);
@@ -472,9 +862,6 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               <Text style={[styles.folderTitleText, { color: colors.text }]} numberOfLines={1}>
                 {currentFolderName}
               </Text>
-              <View style={[styles.editPencilBadge, { backgroundColor: colors.brandLight }]}>
-                <Pencil size={12} color={colors.brand} />
-              </View>
             </View>
             <Text style={[styles.folderSubtitleText, { color: colors.textSecondary }]}>
               {totalCount} kelime • {monthlyCount} tamamlandı
@@ -483,11 +870,32 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
 
           {filteredFolderWords.length > 0 && (
             <TouchableOpacity
-              style={[styles.headerPracticeBtn, { backgroundColor: colors.brandLight, borderColor: colors.brand }]}
+              style={[
+                styles.headerPracticeBtn,
+                activeFilteredCount > 0
+                  ? {
+                      backgroundColor: colors.brandLight,
+                      borderColor: colors.brand,
+                    }
+                  : {
+                      backgroundColor: colors.cardBackground,
+                      borderColor: colors.border,
+                      opacity: 0.65,
+                    },
+              ]}
               onPress={handleStartPractice}
               activeOpacity={0.75}
             >
-              <Text style={[styles.headerPracticeBtnText, { color: colors.brand }]}>Çalış</Text>
+              <Text
+                style={[
+                  styles.headerPracticeBtnText,
+                  { color: activeFilteredCount > 0 ? colors.brand : colors.textSecondary },
+                ]}
+              >
+                {activeFilteredCount > 0
+                  ? (monthlyCount === totalCount && totalCount > 0 ? `Tekrar Et (${activeFilteredCount})` : `Çalış (${activeFilteredCount})`)
+                  : (monthlyCount === totalCount && totalCount > 0 ? 'Tamamlandı 🏆' : 'Beklemede ⏳')}
+              </Text>
             </TouchableOpacity>
           )}
         </View>
@@ -495,9 +903,11 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
         {/* High Performance Unlagged Search Bar inside Folder */}
         <View style={[styles.searchRowWrap, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
           <SearchInputBar
+            value={folderSearchQuery}
             placeholder="Kelimelerim içinde ara..."
             onSearch={setFolderSearchQuery}
-            debounceMs={120}
+            onSubmitEditing={setFolderSearchQuery}
+            debounceMs={300}
           />
 
           {/* Leitner Box Filter Pills */}
@@ -522,7 +932,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               onPress={() => setFilterMode('DAILY')}
             >
               <Text style={[styles.filterPillText, { color: filterMode === 'DAILY' ? colors.brand : colors.textSecondary }]}>
-                Günlük ({dailyCount})
+                1. Gün ({dailyCount})
               </Text>
             </TouchableOpacity>
 
@@ -534,7 +944,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               onPress={() => setFilterMode('WEEKLY')}
             >
               <Text style={[styles.filterPillText, { color: filterMode === 'WEEKLY' ? '#3B82F6' : colors.textSecondary }]}>
-                Haftalık ({weeklyCount})
+                3. Gün ({weeklyCount})
               </Text>
             </TouchableOpacity>
 
@@ -546,7 +956,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               onPress={() => setFilterMode('MONTHLY')}
             >
               <Text style={[styles.filterPillText, { color: filterMode === 'MONTHLY' ? '#10B981' : colors.textSecondary }]}>
-                Aylık ({monthlyCount})
+                7. Gün ({monthlyCount})
               </Text>
             </TouchableOpacity>
           </View>
@@ -556,92 +966,37 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
         <FlatList
           data={filteredFolderWords}
           keyExtractor={(item) => String(item.id || item.word)}
-          contentContainerStyle={styles.listContent}
+          contentContainerStyle={[
+            styles.listContent,
+            filteredFolderWords.length === 0 && styles.listContentEmpty,
+          ]}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => {
             const progress = getBoxProgressInfo(item);
 
             return (
-              <TouchableOpacity
-                style={[
-                  styles.wordRowItem,
-                  {
-                    backgroundColor: colors.cardBackground,
-                    borderBottomColor: colors.border,
-                  },
-                ]}
+              <SwipeableWordRow
+                item={item}
+                colors={colors}
+                progress={progress}
                 onPress={() => setSelectedWord(item)}
-                activeOpacity={0.7}
-              >
-                {/* Sol Taraf: Kelime ve Türkçe Anlamı */}
-                <View style={styles.wordInfoLeft}>
-                  <View style={styles.wordTitleRow}>
-                    <Text style={[styles.wordTitle, { color: colors.text }]}>
-                      {item.word}
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => handleSpeak(item.word)}
-                      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                      style={styles.speakerBtn}
-                    >
-                      <Volume2 size={15} color={colors.textSecondary} />
-                    </TouchableOpacity>
-                  </View>
-                  <Text
-                    style={[styles.wordMeaning, { color: colors.textSecondary }]}
-                    numberOfLines={1}
-                  >
-                    {item.meaning}
-                  </Text>
-                </View>
-
-                {/* Sağ Taraf: Leitner İlerleme Çubuğu (%0, %33, %66, %100 + Tik) ve Silme */}
-                <View style={styles.progressAndActionRight}>
-                  <View style={styles.progressContainerRight}>
-                    {progress.isCompleted ? (
-                      <View style={styles.completedRow}>
-                        <View style={[styles.trackBar, { backgroundColor: colors.subtleBackground }]}>
-                          <View style={[styles.fillBar, { width: '100%', backgroundColor: '#10B981' }]} />
-                        </View>
-                        <View style={styles.checkCircle}>
-                          <Check size={12} color="#FFFFFF" strokeWidth={3} />
-                        </View>
-                      </View>
-                    ) : (
-                      <View style={[styles.trackBar, { backgroundColor: colors.subtleBackground }]}>
-                        <View
-                          style={[
-                            styles.fillBar,
-                            {
-                              width: `${progress.percentage}%`,
-                              backgroundColor: progress.color,
-                            },
-                          ]}
-                        />
-                      </View>
-                    )}
-                  </View>
-
-                  <TouchableOpacity
-                    onPress={() => handleDeleteWord(item)}
-                    hitSlop={{ top: 10, bottom: 10, left: 8, right: 8 }}
-                    style={styles.trashActionBtn}
-                  >
-                    <Trash2 size={16} color={colors.textSecondary} />
-                  </TouchableOpacity>
-                </View>
-              </TouchableOpacity>
+                onSpeak={() => handleSpeak(item.word)}
+                onDelete={() => handleDeleteWord(item)}
+              />
             );
           }}
           ListEmptyComponent={
             <View style={styles.emptyCenter}>
+              <View style={[styles.emptyIconCircle, { backgroundColor: colors.subtleBackground }]}>
+                <BookOpen size={28} color={colors.textSecondary} strokeWidth={1.8} />
+              </View>
               <Text style={[styles.emptyTitle, { color: colors.text }]}>
                 {folderSearchQuery ? 'Kelime Bulunamadı' : 'Listeniz Boş'}
               </Text>
               <Text style={[styles.emptySub, { color: colors.textSecondary }]}>
                 {folderSearchQuery
                   ? `"${folderSearchQuery}" aramasına uygun kelime bulunamadı.`
-                  : 'Henüz kelime eklenmemiş. Arama çubuğuna kelime yazıp Canlı Sözlük üzerinden "+ Ekle" butonuna basarak listenize kelime ekleyebilirsiniz.'}
+                  : 'Arama çubuğundan kelime arayıp ekleyebilirsiniz.'}
               </Text>
             </View>
           }
@@ -674,9 +1029,11 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
       {/* Top Search Header */}
       <View style={[styles.searchRowWrap, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
         <SearchInputBar
-          placeholder="Sözlükte ara veya ekle..."
+          value={searchQuery}
+          placeholder="Sözlükte veya kelimelerimde ara..."
           onSearch={setSearchQuery}
-          debounceMs={120}
+          onSubmitEditing={setSearchQuery}
+          debounceMs={500}
         />
       </View>
 
@@ -732,69 +1089,17 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
           }
           renderItem={({ item }) => {
             const progress = getBoxProgressInfo(item);
+            const isCustom = isCustomWord(item);
             return (
-              <TouchableOpacity
-                style={[
-                  styles.wordRowItem,
-                  {
-                    backgroundColor: colors.cardBackground,
-                    borderBottomColor: colors.border,
-                  },
-                ]}
+              <SwipeableWordRow
+                item={item}
+                colors={colors}
+                progress={progress}
+                canDelete={isCustom}
                 onPress={() => setSelectedWord(item)}
-                activeOpacity={0.7}
-              >
-                <View style={styles.wordInfoLeft}>
-                  <View style={styles.wordTitleRow}>
-                    <Text style={[styles.wordTitle, { color: colors.text }]}>{item.word}</Text>
-                    <TouchableOpacity
-                      onPress={() => handleSpeak(item.word)}
-                      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                      style={styles.speakerBtn}
-                    >
-                      <Volume2 size={15} color={colors.textSecondary} />
-                    </TouchableOpacity>
-                  </View>
-                  <Text style={[styles.wordMeaning, { color: colors.textSecondary }]} numberOfLines={1}>
-                    {item.meaning}
-                  </Text>
-                </View>
-
-                <View style={styles.progressAndActionRight}>
-                  <View style={styles.progressContainerRight}>
-                    {progress.isCompleted ? (
-                      <View style={styles.completedRow}>
-                        <View style={[styles.trackBar, { backgroundColor: colors.subtleBackground }]}>
-                          <View style={[styles.fillBar, { width: '100%', backgroundColor: '#10B981' }]} />
-                        </View>
-                        <View style={styles.checkCircle}>
-                          <Check size={12} color="#FFFFFF" strokeWidth={3} />
-                        </View>
-                      </View>
-                    ) : (
-                      <View style={[styles.trackBar, { backgroundColor: colors.subtleBackground }]}>
-                        <View
-                          style={[
-                            styles.fillBar,
-                            {
-                              width: `${progress.percentage}%`,
-                              backgroundColor: progress.color,
-                            },
-                          ]}
-                        />
-                      </View>
-                    )}
-                  </View>
-
-                  <TouchableOpacity
-                    onPress={() => handleDeleteWord(item)}
-                    hitSlop={{ top: 10, bottom: 10, left: 8, right: 8 }}
-                    style={styles.trashActionBtn}
-                  >
-                    <Trash2 size={16} color={colors.textSecondary} />
-                  </TouchableOpacity>
-                </View>
-              </TouchableOpacity>
+                onSpeak={() => handleSpeak(item.word)}
+                onDelete={isCustom ? () => handleDeleteWord(item) : undefined}
+              />
             );
           }}
           ListEmptyComponent={
@@ -815,7 +1120,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
           contentContainerStyle={styles.folderScrollContent}
           showsVerticalScrollIndicator={false}
         >
-          {/* Stats Overview Card: Toplam, Günlük, Haftalık, Aylık */}
+          {/* Stats Overview Card: Toplam, 1. Gün, 3. Gün, 7. Gün */}
           <View style={[styles.statsOverviewCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
             <View style={styles.statsCol}>
               <Text style={[styles.statsNum, { color: colors.text }]}>{totalCount}</Text>
@@ -824,86 +1129,99 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
             <View style={[styles.statsDivider, { backgroundColor: colors.border }]} />
             <View style={styles.statsCol}>
               <Text style={[styles.statsNum, { color: colors.brand }]}>{dailyCount}</Text>
-              <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>Günlük</Text>
+              <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>1. Gün</Text>
             </View>
             <View style={[styles.statsDivider, { backgroundColor: colors.border }]} />
             <View style={styles.statsCol}>
               <Text style={[styles.statsNum, { color: '#3B82F6' }]}>{weeklyCount}</Text>
-              <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>Haftalık</Text>
+              <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>3. Gün</Text>
             </View>
             <View style={[styles.statsDivider, { backgroundColor: colors.border }]} />
             <View style={styles.statsCol}>
               <Text style={[styles.statsNum, { color: '#10B981' }]}>{monthlyCount}</Text>
-              <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>Aylık</Text>
+              <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>7. Gün</Text>
             </View>
           </View>
 
-          {/* TEK KLASÖR KARTI */}
+          {/* KELİME KLASÖRLERİ */}
           <View style={styles.sectionGroup}>
-            <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
-              KELİME KLASÖRÜ
-            </Text>
+            <View style={styles.sectionHeaderRow}>
+              <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
+                {userFolders.length > 1 ? 'KELİME KLASÖRLERİ' : 'KELİME KLASÖRÜ'}
+              </Text>
+              <TouchableOpacity
+                style={[
+                  styles.addFolderHeaderBtn,
+                  { backgroundColor: colors.brandLight },
+                ]}
+                onPress={handleOpenCreateFolder}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                activeOpacity={0.7}
+              >
+                <Plus size={16} color={colors.brand} strokeWidth={2.8} />
+              </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity
-              style={[styles.singleFolderCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}
-              onPress={() => {
-                setIsInsideFolder(true);
-                setFolderSearchQuery('');
-                setFilterMode('ALL');
-              }}
-              activeOpacity={0.75}
-            >
-              {/* Folder Icon */}
-              <View style={[styles.folderIconBadge, { backgroundColor: colors.brandLight }]}>
-                <Folder size={24} color={colors.brand} />
-              </View>
+            {userFolders.map((folder) => {
+              const fCount = folder.word_count || 0;
+              const fLearned = folder.learned_count || 0;
+              const fPct = fCount > 0 ? Math.round((fLearned / fCount) * 100) : 0;
 
-              {/* Folder Info */}
-              <View style={styles.folderInfo}>
-                <View style={styles.folderTitleLine}>
-                  <Text style={[styles.folderItemTitle, { color: colors.text }]}>
-                    {currentFolderName}
-                  </Text>
-                  <TouchableOpacity
-                    onPress={(e) => {
-                      e.stopPropagation();
-                      setIsEditFolderModalOpen(true);
-                    }}
-                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                    style={[styles.editPencilBadge, { backgroundColor: colors.brandLight }]}
-                  >
-                    <Pencil size={12} color={colors.brand} />
-                  </TouchableOpacity>
-                  <View style={[styles.badgePill, { backgroundColor: colors.brandLight }]}>
-                    <Text style={[styles.badgePillText, { color: colors.brand }]}>
-                      {totalCount} KELİME
+              return (
+                <TouchableOpacity
+                  key={folder.id}
+                  style={[styles.singleFolderCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}
+                  onPress={() => {
+                    setSelectedFolderId(folder.id);
+                    setIsInsideFolder(true);
+                    setFolderSearchQuery('');
+                    setFilterMode('ALL');
+                  }}
+                  activeOpacity={0.75}
+                >
+                  {/* Folder Icon */}
+                  <View style={[styles.folderIconBadge, { backgroundColor: colors.brandLight }]}>
+                    <Folder size={24} color={colors.brand} />
+                  </View>
+
+                  {/* Folder Info */}
+                  <View style={styles.folderInfo}>
+                    <View style={styles.folderTitleLine}>
+                      <Text style={[styles.folderItemTitle, { color: colors.text }]} numberOfLines={1}>
+                        {folder.name}
+                      </Text>
+                      <View style={[styles.badgePill, { backgroundColor: colors.brandLight }]}>
+                        <Text style={[styles.badgePillText, { color: colors.brand }]}>
+                          {fCount} KELİME
+                        </Text>
+                      </View>
+                    </View>
+
+                    <Text style={[styles.folderItemSubtitle, { color: colors.textSecondary }]}>
+                      {folder.description || 'Özel Eklenen Kelimeler Listesi'}
                     </Text>
+
+                    {/* Progress bar inside folder row */}
+                    <View style={styles.folderProgressRow}>
+                      <View style={[styles.folderProgressBar, { backgroundColor: colors.subtleBackground }]}>
+                        <View
+                          style={[
+                            styles.folderProgressFill,
+                            { width: `${fPct}%`, backgroundColor: fPct === 100 ? '#10B981' : colors.brand },
+                          ]}
+                        />
+                      </View>
+                      <Text style={[styles.folderProgressText, { color: colors.textSecondary }]}>
+                        {fLearned}/{fCount} (%{fPct})
+                      </Text>
+                    </View>
                   </View>
-                </View>
 
-                <Text style={[styles.folderItemSubtitle, { color: colors.textSecondary }]}>
-                  Özel Eklenen Kelimeler Listesi
-                </Text>
-
-                {/* Progress bar inside folder row */}
-                <View style={styles.folderProgressRow}>
-                  <View style={[styles.folderProgressBar, { backgroundColor: colors.subtleBackground }]}>
-                    <View
-                      style={[
-                        styles.folderProgressFill,
-                        { width: `${progressPct}%`, backgroundColor: progressPct === 100 ? '#10B981' : colors.brand },
-                      ]}
-                    />
-                  </View>
-                  <Text style={[styles.folderProgressText, { color: colors.textSecondary }]}>
-                    {monthlyCount}/{totalCount} (%{progressPct})
-                  </Text>
-                </View>
-              </View>
-
-              {/* Right Arrow */}
-              <ChevronRight size={20} color={colors.textSecondary} />
-            </TouchableOpacity>
+                  {/* Right Arrow */}
+                  <ChevronRight size={20} color={colors.textSecondary} />
+                </TouchableOpacity>
+              );
+            })}
           </View>
         </ScrollView>
       )}
@@ -917,10 +1235,23 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
         onClose={() => setIsAddWordModalOpen(false)}
       />
 
+      {/* Create New Folder Modal */}
+      <AddFolderModal
+        visible={isCreateFolderModalOpen}
+        onClose={() => {
+          setIsCreateFolderModalOpen(false);
+          loadVocabFolders();
+        }}
+        folderToEdit={null}
+      />
+
       {/* Edit Folder Modal */}
       <AddFolderModal
         visible={isEditFolderModalOpen}
-        onClose={() => setIsEditFolderModalOpen(false)}
+        onClose={() => {
+          setIsEditFolderModalOpen(false);
+          loadVocabFolders();
+        }}
         folderToEdit={currentFolder}
       />
 
@@ -1169,6 +1500,20 @@ const styles = StyleSheet.create({
   sectionGroup: {
     gap: 8,
   },
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 4,
+    marginBottom: 2,
+  },
+  addFolderHeaderBtn: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   sectionHeading: {
     fontSize: 11,
     fontWeight: '800',
@@ -1297,6 +1642,41 @@ const styles = StyleSheet.create({
   listContent: {
     paddingBottom: 32,
   },
+  listContentEmpty: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  swipeRowWrapper: {
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  swipeDeleteBackground: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    width: 80,
+    backgroundColor: '#EF4444',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+  },
+  swipeDeleteText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  swipeFrontCard: {
+    width: '100%',
+    borderBottomWidth: 1,
+  },
+  swipeCardInnerTouchable: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+  },
   wordRowItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1328,9 +1708,18 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   progressContainerRight: {
-    width: 60,
+    minWidth: 64,
     alignItems: 'flex-end',
     justifyContent: 'center',
+  },
+  progressColRight: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    gap: 3,
+  },
+  progressStatusText: {
+    fontSize: 10,
+    fontWeight: '700',
   },
   completedRow: {
     flexDirection: 'row',
@@ -1452,18 +1841,28 @@ const styles = StyleSheet.create({
   emptyCenter: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 60,
-    paddingHorizontal: 24,
+    paddingVertical: 36,
+    paddingHorizontal: 32,
+  },
+  emptyIconCircle: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
   },
   emptyTitle: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '700',
     marginBottom: 6,
+    textAlign: 'center',
   },
   emptySub: {
     fontSize: 13,
     textAlign: 'center',
-    lineHeight: 18,
+    lineHeight: 19,
+    maxWidth: 260,
   },
   // Practice Screen
   practiceTopBar: {

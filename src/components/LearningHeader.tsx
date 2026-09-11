@@ -56,40 +56,22 @@ export const LearningHeader: React.FC<LearningHeaderProps> = ({
 
         {/* Right Side: Streak Badge & Profile Avatar */}
         <View style={styles.headerRightActions}>
-          <TouchableOpacity
-            style={[
-              styles.streakBadge,
-              {
-                backgroundColor: colors.isDark ? 'rgba(249, 115, 22, 0.12)' : '#FFF7ED',
-                borderColor: colors.isDark ? 'rgba(249, 115, 22, 0.28)' : '#FED7AA',
-              },
-            ]}
-            activeOpacity={0.7}
-            hitSlop={{ top: 10, bottom: 10, left: 6, right: 6 }}
-            onPress={() => {
-              if (effectiveStreak <= 0) {
-                Alert.alert(
-                  '🔥 Günlük Seri',
-                  `Henüz aktif bir serin yok.\n\nBugün soru çözerek veya kelime çalışarak ilk gün serini başlatabilirsin! 🚀`
-                );
-              } else if (effectiveStreak === 1) {
-                Alert.alert(
-                  '🔥 Günlük Seri (1. Gün)',
-                  `Bugünkü çalışmanı yaptın ve 1. gün serisini başlattın! 👏\n\nYarın da çalışarak 2 günlük gerçek serini oluştur.`
-                );
-              } else {
-                Alert.alert(
-                  '🔥 Günlük Seri',
-                  `${effectiveStreak} gündür aralıksız çalışıyorsun!\n\nHer gün düzenli pratik yaparak serini koru ve sınav hedefine adım adım yaklaş.`
-                );
-              }
-            }}
-          >
-            <Flame size={14} color="#EA580C" fill="#EA580C" />
-            <Text style={[styles.streakText, { color: colors.isDark ? '#FB923C' : '#C2410C' }]}>
-              {effectiveStreak} Gün
-            </Text>
-          </TouchableOpacity>
+          {effectiveStreak > 0 && (
+            <View
+              style={[
+                styles.streakBadge,
+                {
+                  backgroundColor: colors.isDark ? 'rgba(249, 115, 22, 0.12)' : '#FFF7ED',
+                  borderColor: colors.isDark ? 'rgba(249, 115, 22, 0.28)' : '#FED7AA',
+                },
+              ]}
+            >
+              <Flame size={14} color="#EA580C" fill="#EA580C" />
+              <Text style={[styles.streakText, { color: colors.isDark ? '#FB923C' : '#C2410C' }]}>
+                {effectiveStreak} Gün
+              </Text>
+            </View>
+          )}
 
           {onOpenProfile && (
             <TouchableOpacity

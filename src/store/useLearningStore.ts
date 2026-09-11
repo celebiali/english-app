@@ -84,6 +84,7 @@ interface LearningState {
   activeFolderId: string | null;
   activeStudyFolderId: string;
   completedTodayCount: number;
+  isCustomSession: boolean;
   // User Auth & Profile
   userProfile: UserProfile | null;
 
@@ -208,6 +209,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   activeFolderId: null,
   activeStudyFolderId: 'sys_conn',
   completedTodayCount: 0,
+  isCustomSession: false,
   userProfile: null,
 
   // ==========================================
@@ -288,9 +290,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   setActiveTab: (tab: AppTab) => {
     set({ activeTab: tab });
     if (tab === 'TASKS') {
-      if (get().activeDailyQuestions.length === 0) {
-        get().loadDailyTasks();
-      }
+      get().loadDailyTasks();
     }
     if (tab === 'MISTAKES') {
       get().loadMistakes();
@@ -510,6 +510,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       const vStreak = await dbService.getVocabStreakCount();
       set({
         dailyTasksProgress: todayProg,
+        completedTodayCount: todayProg.vocabCompleted,
         activeDailyQuestions: activeQs,
         questionStreakCount: qStreak,
         vocabStreakCount: vStreak,
@@ -803,17 +804,18 @@ export const useLearningStore = create<LearningState>((set, get) => ({
 
   loadVocabSession: async (force = false) => {
     const { dailyLimit, sessionWords, currentVocabIndex, activeStudyFolderId } = get();
-    let words = sessionWords;
 
-    if (force || sessionWords.length === 0) {
-      words = await srEngine.loadDailyBatch(dailyLimit, activeStudyFolderId);
-    }
+    const [words, summary, weekly, monthly, dictionary] = await Promise.all([
+      force || sessionWords.length === 0
+        ? srEngine.loadDailyBatch(dailyLimit, activeStudyFolderId)
+        : Promise.resolve(sessionWords),
+      srEngine.fetchBoxSummary(),
+      dbService.getWordsForBoxReview(2),
+      dbService.getWordsForBoxReview(3),
+      dbService.getAllWordsWithProgress(),
+    ]);
 
-    const summary = await srEngine.fetchBoxSummary();
-    const weekly = await dbService.getWordsForBoxReview(2);
-    const monthly = await dbService.getWordsForBoxReview(3);
-    const dictionary = await dbService.getAllWordsWithProgress();
-    const folders = await dbService.getVocabFolders();
+    const folders = await dbService.getVocabFolders(dictionary);
 
     set({
       sessionWords: words,
@@ -823,6 +825,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       monthlyWords: monthly,
       dictionaryWords: dictionary,
       vocabFolders: folders,
+      isCustomSession: false,
     });
   },
 
@@ -834,48 +837,82 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   },
 
   startSessionWithWords: (words: WordWithProgress[]) => {
-    set({ sessionWords: words, currentVocabIndex: 0 });
+    set({ sessionWords: words, currentVocabIndex: 0, isCustomSession: true });
   },
 
   answerCurrentVocabCard: async (isCorrect: boolean) => {
-    const { sessionWords, currentVocabIndex, dailyLimit, activeStudyFolderId } = get();
+    const { sessionWords, currentVocabIndex, dailyLimit, activeStudyFolderId, isCustomSession } = get();
     const currentWord = sessionWords[currentVocabIndex];
     if (!currentWord) return;
 
-    await srEngine.processAnswer(currentWord.id, isCorrect);
+    const updatedProg = await srEngine.processAnswer(currentWord.id, isCorrect);
     const updatedVocabStreak = await dbService.checkAndUpdateVocabStreak();
     const nextIdx = currentVocabIndex + 1;
     const summary = await srEngine.fetchBoxSummary();
 
-    // Seamless continuous learning: when reaching end of loaded words, auto-fetch more words
+    // In-memory update for dictionaryWords so UI & filters update immediately
+    const updatedDictionary = (get().dictionaryWords || []).map((w) =>
+      w.id === currentWord.id
+        ? {
+            ...w,
+            box: updatedProg.box,
+            status: updatedProg.status,
+            correctCount: updatedProg.correct_count,
+            incorrectCount: updatedProg.incorrect_count,
+            nextReviewAt: updatedProg.next_review_at,
+            isStudied: true,
+          }
+        : w
+    );
+
+    // If this is a custom folder session, we DO NOT auto-fetch infinite words when finished
+    if (isCustomSession) {
+      set((state) => ({
+        dictionaryWords: updatedDictionary,
+        currentVocabIndex: nextIdx,
+        boxSummary: summary,
+        vocabStreakCount: updatedVocabStreak,
+        completedTodayCount: state.completedTodayCount + 1,
+        dailyTasksProgress: {
+          ...state.dailyTasksProgress,
+          vocabCompleted: state.dailyTasksProgress.vocabCompleted + 1,
+        },
+      }));
+      return;
+    }
+
+    // Seamless continuous learning for global daily queue:
     if (nextIdx >= sessionWords.length) {
       const moreWords = await srEngine.loadDailyBatch(dailyLimit || 30, activeStudyFolderId);
       if (moreWords && moreWords.length > 0) {
         // Filter out already seen in this session to prevent duplicate immediate loops
         const existingIds = new Set(sessionWords.map((w) => w.id));
         const freshWords = moreWords.filter((w) => !existingIds.has(w.id));
-        const wordsToAdd = freshWords.length > 0 ? freshWords : moreWords;
 
-        set((state) => ({
-          sessionWords: [...state.sessionWords, ...wordsToAdd],
-          currentVocabIndex: nextIdx,
-          boxSummary: summary,
-          vocabStreakCount: updatedVocabStreak,
-          completedTodayCount: isCorrect ? state.completedTodayCount + 1 : state.completedTodayCount,
-          dailyTasksProgress: {
-            ...state.dailyTasksProgress,
-            vocabCompleted: state.dailyTasksProgress.vocabCompleted + 1,
-          },
-        }));
-        return;
+        if (freshWords.length > 0) {
+          set((state) => ({
+            dictionaryWords: updatedDictionary,
+            sessionWords: [...state.sessionWords, ...freshWords],
+            currentVocabIndex: nextIdx,
+            boxSummary: summary,
+            vocabStreakCount: updatedVocabStreak,
+            completedTodayCount: state.completedTodayCount + 1,
+            dailyTasksProgress: {
+              ...state.dailyTasksProgress,
+              vocabCompleted: state.dailyTasksProgress.vocabCompleted + 1,
+            },
+          }));
+          return;
+        }
       }
     }
 
     set((state) => ({
+      dictionaryWords: updatedDictionary,
       currentVocabIndex: nextIdx,
       boxSummary: summary,
       vocabStreakCount: updatedVocabStreak,
-      completedTodayCount: isCorrect ? state.completedTodayCount + 1 : state.completedTodayCount,
+      completedTodayCount: state.completedTodayCount + 1,
       dailyTasksProgress: {
         ...state.dailyTasksProgress,
         vocabCompleted: state.dailyTasksProgress.vocabCompleted + 1,
@@ -894,7 +931,8 @@ export const useLearningStore = create<LearningState>((set, get) => ({
         autoFilled.subcategory = folderName;
       }
       await dbService.insertCustomWord(autoFilled);
-      await get().loadVocabSession();
+      await get().loadVocabSession(true);
+      await get().loadDailyTasks();
       return true;
     } catch (err) {
       console.error('Failed to add custom word:', err);
@@ -935,7 +973,8 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   deleteWord: async (wordId: number) => {
     try {
       await dbService.deleteCustomWord(wordId);
-      await get().loadVocabSession();
+      await get().loadVocabSession(true);
+      await get().loadDailyTasks();
     } catch (err) {
       console.error('Failed to delete word:', err);
     }

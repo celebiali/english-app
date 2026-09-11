@@ -127,8 +127,7 @@ class ApplePurchaseServiceImpl {
 
     if (this.isMockMode || !this.isConfigured) {
       // Mock / Sandbox simulation for local development & review bypass
-      console.log('[ApplePurchaseService] Simulating successful Apple In-App Purchase.');
-      const is12m = productId.includes('1099') || productId.includes('12m');
+      const is12m = productId.includes('499') || productId.includes('1099') || productId.includes('12m');
       const durationDays = is12m ? 365 : 180;
       const expiresAt = new Date(Date.now() + durationDays * 86400000).toISOString();
 

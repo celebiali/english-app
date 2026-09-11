@@ -264,6 +264,15 @@ class DatabaseService {
       await this.dbInstance.execAsync(`ALTER TABLE words ADD COLUMN image_url TEXT;`);
     } catch (_) {}
 
+    // Clean up any unstudied dummy rows from user_word_progress
+    try {
+      await this.dbInstance.execAsync(`
+        DELETE FROM user_word_progress 
+        WHERE (correct_count IS NULL OR correct_count = 0) 
+          AND (incorrect_count IS NULL OR incorrect_count = 0);
+      `);
+    } catch (_) {}
+
     // Reset streak if user has 0 completed activity
     try {
       await this.dbInstance.execAsync(`
@@ -970,13 +979,16 @@ class DatabaseService {
   // VOCABULARY FOLDER & CUSTOM WORD METHODS
   // ==========================================
 
-  async getVocabFolders(): Promise<VocabFolder[]> {
-    const allWords = await this.getAllWordsWithProgress();
+  async getVocabFolders(cachedWords?: WordWithProgress[]): Promise<VocabFolder[]> {
+    const allWords = cachedWords || (await this.getAllWordsWithProgress());
 
     if (!this.isNative) {
       await this.memoryDb.init();
-      const list = Array.from(this.memoryDb.folders.values());
-      return list.map((f) => {
+      const otherCustomNames = Array.from(this.memoryDb.folders.values())
+        .filter((f) => !f.is_system && f.id !== 'custom_default')
+        .map((f) => f.name.toLowerCase());
+
+      return Array.from(this.memoryDb.folders.values()).map((f) => {
         let matchingWords: WordWithProgress[] = [];
         if (f.is_system && f.category_type) {
           if (f.level_filter) {
@@ -989,7 +1001,9 @@ class DatabaseService {
           }
         } else if (f.id === 'custom_default') {
           matchingWords = allWords.filter(
-            (w) => w.is_custom || (w.subcategory && !['VOCABULARY', 'CONNECTOR', 'PREFIX_ROOT', 'IDIOM'].includes(w.subcategory))
+            (w) =>
+              (w.is_custom || (w.subcategory && !['VOCABULARY', 'CONNECTOR', 'PREFIX_ROOT', 'IDIOM'].includes(w.subcategory))) &&
+              (!w.subcategory || !otherCustomNames.includes(w.subcategory.toLowerCase()))
           );
         } else {
           matchingWords = allWords.filter((w) => w.subcategory === f.name);
@@ -1008,6 +1022,10 @@ class DatabaseService {
     const rows = await this.dbInstance.getAllAsync(
       `SELECT * FROM vocab_folders ORDER BY is_system DESC, id ASC`
     );
+
+    const otherCustomNames = rows
+      .filter((r: any) => r.is_system !== 1 && r.id !== 'custom_default')
+      .map((r: any) => r.name.toLowerCase());
 
     return rows.map((r: any) => {
       const folder: VocabFolder = {
@@ -1034,7 +1052,9 @@ class DatabaseService {
         }
       } else if (folder.id === 'custom_default') {
         matchingWords = allWords.filter(
-          (w) => w.is_custom || (w.subcategory && !['VOCABULARY', 'CONNECTOR', 'PREFIX_ROOT', 'IDIOM'].includes(w.subcategory))
+          (w) =>
+            (w.is_custom || (w.subcategory && !['VOCABULARY', 'CONNECTOR', 'PREFIX_ROOT', 'IDIOM'].includes(w.subcategory))) &&
+            (!w.subcategory || !otherCustomNames.includes(w.subcategory.toLowerCase()))
         );
       } else {
         matchingWords = allWords.filter((w) => w.subcategory === folder.name);
@@ -1159,19 +1179,6 @@ class DatabaseService {
 
     if (!this.isNative) {
       const id = await this.memoryDb.insertWord(item);
-      const now = new Date();
-      const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-      this.memoryDb.progress.set(id, {
-        id: Date.now(),
-        word_id: id,
-        box: 1,
-        status: 'NEW',
-        correct_count: 0,
-        incorrect_count: 0,
-        last_reviewed_at: now.toISOString(),
-        next_review_at: tomorrow.toISOString(),
-        box_entry_date: now.toISOString(),
-      });
       return id;
     }
 
@@ -1192,13 +1199,6 @@ class DatabaseService {
     );
 
     const wordId = res.lastInsertRowId;
-    // Set next_review_at to tomorrow so words added today NEVER appear in today's daily study session
-    await this.dbInstance.runAsync(
-      `INSERT INTO user_word_progress (word_id, box, status, correct_count, incorrect_count, last_reviewed_at, next_review_at, box_entry_date)
-       VALUES (?, 1, 'NEW', 0, 0, datetime('now'), datetime('now', '+1 day'), datetime('now'))`,
-      [wordId]
-    );
-
     return wordId;
   }
 
@@ -1328,13 +1328,19 @@ class DatabaseService {
 
   async deleteCustomWord(wordId: number): Promise<void> {
     if (!this.isNative) {
-      this.memoryDb.words.delete(wordId);
+      const w = this.memoryDb.words.get(wordId);
+      if (w && (w.is_custom || (w.subcategory && !['VOCABULARY', 'CONNECTOR', 'PREFIX_ROOT', 'IDIOM'].includes(w.subcategory)))) {
+        this.memoryDb.words.delete(wordId);
+      }
       this.memoryDb.progress.delete(wordId);
       return;
     }
 
     await this.dbInstance.runAsync(`DELETE FROM user_word_progress WHERE word_id = ?`, [wordId]);
-    await this.dbInstance.runAsync(`DELETE FROM words WHERE id = ?`, [wordId]);
+    await this.dbInstance.runAsync(
+      `DELETE FROM words WHERE id = ? AND (is_custom = 1 OR (subcategory IS NOT NULL AND subcategory NOT IN ('VOCABULARY', 'CONNECTOR', 'PREFIX_ROOT', 'IDIOM')))`,
+      [wordId]
+    );
   }
 
   async updateWordBox(wordId: number, boxNumber: number): Promise<void> {
@@ -1587,7 +1593,7 @@ class DatabaseService {
       example_translation: r.example_translation,
       etymology_note: r.etymology_note,
       is_custom: r.is_custom === 1,
-      isStudied: r.box !== null,
+      isStudied: r.box !== null && ((r.correct_count || 0) > 0 || (r.incorrect_count || 0) > 0),
       box: r.box,
       status: r.p_status,
       correctCount: r.correct_count || 0,
@@ -1678,37 +1684,54 @@ class DatabaseService {
     let correctCount = currentProgress ? currentProgress.correct_count : 0;
     let incorrectCount = currentProgress ? currentProgress.incorrect_count : 0;
 
+    // Vade kontrolü: Kelimenin aralıklı tekrar süresi dolmuş mu?
+    const isDueForReview = !currentProgress?.next_review_at || new Date(currentProgress.next_review_at).getTime() <= now.getTime();
+
     if (isCorrect) {
       correctCount += 1;
       const currentBox = currentProgress ? currentProgress.box : 1;
 
       if (currentBox === 0 || currentBox === 1) {
-        // Günlük kutu doğru -> Haftalık kutu (7 gün sonra)
+        // 1. GÜN: Günlük kutu doğru -> 3 Gün Sonraya randevu (Kutu 2 - Pekiştirme)
         newBox = 2;
-        nextReviewAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+        nextReviewAt = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
         newStatus = 'REVIEWING';
       } else if (currentBox === 2) {
-        // Haftalık kutu doğru -> Aylık kutu (30 gün sonra)
-        newBox = 3;
-        nextReviewAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
-        newStatus = 'MASTERED';
+        if (isDueForReview) {
+          // 3. GÜN VADESİ DOLMUŞ: Doğru bilindi -> 7 Gün Sonraya randevu (Kutu 3 - Kalıcı Hafıza)
+          newBox = 3;
+          nextReviewAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+          newStatus = 'REVIEWING';
+        } else {
+          // 3 gün dolmadan erken çalışıldıysa kutuda kalır, pekiştirilir
+          newBox = 2;
+          nextReviewAt = currentProgress?.next_review_at ? new Date(currentProgress.next_review_at) : new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+          newStatus = 'REVIEWING';
+        }
       } else {
-        // Aylık kutu doğru -> Kalıcı Hafıza pekiştirme (90 gün sonra)
-        newBox = 3;
-        nextReviewAt = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000);
-        newStatus = 'MASTERED';
+        if (isDueForReview) {
+          // 7. GÜN VADESİ DOLMUŞ: Doğru bilindi -> %100 TAMAMLANDI (Mastered & Kalıcı Hafıza)
+          newBox = 3;
+          nextReviewAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+          newStatus = 'MASTERED';
+        } else {
+          // Henüz 7 gün dolmamışken erken çalışıldıysa kutuda kalır
+          newBox = 3;
+          nextReviewAt = currentProgress?.next_review_at ? new Date(currentProgress.next_review_at) : new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+          newStatus = currentProgress?.status === 'MASTERED' ? 'MASTERED' : 'REVIEWING';
+        }
       }
     } else {
       incorrectCount += 1;
       const currentBox = currentProgress ? currentProgress.box : 1;
 
       if (currentBox === 3) {
-        // Aylık kutudaki yanlış -> Haftalık kutuya kademeli düşer (7 gün sonra)
+        // Kalıcı hafızadaki kelime yanlış bilinirse -> Kutu 2'ye (Pekiştirme - 3 gün sonra) düşer
         newBox = 2;
-        nextReviewAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+        nextReviewAt = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
         newStatus = 'REVIEWING';
       } else if (currentBox === 2) {
-        // Haftalık kutudaki yanlış -> Günlük kutuya düşer (1 gün sonra)
+        // Pekiştirmedeki kelime yanlış bilinirse -> Kutu 1'e (Günlük - 1 gün sonra) düşer
         newBox = 1;
         nextReviewAt = new Date(now.getTime() + 24 * 60 * 60 * 1000);
         newStatus = 'LEARNING';
@@ -1756,6 +1779,12 @@ class DatabaseService {
           updatedProg.box_entry_date,
         ]
       );
+
+      // Record to daily_stats for words_reviewed
+      await this.dbInstance.runAsync(
+        `INSERT INTO daily_stats (study_date, words_reviewed) VALUES (date('now'), 1)
+         ON CONFLICT(study_date) DO UPDATE SET words_reviewed = words_reviewed + 1`
+      ).catch(() => {});
     } else {
       this.memoryDb.progress.set(wordId, updatedProg);
     }
@@ -1780,10 +1809,10 @@ class DatabaseService {
         return { badgeText: '🔄 Dünden Tekrar (1 Gün)', daysOverdue };
       }
       if (progBox === 2) {
-        return { badgeText: '📅 Haftalık Tekrar (7 Gün)', daysOverdue };
+        return { badgeText: '⚡ 3. Gün Tekrarı', daysOverdue };
       }
       if (progBox === 3) {
-        return { badgeText: '🏆 Aylık Tekrar (30 Gün)', daysOverdue };
+        return { badgeText: '🏆 7. Gün Kalıcı Hafıza Testi', daysOverdue };
       }
       return { badgeText: '🔄 Aralıklı Tekrar', daysOverdue };
     };
@@ -2183,23 +2212,16 @@ class DatabaseService {
           else sk_done++;
         }
       }
-      const memStat = this.memoryDb.dailyTaskStats?.get(todayStr);
       return {
-        paragraphCompleted: Math.min(goals.paragraph, Math.max(memStat?.paragraphCompleted || 0, p_done)),
-        clozeCompleted: Math.min(goals.cloze, Math.max(memStat?.clozeCompleted || 0, c_done)),
-        sentenceCompleted: Math.min(goals.sentence, Math.max(memStat?.sentenceCompleted || 0, s_done)),
-        skillsCompleted: Math.min(goals.skills, Math.max(memStat?.skillsCompleted || 0, sk_done)),
-        vocabCompleted: memStat?.vocabCompleted || 0,
+        paragraphCompleted: Math.min(goals.paragraph, p_done),
+        clozeCompleted: Math.min(goals.cloze, c_done),
+        sentenceCompleted: Math.min(goals.sentence, s_done),
+        skillsCompleted: Math.min(goals.skills, sk_done),
+        vocabCompleted: this.memoryDb.dailyTaskStats?.get(todayStr)?.vocabCompleted || 0,
       };
     }
 
     try {
-      const statsRow: any = await this.dbInstance.getFirstAsync(
-        `SELECT paragraph_completed, cloze_completed, sentence_completed, skills_completed, words_reviewed 
-         FROM daily_stats WHERE study_date = ?`,
-        [todayStr]
-      );
-
       const qRow: any = await this.dbInstance.getFirstAsync(
         `SELECT 
           COALESCE(SUM(CASE WHEN type = 'PARAGRAPH' AND status != 'ACTIVE' THEN 1 ELSE 0 END), 0) as p_done,
@@ -2209,22 +2231,51 @@ class DatabaseService {
          FROM questions`
       );
 
-      const pStat = statsRow?.paragraph_completed || 0;
-      const cStat = statsRow?.cloze_completed || 0;
-      const sStat = statsRow?.sentence_completed || 0;
-      const skStat = statsRow?.skills_completed || 0;
+      // Ensure any unstudied dummy rows are deleted
+      await this.dbInstance.runAsync(
+        `DELETE FROM user_word_progress 
+         WHERE (correct_count IS NULL OR correct_count = 0) 
+           AND (incorrect_count IS NULL OR incorrect_count = 0)`
+      ).catch(() => {});
 
-      const pDone = Math.min(goals.paragraph, Math.max(pStat, qRow?.p_done || 0));
-      const cDone = Math.min(goals.cloze, Math.max(cStat, qRow?.c_done || 0));
-      const sDone = Math.min(goals.sentence, Math.max(sStat, qRow?.s_done || 0));
-      const skDone = Math.min(goals.skills, Math.max(skStat, qRow?.sk_done || 0));
+      // Query authoritative count from user_word_progress for words reviewed today
+      const vocabRow: any = await this.dbInstance.getFirstAsync(
+        `SELECT COUNT(*) as vocab_done
+         FROM user_word_progress
+         WHERE (correct_count > 0 OR incorrect_count > 0)
+           AND (
+             DATE(last_reviewed_at) = DATE('now')
+             OR DATE(last_reviewed_at) = DATE('now', 'localtime')
+             OR last_reviewed_at LIKE ? || '%'
+           )`,
+        [todayStr]
+      );
+
+      const pDone = Math.min(goals.paragraph, qRow?.p_done || 0);
+      const cDone = Math.min(goals.cloze, qRow?.c_done || 0);
+      const sDone = Math.min(goals.sentence, qRow?.s_done || 0);
+      const skDone = Math.min(goals.skills, qRow?.sk_done || 0);
+      const vDone = vocabRow?.vocab_done || 0;
+
+      // Keep daily_stats table in exact sync with authoritative questions and vocab count
+      await this.dbInstance.runAsync(
+        `INSERT INTO daily_stats (study_date, paragraph_completed, cloze_completed, sentence_completed, skills_completed, words_reviewed)
+         VALUES (?, ?, ?, ?, ?, ?)
+         ON CONFLICT(study_date) DO UPDATE SET
+           paragraph_completed = excluded.paragraph_completed,
+           cloze_completed = excluded.cloze_completed,
+           sentence_completed = excluded.sentence_completed,
+           skills_completed = excluded.skills_completed,
+           words_reviewed = MAX(COALESCE(daily_stats.words_reviewed, 0), excluded.words_reviewed)`,
+        [todayStr, pDone, cDone, sDone, skDone, vDone]
+      );
 
       return {
         paragraphCompleted: pDone,
         clozeCompleted: cDone,
         sentenceCompleted: sDone,
         skillsCompleted: skDone,
-        vocabCompleted: statsRow?.words_reviewed || 0,
+        vocabCompleted: vDone,
       };
     } catch (e) {
       console.warn('Failed to get daily task progress from SQLite:', e);
@@ -2248,56 +2299,7 @@ class DatabaseService {
     skillsCompleted: number;
     vocabCompleted: number;
   }> {
-    const todayStr = new Date().toISOString().split('T')[0];
-    const current = await this.getDailyTaskProgressToday(goals);
-
-    let p = current.paragraphCompleted;
-    let c = current.clozeCompleted;
-    let s = current.sentenceCompleted;
-    let sk = current.skillsCompleted;
-
-    if (type === 'PARAGRAPH') p = Math.min(goals.paragraph, p + 1);
-    else if (type === 'CLOZE_TEST') c = Math.min(goals.cloze, c + 1);
-    else if (type === 'SENTENCE_COMPLETION') s = Math.min(goals.sentence, s + 1);
-    else sk = Math.min(goals.skills, sk + 1);
-
-    if (!this.isNative) {
-      if (!this.memoryDb.dailyTaskStats) {
-        this.memoryDb.dailyTaskStats = new Map();
-      }
-      const updated = {
-        paragraphCompleted: p,
-        clozeCompleted: c,
-        sentenceCompleted: s,
-        skillsCompleted: sk,
-        vocabCompleted: current.vocabCompleted,
-      };
-      this.memoryDb.dailyTaskStats.set(todayStr, updated);
-      return updated;
-    }
-
-    try {
-      await this.dbInstance.runAsync(
-        `INSERT INTO daily_stats (study_date, paragraph_completed, cloze_completed, sentence_completed, skills_completed)
-         VALUES (?, ?, ?, ?, ?)
-         ON CONFLICT(study_date) DO UPDATE SET
-           paragraph_completed = excluded.paragraph_completed,
-           cloze_completed = excluded.cloze_completed,
-           sentence_completed = excluded.sentence_completed,
-           skills_completed = excluded.skills_completed`,
-        [todayStr, p, c, s, sk]
-      );
-    } catch (e) {
-      console.warn('Failed to increment daily task progress in SQLite:', e);
-    }
-
-    return {
-      paragraphCompleted: p,
-      clozeCompleted: c,
-      sentenceCompleted: s,
-      skillsCompleted: sk,
-      vocabCompleted: current.vocabCompleted,
-    };
+    return await this.getDailyTaskProgressToday(goals);
   }
 
   // ==========================================

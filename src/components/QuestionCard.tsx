@@ -50,9 +50,12 @@ export const QuestionCard: React.FC<Props> = ({
   const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState<boolean>(false);
   const [selectedWordForModal, setSelectedWordForModal] = useState<string>('');
 
+  const hasAnsweredRef = React.useRef(selectedOption !== null);
+
   React.useEffect(() => {
     setLocalAnswered(selectedOption);
     setIsPassageExpanded(false);
+    hasAnsweredRef.current = selectedOption !== null;
   }, [question.id, selectedOption]);
 
   const activeSelected = mode === 'EXAM' || mode === 'REVIEW' ? selectedOption : localAnswered;
@@ -63,7 +66,8 @@ export const QuestionCard: React.FC<Props> = ({
   const handleOptionPress = (key: OptionKey) => {
     if (mode === 'REVIEW') return;
     if (mode === 'PRACTICE') {
-      if (localAnswered !== null) return;
+      if (hasAnsweredRef.current || localAnswered !== null) return;
+      hasAnsweredRef.current = true;
       setLocalAnswered(key);
       onSelectOption?.(key);
     } else {

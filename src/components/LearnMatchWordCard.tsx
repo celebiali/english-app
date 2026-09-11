@@ -1,19 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
-  Dimensions,
   ScrollView,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
-import { X, Volume2, Mic, Star } from 'lucide-react-native';
+import { X, Volume2 } from 'lucide-react-native';
 import { useThemeStore } from '../store/useThemeStore';
 import { WordWithProgress } from '../database/DatabaseService';
 import { CardWord } from '../types';
-import { getContextImageForWord } from '../services/vocabLearnMatchData';
+import { DictionaryApiService } from '../services/DictionaryApiService';
 
 let SpeechModule: any = null;
 try {
@@ -33,8 +32,6 @@ interface LearnMatchWordCardProps {
   nextButtonText?: string;
 }
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-
 export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
   word,
   currentIndex,
@@ -42,12 +39,48 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
   onNext,
   onPrev,
   onClose,
-  onToggleLearned,
   nextButtonText,
 }) => {
   const { colors } = useThemeStore();
 
-  const handleSpeak = () => {
+  const [enrichedDetail, setEnrichedDetail] = useState<{
+    phonetic?: string;
+    exampleEn?: string;
+    exampleTr?: string;
+  } | null>(null);
+  const [isLoadingSentence, setIsLoadingSentence] = useState<boolean>(false);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    // If word doesn't have an example sentence or translation, asynchronously fetch from Dictionary API
+    if (!word.example_sentence || !word.example_translation) {
+      setIsLoadingSentence(true);
+      DictionaryApiService.lookupWord(word.word)
+        .then((res) => {
+          if (isMounted && res) {
+            setEnrichedDetail({
+              phonetic: res.phonetic,
+              exampleEn: res.exampleEn,
+              exampleTr: res.exampleTr,
+            });
+          }
+        })
+        .catch(() => {})
+        .finally(() => {
+          if (isMounted) setIsLoadingSentence(false);
+        });
+    } else {
+      setEnrichedDetail(null);
+      setIsLoadingSentence(false);
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [word.word, word.example_sentence, word.example_translation]);
+
+  const handleSpeakWord = () => {
     try {
       if (SpeechModule && typeof SpeechModule.speak === 'function') {
         SpeechModule.stop();
@@ -62,20 +95,46 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
     }
   };
 
+  const handleSpeakSentence = (textToSpeak: string) => {
+    try {
+      if (SpeechModule && typeof SpeechModule.speak === 'function') {
+        SpeechModule.stop();
+        SpeechModule.speak(textToSpeak, {
+          language: 'en-US',
+          pitch: 1.0,
+          rate: 0.86,
+        });
+      }
+    } catch (e) {
+      console.warn('Speech error:', e);
+    }
+  };
+
   const progressPercent = totalCards > 0 ? Math.min(100, Math.round(((currentIndex + 1) / totalCards) * 100)) : 0;
-  const imageUrl = getContextImageForWord(word.word, word.id);
 
-  // Render underlined English sentence if sentence contains the target word
-  const renderFormattedSentence = () => {
-    if (!word.example_sentence) return null;
+  // Effective English and Turkish example sentences
+  const effectiveExampleEn =
+    word.example_sentence ||
+    enrichedDetail?.exampleEn ||
+    `The ${word.word.toLowerCase()} is widely used in academic texts and daily communication.`;
 
-    const sentence = word.example_sentence;
+  const effectiveExampleTr =
+    word.example_translation ||
+    enrichedDetail?.exampleTr ||
+    `"${word.word}" (${word.meaning}), akademik metinlerde ve günlük iletişimde sıkça kullanılır.`;
+
+  const phoneticText = enrichedDetail?.phonetic || '';
+
+  // Render English sentence with target word highlighted
+  const renderFormattedSentence = (sentence: string) => {
+    if (!sentence) return null;
+
     const cleanTarget = word.word.replace(/^\(to\)\s*/i, '').trim();
     const regex = new RegExp(`(${cleanTarget})`, 'gi');
     const parts = sentence.split(regex);
 
     return (
-      <Text style={[styles.exampleSentenceText, { color: colors.textSecondary }]}>
+      <Text style={[styles.exampleSentenceText, { color: colors.text }]}>
         {parts.map((part, i) => {
           if (part.toLowerCase() === cleanTarget.toLowerCase()) {
             return (
@@ -83,7 +142,7 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
                 key={i}
                 style={[
                   styles.underlinedWord,
-                  { color: colors.text, textDecorationColor: colors.brand },
+                  { color: colors.brand, backgroundColor: colors.brandLight },
                 ]}
               >
                 {part}
@@ -137,81 +196,93 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
             },
           ]}
         >
-          {/* Target Word */}
-          <Text style={[styles.targetWordText, { color: colors.brand }]} numberOfLines={2}>
-            {word.word}
-          </Text>
+          {/* TOP SECTION: TARGET WORD & PRONUNCIATION */}
+          <View style={styles.wordHeaderSection}>
+            <View style={styles.wordTitleRow}>
+              <Text style={[styles.targetWordText, { color: colors.brand }]} numberOfLines={2}>
+                {word.word}
+              </Text>
+              <TouchableOpacity
+                style={[styles.audioPillBtn, { backgroundColor: colors.brandLight }]}
+                onPress={handleSpeakWord}
+                activeOpacity={0.7}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                accessibilityLabel="Telaffuzu Dinle"
+              >
+                <Volume2 size={20} color={colors.brand} strokeWidth={2.4} />
+              </TouchableOpacity>
+            </View>
 
-          {/* English Example Sentence */}
-          {word.example_sentence ? (
-            <View style={styles.sentenceWrapper}>{renderFormattedSentence()}</View>
-          ) : null}
-
-          {/* Divider */}
-          <View style={[styles.divider, { backgroundColor: colors.border }]} />
-
-          {/* Turkish Meaning */}
-          <Text style={[styles.turkishMeaningText, { color: colors.text }]} numberOfLines={2}>
-            {word.meaning}
-          </Text>
-
-          {/* Turkish Sentence Translation */}
-          {word.example_translation ? (
-            <Text style={[styles.turkishSentenceText, { color: colors.textSecondary }]}>
-              {word.example_translation}
-            </Text>
-          ) : null}
-
-          {/* Illustrative Context Image */}
-          <View style={styles.imageContainer}>
-            <Image
-              source={{ uri: imageUrl }}
-              style={styles.illustrativeImage}
-              resizeMode="cover"
-            />
+            {phoneticText ? (
+              <Text style={[styles.phoneticText, { color: colors.textSecondary }]}>
+                {phoneticText}
+              </Text>
+            ) : null}
           </View>
 
-          {/* Sound & Action Buttons */}
-          <View style={styles.actionButtonsRow}>
-            <TouchableOpacity
-              style={[styles.audioBtn, { backgroundColor: colors.brand }]}
-              onPress={handleSpeak}
-              activeOpacity={0.8}
-              accessibilityLabel="Telaffuzu Dinle"
-            >
-              <Volume2 size={24} color="#FFFFFF" strokeWidth={2.4} />
-            </TouchableOpacity>
+          {/* DIVIDER */}
+          <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
-            <TouchableOpacity
-              style={[
-                styles.micBtn,
-                {
-                  backgroundColor: colors.subtleBackground,
-                  borderColor: colors.border,
-                },
-              ]}
-              onPress={() => {
-                if (onToggleLearned) onToggleLearned(word);
-              }}
-              activeOpacity={0.8}
-              accessibilityLabel="Öğrenildi Olarak İşaretle"
-            >
-              <Star
-                size={22}
-                color={
-                  (('box' in word && (word.box || 0) >= 2) ||
-                    ('progress' in word && (word.progress?.box || 0) >= 2))
-                    ? '#EAB308'
-                    : colors.textSecondary
-                }
-                fill={
-                  (('box' in word && (word.box || 0) >= 2) ||
-                    ('progress' in word && (word.progress?.box || 0) >= 2))
-                    ? '#EAB308'
-                    : 'none'
-                }
-              />
-            </TouchableOpacity>
+          {/* TURKISH MEANING SECTION */}
+          <View style={styles.meaningSection}>
+            <Text style={[styles.sectionMetaLabel, { color: colors.textSecondary }]}>
+              TÜRKÇE ANLAMI
+            </Text>
+            <Text style={[styles.turkishMeaningText, { color: colors.text }]}>
+              {word.meaning}
+            </Text>
+          </View>
+
+          {/* DIVIDER */}
+          <View style={[styles.divider, { backgroundColor: colors.border }]} />
+
+          {/* CONTEXT / EXAMPLE SENTENCE SECTION */}
+          <View style={styles.contextSection}>
+            <View style={styles.contextHeaderRow}>
+              <Text style={[styles.sectionMetaLabel, { color: colors.textSecondary }]}>
+                CÜMLE İÇİNDE KULLANIMI
+              </Text>
+              <TouchableOpacity
+                onPress={() => handleSpeakSentence(effectiveExampleEn)}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                style={styles.sentenceAudioIconBtn}
+                accessibilityLabel="Cümleyi Dinle"
+              >
+                <Volume2 size={16} color={colors.brand} />
+              </TouchableOpacity>
+            </View>
+
+            {isLoadingSentence ? (
+              <View style={styles.sentenceLoadingBox}>
+                <ActivityIndicator size="small" color={colors.brand} />
+                <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
+                  Örnek cümle yükleniyor...
+                </Text>
+              </View>
+            ) : (
+              <View
+                style={[
+                  styles.sentenceCard,
+                  {
+                    backgroundColor: colors.subtleBackground,
+                    borderColor: colors.border,
+                  },
+                ]}
+              >
+                {/* English Sentence */}
+                <View style={styles.enSentenceBox}>
+                  {renderFormattedSentence(effectiveExampleEn)}
+                </View>
+
+                {/* Sentence Divider */}
+                <View style={[styles.sentenceInnerDivider, { backgroundColor: colors.border }]} />
+
+                {/* Turkish Translation */}
+                <Text style={[styles.turkishSentenceText, { color: colors.textSecondary }]}>
+                  {effectiveExampleTr}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -296,101 +367,118 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   scrollContent: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
+    paddingHorizontal: 18,
+    paddingTop: 12,
     paddingBottom: 24,
     alignItems: 'center',
   },
   cardContainer: {
     width: '100%',
     maxWidth: 420,
-    borderRadius: 24,
+    borderRadius: 20,
     borderWidth: 1,
     paddingHorizontal: 20,
     paddingTop: 24,
-    paddingBottom: 20,
+    paddingBottom: 24,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
+    elevation: 2,
+  },
+  wordHeaderSection: {
     alignItems: 'center',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 16,
-    elevation: 3,
+    width: '100%',
+  },
+  wordTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
   },
   targetWordText: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: '800',
-    color: '#2563EB',
     textAlign: 'center',
-    marginBottom: 8,
+    letterSpacing: -0.3,
   },
-  sentenceWrapper: {
-    paddingHorizontal: 8,
-    marginBottom: 16,
+  audioPillBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  exampleSentenceText: {
-    fontSize: 15,
-    lineHeight: 22,
-    textAlign: 'center',
-  },
-  underlinedWord: {
-    fontWeight: '700',
-    textDecorationLine: 'underline',
+  phoneticText: {
+    fontSize: 13.5,
+    marginTop: 4,
+    fontStyle: 'italic',
   },
   divider: {
     width: '100%',
     height: 1,
-    marginVertical: 14,
+    marginVertical: 18,
+  },
+  meaningSection: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  sectionMetaLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.8,
+    marginBottom: 6,
+    textTransform: 'uppercase',
   },
   turkishMeaningText: {
-    fontSize: 19,
+    fontSize: 20,
     fontWeight: '700',
     textAlign: 'center',
-    marginBottom: 6,
+    lineHeight: 26,
   },
-  turkishSentenceText: {
-    fontSize: 14,
-    lineHeight: 20,
-    textAlign: 'center',
-    marginBottom: 16,
-    paddingHorizontal: 8,
-  },
-  imageContainer: {
+  contextSection: {
     width: '100%',
-    height: 220,
-    borderRadius: 16,
-    overflow: 'hidden',
-    backgroundColor: 'rgba(0,0,0,0.04)',
-    marginVertical: 12,
   },
-  illustrativeImage: {
-    width: '100%',
-    height: '100%',
-  },
-  actionButtonsRow: {
+  contextHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 16,
-    marginTop: 8,
+    justifyContent: 'space-between',
+    marginBottom: 8,
   },
-  audioBtn: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
+  sentenceAudioIconBtn: {
+    padding: 4,
+  },
+  sentenceLoadingBox: {
+    paddingVertical: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#2563EB',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.35,
-    shadowRadius: 8,
-    elevation: 4,
+    gap: 8,
   },
-  micBtn: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+  loadingText: {
+    fontSize: 12,
+  },
+  sentenceCard: {
+    borderRadius: 14,
     borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 14,
+  },
+  enSentenceBox: {
+    marginBottom: 8,
+  },
+  exampleSentenceText: {
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  underlinedWord: {
+    paddingHorizontal: 3,
+    borderRadius: 3,
+  },
+  sentenceInnerDivider: {
+    height: 1,
+    marginVertical: 8,
+  },
+  turkishSentenceText: {
+    fontSize: 13.5,
+    lineHeight: 20,
   },
   bottomBar: {
     paddingHorizontal: 16,
@@ -404,33 +492,28 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   prevBtn: {
-    height: 54,
+    height: 52,
     paddingHorizontal: 20,
-    borderRadius: 16,
+    borderRadius: 14,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   prevBtnText: {
-    fontSize: 16,
+    fontSize: 15.5,
     fontWeight: '600',
   },
   nextBtn: {
     width: '100%',
-    height: 54,
-    borderRadius: 16,
+    height: 52,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#2563EB',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.28,
-    shadowRadius: 8,
-    elevation: 3,
   },
   nextBtnText: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '700',
     color: '#FFFFFF',
-    letterSpacing: 0.3,
+    letterSpacing: 0.2,
   },
 });

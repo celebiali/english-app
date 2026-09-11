@@ -33,6 +33,8 @@ export interface CardComponentProps {
 export const CardComponent: React.FC<CardComponentProps> = ({
   cardWord,
   onAnswer,
+  cardIndex = 0,
+  totalCards = 1,
 }) => {
   const { colors } = useThemeStore();
   const [userInput, setUserInput] = useState<string>('');
@@ -346,8 +348,14 @@ export const CardComponent: React.FC<CardComponentProps> = ({
             onPress={handleProceed}
             activeOpacity={0.85}
           >
-            <Text style={[styles.proceedBtnText, { color: colors.textOnBrand }]}>Sonraki Kelimeye Geç</Text>
-            <ArrowRight size={18} color={colors.textOnBrand} />
+            <Text style={[styles.proceedBtnText, { color: colors.textOnBrand }]}>
+              {totalCards > 0 && cardIndex >= totalCards - 1 ? 'Tamamla' : 'Sonraki Kelimeye Geç'}
+            </Text>
+            {totalCards > 0 && cardIndex >= totalCards - 1 ? (
+              <CheckCircle2 size={18} color={colors.textOnBrand} />
+            ) : (
+              <ArrowRight size={18} color={colors.textOnBrand} />
+            )}
           </TouchableOpacity>
         </View>
       )}

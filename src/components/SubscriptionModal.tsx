@@ -10,11 +10,9 @@ import {
   Linking,
 } from 'react-native';
 import {
-  Sparkles,
   Check,
-  Crown,
+  ShieldCheck,
   X,
-  RotateCcw,
 } from 'lucide-react-native';
 import { SmoothBottomSheet } from './SmoothBottomSheet';
 import { SUBSCRIPTION_PLANS } from '../services/PromoCodeService';
@@ -52,18 +50,26 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
       }
 
       if (result.success && result.isPro) {
-        if (userProfile) {
-          await setUserProfile({
-            ...userProfile,
-            isPro: true,
-            subscriptionPlanId: plan.id,
-            proExpiresAt: result.expiresAt || new Date(Date.now() + plan.durationMonths * 30 * 86400000).toISOString(),
-          });
-        }
+        const profileToSave = userProfile || {
+          id: `user_${Date.now()}`,
+          fullName: 'Kullanıcı',
+          email: '',
+          targetScore: 70,
+          isGuest: true,
+          isPro: true,
+          createdAt: new Date().toISOString(),
+        };
+
+        await setUserProfile({
+          ...profileToSave,
+          isPro: true,
+          subscriptionPlanId: plan.id,
+          proExpiresAt: result.expiresAt || new Date(Date.now() + plan.durationMonths * 30 * 86400000).toISOString(),
+        });
 
         Alert.alert(
           'Tebrikler! 👑',
-          '7 Günlük Ücretsiz Denemeniz ve Dil Sınavı Hazırlık Pro üyeliğiniz aktif edildi. Tüm denemeler ve AI koçluğu kullanımınıza açıldı.',
+          '7 Günlük Ücretsiz Denemeniz ve PratikDil Pro üyeliğiniz aktif edildi. Tüm denemeler ve AI koçluğu kullanımınıza açıldı.',
           [{ text: 'Hemen Başla', onPress: onClose }]
         );
       } else if (result.error) {
@@ -81,18 +87,26 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
     try {
       const restoreResult = await ApplePurchaseService.restorePurchases();
       if (restoreResult.success && restoreResult.isPro) {
-        if (userProfile) {
-          await setUserProfile({
-            ...userProfile,
-            isPro: true,
-            subscriptionPlanId: restoreResult.restoredPlanId,
-            proExpiresAt: restoreResult.expiresAt || new Date(Date.now() + 180 * 86400000).toISOString(),
-          });
-        }
+        const profileToSave = userProfile || {
+          id: `user_${Date.now()}`,
+          fullName: 'Kullanıcı',
+          email: '',
+          targetScore: 70,
+          isGuest: true,
+          isPro: true,
+          createdAt: new Date().toISOString(),
+        };
+
+        await setUserProfile({
+          ...profileToSave,
+          isPro: true,
+          subscriptionPlanId: restoreResult.restoredPlanId,
+          proExpiresAt: restoreResult.expiresAt || new Date(Date.now() + 180 * 86400000).toISOString(),
+        });
         Alert.alert('Başarılı! 🎉', 'Mevcut Apple aboneliğiniz başarıyla geri yüklendi.');
         onClose();
       } else {
-        Alert.alert('Bilgi', 'Apple hesabınıza bağlı aktif bir Dil Sınavı Hazırlık aboneliği bulunamadı.');
+        Alert.alert('Bilgi', 'Apple hesabınıza bağlı aktif bir PratikDil Pro aboneliği bulunamadı.');
       }
     } catch (e: any) {
       Alert.alert('Hata', e?.message || 'Satın alımlar geri yüklenemedi.');
@@ -102,195 +116,280 @@ export const SubscriptionModal: React.FC<Props> = ({ visible, onClose }) => {
   };
 
   const proFeatures = [
-    '80 Soruluk Gerçek Master Deneme Sınavları',
-    'ÖSYM Çeldiricilerini Deşifre Eden AI Koçluğu',
-    'Kişisel Hata Kasası ve Zayıf Nokta Analizi',
+    {
+      title: '80 soruluk master denemeler',
+      desc: 'ÖSYM standartlarında tam sınav deneyimi',
+    },
+    {
+      title: 'AI çeldirici analizi',
+      desc: 'Yanlış seçeneklerin neden tuzak olduğunu gösterir',
+    },
+    {
+      title: 'Akıllı hata kasası',
+      desc: 'Yanlışların otomatik kaydı ve aralıklı tekrarı',
+    },
+    {
+      title: 'Aralıklı tekrarla kelime öğrenimi',
+      desc: '7.000+ akademik kelime, unutmadan önce tekrar hatırlatılır',
+    },
   ];
 
+  const plan6 = plans.find((p) => p.id === 'plan_6m') || plans[0];
+  const plan12 = plans.find((p) => p.id === 'plan_12m') || plans[1] || plans[0];
   const currentPlan = plans.find((p) => p.id === selectedPlanId) || plans[0];
 
   return (
-    <SmoothBottomSheet visible={visible} onClose={onClose} height="85%">
+    <SmoothBottomSheet visible={visible} onClose={onClose} height="90%">
       <View style={{ flex: 1, backgroundColor: colors.cardBackground }}>
-        <ScrollView
-          style={[styles.container, { backgroundColor: colors.cardBackground }]}
-          contentContainerStyle={styles.content}
-          showsVerticalScrollIndicator={false}
-        >
-          {/* TOP BAR */}
-          <View style={styles.topRow}>
-            <View style={[styles.proBadge, { backgroundColor: colors.accentWarmLight }]}>
-              <Crown size={14} color={colors.accentWarm} />
-              <Text style={[styles.proBadgeText, { color: colors.accentWarm }]}>PRO ERİŞİM</Text>
-            </View>
-
-            <TouchableOpacity
-              style={[styles.closeBtn, { backgroundColor: colors.subtleBackground }]}
-              onPress={onClose}
-              hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-            >
-              <X size={18} color={colors.textSecondary} />
-            </TouchableOpacity>
-          </View>
-
-          {/* HERO */}
-          <View style={styles.heroSection}>
-            <Text style={[styles.heroTitle, { color: colors.text }]}>
-              PratikDil Pro
-            </Text>
-            <Text style={[styles.heroSubtitle, { color: colors.textSecondary }]}>
-              Hedef puanına ulaşmak için tüm kilitleri aç.
-            </Text>
-          </View>
-
-          {/* MINIMALIST FEATURE BULLETS */}
-          <View style={styles.featureList}>
-            {proFeatures.map((feat, index) => (
-              <View key={index} style={styles.featureRow}>
-                <View style={[styles.checkCircle, { backgroundColor: colors.brandLight }]}>
-                  <Check size={12} color={colors.brand} strokeWidth={3} />
-                </View>
-                <Text style={[styles.featureRowText, { color: colors.text }]}>{feat}</Text>
-              </View>
-            ))}
-          </View>
-
-          {/* COMPACT PLAN CARDS */}
-          <View style={styles.plansContainer}>
-            {plans.map((plan) => {
-              const isSelected = selectedPlanId === plan.id;
-              return (
-                <TouchableOpacity
-                  key={plan.id}
-                  style={[
-                    styles.planCard,
-                    {
-                      backgroundColor: isSelected
-                        ? (colors.isDark ? '#1E293B' : '#EFF6FF')
-                        : colors.cardBackground,
-                      borderColor: isSelected ? colors.brand : colors.border,
-                    },
-                  ]}
-                  onPress={() => setSelectedPlanId(plan.id)}
-                  activeOpacity={0.85}
-                >
-                  {plan.badge && (
-                    <View
-                      style={[
-                        styles.planBadge,
-                        { backgroundColor: plan.isPopular ? colors.brand : colors.accentWarm },
-                      ]}
-                    >
-                      <Text style={[styles.planBadgeText, { color: colors.textOnBrand }]}>
-                        {plan.badge}
-                      </Text>
-                    </View>
-                  )}
-
-                  <View style={styles.planContentRow}>
-                    <View style={styles.planRadioCircleOuter}>
-                      <View
-                        style={[
-                          styles.planRadioCircle,
-                          { borderColor: isSelected ? colors.brand : colors.border },
-                        ]}
-                      >
-                        {isSelected && (
-                          <View
-                            style={[styles.planRadioInner, { backgroundColor: colors.brand }]}
-                          />
-                        )}
-                      </View>
-                    </View>
-
-                    <View style={{ flex: 1, paddingHorizontal: 10 }}>
-                      <Text style={[styles.planName, { color: colors.text }]}>{plan.title}</Text>
-                      <Text style={[styles.planDesc, { color: colors.textSecondary }]}>
-                        {plan.durationMonths} Ay Sınırsız Erişim
-                      </Text>
-                    </View>
-
-                    <View style={{ alignItems: 'flex-end' }}>
-                      <Text style={[styles.planPrice, { color: colors.brand }]}>
-                        {plan.originalPrice} ₺
-                      </Text>
-                      <Text style={[styles.planSubprice, { color: colors.textSecondary }]}>
-                        ~{plan.monthlyPrice} ₺/ay
-                      </Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-
-          {/* PRIMARY CTA BUTTON */}
+        {/* TOPBAR */}
+        <View style={styles.topbar}>
           <TouchableOpacity
-            style={[
-              styles.ctaButton,
-              { backgroundColor: colors.brand, opacity: isPurchasing ? 0.7 : 1 },
-            ]}
-            onPress={() => handleAppleSubscribe(selectedPlanId)}
-            activeOpacity={0.85}
-            disabled={isPurchasing}
+            style={styles.closeButton}
+            onPress={onClose}
+            activeOpacity={0.7}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+            accessibilityLabel="Kapat"
           >
-            {isPurchasing ? (
-              <ActivityIndicator color={colors.textOnBrand} />
-            ) : (
-              <>
-                <Sparkles size={18} color={colors.textOnBrand} />
-                <Text style={[styles.ctaButtonText, { color: colors.textOnBrand }]}>
-                  7 Gün Ücretsiz Dene ve Başla
-                </Text>
-              </>
-            )}
+            <X size={20} color={colors.text} />
           </TouchableOpacity>
 
-          <Text style={[styles.trialNoticeText, { color: colors.textSecondary }]}>
-            7 gün tamamen ücretsiz • Dilediğin an kolayca iptal et
+          <Text style={[styles.topbarTitle, { color: colors.text }]}>
+            PratikDil Pro
           </Text>
 
-          {/* ELEGANT APPLE SUBSCRIPTION DISCLAIMER (GUIDELINE 3.1.2) */}
-          <Text style={[styles.disclaimerText, { color: colors.textSecondary }]}>
-            Deneme süresi bitiminde seçilen paket ({currentPlan.originalPrice} ₺ / {currentPlan.durationMonths} Ay) otomatik olarak yenilenir. Aboneliğinizi dilediğiniz an App Store Hesap Ayarları üzerinden yönetebilir veya iptal edebilirsiniz.
-          </Text>
-
-          {/* RESTORE PURCHASES */}
           <TouchableOpacity
-            style={styles.restoreBtn}
             onPress={handleRestorePurchases}
             disabled={isRestoring}
-            activeOpacity={0.7}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
             {isRestoring ? (
               <ActivityIndicator size="small" color={colors.brand} />
             ) : (
-              <>
-                <RotateCcw size={13} color={colors.textSecondary} />
-                <Text style={[styles.restoreBtnText, { color: colors.textSecondary }]}>
-                  Satın Alımları Geri Yükle
-                </Text>
-              </>
+              <Text style={[styles.topbarRestore, { color: colors.textSecondary }]}>
+                Geri Yükle
+              </Text>
             )}
           </TouchableOpacity>
+        </View>
 
-          {/* LEGAL LINKS */}
-          <View style={styles.legalLinksRow}>
-            <TouchableOpacity
-              onPress={() => Linking.openURL(ENV_CONFIG.LEGAL.TERMS_URL)}
-            >
-              <Text style={[styles.legalLinkText, { color: colors.textSecondary }]}>
-                Kullanım Şartları (EULA)
+        <View style={[styles.divider, { backgroundColor: colors.border }]} />
+
+        <ScrollView
+          style={[styles.container, { backgroundColor: colors.cardBackground }]}
+          contentContainerStyle={styles.content}
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* UPPER MAIN CONTENT */}
+          <View style={styles.mainContent}>
+            {/* HERO SECTION */}
+            <View style={styles.hero}>
+              <View style={styles.heroTag}>
+                <View style={[styles.heroTagLine, { backgroundColor: colors.brand }]} />
+                <Text style={[styles.heroTagText, { color: colors.brand }]}>
+                  YDS · YÖKDİL · YDT
+                </Text>
+              </View>
+
+              <Text style={[styles.heroTitle, { color: colors.text }]}>
+                Hedeflediğin puanı şansa bırakma
               </Text>
-            </TouchableOpacity>
-            <Text style={{ color: colors.textSecondary, fontSize: 10 }}>•</Text>
-            <TouchableOpacity
-              onPress={() => Linking.openURL(ENV_CONFIG.LEGAL.PRIVACY_URL)}
-            >
-              <Text style={[styles.legalLinkText, { color: colors.textSecondary }]}>
-                Gizlilik Politikası
+
+              <Text style={[styles.heroDesc, { color: colors.textSecondary }]}>
+                Gerçek sınav simülasyonları ve yapay zeka destekli çeldirici analiziyle ilk seferde geç.
               </Text>
+            </View>
+
+            {/* TRIAL BANNER */}
+            <View
+              style={[
+                styles.trialBanner,
+                {
+                  backgroundColor: colors.subtleBackground,
+                  borderColor: colors.border,
+                },
+              ]}
+            >
+              <ShieldCheck size={16} color={colors.brand} />
+              <Text style={[styles.trialBannerText, { color: colors.text }]}>
+                7 gün ücretsiz dene, istediğin an App Store'dan iptal et
+              </Text>
+            </View>
+
+            {/* SECTION LABEL: ADVANTAGES */}
+            <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>
+              Pro ile gelen avantajlar
+            </Text>
+
+            {/* FEATURES LIST */}
+            <View style={styles.featList}>
+              {proFeatures.map((item, index) => {
+                const isLast = index === proFeatures.length - 1;
+                return (
+                  <View
+                    key={index}
+                    style={[
+                      styles.featRow,
+                      !isLast && { borderBottomColor: colors.border, borderBottomWidth: StyleSheet.hairlineWidth },
+                    ]}
+                  >
+                    <Check size={15} color={colors.brand} style={styles.featIcon} />
+                    <View style={styles.featTextCol}>
+                      <Text style={[styles.featTitle, { color: colors.text }]}>{item.title}</Text>
+                      <Text style={[styles.featDesc, { color: colors.textSecondary }]}>{item.desc}</Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+
+            {/* SECTION LABEL: PACKAGES */}
+            <Text style={[styles.sectionLabel, { color: colors.textSecondary, marginTop: 10 }]}>
+              Uygun paketi seç
+            </Text>
+
+            {/* PLANS SELECTOR */}
+            <View style={styles.plansContainer}>
+              {/* Plan 1: 6 Aylık */}
+              {plan6 && (
+                <TouchableOpacity
+                  style={[
+                    styles.planCard,
+                    {
+                      backgroundColor: colors.cardBackground,
+                      borderColor: selectedPlanId === plan6.id ? colors.brand : colors.border,
+                      borderWidth: selectedPlanId === plan6.id ? 1.8 : 1,
+                    },
+                  ]}
+                  onPress={() => setSelectedPlanId(plan6.id)}
+                  activeOpacity={0.85}
+                >
+                  <View style={styles.planLeft}>
+                    <View
+                      style={[
+                        styles.dot,
+                        { borderColor: selectedPlanId === plan6.id ? colors.brand : colors.border },
+                      ]}
+                    >
+                      {selectedPlanId === plan6.id && (
+                        <View style={[styles.dotFill, { backgroundColor: colors.brand }]} />
+                      )}
+                    </View>
+                    <View style={styles.planTextWrap}>
+                      <Text style={[styles.planName, { color: colors.text }]}>
+                        6 aylık hazırlık paketi
+                      </Text>
+                      <Text style={[styles.planDesc, { color: colors.textSecondary }]}>
+                        Sınav dönemine özel · en çok tercih edilen
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.planRight}>
+                    <Text style={[styles.planPrice, { color: colors.text }]}>
+                      {plan6.originalPrice} ₺
+                    </Text>
+                    <Text style={[styles.planPerMonth, { color: colors.textSecondary }]}>
+                      ~{plan6.monthlyPrice} ₺/ay
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+
+              {/* Plan 2: 12 Aylık */}
+              {plan12 && (
+                <TouchableOpacity
+                  style={[
+                    styles.planCard,
+                    {
+                      backgroundColor: colors.cardBackground,
+                      borderColor: selectedPlanId === plan12.id ? colors.brand : colors.border,
+                      borderWidth: selectedPlanId === plan12.id ? 1.8 : 1,
+                    },
+                  ]}
+                  onPress={() => setSelectedPlanId(plan12.id)}
+                  activeOpacity={0.85}
+                >
+                  <View style={styles.planLeft}>
+                    <View
+                      style={[
+                        styles.dot,
+                        { borderColor: selectedPlanId === plan12.id ? colors.brand : colors.border },
+                      ]}
+                    >
+                      {selectedPlanId === plan12.id && (
+                        <View style={[styles.dotFill, { backgroundColor: colors.brand }]} />
+                      )}
+                    </View>
+                    <View style={styles.planTextWrap}>
+                      <Text style={[styles.planName, { color: colors.text }]}>
+                        12 aylık sınırsız VIP
+                      </Text>
+                      <Text style={[styles.planDesc, { color: colors.textSecondary }]}>
+                        YDS + YÖKDİL + YDT tüm yıl
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.planRight}>
+                    <Text style={[styles.planPrice, { color: colors.text }]}>
+                      {plan12.originalPrice} ₺
+                    </Text>
+                    <Text style={[styles.planPerMonth, { color: colors.textSecondary }]}>
+                      ~{plan12.monthlyPrice} ₺/ay
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+
+          {/* BOTTOM SECTION */}
+          <View style={styles.bottomSection}>
+            <TouchableOpacity
+              style={[
+                styles.ctaBtn,
+                { backgroundColor: colors.brand, opacity: isPurchasing ? 0.8 : 1 },
+              ]}
+              onPress={() => handleAppleSubscribe(selectedPlanId)}
+              activeOpacity={0.88}
+              disabled={isPurchasing}
+            >
+              {isPurchasing ? (
+                <ActivityIndicator color="#FFFFFF" />
+              ) : (
+                <Text style={styles.ctaBtnText}>
+                  {`7 gün ücretsiz dene · ${currentPlan.originalPrice} ₺/${currentPlan.durationMonths === 6 ? '6 ay' : '12 ay'}`}
+                </Text>
+              )}
             </TouchableOpacity>
+
+            <Text style={[styles.ctaSub, { color: colors.textSecondary }]}>
+              Süre bitene kadar ücret alınmaz, dilediğin an iptal et
+            </Text>
+
+            {/* LEGAL LINKS */}
+            <View style={styles.linksWrap}>
+              <TouchableOpacity
+                onPress={() => Linking.openURL(ENV_CONFIG.LEGAL.APPLE_STANDARD_EULA_URL)}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <Text style={[styles.linkText, { color: colors.textSecondary }]}>
+                  Kullanım Şartları (EULA)
+                </Text>
+              </TouchableOpacity>
+
+              <Text style={[styles.linkDot, { color: colors.textSecondary }]}>·</Text>
+
+              <TouchableOpacity
+                onPress={() => Linking.openURL(ENV_CONFIG.LEGAL.PRIVACY_URL)}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <Text style={[styles.linkText, { color: colors.textSecondary }]}>
+                  Gizlilik Politikası
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -303,181 +402,207 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingBottom: 28,
+    paddingTop: 16,
+    paddingBottom: 16,
   },
-  topRow: {
+  topbar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 8,
-    marginTop: 2,
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
-  proBadge: {
+  closeButton: {
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  topbarTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  topbarRestore: {
+    fontSize: 12,
+    textDecorationLine: 'underline',
+  },
+  divider: {
+    height: StyleSheet.hairlineWidth,
+    marginHorizontal: 20,
+  },
+  mainContent: {
+    flexShrink: 0,
+  },
+  hero: {
+    marginBottom: 10,
+  },
+  heroTag: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 16,
+    marginBottom: 6,
   },
-  proBadgeText: {
+  heroTagLine: {
+    width: 20,
+    height: 2,
+    borderRadius: 1,
+  },
+  heroTagText: {
     fontSize: 11,
-    fontWeight: '800',
+    fontWeight: '700',
     letterSpacing: 0.5,
   },
-  closeBtn: {
-    padding: 6,
-    borderRadius: 20,
-  },
-  heroSection: {
-    marginBottom: 14,
-  },
   heroTitle: {
-    fontSize: 23,
-    fontWeight: '900',
+    fontSize: 21,
+    fontWeight: '700',
+    lineHeight: 26,
+    marginBottom: 5,
+  },
+  heroDesc: {
+    fontSize: 12.5,
+    lineHeight: 17,
+  },
+  trialBanner: {
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingVertical: 9,
+    paddingHorizontal: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 12,
+  },
+  trialBannerText: {
+    fontSize: 12,
+    fontWeight: '500',
+    flex: 1,
+    lineHeight: 16,
+  },
+  sectionLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    letterSpacing: 0.4,
+    marginBottom: 6,
+  },
+  featList: {
     marginBottom: 4,
   },
-  heroSubtitle: {
-    fontSize: 13,
-    fontWeight: '500',
-  },
-  featureList: {
-    gap: 8,
-    marginBottom: 16,
-  },
-  featureRow: {
+  featRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
+    alignItems: 'flex-start',
+    gap: 9,
+    paddingVertical: 7,
   },
-  checkCircle: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+  featIcon: {
+    marginTop: 2,
+    flexShrink: 0,
   },
-  featureRowText: {
-    fontSize: 12.5,
-    fontWeight: '600',
+  featTextCol: {
     flex: 1,
   },
+  featTitle: {
+    fontSize: 13,
+    fontWeight: '600',
+    marginBottom: 1,
+  },
+  featDesc: {
+    fontSize: 11.5,
+    lineHeight: 15,
+  },
   plansContainer: {
-    gap: 10,
-    marginBottom: 16,
-    marginTop: 4,
+    gap: 8,
+    marginBottom: 8,
   },
   planCard: {
-    borderWidth: 1.5,
-    borderRadius: 14,
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-    position: 'relative',
-  },
-  planBadge: {
-    position: 'absolute',
-    top: -9,
-    right: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 2.5,
     borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 13,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  planBadgeText: {
-    fontSize: 9.5,
-    fontWeight: '800',
-    letterSpacing: 0.3,
-  },
-  planContentRow: {
+  planLeft: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 10,
+    flex: 1,
+    paddingRight: 6,
   },
-  planRadioCircleOuter: {
-    justifyContent: 'center',
+  dot: {
+    width: 17,
+    height: 17,
+    borderRadius: 8.5,
+    borderWidth: 1.5,
     alignItems: 'center',
-  },
-  planRadioCircle: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    borderWidth: 2,
-    alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
   },
-  planRadioInner: {
+  dotFill: {
     width: 8,
     height: 8,
     borderRadius: 4,
   },
+  planTextWrap: {
+    flex: 1,
+  },
   planName: {
-    fontSize: 14,
-    fontWeight: '800',
+    fontSize: 13,
+    fontWeight: '600',
+    marginBottom: 1,
   },
   planDesc: {
     fontSize: 11,
-    fontWeight: '500',
-    marginTop: 2,
+    lineHeight: 14,
+  },
+  planRight: {
+    alignItems: 'flex-end',
   },
   planPrice: {
-    fontSize: 17,
-    fontWeight: '900',
+    fontSize: 15.5,
+    fontWeight: '700',
+    marginBottom: 1,
   },
-  planSubprice: {
+  planPerMonth: {
     fontSize: 10.5,
-    fontWeight: '600',
-    marginTop: 1,
   },
-  ctaButton: {
+  bottomSection: {
+    paddingTop: 8,
+    paddingBottom: 4,
+  },
+  ctaBtn: {
+    width: '100%',
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ctaBtnText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  ctaSub: {
+    textAlign: 'center',
+    fontSize: 10.5,
+    marginTop: 7,
+    lineHeight: 14,
+  },
+  linksWrap: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    paddingVertical: 14,
-    borderRadius: 14,
-    marginBottom: 6,
-    shadowColor: '#4762BD',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 3,
+    paddingTop: 6,
   },
-  ctaButtonText: {
-    fontSize: 15,
-    fontWeight: '800',
-  },
-  trialNoticeText: {
-    fontSize: 11.5,
-    fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  disclaimerText: {
+  linkText: {
     fontSize: 10.5,
-    textAlign: 'center',
-    lineHeight: 14.5,
-    marginBottom: 12,
-    paddingHorizontal: 8,
-  },
-  restoreBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-    paddingVertical: 6,
-    marginBottom: 8,
-  },
-  restoreBtnText: {
-    fontSize: 11.5,
-    fontWeight: '600',
-  },
-  legalLinksRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-  },
-  legalLinkText: {
-    fontSize: 11,
     textDecorationLine: 'underline',
+  },
+  linkDot: {
+    fontSize: 10.5,
   },
 });

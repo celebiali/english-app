@@ -1867,24 +1867,29 @@ class DatabaseService {
         isCooldown: false,
       }));
 
-      // Hedef aktif klasörden 25 YENİ kelime seç
+      // Hedef havuzdan en fazla newWordsLimit kadar tekrar ve yeni kelime al
+      const limitedReviews = reviewWords.slice(0, newWordsLimit);
+      const remainingSlots = Math.max(0, newWordsLimit - limitedReviews.length);
+
       const targetFolderWords = allWords.filter(isMatchingFolder);
       const newWords: CardWord[] = [];
-      for (const w of targetFolderWords) {
-        const prog = this.memoryDb.progress.get(w.id);
-        if (!prog) {
-          if (newWords.length < newWordsLimit) {
-            newWords.push({
-              ...w,
-              cardType: 'NEW',
-              reviewBadgeText: '✨ Günün Yeni Kelimesi',
-              isCooldown: false,
-            });
+      if (remainingSlots > 0) {
+        for (const w of targetFolderWords) {
+          const prog = this.memoryDb.progress.get(w.id);
+          if (!prog) {
+            if (newWords.length < remainingSlots) {
+              newWords.push({
+                ...w,
+                cardType: 'NEW',
+                reviewBadgeText: '✨ Günün Yeni Kelimesi',
+                isCooldown: false,
+              });
+            }
           }
         }
       }
 
-      return [...reviewWords, ...newWords];
+      return [...limitedReviews, ...newWords].slice(0, newWordsLimit);
     }
 
     // Native SQLite implementation
@@ -1915,14 +1920,15 @@ class DatabaseService {
       }
     }
 
-    // 1. Vadesi gelmiş kelimeleri TÜM klasörlerden çek (7 ve 30 günlük süresi dolanlar)
+    // 1. Vadesi gelmiş kelimeleri TÜM klasörlerden çek (azami newWordsLimit kadar)
     const reviewSql = `SELECT w.*, p.box as prog_box, p.status as prog_status, p.correct_count as prog_correct, p.incorrect_count as prog_incorrect, p.last_reviewed_at as prog_last_reviewed, p.next_review_at as prog_next_review, p.box_entry_date as prog_entry_date
          FROM words w
          INNER JOIN user_word_progress p ON w.id = p.word_id
          WHERE p.next_review_at IS NOT NULL AND p.next_review_at <= datetime('now')
-         ORDER BY p.next_review_at ASC`;
+         ORDER BY p.next_review_at ASC
+         LIMIT ?`;
 
-    const reviewRows = await this.dbInstance.getAllAsync(reviewSql);
+    const reviewRows = await this.dbInstance.getAllAsync(reviewSql, [newWordsLimit]);
 
     const reviewWords: CardWord[] = reviewRows.map((r: any) => {
       const { badgeText, daysOverdue } = computeBadgeInfo(r.prog_box, r.prog_next_review);
@@ -1957,40 +1963,45 @@ class DatabaseService {
       };
     });
 
-    // 2. Garantili olarak hedef klasörden YENİ hiç görülmemiş kelimeleri getir
-    const newSql = folderFilterSql
-      ? `SELECT w.* FROM words w
-         LEFT JOIN user_word_progress p ON w.id = p.word_id
-         WHERE p.id IS NULL AND (${folderFilterSql})
-         ORDER BY w.id ASC
-         LIMIT ?`
-      : `SELECT w.* FROM words w
-         LEFT JOIN user_word_progress p ON w.id = p.word_id
-         WHERE p.id IS NULL AND (w.is_custom IS NULL OR w.is_custom = 0)
-         ORDER BY w.id ASC
-         LIMIT ?`;
+    // 2. Kalan kontenjan varsa hedef klasörden YENİ hiç görülmemiş kelimeleri getir
+    const remainingSlots = Math.max(0, newWordsLimit - reviewWords.length);
+    let newWords: CardWord[] = [];
 
-    const newParams = [...folderParams, newWordsLimit];
-    const newRows = await this.dbInstance.getAllAsync(newSql, newParams);
+    if (remainingSlots > 0) {
+      const newSql = folderFilterSql
+        ? `SELECT w.* FROM words w
+           LEFT JOIN user_word_progress p ON w.id = p.word_id
+           WHERE p.id IS NULL AND (${folderFilterSql})
+           ORDER BY w.id ASC
+           LIMIT ?`
+        : `SELECT w.* FROM words w
+           LEFT JOIN user_word_progress p ON w.id = p.word_id
+           WHERE p.id IS NULL AND (w.is_custom IS NULL OR w.is_custom = 0)
+           ORDER BY w.id ASC
+           LIMIT ?`;
 
-    const newWords: CardWord[] = newRows.map((r: any) => ({
-      id: r.id,
-      word: r.word,
-      meaning: r.meaning,
-      category: r.category,
-      subcategory: r.subcategory,
-      level: r.level,
-      synonyms: this.safeParseJson(r.synonyms, []),
-      example_sentence: r.example_sentence,
-      example_translation: r.example_translation,
-      etymology_note: r.etymology_note,
-      is_custom: r.is_custom === 1,
-      cardType: 'NEW',
-      reviewBadgeText: '✨ Günün Yeni Kelimesi',
-      isCooldown: false,
-    }));
+      const newParams = [...folderParams, remainingSlots];
+      const newRows = await this.dbInstance.getAllAsync(newSql, newParams);
 
-    return [...reviewWords, ...newWords];
+      newWords = newRows.map((r: any) => ({
+        id: r.id,
+        word: r.word,
+        meaning: r.meaning,
+        category: r.category,
+        subcategory: r.subcategory,
+        level: r.level,
+        synonyms: this.safeParseJson(r.synonyms, []),
+        example_sentence: r.example_sentence,
+        example_translation: r.example_translation,
+        etymology_note: r.etymology_note,
+        is_custom: r.is_custom === 1,
+        cardType: 'NEW',
+        reviewBadgeText: '✨ Günün Yeni Kelimesi',
+        isCooldown: false,
+      }));
+    }
+
+    return [...reviewWords, ...newWords].slice(0, newWordsLimit);
   }
 
   // ==========================================

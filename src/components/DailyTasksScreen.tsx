@@ -261,7 +261,7 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
 
   const handleStartVocab = async () => {
     let words = sessionWords;
-    if (!words || words.length === 0) {
+    if (!words || words.length === 0 || words.length > (vocabGoal || 25)) {
       await loadVocabSession(true);
       words = useLearningStore.getState().sessionWords;
     }
@@ -320,16 +320,18 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
   // VIEW: DEDICATED DAILY VOCABULARY SESSION (GÜNÜN 25 KELİMESİ)
   // =========================================================================
   if (isVocabSolvingMode) {
+    const dailyBatchWords = (sessionWords || []).slice(0, vocabGoal || 25);
+
     // Phase 1: Study Slider Phase (Kelimeleri Tanıma / Kart İnceleme)
-    if (isVocabStudySlider && sessionWords && sessionWords.length > 0) {
-      const currentStudyWord = sessionWords[vocabStudyIndex] || sessionWords[0];
-      const isLastCard = vocabStudyIndex >= sessionWords.length - 1;
+    if (isVocabStudySlider && dailyBatchWords.length > 0) {
+      const currentStudyWord = dailyBatchWords[vocabStudyIndex] || dailyBatchWords[0];
+      const isLastCard = vocabStudyIndex >= dailyBatchWords.length - 1;
 
       return (
         <LearnMatchWordCard
           word={currentStudyWord}
           currentIndex={vocabStudyIndex}
-          totalCards={sessionWords.length}
+          totalCards={dailyBatchWords.length}
           nextButtonText={isLastCard ? 'Alıştırmaya Başla 🚀' : 'Sonraki'}
           onNext={() => {
             if (!isLastCard) {
@@ -354,9 +356,9 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
     }
 
     // Phase 2: Practice Quiz Phase (Aktif Hatırlama & Tureng / AI Kontrolü)
-    const currentCard = sessionWords?.[currentVocabIndex] || null;
-    const isFinished = currentVocabIndex >= (sessionWords?.length || 0);
-    const totalCount = sessionWords?.length || 0;
+    const currentCard = dailyBatchWords[currentVocabIndex] || null;
+    const isFinished = currentVocabIndex >= dailyBatchWords.length;
+    const totalCount = dailyBatchWords.length;
     const progressPercent = totalCount > 0 ? Math.min(100, Math.round(((currentVocabIndex + 1) / totalCount) * 100)) : 0;
 
     return (
@@ -409,7 +411,7 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
                 await answerCurrentVocabCard(isCorrect);
               }}
               cardIndex={currentVocabIndex}
-              totalCards={sessionWords.length || 0}
+              totalCards={dailyBatchWords.length || 0}
             />
           </ScrollView>
         ) : (

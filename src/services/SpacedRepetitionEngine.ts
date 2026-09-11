@@ -15,7 +15,7 @@ export class SpacedRepetitionEngine {
       };
     });
 
-    return cardWords;
+    return cardWords.slice(0, dailyLimit);
   }
 
   /**

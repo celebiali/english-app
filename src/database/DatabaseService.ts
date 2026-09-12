@@ -276,6 +276,15 @@ class DatabaseService {
       `);
     } catch (_) {}
 
+    // Fix words that jumped to Box 2 on 1st correct answer -> move back to Box 1 (1. Gün)
+    try {
+      await this.dbInstance.execAsync(`
+        UPDATE user_word_progress 
+        SET box = 1, next_review_at = datetime('now', '+1 day'), status = 'LEARNING'
+        WHERE box = 2 AND (correct_count IS NULL OR correct_count <= 1);
+      `);
+    } catch (_) {}
+
     // Reset streak if user has 0 completed activity
     try {
       await this.dbInstance.execAsync(`
@@ -1734,61 +1743,49 @@ class DatabaseService {
     let correctCount = currentProgress ? currentProgress.correct_count : 0;
     let incorrectCount = currentProgress ? currentProgress.incorrect_count : 0;
 
-    // Vade kontrolü: Kelimenin aralıklı tekrar süresi dolmuş mu?
-    const isDueForReview = !currentProgress?.next_review_at || new Date(currentProgress.next_review_at).getTime() <= now.getTime();
+    const currentBox = currentProgress ? currentProgress.box : 0;
 
     if (isCorrect) {
       correctCount += 1;
-      const currentBox = currentProgress ? currentProgress.box : 1;
 
-      if (currentBox === 0 || currentBox === 1) {
-        // 1. GÜN: Günlük kutu doğru -> 3 Gün Sonraya randevu (Kutu 2 - Pekiştirme)
+      if (!currentProgress || currentBox === 0) {
+        // 1. AŞAMA (YENİ KELİME BİLİNDİ): 1. Gün kutusuna gider (1 gün sonra tekrar randevu)
+        newBox = 1;
+        nextReviewAt = new Date(now.getTime() + 1 * 24 * 60 * 60 * 1000);
+        newStatus = 'LEARNING';
+      } else if (currentBox === 1) {
+        // 2. AŞAMA (1. GÜN KUTUSUNDAKİ KELİME TEKRAR BİLİNDİ): 3. Gün kutusuna gider (3 gün sonra tekrar randevu)
         newBox = 2;
         nextReviewAt = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
         newStatus = 'REVIEWING';
       } else if (currentBox === 2) {
-        if (isDueForReview) {
-          // 3. GÜN VADESİ DOLMUŞ: Doğru bilindi -> 7 Gün Sonraya randevu (Kutu 3 - Kalıcı Hafıza)
-          newBox = 3;
-          nextReviewAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-          newStatus = 'REVIEWING';
-        } else {
-          // 3 gün dolmadan erken çalışıldıysa kutuda kalır, pekiştirilir
-          newBox = 2;
-          nextReviewAt = currentProgress?.next_review_at ? new Date(currentProgress.next_review_at) : new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
-          newStatus = 'REVIEWING';
-        }
+        // 3. AŞAMA (3. GÜN KUTUSUNDAKİ KELİME TEKRAR BİLİNDİ): 7. Gün kutusuna gider (7 gün sonra tekrar randevu)
+        newBox = 3;
+        nextReviewAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+        newStatus = 'REVIEWING';
       } else {
-        if (isDueForReview) {
-          // 7. GÜN VADESİ DOLMUŞ: Doğru bilindi -> %100 TAMAMLANDI (Mastered & Kalıcı Hafıza)
-          newBox = 3;
-          nextReviewAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
-          newStatus = 'MASTERED';
-        } else {
-          // Henüz 7 gün dolmamışken erken çalışıldıysa kutuda kalır
-          newBox = 3;
-          nextReviewAt = currentProgress?.next_review_at ? new Date(currentProgress.next_review_at) : new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-          newStatus = currentProgress?.status === 'MASTERED' ? 'MASTERED' : 'REVIEWING';
-        }
+        // 4. AŞAMA (7. GÜN KUTUSUNDAKİ KELİME TEKRAR BİLİNDİ): %100 TAMAMLANDI (Mastered & Kalıcı Hafıza)
+        newBox = 3;
+        nextReviewAt = new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000);
+        newStatus = 'MASTERED';
       }
     } else {
       incorrectCount += 1;
-      const currentBox = currentProgress ? currentProgress.box : 1;
 
       if (currentBox === 3) {
-        // Kalıcı hafızadaki kelime yanlış bilinirse -> Kutu 2'ye (Pekiştirme - 3 gün sonra) düşer
+        // 7. Gün kutusundaki yanlış bilinirse -> Kutu 2'ye (3. Gün - 1 gün sonra tekrar) geriler
         newBox = 2;
-        nextReviewAt = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+        nextReviewAt = new Date(now.getTime() + 1 * 24 * 60 * 60 * 1000);
         newStatus = 'REVIEWING';
       } else if (currentBox === 2) {
-        // Pekiştirmedeki kelime yanlış bilinirse -> Kutu 1'e (Günlük - 1 gün sonra) düşer
+        // 3. Gün kutusundaki yanlış bilinirse -> Kutu 1'e (1. Gün - 1 gün sonra tekrar) geriler
         newBox = 1;
-        nextReviewAt = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+        nextReviewAt = new Date(now.getTime() + 1 * 24 * 60 * 60 * 1000);
         newStatus = 'LEARNING';
       } else {
-        // Günlük kutudaki yanlış -> Bilene kadar günlük kutuda kalır (1 gün sonra)
+        // 1. Gün veya yeni kelime yanlış bilinirse -> Kutu 1'de kalır (1 gün sonra tekrar)
         newBox = 1;
-        nextReviewAt = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+        nextReviewAt = new Date(now.getTime() + 1 * 24 * 60 * 60 * 1000);
         newStatus = 'LEARNING';
       }
     }

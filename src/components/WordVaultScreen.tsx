@@ -544,8 +544,17 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     const isDue = reviewTimestamp !== null && diffMs <= 0;
 
     if (box === 3) {
+      if (word.status === 'MASTERED') {
+        return {
+          percentage: 100,
+          color: '#10B981',
+          isCompleted: true,
+          statusText: '🏆 Tamamlandı',
+          isDue: false,
+        };
+      }
       return {
-        percentage: 66,
+        percentage: 75,
         color: '#10B981',
         isCompleted: false,
         statusText: isDue ? '⚡ Tekrar' : `${daysRemaining > 0 ? daysRemaining : 7}g beklemede ⏳`,
@@ -554,19 +563,29 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     }
     if (box === 2) {
       return {
-        percentage: 33,
+        percentage: 50,
         color: '#3B82F6',
         isCompleted: false,
         statusText: isDue ? '⚡ Tekrar' : `${daysRemaining > 0 ? daysRemaining : 3}g beklemede ⏳`,
         isDue,
       };
     }
-    // Box 0 or 1 (Günlük / Yeni)
+    // Box 1 (1. Gün)
+    if (box === 1) {
+      return {
+        percentage: 25,
+        color: '#F59E0B',
+        isCompleted: false,
+        statusText: isDue ? '⚡ Tekrar' : `${daysRemaining > 0 ? daysRemaining : 1}g beklemede ⏳`,
+        isDue,
+      };
+    }
+    // Box 0 (Henüz çalışılmamış Yeni Kelime)
     return {
       percentage: 0,
       color: colors.border,
       isCompleted: false,
-      statusText: '1. Gün',
+      statusText: 'Yeni',
       isDue: true,
     };
   };
@@ -574,18 +593,17 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
   // Helper to determine if a word is active/due for practice
   const isWordActiveForPractice = useCallback((word: WordWithProgress): boolean => {
     const box = word.box || 0;
-    const isMastered = box >= 3 && ((word.correctCount || 0) >= 2 || word.status === 'MASTERED');
+    const isMastered = word.status === 'MASTERED' || (box >= 3 && (word.correctCount || 0) >= 3);
 
     // Mastered (%100 completed) words are finished
     if (isMastered) return false;
 
-    // Box 0 or 1: New / Daily words waiting to be learned
-    if (box <= 1) {
+    // Box 0: Henüz hiç çalışılmamış yeni kelime -> Her zaman aktiftir
+    if (!word.box || box === 0) {
       return true;
     }
 
-    // Box 2 (Haftalık / 3. Gün) and Box 3 (Aylık / 7. Gün):
-    // SADECE tekrar randevu tarihi geldiyse veya geçmişse aktiftir!
+    // Box 1, Box 2 ve Box 3: Randevu tarihi geldiyse veya geçtiyse aktiftir!
     if (word.nextReviewAt) {
       const reviewTime = parseSqliteDate(word.nextReviewAt);
       if (reviewTime !== null) {
@@ -593,8 +611,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
       }
     }
 
-    // Box 2 ve Box 3'teki kelimeler randevu tarihi yoksa veya henüz gelmediyse AKTİF DEĞİLDİR (beklemededir)
-    return false;
+    return true;
   }, []);
 
   // Check if a word is a user-added custom word

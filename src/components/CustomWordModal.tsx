@@ -16,6 +16,7 @@ import { useLearningStore } from '../store/useLearningStore';
 import { dbService } from '../database/DatabaseService';
 import { useThemeStore } from '../store/useThemeStore';
 import { AIService } from '../services/AIService';
+import { DictionaryApiService } from '../services/DictionaryApiService';
 import { SmoothBottomSheet } from './SmoothBottomSheet';
 
 interface Props {
@@ -71,14 +72,29 @@ export const CustomWordModal: React.FC<Props> = ({
   }, [visible, initialWord, initialMeaning, initialFolderId, vocabFolders]);
 
   const handleAiAutoFill = async () => {
-    if (!wordText.trim()) {
+    const cleanWord = wordText.trim();
+    if (!cleanWord) {
       Alert.alert('Kelime Yazın', 'Lütfen önce bir İngilizce kelime yazın.');
       return;
     }
     Keyboard.dismiss();
     setIsAutoFilling(true);
     try {
-      const details = await AIService.autoCompleteWord(wordText.trim());
+      // 1. AŞAMA: Ultra-hızlı sözlük motoru kontrolü (~100-150ms)
+      const fastDict = await DictionaryApiService.lookupWord(cleanWord);
+      if (fastDict && fastDict.primaryTurkish) {
+        const trText = fastDict.allTurkishMeanings && fastDict.allTurkishMeanings.length > 1
+          ? fastDict.allTurkishMeanings.slice(0, 3).join(', ')
+          : fastDict.primaryTurkish;
+        setMeaning(trText);
+        if (fastDict.exampleEn) setExampleSentence(fastDict.exampleEn);
+        if (fastDict.exampleTr) setExampleTranslation(fastDict.exampleTr);
+        setIsAutoFilling(false);
+        return;
+      }
+
+      // 2. AŞAMA: Sözlükte bulunamazsa Gemini AI ile akademik tamamlama
+      const details = await AIService.autoCompleteWord(cleanWord);
       if (details && details.meaning) {
         setMeaning(details.meaning);
         if (details.example_sentence) setExampleSentence(details.example_sentence);
@@ -86,7 +102,7 @@ export const CustomWordModal: React.FC<Props> = ({
       } else {
         Alert.alert(
           'Kelime Bulunamadı',
-          `"${wordText.trim()}" kelimesi sözlükte bulunamadı. Lütfen kelimenin yazımını kontrol edin veya anlamını manuel olarak yazın.`
+          `"${cleanWord}" kelimesi sözlükte bulunamadı. Lütfen kelimenin yazımını kontrol edin veya anlamını manuel olarak yazın.`
         );
       }
     } catch (err) {

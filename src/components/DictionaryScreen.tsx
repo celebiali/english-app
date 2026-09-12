@@ -77,7 +77,7 @@ export const DictionaryScreen: React.FC = () => {
 
   const toastFadeAnim = useRef(new Animated.Value(0)).current;
 
-  // Search logic: Local SQLite first, then online Dictionary API in parallel
+  // Search logic: Instant local SQLite search + non-blocking ultra-fast online API lookup
   useEffect(() => {
     const trimmed = searchQuery.trim();
     if (!trimmed) {
@@ -87,28 +87,59 @@ export const DictionaryScreen: React.FC = () => {
       return;
     }
 
-    setIsSearching(true);
-    const timer = setTimeout(async () => {
-      try {
-        // 1. Local SQLite search (instant)
-        const localMatches = await dbService.searchDictionary(trimmed, 25);
-        setSearchResults(localMatches);
+    let isMounted = true;
+    const abortController = new AbortController();
 
-        // 2. Query Free Dictionary API for English input
-        if (/^[a-zA-Z\s'-]+$/.test(trimmed) && trimmed.length >= 2) {
-          const apiData = await DictionaryApiService.lookupWord(trimmed);
-          setApiResult(apiData);
-        } else {
-          setApiResult(null);
+    // 1. Local SQLite search (instant 0-10ms response)
+    dbService
+      .searchDictionary(trimmed, 25)
+      .then((localMatches) => {
+        if (isMounted) {
+          setSearchResults(localMatches);
+          // If local matches are found, user can interact immediately!
+          if (localMatches.length > 0) {
+            setIsSearching(false);
+          }
         }
-      } catch (err) {
-        console.warn('Search error:', err);
-      } finally {
-        setIsSearching(false);
-      }
-    }, 200);
+      })
+      .catch((err) => {
+        console.warn('Local search error:', err);
+      });
 
-    return () => clearTimeout(timer);
+    // 2. Query Live Dictionary API with short debounce & abortable controller
+    if (/^[a-zA-Z\s'-]+$/.test(trimmed) && trimmed.length >= 2) {
+      setIsSearching(true);
+      const timer = setTimeout(async () => {
+        try {
+          const apiData = await DictionaryApiService.lookupWord(trimmed, {
+            signal: abortController.signal,
+          });
+          if (isMounted) {
+            setApiResult(apiData);
+          }
+        } catch (err: any) {
+          if (err?.name !== 'AbortError') {
+            console.warn('API search error:', err);
+          }
+        } finally {
+          if (isMounted) {
+            setIsSearching(false);
+          }
+        }
+      }, 100);
+
+      return () => {
+        isMounted = false;
+        abortController.abort();
+        clearTimeout(timer);
+      };
+    } else {
+      setApiResult(null);
+      return () => {
+        isMounted = false;
+        abortController.abort();
+      };
+    }
   }, [searchQuery]);
 
   // When a word is selected, fetch deep dictionary detail (definitions, phonetics, examples)

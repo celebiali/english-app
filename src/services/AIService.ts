@@ -2,6 +2,7 @@ import { QuestionItem, YdsQuestionType, OptionKey, WordItem, AIMistakeAnalysis, 
 import { ENV_CONFIG } from '../config/env';
 import { INITIAL_YDS_QUESTIONS } from './YdsQuestionBank';
 import { dbService } from '../database/DatabaseService';
+import { DictionaryApiService } from './DictionaryApiService';
 
 export interface AIQuestionGenerateParams {
   type: YdsQuestionType;
@@ -421,7 +422,28 @@ GÖREV:
       }
     } catch (_) {}
 
-    // 2. AŞAMA: Yerelde Yoksa Sıfır Yaratıcılık (temperature: 0.0) ile Kesin Sözlük Motoruna Sor
+    // 2. AŞAMA: Ultra-hızlı Sözlük Motorunu Kontrol Et (~100-150ms)
+    try {
+      const fastDict = await DictionaryApiService.lookupWord(cleanWord);
+      if (fastDict && fastDict.primaryTurkish) {
+        const trMeaning =
+          fastDict.allTurkishMeanings && fastDict.allTurkishMeanings.length > 1
+            ? fastDict.allTurkishMeanings.slice(0, 3).join(', ')
+            : fastDict.primaryTurkish;
+        return {
+          word: cleanWord.toUpperCase(),
+          meaning: trMeaning,
+          level: 'B2',
+          example_sentence: fastDict.exampleEn || '',
+          example_translation: fastDict.exampleTr || '',
+          synonyms: [],
+          category: 'VOCABULARY',
+          is_custom: true,
+        };
+      }
+    } catch (_) {}
+
+    // 3. AŞAMA: Yerelde ve Sözlükte Yoksa Sıfır Yaratıcılık (temperature: 0.0) ile Kesin Sözlük Motoruna Sor
     const prompt = `Sen resmi İngilizce-Türkçe Akademik Sözlük motorusun.
 GİRDİ: "${cleanWord}"
 GÖREV:

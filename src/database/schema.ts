@@ -157,6 +157,7 @@ CREATE TABLE IF NOT EXISTS vocab_folders (
 `;
 
 export const CREATE_INDEXES = `
+CREATE INDEX IF NOT EXISTS idx_words_word ON words(word);
 CREATE INDEX IF NOT EXISTS idx_words_level ON words(level);
 CREATE INDEX IF NOT EXISTS idx_words_category ON words(category);
 CREATE INDEX IF NOT EXISTS idx_words_subcategory ON words(subcategory);

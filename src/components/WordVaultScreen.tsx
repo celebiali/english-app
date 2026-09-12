@@ -318,7 +318,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     loadVocabFolders();
   }, []);
 
-  // Dictionary API search when user stops typing or submits search
+  // Dictionary API search with 120ms debounce & abortable controller
   useEffect(() => {
     const clean = searchQuery.trim().toLowerCase();
     if (!clean || clean.length < 2) {
@@ -346,27 +346,32 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     }
 
     let isMounted = true;
+    const abortController = new AbortController();
     setIsSearchingApi(true);
 
-    DictionaryApiService.lookupWord(clean)
-      .then((res) => {
-        if (isMounted) {
-          setApiResult(res);
-        }
-      })
-      .catch(() => {
-        if (isMounted) {
-          setApiResult(null);
-        }
-      })
-      .finally(() => {
-        if (isMounted) {
-          setIsSearchingApi(false);
-        }
-      });
+    const timer = setTimeout(() => {
+      DictionaryApiService.lookupWord(clean, { signal: abortController.signal })
+        .then((res) => {
+          if (isMounted) {
+            setApiResult(res);
+          }
+        })
+        .catch((err) => {
+          if (isMounted && err?.name !== 'AbortError') {
+            setApiResult(null);
+          }
+        })
+        .finally(() => {
+          if (isMounted) {
+            setIsSearchingApi(false);
+          }
+        });
+    }, 120);
 
     return () => {
       isMounted = false;
+      abortController.abort();
+      clearTimeout(timer);
       setIsSearchingApi(false);
     };
   }, [searchQuery, dictionaryWords]);

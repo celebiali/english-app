@@ -1402,6 +1402,27 @@ class DatabaseService {
     );
   }
 
+  /**
+   * Updates the Turkish meaning of a word in SQLite/Memory DB
+   */
+  async updateWordMeaning(wordId: number, newMeaning: string): Promise<void> {
+    const cleanMeaning = (newMeaning || '').trim();
+    if (!cleanMeaning) return;
+
+    if (!this.isNative) {
+      const w = this.memoryDb.words.get(wordId);
+      if (w) {
+        w.meaning = cleanMeaning;
+      }
+      return;
+    }
+
+    await this.dbInstance.runAsync(
+      `UPDATE words SET meaning = ? WHERE id = ?`,
+      [cleanMeaning, wordId]
+    );
+  }
+
   async updateWordBox(wordId: number, boxNumber: number): Promise<void> {
     if (!this.isNative) {
       const p = this.memoryDb.progress.get(wordId);

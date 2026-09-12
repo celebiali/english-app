@@ -29,8 +29,8 @@ export class DictionaryApiService {
   private static cache = new Map<string, RichDictionaryResult>();
 
   /**
-   * Translates English words and sentences to Turkish using MyMemory API.
-   * 100% free, JSON response, never triggers bot captchas.
+   * Translates English words to Turkish using Google Translate neural engine,
+   * with automatic extraction of synonyms / alternative meanings and MyMemory fallback.
    */
   private static async fetchTurkishTranslations(
     word: string
@@ -47,12 +47,99 @@ export class DictionaryApiService {
           .filter(Boolean);
         return {
           primary: parts[0] || localWord.meaning,
-          all: parts.length > 0 ? parts.slice(0, 6) : [localWord.meaning],
+          all: parts.length > 0 ? parts.slice(0, 8) : [localWord.meaning],
         };
       }
     } catch (_) {}
 
-    // 2. Fetch from MyMemory Translation API
+    // 2. Fetch from Google Translate API (Highest accuracy for compound/academic words)
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=tr&dt=t&dt=bd&dt=at&q=${encodeURIComponent(
+        clean
+      )}`;
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
+      if (response.ok) {
+        const data = await response.json();
+        let primary = '';
+        const all: string[] = [];
+
+        // Primary translation from segments
+        if (Array.isArray(data) && Array.isArray(data[0])) {
+          let assembled = '';
+          for (const seg of data[0]) {
+            if (seg && typeof seg[0] === 'string') {
+              assembled += seg[0];
+            }
+          }
+          const trClean = assembled.trim();
+          if (trClean && trClean.toLowerCase() !== clean) {
+            primary = trClean.charAt(0).toUpperCase() + trClean.slice(1);
+            all.push(primary);
+          }
+        }
+
+        // Alternative translations from data[5]
+        if (Array.isArray(data) && Array.isArray(data[5]) && Array.isArray(data[5][0])) {
+          const alts = data[5][0][2];
+          if (Array.isArray(alts)) {
+            for (const item of alts) {
+              if (item && typeof item[0] === 'string') {
+                const altText = item[0].trim();
+                const altCap = altText.charAt(0).toUpperCase() + altText.slice(1);
+                if (
+                  altText &&
+                  altText.toLowerCase() !== clean &&
+                  !all.some((a) => a.toLowerCase() === altText.toLowerCase()) &&
+                  altText.length < 40
+                ) {
+                  all.push(altCap);
+                }
+              }
+            }
+          }
+        }
+
+        // Dictionary definitions from data[1] (part of speech categories)
+        if (Array.isArray(data) && Array.isArray(data[1])) {
+          for (const group of data[1]) {
+            if (Array.isArray(group) && Array.isArray(group[1])) {
+              for (const w of group[1]) {
+                if (typeof w === 'string') {
+                  const wClean = w.trim();
+                  const wCap = wClean.charAt(0).toUpperCase() + wClean.slice(1);
+                  if (
+                    wClean &&
+                    wClean.toLowerCase() !== clean &&
+                    !all.some((a) => a.toLowerCase() === wClean.toLowerCase()) &&
+                    wClean.length < 40
+                  ) {
+                    all.push(wCap);
+                  }
+                }
+              }
+            }
+            if (all.length >= 8) break;
+          }
+        }
+
+        if (primary || all.length > 0) {
+          const finalPrimary = primary || all[0] || clean;
+          return {
+            primary: finalPrimary,
+            all: all.length > 0 ? all.slice(0, 8) : [finalPrimary],
+          };
+        }
+      }
+    } catch (googleErr) {
+      console.warn('Google Translate error, falling back to MyMemory:', googleErr);
+    }
+
+    // 3. Fallback: Fetch from MyMemory Translation API
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 4000);
@@ -71,14 +158,12 @@ export class DictionaryApiService {
 
       if (data && data.responseData && data.responseData.translatedText) {
         const tr = data.responseData.translatedText.trim().toLowerCase();
-        // Ignore if returned same word (meaning no translation found)
         if (tr && tr !== clean) {
           primary = tr.charAt(0).toUpperCase() + tr.slice(1);
           all.push(primary);
         }
       }
 
-      // Collect alternative translations from matches
       if (data && Array.isArray(data.matches)) {
         for (const match of data.matches) {
           if (match.translation) {
@@ -109,16 +194,46 @@ export class DictionaryApiService {
   }
 
   /**
-   * Translates an English example sentence to Turkish
+   * Translates an English example sentence to Turkish using Google Translate (with MyMemory fallback)
    */
   static async translateSentence(sentence: string): Promise<string> {
     if (!sentence || sentence.trim().length === 0) return '';
+    const cleanSentence = sentence.trim();
+
+    // 1. Google Translate engine for natural sentence translation
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=tr&dt=t&q=${encodeURIComponent(
+        cleanSentence
+      )}`;
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
+      if (response.ok) {
+        const data = await response.json();
+        if (Array.isArray(data) && Array.isArray(data[0])) {
+          let fullTr = '';
+          for (const part of data[0]) {
+            if (part && typeof part[0] === 'string') {
+              fullTr += part[0];
+            }
+          }
+          if (fullTr.trim()) {
+            return fullTr.trim();
+          }
+        }
+      }
+    } catch (_) {}
+
+    // 2. Fallback to MyMemory
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3500);
 
       const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
-        sentence.trim()
+        cleanSentence
       )}&langpair=en|tr`;
       const response = await fetch(url, { signal: controller.signal });
       clearTimeout(timeoutId);

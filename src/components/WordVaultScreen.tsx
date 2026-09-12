@@ -13,6 +13,7 @@ import {
   Alert,
   PanResponder,
   Keyboard,
+  TextInput,
 } from 'react-native';
 import {
   X,
@@ -28,6 +29,7 @@ import {
   BookOpen,
   Sparkles,
   Trash2,
+  Edit3,
 } from 'lucide-react-native';
 import * as Speech from 'expo-speech';
 import { useThemeStore } from '../store/useThemeStore';
@@ -242,6 +244,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     resetVocabSession,
     startSessionWithWords,
     deleteWord,
+    updateWordMeaning,
     vocabFolders,
   } = useLearningStore();
 
@@ -283,6 +286,14 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
   // Selected word detail modal
   const [selectedWord, setSelectedWord] = useState<WordWithProgress | null>(null);
   const [selectedWordDetail, setSelectedWordDetail] = useState<RichDictionaryResult | null>(null);
+
+  // Edit Turkish Meaning state (Kelime eklemeden önce veya kelime detayında anlamı düzenleme)
+  const [isEditMeaningModalOpen, setIsEditMeaningModalOpen] = useState(false);
+  const [editingWordText, setEditingWordText] = useState('');
+  const [editingMeaningInput, setEditingMeaningInput] = useState('');
+  const [editingSuggestions, setEditingSuggestions] = useState<string[]>([]);
+  const [editingTargetType, setEditingTargetType] = useState<'API_RESULT' | 'EXISTING_WORD'>('API_RESULT');
+  const [editingWordId, setEditingWordId] = useState<number | null>(null);
 
   // Study slider phase (Önce kelimeleri telaffuz, cümle ve Türkçe anlamıyla inceleme)
   const [isStudySliderActive, setIsStudySliderActive] = useState(false);
@@ -466,6 +477,67 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
       showToast(`"${wordTextToAdd}" listenize eklendi! ⭐`);
     } catch (err) {
       console.warn('Error adding word:', err);
+    }
+  };
+
+  // Open edit modal for live API search result before adding to vault
+  const handleOpenEditApiMeaning = (res: RichDictionaryResult) => {
+    setEditingWordText(res.word);
+    setEditingMeaningInput(res.primaryTurkish || '');
+    const alts = (res.allTurkishMeanings || []).filter(
+      (m) => m && m.trim().toLowerCase() !== (res.primaryTurkish || '').trim().toLowerCase()
+    );
+    setEditingSuggestions(alts);
+    setEditingTargetType('API_RESULT');
+    setEditingWordId(null);
+    setIsEditMeaningModalOpen(true);
+  };
+
+  // Open edit modal for existing word in word vault / detail modal
+  const handleOpenEditExistingWord = (word: WordWithProgress) => {
+    setEditingWordText(word.word);
+    setEditingMeaningInput(word.meaning || '');
+    const alts = (selectedWordDetail?.allTurkishMeanings || []).filter(
+      (m) => m && m.trim().toLowerCase() !== (word.meaning || '').trim().toLowerCase()
+    );
+    setEditingSuggestions(alts);
+    setEditingTargetType('EXISTING_WORD');
+    setEditingWordId(word.id);
+    setIsEditMeaningModalOpen(true);
+  };
+
+  // Save the edited Turkish meaning
+  const handleSaveEditedMeaning = async (alsoAddToVault: boolean = false) => {
+    const cleanMeaning = editingMeaningInput.trim();
+    if (!cleanMeaning) {
+      Alert.alert('Eksik Bilgi', 'Lütfen geçerli bir Türkçe anlam girin.');
+      return;
+    }
+
+    if (editingTargetType === 'API_RESULT' && apiResult) {
+      const updatedApiResult: RichDictionaryResult = {
+        ...apiResult,
+        primaryTurkish: cleanMeaning,
+      };
+      setApiResult(updatedApiResult);
+      setIsEditMeaningModalOpen(false);
+
+      if (alsoAddToVault) {
+        await handleAddWordDirectly(updatedApiResult);
+      } else {
+        showToast('Türkçe anlam güncellendi. "Ekle" butonuna basarak kaydedebilirsiniz.');
+      }
+    } else if (editingTargetType === 'EXISTING_WORD' && editingWordId !== null) {
+      try {
+        await updateWordMeaning(editingWordId, cleanMeaning);
+        if (selectedWord && selectedWord.id === editingWordId) {
+          setSelectedWord({ ...selectedWord, meaning: cleanMeaning });
+        }
+        setIsEditMeaningModalOpen(false);
+        showToast(`"${editingWordText}" anlamı güncellendi! ✅`);
+      } catch (err) {
+        console.warn('Anlam güncellenirken hata:', err);
+      }
     }
   };
 
@@ -1022,6 +1094,9 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
         {/* Word Detail Modal */}
         {renderWordDetailModal()}
 
+        {/* Edit Turkish Meaning Modal */}
+        {renderEditMeaningModal()}
+
         {/* Custom Word Modal */}
         <CustomWordModal
           visible={isAddWordModalOpen}
@@ -1073,7 +1148,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
           ListHeaderComponent={
             // Canlı Sözlük Kartı (Kullanıcının kelimelerinde tam eşleşme yoksa)
             apiResult ? (
-              <TouchableOpacity
+              <View
                 style={[
                   styles.apiResultCard,
                   {
@@ -1081,10 +1156,8 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
                     borderColor: colors.brand,
                   },
                 ]}
-                onPress={() => handleAddWordDirectly(apiResult)}
-                activeOpacity={0.75}
               >
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, marginRight: 10 }}>
                   <View style={styles.apiHeaderRow}>
                     <Text style={[styles.wordTitle, { color: colors.brand }]}>
                       {apiResult.word}
@@ -1094,16 +1167,30 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
                       <Text style={[styles.apiBadgeText, { color: colors.brand }]}>Canlı Sözlük</Text>
                     </View>
                   </View>
-                  <Text style={[styles.wordMeaning, { color: colors.textSecondary }]} numberOfLines={1}>
-                    {apiResult.primaryTurkish}
-                  </Text>
+
+                  <TouchableOpacity
+                    style={styles.apiMeaningRowTouch}
+                    onPress={() => handleOpenEditApiMeaning(apiResult)}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={[styles.wordMeaning, { color: colors.textSecondary, flexShrink: 1 }]} numberOfLines={1}>
+                      {apiResult.primaryTurkish}
+                    </Text>
+                    <View style={[styles.apiEditIconBtn, { backgroundColor: colors.brandLight }]}>
+                      <Edit3 size={12} color={colors.brand} />
+                    </View>
+                  </TouchableOpacity>
                 </View>
 
-                <View style={[styles.addDirectBtn, { backgroundColor: colors.brand }]}>
+                <TouchableOpacity
+                  style={[styles.addDirectBtn, { backgroundColor: colors.brand }]}
+                  onPress={() => handleAddWordDirectly(apiResult)}
+                  activeOpacity={0.8}
+                >
                   <Plus size={16} color="#FFFFFF" strokeWidth={2.8} />
                   <Text style={styles.addDirectBtnText}>Ekle</Text>
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
             ) : isSearchingApi ? (
               <View style={styles.apiLoadingWrap}>
                 <ActivityIndicator size="small" color={colors.brand} />
@@ -1255,6 +1342,9 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
       {/* Word Detail Modal */}
       {renderWordDetailModal()}
 
+      {/* Edit Turkish Meaning Modal */}
+      {renderEditMeaningModal()}
+
       {/* Custom Word Modal */}
       <CustomWordModal
         visible={isAddWordModalOpen}
@@ -1305,13 +1395,23 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
           <View style={[styles.modalCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
             {/* Modal Header */}
             <View style={styles.modalHeader}>
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 1, marginRight: 6 }}>
                 <Text style={[styles.modalWordTitle, { color: colors.text }]}>
                   {selectedWord.word}
                 </Text>
-                <Text style={[styles.modalWordMeaning, { color: colors.brand }]}>
-                  {selectedWordDetail?.primaryTurkish || selectedWord.meaning}
-                </Text>
+                <View style={styles.modalMeaningRow}>
+                  <Text style={[styles.modalWordMeaning, { color: colors.brand, flexShrink: 1 }]}>
+                    {selectedWord.meaning || selectedWordDetail?.primaryTurkish}
+                  </Text>
+                  <TouchableOpacity
+                    style={[styles.modalEditIconBtn, { backgroundColor: colors.brandLight }]}
+                    onPress={() => handleOpenEditExistingWord(selectedWord)}
+                    activeOpacity={0.7}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  >
+                    <Edit3 size={12} color={colors.brand} />
+                  </TouchableOpacity>
+                </View>
               </View>
 
               <TouchableOpacity
@@ -1387,6 +1487,159 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               >
                 <Text style={styles.modalDoneBtnText}>Tamam</Text>
               </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    );
+  }
+
+  // Helper function to render edit Turkish meaning modal
+  function renderEditMeaningModal() {
+    if (!isEditMeaningModalOpen) return null;
+
+    return (
+      <Modal
+        visible={isEditMeaningModalOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsEditMeaningModalOpen(false)}
+      >
+        <View style={styles.modalBackdrop}>
+          <View
+            style={[
+              styles.modalCard,
+              { backgroundColor: colors.cardBackground, borderColor: colors.border },
+            ]}
+          >
+            {/* Header */}
+            <View style={styles.modalHeader}>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.editModalTitle, { color: colors.text }]}>
+                  Türkçe Anlamı Düzenle
+                </Text>
+                <Text style={[styles.editModalWordSub, { color: colors.brand }]}>
+                  {editingWordText}
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={[styles.modalCloseBtn, { backgroundColor: colors.subtleBackground }]}
+                onPress={() => setIsEditMeaningModalOpen(false)}
+              >
+                <X size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
+
+            {/* Input */}
+            <View style={styles.editMeaningInputSection}>
+              <Text style={[styles.editMeaningLabel, { color: colors.textSecondary }]}>
+                Türkçe Karşılık:
+              </Text>
+              <TextInput
+                style={[
+                  styles.editMeaningInput,
+                  {
+                    backgroundColor: colors.subtleBackground,
+                    color: colors.text,
+                    borderColor: colors.border,
+                  },
+                ]}
+                value={editingMeaningInput}
+                onChangeText={setEditingMeaningInput}
+                placeholder="Örn: Bakım odası"
+                placeholderTextColor={colors.textSecondary}
+                autoFocus
+                selectTextOnFocus
+              />
+            </View>
+
+            {/* Suggestions Chips (e.g. from Google Translate / dictionary alts) */}
+            {editingSuggestions.length > 0 && (
+              <View style={styles.editMeaningSuggestionsWrap}>
+                <Text style={[styles.editSuggestionsTitle, { color: colors.textSecondary }]}>
+                  💡 Alternatif Çeviriler (Dokun ve seç):
+                </Text>
+                <View style={styles.editChipsRow}>
+                  {editingSuggestions.slice(0, 6).map((sug, idx) => {
+                    const isSelected =
+                      editingMeaningInput.trim().toLowerCase() === sug.trim().toLowerCase();
+                    return (
+                      <TouchableOpacity
+                        key={idx}
+                        style={[
+                          styles.editChip,
+                          {
+                            backgroundColor: isSelected ? colors.brandLight : colors.subtleBackground,
+                            borderColor: isSelected ? colors.brand : colors.border,
+                          },
+                        ]}
+                        onPress={() => setEditingMeaningInput(sug)}
+                        activeOpacity={0.7}
+                      >
+                        <Text
+                          style={[
+                            styles.editChipText,
+                            {
+                              color: isSelected ? colors.brand : colors.text,
+                              fontWeight: isSelected ? '700' : '500',
+                            },
+                          ]}
+                        >
+                          {sug}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              </View>
+            )}
+
+            {/* Action Buttons */}
+            <View style={styles.editModalButtonsRow}>
+              <TouchableOpacity
+                style={[styles.editModalCancelBtn, { borderColor: colors.border }]}
+                onPress={() => setIsEditMeaningModalOpen(false)}
+                activeOpacity={0.7}
+              >
+                <Text style={[styles.editModalCancelText, { color: colors.textSecondary }]}>
+                  Vazgeç
+                </Text>
+              </TouchableOpacity>
+
+              {editingTargetType === 'API_RESULT' ? (
+                <>
+                  <TouchableOpacity
+                    style={[
+                      styles.editModalApplyBtn,
+                      { borderColor: colors.brand, backgroundColor: colors.brandLight },
+                    ]}
+                    onPress={() => handleSaveEditedMeaning(false)}
+                    activeOpacity={0.75}
+                  >
+                    <Text style={[styles.editModalApplyText, { color: colors.brand }]}>
+                      Uygula
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[styles.editModalSaveBtn, { backgroundColor: colors.brand }]}
+                    onPress={() => handleSaveEditedMeaning(true)}
+                    activeOpacity={0.8}
+                  >
+                    <Plus size={15} color="#FFFFFF" strokeWidth={2.6} />
+                    <Text style={styles.editModalSaveBtnText}>Kaydet ve Ekle</Text>
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <TouchableOpacity
+                  style={[styles.editModalSaveBtn, { backgroundColor: colors.brand, flex: 1 }]}
+                  onPress={() => handleSaveEditedMeaning(false)}
+                  activeOpacity={0.8}
+                >
+                  <Check size={16} color="#FFFFFF" strokeWidth={2.6} />
+                  <Text style={styles.editModalSaveBtnText}>Kaydet</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>
@@ -2118,5 +2371,123 @@ const styles = StyleSheet.create({
   searchTipText: {
     fontSize: 12.5,
     lineHeight: 18,
+  },
+  // Live Dictionary Meaning & Edit Pill
+  apiMeaningRowTouch: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 2,
+  },
+  apiEditIconBtn: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  // Modal Meaning Row & Edit Pill
+  modalMeaningRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 3,
+  },
+  modalEditIconBtn: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  // Edit Meaning Modal Styles
+  editModalTitle: {
+    fontSize: 17,
+    fontWeight: '800',
+  },
+  editModalWordSub: {
+    fontSize: 14,
+    fontWeight: '700',
+    marginTop: 2,
+  },
+  editMeaningInputSection: {
+    marginTop: 14,
+    marginBottom: 12,
+  },
+  editMeaningLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    marginBottom: 6,
+  },
+  editMeaningInput: {
+    fontSize: 15,
+    fontWeight: '600',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  editMeaningSuggestionsWrap: {
+    marginBottom: 16,
+  },
+  editSuggestionsTitle: {
+    fontSize: 12,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  editChipsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  editChip: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  editChipText: {
+    fontSize: 12,
+  },
+  editModalButtonsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 8,
+    marginTop: 6,
+  },
+  editModalCancelBtn: {
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  editModalCancelText: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  editModalApplyBtn: {
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  editModalApplyText: {
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  editModalSaveBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    borderRadius: 10,
+  },
+  editModalSaveBtnText: {
+    color: '#FFFFFF',
+    fontSize: 13,
+    fontWeight: '700',
   },
 });

@@ -137,6 +137,7 @@ interface LearningState {
   updateVocabFolder: (id: string, updates: { name?: string; description?: string; color?: string; icon?: string }) => Promise<void>;
   deleteVocabFolder: (id: string) => Promise<void>;
   deleteWord: (wordId: number) => Promise<void>;
+  updateWordMeaning: (wordId: number, newMeaning: string) => Promise<void>;
 
   resetAllProgress: () => Promise<void>;
   deleteUserAccount: () => Promise<void>;
@@ -977,6 +978,16 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       await get().loadDailyTasks();
     } catch (err) {
       console.error('Failed to delete word:', err);
+    }
+  },
+
+  updateWordMeaning: async (wordId: number, newMeaning: string) => {
+    try {
+      await dbService.updateWordMeaning(wordId, newMeaning);
+      await get().loadVocabSession(true);
+      await get().loadDailyTasks();
+    } catch (err) {
+      console.error('Failed to update word meaning:', err);
     }
   },
 

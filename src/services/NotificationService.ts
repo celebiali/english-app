@@ -79,7 +79,7 @@ export class NotificationService {
    */
   static async scheduleIfPermitted(
     eveningHour: number = 20,
-    eveningMinute: number = 0,
+    eveningMinute: number = 30,
     dailyTarget: number = 35,
     streakCount: number = 1
   ): Promise<boolean> {
@@ -90,12 +90,12 @@ export class NotificationService {
 
   /**
    * Schedules full set of smart daily reminders:
-   * 1. Morning Vocab (09:00 AM)
-   * 2. Evening Task & Streak Protection (eveningHour e.g. 20:00)
+   * 1. Morning Vocab (09:00 AM) - Kelimeler ve Tekrarlar
+   * 2. Evening Streak Protection (eveningHour e.g. 20:30)
    */
   static async scheduleAllReminders(
     eveningHour: number = 20,
-    eveningMinute: number = 0,
+    eveningMinute: number = 30,
     dailyTarget: number = 35,
     streakCount: number = 1
   ): Promise<boolean> {
@@ -105,11 +105,11 @@ export class NotificationService {
     try {
       await Notifications.cancelAllScheduledNotificationsAsync();
 
-      // 1. Morning Kickoff Reminder (09:00)
+      // 1. Morning Kickoff Reminder (09:00) - Kelimeler ve tekrarlar hazır
       await Notifications.scheduleNotificationAsync({
         content: {
-          title: 'Günün Kelime Seti Hazır! 📚',
-          body: 'Güne taze Leitner kelime kartları ve aralıklı tekrarlar ile başlayın.',
+          title: 'Günün Kelimeleri ve Tekrarları Hazır! 📚',
+          body: 'Bugün tekrar vakti gelen kelimelerin ve yeni hedefin seni bekliyor. Güne taze bir başlangıç yap!',
           sound: 'default',
           data: { screen: 'VOCAB' },
         },
@@ -120,23 +120,20 @@ export class NotificationService {
         },
       });
 
-      // 2. Evening Focus & Streak Protection Reminder
-      // Kullanıcının gerçek seri durumuna göre dinamik başlık ve açıklama:
-      // streakCount <= 0: Henüz seri yok -> "İlk Gün Serini Başlat! 🎯"
-      // streakCount === 1: 1 gün çalışılmış -> "2. Gün Serini Yakala! 🔥"
-      // streakCount > 1: Gerçek seri var -> "🔥 ${streakCount} Günlük Serini Koru!"
-      let eveningTitle = '🎯 Günlük Çalışma Hedefini Tamamla!';
-      let eveningBody = `Bugünkü ${dailyTarget} soruluk sınav hedefin seni bekliyor. Hemen başla, hedefine bir adım daha yaklaş!`;
+      // 2. Evening Streak Protection Reminder (20:30 / eveningHour)
+      // Gün içinde çalışma yapılmadıysa seriyi koruma uyarısı
+      let eveningTitle = '🔥 Serini Kaybetme!';
+      let eveningBody = `Bugün henüz günlük hedefini tamamlamadın! Serini korumak ve sınavına hazırlanmak için birkaç dakika ayır.`;
 
-      if (streakCount <= 0) {
-        eveningTitle = '🎯 İlk Gün Serini Başlat!';
-        eveningBody = `Bugün birkaç soru veya kelime çözerek ilk serini yakala ve sınav hedefine doğru yola çık!`;
+      if (streakCount > 1) {
+        eveningTitle = `🔥 ${streakCount} Günlük Serini Kaybetme!`;
+        eveningBody = `${streakCount} gündür harika gidiyorsun! Bugünkü çalışmanı tamamlayarak serini koru.`;
       } else if (streakCount === 1) {
         eveningTitle = '🔥 2. Gün Serisini Yakala!';
-        eveningBody = `Harika bir başlangıç yaptın! Bugünkü çalışmanı tamamlayarak serini 2 güne çıkar.`;
+        eveningBody = 'Harika bir başlangıç yaptın! Bugünkü çalışmanı tamamlayarak serini 2 güne çıkar.';
       } else {
-        eveningTitle = `🔥 ${streakCount} Günlük Serini Koru!`;
-        eveningBody = `${streakCount} gündür harika gidiyorsun! Bugünkü çalışmanı tamamla ve serini kaybetme.`;
+        eveningTitle = '🎯 İlk Gün Serini Başlat!';
+        eveningBody = 'Bugün birkaç soru veya kelime çözerek ilk serini yakala ve hedefine bir adım daha yaklaş!';
       }
 
       await Notifications.scheduleNotificationAsync({

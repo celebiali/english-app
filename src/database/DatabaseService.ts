@@ -1745,23 +1745,31 @@ class DatabaseService {
 
     const currentBox = currentProgress ? currentProgress.box : 0;
 
+    // Randevu saatini sabah 06:00'ya sabitler; böylece sabah 09:00 bildirimi geldiğinde tüm kelimeler hazır olur!
+    const getMorningReviewDate = (daysAhead: number): Date => {
+      const target = new Date();
+      target.setDate(target.getDate() + daysAhead);
+      target.setHours(6, 0, 0, 0);
+      return target;
+    };
+
     if (isCorrect) {
       correctCount += 1;
 
       if (!currentProgress || currentBox === 0) {
-        // 1. AŞAMA (YENİ KELİME BİLİNDİ): 1. Gün kutusuna gider (1 gün sonra tekrar randevu)
+        // 1. AŞAMA (YENİ KELİME BİLİNDİ): 1. Gün kutusuna gider (ertesi sabah hazır)
         newBox = 1;
-        nextReviewAt = new Date(now.getTime() + 1 * 24 * 60 * 60 * 1000);
+        nextReviewAt = getMorningReviewDate(1);
         newStatus = 'LEARNING';
       } else if (currentBox === 1) {
-        // 2. AŞAMA (1. GÜN KUTUSUNDAKİ KELİME TEKRAR BİLİNDİ): 3. Gün kutusuna gider (3 gün sonra tekrar randevu)
+        // 2. AŞAMA (1. GÜN KUTUSUNDAKİ KELİME TEKRAR BİLİNDİ): 3. Gün kutusuna gider (3 gün sonra sabah hazır)
         newBox = 2;
-        nextReviewAt = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+        nextReviewAt = getMorningReviewDate(3);
         newStatus = 'REVIEWING';
       } else if (currentBox === 2) {
-        // 3. AŞAMA (3. GÜN KUTUSUNDAKİ KELİME TEKRAR BİLİNDİ): 7. Gün kutusuna gider (7 gün sonra tekrar randevu)
+        // 3. AŞAMA (3. GÜN KUTUSUNDAKİ KELİME TEKRAR BİLİNDİ): 7. Gün kutusuna gider (7 gün sonra sabah hazır)
         newBox = 3;
-        nextReviewAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+        nextReviewAt = getMorningReviewDate(7);
         newStatus = 'REVIEWING';
       } else {
         // 4. AŞAMA (7. GÜN KUTUSUNDAKİ KELİME TEKRAR BİLİNDİ): %100 TAMAMLANDI (Mastered & Kalıcı Hafıza)
@@ -1773,19 +1781,19 @@ class DatabaseService {
       incorrectCount += 1;
 
       if (currentBox === 3) {
-        // 7. Gün kutusundaki yanlış bilinirse -> Kutu 2'ye (3. Gün - 1 gün sonra tekrar) geriler
+        // 7. Gün kutusundaki yanlış bilinirse -> Kutu 2'ye (3. Gün) geriler, ertesi sabah tekrar sorulur
         newBox = 2;
-        nextReviewAt = new Date(now.getTime() + 1 * 24 * 60 * 60 * 1000);
+        nextReviewAt = getMorningReviewDate(1);
         newStatus = 'REVIEWING';
       } else if (currentBox === 2) {
-        // 3. Gün kutusundaki yanlış bilinirse -> Kutu 1'e (1. Gün - 1 gün sonra tekrar) geriler
+        // 3. Gün kutusundaki yanlış bilinirse -> Kutu 1'e (1. Gün) geriler, ertesi sabah tekrar sorulur
         newBox = 1;
-        nextReviewAt = new Date(now.getTime() + 1 * 24 * 60 * 60 * 1000);
+        nextReviewAt = getMorningReviewDate(1);
         newStatus = 'LEARNING';
       } else {
-        // 1. Gün veya yeni kelime yanlış bilinirse -> Kutu 1'de kalır (1 gün sonra tekrar)
+        // 1. Gün veya yeni kelime yanlış bilinirse -> Kutu 1'de kalır, ertesi sabah tekrar sorulur
         newBox = 1;
-        nextReviewAt = new Date(now.getTime() + 1 * 24 * 60 * 60 * 1000);
+        nextReviewAt = getMorningReviewDate(1);
         newStatus = 'LEARNING';
       }
     }
@@ -1995,14 +2003,15 @@ class DatabaseService {
     }
 
     // 1. Vadesi gelmiş kelimeleri TÜM klasörlerden çek (azami newWordsLimit kadar)
+    const nowIso = new Date().toISOString();
     const reviewSql = `SELECT w.*, p.box as prog_box, p.status as prog_status, p.correct_count as prog_correct, p.incorrect_count as prog_incorrect, p.last_reviewed_at as prog_last_reviewed, p.next_review_at as prog_next_review, p.box_entry_date as prog_entry_date
          FROM words w
          INNER JOIN user_word_progress p ON w.id = p.word_id
-         WHERE p.next_review_at IS NOT NULL AND p.next_review_at <= datetime('now')
+         WHERE p.next_review_at IS NOT NULL AND (datetime(p.next_review_at) <= datetime('now') OR p.next_review_at <= ?)
          ORDER BY p.next_review_at ASC
          LIMIT ?`;
 
-    const reviewRows = await this.dbInstance.getAllAsync(reviewSql, [newWordsLimit]);
+    const reviewRows = await this.dbInstance.getAllAsync(reviewSql, [nowIso, newWordsLimit]);
 
     const reviewWords: CardWord[] = reviewRows.map((r: any) => {
       const { badgeText, daysOverdue } = computeBadgeInfo(r.prog_box, r.prog_next_review);

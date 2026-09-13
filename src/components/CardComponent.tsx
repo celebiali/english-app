@@ -8,6 +8,7 @@ import {
   Pressable,
   Keyboard,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { CheckCircle2, XCircle, ArrowRight, HelpCircle, Volume2 } from 'lucide-react-native';
 import { CardWord } from '../types';
@@ -36,7 +37,14 @@ export const CardComponent: React.FC<CardComponentProps> = ({
   cardIndex = 0,
   totalCards = 1,
 }) => {
-  const { colors } = useThemeStore();
+  const { colors, fontSize, isSystemFontSize, fontFamily } = useThemeStore();
+  const dynamicFontSize = isSystemFontSize ? 16 : fontSize;
+  const dynamicFontFamily =
+    fontFamily === 'serif'
+      ? (Platform.OS === 'ios' ? 'Georgia' : 'serif')
+      : fontFamily === 'rounded'
+      ? (Platform.OS === 'ios' ? 'Avenir-Medium' : 'sans-serif-medium')
+      : undefined;
   const [userInput, setUserInput] = useState<string>('');
   const [isChecking, setIsChecking] = useState<boolean>(false);
   const [isEvaluated, setIsEvaluated] = useState<boolean>(false);
@@ -183,7 +191,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
 
               <View style={styles.wordCenterBox}>
                 <View style={styles.wordAudioRow}>
-                  <Text style={[styles.flashWord, { color: colors.text }]}>{cardWord.word}</Text>
+                  <Text style={[styles.flashWord, { color: colors.text, fontFamily: dynamicFontFamily }]}>{cardWord.word}</Text>
                   <TouchableOpacity
                     onPress={(e) => {
                       e.stopPropagation();
@@ -212,7 +220,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
             <View style={[styles.flashBack, { backgroundColor: colors.cardBackground }]}>
               <View style={styles.fbHeaderRow}>
                 <View style={styles.fbWordAudioRow}>
-                  <Text style={[styles.fbWordTitle, { color: colors.text }]}>{cardWord.word}</Text>
+                  <Text style={[styles.fbWordTitle, { color: colors.text, fontFamily: dynamicFontFamily }]}>{cardWord.word}</Text>
                   <TouchableOpacity
                     onPress={(e) => {
                       e.stopPropagation();
@@ -246,7 +254,16 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                 </View>
               </View>
 
-              <Text style={[styles.fbTr, { color: colors.text }]}>{cardWord.meaning}</Text>
+              <Text style={[
+                styles.fbTr,
+                {
+                  color: colors.text,
+                  fontFamily: dynamicFontFamily,
+                  fontSize: Math.round(dynamicFontSize * 1.25),
+                }
+              ]}>
+                {cardWord.meaning}
+              </Text>
 
               {/* Category Tags & Meanings */}
               {turengDetail?.meanings && turengDetail.meanings.length > 0 && (
@@ -254,7 +271,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                   {turengDetail.meanings.slice(0, 3).map((item, idx) => (
                     <View key={idx} style={styles.catRow}>
                       <Text style={[styles.catTag, { color: colors.brand }]}>[{item.category}]</Text>
-                      <Text style={[styles.catMeaning, { color: colors.text }]}>{item.turkish}</Text>
+                      <Text style={[styles.catMeaning, { color: colors.text, fontFamily: dynamicFontFamily }]}>{item.turkish}</Text>
                     </View>
                   ))}
                 </View>
@@ -274,9 +291,28 @@ export const CardComponent: React.FC<CardComponentProps> = ({
               {/* Example Sentence */}
               {cardWord.example_sentence && (
                 <View style={[styles.fbEx, { backgroundColor: colors.subtleBackground, borderLeftColor: colors.brand }]}>
-                  <Text style={[styles.fbExEn, { color: colors.text }]}>"{cardWord.example_sentence}"</Text>
+                  <Text style={[
+                    styles.fbExEn,
+                    {
+                      color: colors.text,
+                      fontFamily: dynamicFontFamily,
+                      fontSize: dynamicFontSize,
+                      lineHeight: Math.round(dynamicFontSize * 1.45),
+                    }
+                  ]}>
+                    "{cardWord.example_sentence}"
+                  </Text>
                   {cardWord.example_translation && (
-                    <Text style={[styles.fbExTr, { color: colors.textSecondary }]}>{cardWord.example_translation}</Text>
+                    <Text style={[
+                      styles.fbExTr,
+                      {
+                        color: colors.textSecondary,
+                        fontFamily: dynamicFontFamily,
+                        fontSize: Math.max(12, dynamicFontSize - 2),
+                      }
+                    ]}>
+                      {cardWord.example_translation}
+                    </Text>
                   )}
                 </View>
               )}

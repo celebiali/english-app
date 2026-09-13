@@ -30,6 +30,7 @@ import {
   Sparkles,
   Trash2,
   Edit3,
+  Clock,
 } from 'lucide-react-native';
 import * as Speech from 'expo-speech';
 import { useThemeStore } from '../store/useThemeStore';
@@ -57,6 +58,7 @@ interface SwipeableWordRowProps {
     isCompleted: boolean;
     statusText?: string;
     isDue?: boolean;
+    showClock?: boolean;
   };
   canDelete?: boolean;
   onPress: () => void;
@@ -209,14 +211,19 @@ const SwipeableWordRow: React.FC<SwipeableWordRowProps> = ({
                   />
                 </View>
                 {progress.statusText ? (
-                  <Text
-                    style={[
-                      styles.progressStatusText,
-                      { color: progress.isDue ? colors.brand : colors.textSecondary },
-                    ]}
-                  >
-                    {progress.statusText}
-                  </Text>
+                  <View style={styles.statusRowRight}>
+                    {progress.showClock && (
+                      <Clock size={10} color={colors.textSecondary} strokeWidth={2.2} />
+                    )}
+                    <Text
+                      style={[
+                        styles.progressStatusText,
+                        { color: progress.isDue ? colors.brand : colors.textSecondary },
+                      ]}
+                    >
+                      {progress.statusText}
+                    </Text>
+                  </View>
                 ) : null}
               </View>
             )}
@@ -620,13 +627,20 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     const daysRemaining = diffMs > 0 ? Math.ceil(diffMs / (1000 * 60 * 60 * 24)) : 0;
     const isDue = reviewTimestamp !== null && diffMs <= 0;
 
+    // Helper for friendly review time text
+    const getWaitStatusText = (defaultDays: number) => {
+      const days = daysRemaining > 0 ? daysRemaining : defaultDays;
+      if (days <= 1) return 'Yarın';
+      return `${days} gün sonra`;
+    };
+
     if (box === 3) {
       if (word.status === 'MASTERED') {
         return {
           percentage: 100,
           color: '#10B981',
           isCompleted: true,
-          statusText: '🏆 Tamamlandı',
+          statusText: 'Tamamlandı',
           isDue: false,
         };
       }
@@ -634,7 +648,8 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
         percentage: 75,
         color: '#10B981',
         isCompleted: false,
-        statusText: isDue ? '⚡ Tekrar' : `${daysRemaining > 0 ? daysRemaining : 7}g beklemede ⏳`,
+        statusText: isDue ? '⚡ Tekrar' : getWaitStatusText(7),
+        showClock: !isDue,
         isDue,
       };
     }
@@ -643,7 +658,8 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
         percentage: 50,
         color: '#3B82F6',
         isCompleted: false,
-        statusText: isDue ? '⚡ Tekrar' : `${daysRemaining > 0 ? daysRemaining : 3}g beklemede ⏳`,
+        statusText: isDue ? '⚡ Tekrar' : getWaitStatusText(3),
+        showClock: !isDue,
         isDue,
       };
     }
@@ -653,7 +669,8 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
         percentage: 25,
         color: '#F59E0B',
         isCompleted: false,
-        statusText: isDue ? '⚡ Tekrar' : `${daysRemaining > 0 ? daysRemaining : 1}g beklemede ⏳`,
+        statusText: isDue ? '⚡ Tekrar' : getWaitStatusText(1),
+        showClock: !isDue,
         isDue,
       };
     }
@@ -663,6 +680,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
       color: colors.border,
       isCompleted: false,
       statusText: 'Yeni',
+      showClock: false,
       isDue: true,
     };
   };
@@ -988,7 +1006,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               >
                 {activeFilteredCount > 0
                   ? (monthlyCount === totalCount && totalCount > 0 ? `Tekrar Et (${activeFilteredCount})` : `Çalış (${activeFilteredCount})`)
-                  : (monthlyCount === totalCount && totalCount > 0 ? 'Tamamlandı 🏆' : 'Beklemede ⏳')}
+                  : (monthlyCount === totalCount && totalCount > 0 ? 'Tamamlandı' : 'Yarın Tekrar')}
               </Text>
             </TouchableOpacity>
           )}
@@ -1387,113 +1405,102 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
 
   // Helper function to render detail modal
   function renderWordDetailModal() {
-    if (!selectedWord) return null;
-
     return (
       <Modal
-        visible={!!selectedWord}
+        visible={Boolean(selectedWord)}
         transparent
         animationType="fade"
         onRequestClose={() => setSelectedWord(null)}
       >
         <View style={styles.modalBackdrop}>
-          <View style={[styles.modalCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
-            {/* Modal Header */}
-            <View style={styles.modalHeader}>
-              <View style={{ flex: 1, marginRight: 6 }}>
-                <Text style={[styles.modalWordTitle, { color: colors.text }]}>
-                  {selectedWord.word}
-                </Text>
-                <View style={styles.modalMeaningRow}>
-                  <Text style={[styles.modalWordMeaning, { color: colors.brand, flexShrink: 1 }]}>
-                    {selectedWord.meaning || selectedWordDetail?.primaryTurkish}
+          <TouchableOpacity
+            style={StyleSheet.absoluteFill}
+            activeOpacity={1}
+            onPress={() => setSelectedWord(null)}
+          />
+          {selectedWord ? (
+            <View style={[styles.modalCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+              {/* Modal Header */}
+              <View style={styles.modalHeader}>
+                <View style={{ flex: 1, marginRight: 6 }}>
+                  <Text style={[styles.modalWordTitle, { color: colors.text }]}>
+                    {selectedWord.word}
                   </Text>
-                  <TouchableOpacity
-                    style={[styles.modalEditIconBtn, { backgroundColor: colors.brandLight }]}
-                    onPress={() => handleOpenEditExistingWord(selectedWord)}
-                    activeOpacity={0.7}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                  >
-                    <Edit3 size={12} color={colors.brand} />
-                  </TouchableOpacity>
+                  <View style={styles.modalMeaningRow}>
+                    <Text style={[styles.modalWordMeaning, { color: colors.brand, flexShrink: 1 }]}>
+                      {selectedWord.meaning || selectedWordDetail?.primaryTurkish}
+                    </Text>
+                    <TouchableOpacity
+                      style={[styles.modalEditIconBtn, { backgroundColor: colors.brandLight }]}
+                      onPress={() => handleOpenEditExistingWord(selectedWord)}
+                      activeOpacity={0.7}
+                      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    >
+                      <Edit3 size={12} color={colors.brand} />
+                    </TouchableOpacity>
+                  </View>
                 </View>
+
+                <TouchableOpacity
+                  style={[styles.modalAudioBtn, { backgroundColor: colors.subtleBackground }]}
+                  onPress={() => handleSpeak(selectedWord.word)}
+                  activeOpacity={0.7}
+                >
+                  <Volume2 size={22} color={colors.brand} />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.modalCloseBtn, { backgroundColor: colors.subtleBackground }]}
+                  onPress={() => setSelectedWord(null)}
+                >
+                  <X size={18} color={colors.textSecondary} />
+                </TouchableOpacity>
               </View>
 
-              <TouchableOpacity
-                style={[styles.modalAudioBtn, { backgroundColor: colors.subtleBackground }]}
-                onPress={() => handleSpeak(selectedWord.word)}
-                activeOpacity={0.7}
-              >
-                <Volume2 size={22} color={colors.brand} />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[styles.modalCloseBtn, { backgroundColor: colors.subtleBackground }]}
-                onPress={() => setSelectedWord(null)}
-              >
-                <X size={18} color={colors.textSecondary} />
-              </TouchableOpacity>
-            </View>
-
-            {/* Leitner Durumu */}
-            <View style={[styles.modalBoxStatus, { backgroundColor: colors.subtleBackground }]}>
-              <Text style={[styles.modalBoxStatusTitle, { color: colors.textSecondary }]}>
-                Hafıza Kutusu:
-              </Text>
-              <Text style={[styles.modalBoxStatusValue, { color: colors.text }]}>
-                {selectedWord.box === 0
-                  ? 'Yeni Kelime (%0)'
-                  : selectedWord.box === 1
-                  ? 'Günlük Tekrar Havuzu (%0)'
-                  : selectedWord.box === 2
-                  ? 'Haftalık Tekrar Havuzu (%33)'
-                  : 'Aylık Kalıcı Hafıza (%66)'}
-              </Text>
-            </View>
-
-            {/* Örnek Cümle */}
-            {(selectedWordDetail?.exampleEn || selectedWord.example_sentence) && (
-              <View style={styles.modalExampleSection}>
-                <Text style={[styles.modalExampleTitle, { color: colors.textSecondary }]}>
-                  Örnek Cümle:
-                </Text>
-                <Text style={[styles.modalExampleEn, { color: colors.text }]}>
-                  {selectedWordDetail?.exampleEn || selectedWord.example_sentence}
-                </Text>
-                {(selectedWordDetail?.exampleTr || selectedWord.example_translation) && (
-                  <Text style={[styles.modalExampleTr, { color: colors.textSecondary }]}>
-                    {selectedWordDetail?.exampleTr || selectedWord.example_translation}
+              {/* Örnek Cümle */}
+              {(selectedWordDetail?.exampleEn || selectedWord.example_sentence) ? (
+                <View style={styles.modalExampleSection}>
+                  <Text style={[styles.modalExampleTitle, { color: colors.textSecondary }]}>
+                    Örnek Cümle:
                   </Text>
-                )}
+                  <Text style={[styles.modalExampleEn, { color: colors.text }]}>
+                    {selectedWordDetail?.exampleEn || selectedWord.example_sentence}
+                  </Text>
+                  {(selectedWordDetail?.exampleTr || selectedWord.example_translation) ? (
+                    <Text style={[styles.modalExampleTr, { color: colors.textSecondary }]}>
+                      {selectedWordDetail?.exampleTr || selectedWord.example_translation}
+                    </Text>
+                  ) : null}
+                </View>
+              ) : null}
+
+              {/* Modal Alt Butonlar: Kaldır & Tamam */}
+              <View style={styles.modalButtonsRow}>
+                <TouchableOpacity
+                  style={[
+                    styles.modalDeleteBtn,
+                    {
+                      borderColor: colors.isDark ? '#5C222E' : '#FEE2E2',
+                      backgroundColor: colors.isDark ? '#3B1E2B' : '#FEF2F2',
+                    },
+                  ]}
+                  onPress={() => handleDeleteWord(selectedWord)}
+                  activeOpacity={0.75}
+                >
+                  <Trash2 size={16} color="#EF4444" />
+                  <Text style={styles.modalDeleteBtnText}>Listeden Kaldır</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.modalDoneBtn, { backgroundColor: colors.brand }]}
+                  onPress={() => setSelectedWord(null)}
+                  activeOpacity={0.85}
+                >
+                  <Text style={styles.modalDoneBtnText}>Tamam</Text>
+                </TouchableOpacity>
               </View>
-            )}
-
-            {/* Modal Alt Butonlar: Kaldır & Tamam */}
-            <View style={styles.modalButtonsRow}>
-              <TouchableOpacity
-                style={[
-                  styles.modalDeleteBtn,
-                  {
-                    borderColor: colors.isDark ? '#5C222E' : '#FEE2E2',
-                    backgroundColor: colors.isDark ? '#3B1E2B' : '#FEF2F2',
-                  },
-                ]}
-                onPress={() => handleDeleteWord(selectedWord)}
-                activeOpacity={0.75}
-              >
-                <Trash2 size={16} color="#EF4444" />
-                <Text style={styles.modalDeleteBtnText}>Listeden Kaldır</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[styles.modalDoneBtn, { backgroundColor: colors.brand }]}
-                onPress={() => setSelectedWord(null)}
-                activeOpacity={0.85}
-              >
-                <Text style={styles.modalDoneBtnText}>Tamam</Text>
-              </TouchableOpacity>
             </View>
-          </View>
+          ) : null}
         </View>
       </Modal>
     );
@@ -1501,8 +1508,6 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
 
   // Helper function to render edit Turkish meaning modal
   function renderEditMeaningModal() {
-    if (!isEditMeaningModalOpen) return null;
-
     return (
       <Modal
         visible={isEditMeaningModalOpen}
@@ -1511,12 +1516,18 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
         onRequestClose={() => setIsEditMeaningModalOpen(false)}
       >
         <View style={styles.modalBackdrop}>
-          <View
-            style={[
-              styles.modalCard,
-              { backgroundColor: colors.cardBackground, borderColor: colors.border },
-            ]}
-          >
+          <TouchableOpacity
+            style={StyleSheet.absoluteFill}
+            activeOpacity={1}
+            onPress={() => setIsEditMeaningModalOpen(false)}
+          />
+          {isEditMeaningModalOpen ? (
+            <View
+              style={[
+                styles.modalCard,
+                { backgroundColor: colors.cardBackground, borderColor: colors.border },
+              ]}
+            >
             {/* Header */}
             <View style={styles.modalHeader}>
               <View style={{ flex: 1 }}>
@@ -1647,9 +1658,10 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               )}
             </View>
           </View>
-        </View>
-      </Modal>
-    );
+        ) : null}
+      </View>
+    </Modal>
+  );
   }
 };
 
@@ -2004,6 +2016,11 @@ const styles = StyleSheet.create({
   progressStatusText: {
     fontSize: 10,
     fontWeight: '700',
+  },
+  statusRowRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
   },
   completedRow: {
     flexDirection: 'row',

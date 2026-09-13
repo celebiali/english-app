@@ -94,19 +94,18 @@ export const SelectFolderModal: React.FC<SelectFolderModalProps> = ({
     setIsCreatingNew(false);
   };
 
-  if (!visible || !word) return null;
-
   return (
     <Modal
-      visible={visible}
+      visible={Boolean(visible && word)}
       transparent
       animationType="slide"
       onRequestClose={onClose}
     >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.overlay}
-      >
+      {Boolean(visible && word) ? (
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.overlay}
+        >
         <TouchableOpacity
           style={styles.backdrop}
           activeOpacity={1}
@@ -273,7 +272,8 @@ export const SelectFolderModal: React.FC<SelectFolderModalProps> = ({
           </ScrollView>
         </View>
       </KeyboardAvoidingView>
-    </Modal>
+    ) : null}
+  </Modal>
   );
 };
 

@@ -117,7 +117,11 @@ export const QuestionCard: React.FC<Props> = ({
 
   const dynamicFontSize = isSystemFontSize ? 15.5 : fontSize;
   const dynamicFontFamily =
-    fontFamily === 'serif' ? (Platform.OS === 'ios' ? 'Georgia' : 'serif') : undefined;
+    fontFamily === 'serif'
+      ? (Platform.OS === 'ios' ? 'Georgia' : 'serif')
+      : fontFamily === 'rounded'
+      ? (Platform.OS === 'ios' ? 'Avenir-Medium' : 'sans-serif-medium')
+      : undefined;
 
   return (
     <ScrollView

@@ -33,6 +33,7 @@ import {
   ExternalLink,
   Crown,
   Pencil,
+  Info,
 } from 'lucide-react-native';
 import { useThemeStore, FontSizeValue } from '../store/useThemeStore';
 import { useLearningStore } from '../store/useLearningStore';
@@ -459,7 +460,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
 
         {/* SECTION: GÖRÜNÜM & YAZI */}
         <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
-          GÖRÜNÜM & YAZI
+          GÖRÜNÜM & YAZI (OKUMA VE SINAV)
         </Text>
         <View style={[styles.groupedCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
           {/* Yazı Boyutu */}
@@ -468,7 +469,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
             onPress={() => setIsFontSizeModalOpen(true)}
             activeOpacity={0.7}
           >
-            <Text style={[styles.rowLabel, { color: colors.text }]}>Yazı Boyutu</Text>
+            <View style={{ flex: 1, marginRight: 8 }}>
+              <Text style={[styles.rowLabel, { color: colors.text }]}>Yazı Boyutu</Text>
+              <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
+                Soru metinleri, paragraflar ve kelime kartları
+              </Text>
+            </View>
             <View style={styles.rowRight}>
               <Text style={[styles.rowValue, { color: colors.textSecondary }]}>
                 {getFontSizeLabel(fontSize)}
@@ -483,7 +489,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
             onPress={() => setIsFontFamilyModalOpen(true)}
             activeOpacity={0.7}
           >
-            <Text style={[styles.rowLabel, { color: colors.text }]}>Yazı Tipi</Text>
+            <View style={{ flex: 1, marginRight: 8 }}>
+              <Text style={[styles.rowLabel, { color: colors.text }]}>Yazı Tipi</Text>
+              <Text style={[styles.rowSubLabel, { color: colors.textSecondary }]}>
+                Sınav soruları ve okuma parçaları
+              </Text>
+            </View>
             <View style={styles.rowRight}>
               <Text style={[styles.rowValue, { color: colors.textSecondary }]}>
                 {getFontFamilyLabel(fontFamily)}
@@ -670,6 +681,14 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
           </View>
 
           <View style={styles.modalBody}>
+            {/* Scope explanation banner */}
+            <View style={[styles.fontScopeBanner, { backgroundColor: colors.brandLight, borderColor: colors.brandLightBorder }]}>
+              <Info size={16} color={colors.brand} style={{ marginTop: 2 }} />
+              <Text style={[styles.fontScopeBannerText, { color: colors.brand }]}>
+                Seçtiğiniz punto; YDS/YÖKDİL deneme sorularındaki soru ve paragraf metinleri ile kelime kartlarındaki (cümle ve çeviri) metinleri ayarlar. Menü butonları düzeni korumak için sabit kalır.
+              </Text>
+            </View>
+
             {/* Live Academic Preview Card */}
             <View
               style={[
@@ -686,7 +705,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
                   {
                     color: colors.text,
                     fontSize: isSystemFontSize ? 17 : fontSize,
-                    fontFamily: fontFamily === 'serif' ? (Platform.OS === 'ios' ? 'Georgia' : 'serif') : undefined,
+                    fontFamily:
+                      fontFamily === 'serif'
+                        ? (Platform.OS === 'ios' ? 'Georgia' : 'serif')
+                        : fontFamily === 'rounded'
+                        ? (Platform.OS === 'ios' ? 'Avenir-Medium' : 'sans-serif-medium')
+                        : undefined,
                   },
                 ]}
               >
@@ -786,6 +810,14 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
           </View>
 
           <ScrollView style={styles.modalBody}>
+            {/* Scope explanation banner */}
+            <View style={[styles.fontScopeBanner, { backgroundColor: colors.brandLight, borderColor: colors.brandLightBorder, marginBottom: 14 }]}>
+              <Info size={16} color={colors.brand} style={{ marginTop: 2 }} />
+              <Text style={[styles.fontScopeBannerText, { color: colors.brand }]}>
+                Seçtiğiniz yazı tipi; deneme sınavı soru/paragraf metinleri ile kelime kartlarındaki cümle ve anlamlarda aktifleşir.
+              </Text>
+            </View>
+
             {/* Modern Sans */}
             <TouchableOpacity
               style={[
@@ -852,7 +884,15 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
                 <Text style={[styles.fontFamilyName, { color: colors.brand }]}>Okuma Kolaylığı (Yuvarlak & Net)</Text>
                 {fontFamily === 'rounded' && <Check size={18} color={colors.brand} />}
               </View>
-              <Text style={[styles.fontFamilySample, { color: colors.text }]}>
+              <Text
+                style={[
+                  styles.fontFamilySample,
+                  {
+                    color: colors.text,
+                    fontFamily: Platform.OS === 'ios' ? 'Avenir-Medium' : 'sans-serif-medium',
+                  },
+                ]}
+              >
                 Comprehensive academic linguistic research shows rapid learning retention when using spaced repetition.
               </Text>
             </TouchableOpacity>
@@ -1384,6 +1424,20 @@ const styles = StyleSheet.create({
   modalBody: {
     padding: 18,
     gap: 16,
+  },
+  fontScopeBanner: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+    padding: 14,
+    borderRadius: 16,
+    borderWidth: 1,
+  },
+  fontScopeBannerText: {
+    flex: 1,
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: '500',
   },
   fontPreviewCard: {
     borderRadius: 20,

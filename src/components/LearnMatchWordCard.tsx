@@ -8,7 +8,7 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import { X, Volume2 } from 'lucide-react-native';
+import { X, Volume2, Languages } from 'lucide-react-native';
 import { useThemeStore } from '../store/useThemeStore';
 import { WordWithProgress } from '../database/DatabaseService';
 import { CardWord } from '../types';
@@ -41,7 +41,15 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
   onClose,
   nextButtonText,
 }) => {
-  const { colors } = useThemeStore();
+  const { colors, fontSize, isSystemFontSize, fontFamily } = useThemeStore();
+
+  const dynamicFontSize = isSystemFontSize ? 15.5 : fontSize;
+  const dynamicFontFamily =
+    fontFamily === 'serif'
+      ? (Platform.OS === 'ios' ? 'Georgia' : 'serif')
+      : fontFamily === 'rounded'
+      ? (Platform.OS === 'ios' ? 'Avenir-Medium' : 'sans-serif-medium')
+      : undefined;
 
   const [enrichedDetail, setEnrichedDetail] = useState<{
     phonetic?: string;
@@ -49,6 +57,16 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
     exampleTr?: string;
   } | null>(null);
   const [isLoadingSentence, setIsLoadingSentence] = useState<boolean>(false);
+  const [showTranslation, setShowTranslation] = useState<boolean>(false);
+  const [isTranslatingSentence, setIsTranslatingSentence] = useState<boolean>(false);
+  const [onDemandTranslation, setOnDemandTranslation] = useState<string>('');
+
+  // Reset translation toggle and on-demand translation when word changes
+  useEffect(() => {
+    setShowTranslation(false);
+    setOnDemandTranslation('');
+    setIsTranslatingSentence(false);
+  }, [word.word, currentIndex]);
 
   useEffect(() => {
     let isMounted = true;
@@ -112,16 +130,47 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
 
   const progressPercent = totalCards > 0 ? Math.min(100, Math.round(((currentIndex + 1) / totalCards) * 100)) : 0;
 
-  // Effective English and Turkish example sentences
+  // Effective English example sentence
   const effectiveExampleEn =
     word.example_sentence ||
     enrichedDetail?.exampleEn ||
     `The ${word.word.toLowerCase()} is widely used in academic texts and daily communication.`;
 
-  const effectiveExampleTr =
+  // Candidate Turkish translation (strictly excluding synthetic boilerplate explanations)
+  const candidateTr =
     word.example_translation ||
     enrichedDetail?.exampleTr ||
-    `"${word.word}" (${word.meaning}), akademik metinlerde ve günlük iletişimde sıkça kullanılır.`;
+    onDemandTranslation;
+
+  const effectiveExampleTr =
+    candidateTr &&
+    !candidateTr.includes('akademik metinlerde ve günlük iletişimde sıkça kullanılır')
+      ? candidateTr
+      : onDemandTranslation;
+
+  const handleToggleTranslation = async () => {
+    if (showTranslation) {
+      setShowTranslation(false);
+      return;
+    }
+
+    setShowTranslation(true);
+
+    // If Turkish translation is not available yet, dynamically translate the sentence on demand
+    if (!effectiveExampleTr && effectiveExampleEn) {
+      setIsTranslatingSentence(true);
+      try {
+        const tr = await DictionaryApiService.translateSentence(effectiveExampleEn);
+        if (tr && !tr.includes('akademik metinlerde')) {
+          setOnDemandTranslation(tr);
+        }
+      } catch (e) {
+        console.warn('Failed to translate example sentence:', e);
+      } finally {
+        setIsTranslatingSentence(false);
+      }
+    }
+  };
 
   const phoneticText = enrichedDetail?.phonetic || '';
 
@@ -134,7 +183,17 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
     const parts = sentence.split(regex);
 
     return (
-      <Text style={[styles.exampleSentenceText, { color: colors.text }]}>
+      <Text
+        style={[
+          styles.exampleSentenceText,
+          {
+            color: colors.text,
+            fontSize: dynamicFontSize,
+            lineHeight: Math.round(dynamicFontSize * 1.48),
+            fontFamily: dynamicFontFamily,
+          },
+        ]}
+      >
         {parts.map((part, i) => {
           if (part.toLowerCase() === cleanTarget.toLowerCase()) {
             return (
@@ -199,7 +258,13 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
           {/* TOP SECTION: TARGET WORD & PRONUNCIATION */}
           <View style={styles.wordHeaderSection}>
             <View style={styles.wordTitleRow}>
-              <Text style={[styles.targetWordText, { color: colors.brand }]} numberOfLines={2}>
+              <Text
+                style={[
+                  styles.targetWordText,
+                  { color: colors.brand, fontFamily: dynamicFontFamily },
+                ]}
+                numberOfLines={2}
+              >
                 {word.word}
               </Text>
               <TouchableOpacity
@@ -228,7 +293,12 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
             <Text style={[styles.sectionMetaLabel, { color: colors.textSecondary }]}>
               TÜRKÇE ANLAMI
             </Text>
-            <Text style={[styles.turkishMeaningText, { color: colors.text }]}>
+            <Text
+              style={[
+                styles.turkishMeaningText,
+                { color: colors.text, fontFamily: dynamicFontFamily },
+              ]}
+            >
               {word.meaning}
             </Text>
           </View>
@@ -274,13 +344,60 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
                   {renderFormattedSentence(effectiveExampleEn)}
                 </View>
 
-                {/* Sentence Divider */}
-                <View style={[styles.sentenceInnerDivider, { backgroundColor: colors.border }]} />
+                {/* Translation Toggle Button (Icon only) */}
+                <TouchableOpacity
+                  style={[
+                    styles.translationIconBtn,
+                    {
+                      backgroundColor: showTranslation ? colors.brandLight : colors.cardBackground,
+                      borderColor: showTranslation ? colors.brand : colors.border,
+                    },
+                  ]}
+                  onPress={handleToggleTranslation}
+                  activeOpacity={0.75}
+                  accessibilityLabel="Çeviri"
+                >
+                  <Languages size={16} color={colors.brand} strokeWidth={2.2} />
+                </TouchableOpacity>
 
-                {/* Turkish Translation */}
-                <Text style={[styles.turkishSentenceText, { color: colors.textSecondary }]}>
-                  {effectiveExampleTr}
-                </Text>
+                {/* Turkish Translation (Revealed on demand) */}
+                {showTranslation && (
+                  <View style={styles.translationContainer}>
+                    <View style={[styles.sentenceInnerDivider, { backgroundColor: colors.border }]} />
+                    {isTranslatingSentence ? (
+                      <View style={styles.translationLoadingRow}>
+                        <ActivityIndicator size="small" color={colors.brand} />
+                        <Text style={[styles.translatingText, { color: colors.textSecondary }]}>
+                          Türkçe çeviri hazırlanıyor...
+                        </Text>
+                      </View>
+                    ) : effectiveExampleTr ? (
+                      <Text style={[
+                        styles.turkishSentenceText,
+                        {
+                          color: colors.textSecondary,
+                          fontSize: Math.max(12, dynamicFontSize - 2),
+                          lineHeight: Math.round((dynamicFontSize - 2) * 1.45),
+                          fontFamily: dynamicFontFamily,
+                        }
+                      ]}>
+                        {effectiveExampleTr}
+                      </Text>
+                    ) : (
+                      <Text style={[
+                        styles.turkishSentenceText,
+                        {
+                          color: colors.textSecondary,
+                          fontStyle: 'italic',
+                          fontSize: Math.max(12, dynamicFontSize - 2),
+                          fontFamily: dynamicFontFamily,
+                        }
+                      ]}>
+                        Çeviri bulunamadı.
+                      </Text>
+                    )}
+                  </View>
+                )}
               </View>
             )}
           </View>
@@ -479,6 +596,28 @@ const styles = StyleSheet.create({
   turkishSentenceText: {
     fontSize: 13.5,
     lineHeight: 20,
+  },
+  translationIconBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 8,
+  },
+  translationContainer: {
+    marginTop: 4,
+  },
+  translationLoadingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 6,
+  },
+  translatingText: {
+    fontSize: 12.5,
+    fontStyle: 'italic',
   },
   bottomBar: {
     paddingHorizontal: 16,

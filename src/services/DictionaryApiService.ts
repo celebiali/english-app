@@ -36,9 +36,14 @@ export class DictionaryApiService {
     'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1';
 
   /**
-   * Ultra-fast translation using Google Translate neural engine with dict-chrome-ex client.
-   * Extracts primary translation and all alternative academic meanings in ~60-150ms.
-   * Falls back to MyMemory API if unavailable.
+   * High-reliability multi-engine translation:
+   * 1. Local SQLite DB (instant 1ms)
+   * 2. Google Translate Neural Engine with gtx client (primary, 5000ms timeout for mobile networks)
+   * 3. Google Translate clients5 dict client (fallback, 4000ms timeout)
+   * 4. Google Translate dict-chrome-ex client (fallback, 4000ms timeout)
+   * 5. MyMemory Translation API (fallback, 4000ms timeout)
+   * 
+   * NEVER returns the English word as the Turkish meaning!
    */
   private static async fetchTurkishTranslations(
     word: string,
@@ -67,17 +72,22 @@ export class DictionaryApiService {
       }
     } catch (_) {}
 
-    // 2. High-speed Google Translate dict-chrome-ex client (<150ms)
+    // Helper: Checks if candidate translation is genuine Turkish (not equal to the English input)
+    const isValidTurkish = (candidate: string): boolean => {
+      if (!candidate) return false;
+      const t = candidate.trim().toLowerCase();
+      return t.length > 0 && t !== clean;
+    };
+
+    // 2. Google Translate with public "gtx" client (5000ms timeout - high resilience on 5G/cellular)
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2000);
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
 
       const onParentAbort = () => controller.abort();
-      if (signal) {
-        signal.addEventListener('abort', onParentAbort);
-      }
+      if (signal) signal.addEventListener('abort', onParentAbort);
 
-      const url = `https://translate.googleapis.com/translate_a/single?client=dict-chrome-ex&sl=en&tl=tr&dt=t&dt=bd&dt=at&q=${encodeURIComponent(
+      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=tr&dt=t&dt=bd&dt=at&q=${encodeURIComponent(
         clean
       )}`;
 
@@ -104,13 +114,13 @@ export class DictionaryApiService {
             }
           }
           const trClean = assembled.trim();
-          if (trClean && trClean.toLowerCase() !== clean) {
+          if (isValidTurkish(trClean)) {
             primary = trClean.charAt(0).toUpperCase() + trClean.slice(1);
             all.push(primary);
           }
         }
 
-        // Detailed parts of speech from data[1]
+        // Detailed parts of speech and alternative definitions from data[1]
         if (Array.isArray(data) && Array.isArray(data[1])) {
           for (const group of data[1]) {
             const pos = typeof group[0] === 'string' ? group[0] : 'general';
@@ -119,11 +129,13 @@ export class DictionaryApiService {
               for (const w of group[1]) {
                 if (typeof w === 'string') {
                   const wClean = w.trim();
-                  const wCap = wClean.charAt(0).toUpperCase() + wClean.slice(1);
-                  if (wClean && wClean.toLowerCase() !== clean && !all.includes(wCap)) {
-                    all.push(wCap);
+                  if (isValidTurkish(wClean)) {
+                    const wCap = wClean.charAt(0).toUpperCase() + wClean.slice(1);
+                    if (!all.includes(wCap)) {
+                      all.push(wCap);
+                    }
+                    definitions.push({ definition: wCap });
                   }
-                  definitions.push({ definition: wCap });
                 }
               }
             }
@@ -137,26 +149,107 @@ export class DictionaryApiService {
         }
 
         if (primary || all.length > 0) {
-          const finalPrimary = primary || all[0] || clean;
+          const finalPrimary = primary || all[0] || '';
+          if (isValidTurkish(finalPrimary)) {
+            return {
+              primary: finalPrimary,
+              all: all.length > 0 ? all.slice(0, 8) : [finalPrimary],
+              meanings,
+            };
+          }
+        }
+      }
+    } catch (_) {}
+
+    // 3. Fallback: Google Translate clients5 endpoint (4000ms timeout)
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+      const onParentAbort = () => controller.abort();
+      if (signal) signal.addEventListener('abort', onParentAbort);
+
+      const url = `https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=en&tl=tr&q=${encodeURIComponent(
+        clean
+      )}`;
+
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
+      if (signal) signal.removeEventListener('abort', onParentAbort);
+
+      if (response.ok) {
+        const data = await response.json();
+        const candidate = Array.isArray(data) && typeof data[0] === 'string' ? data[0].trim() : '';
+        if (isValidTurkish(candidate)) {
+          const cap = candidate.charAt(0).toUpperCase() + candidate.slice(1);
           return {
-            primary: finalPrimary,
-            all: all.length > 0 ? all.slice(0, 8) : [finalPrimary],
-            meanings,
+            primary: cap,
+            all: [cap],
+            meanings: [],
           };
         }
       }
     } catch (_) {}
 
-    // 3. Fallback: MyMemory Translation API (short 1500ms timeout)
+    // 4. Fallback: Google Translate dict-chrome-ex endpoint (4000ms timeout)
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 1500);
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+      const onParentAbort = () => controller.abort();
+      if (signal) signal.addEventListener('abort', onParentAbort);
+
+      const url = `https://translate.googleapis.com/translate_a/single?client=dict-chrome-ex&sl=en&tl=tr&dt=t&dt=bd&dt=at&q=${encodeURIComponent(
+        clean
+      )}`;
+
+      const response = await fetch(url, {
+        headers: { 'User-Agent': this.USER_AGENT },
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+      if (signal) signal.removeEventListener('abort', onParentAbort);
+
+      if (response.ok) {
+        const data = await response.json();
+        let primary = '';
+        const all: string[] = [];
+
+        if (Array.isArray(data) && Array.isArray(data[0])) {
+          let assembled = '';
+          for (const seg of data[0]) {
+            if (seg && typeof seg[0] === 'string') {
+              assembled += seg[0];
+            }
+          }
+          const trClean = assembled.trim();
+          if (isValidTurkish(trClean)) {
+            primary = trClean.charAt(0).toUpperCase() + trClean.slice(1);
+            all.push(primary);
+          }
+        }
+
+        if (primary) {
+          return { primary, all, meanings: [] };
+        }
+      }
+    } catch (_) {}
+
+    // 5. Fallback: MyMemory Translation API (4000ms timeout)
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+      const onParentAbort = () => controller.abort();
+      if (signal) signal.addEventListener('abort', onParentAbort);
 
       const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
         clean
       )}&langpair=en|tr`;
       const response = await fetch(url, { signal: controller.signal });
       clearTimeout(timeoutId);
+      if (signal) signal.removeEventListener('abort', onParentAbort);
 
       if (response.ok) {
         const data = await response.json();
@@ -165,7 +258,7 @@ export class DictionaryApiService {
 
         if (data?.responseData?.translatedText) {
           const tr = data.responseData.translatedText.trim();
-          if (tr && tr.toLowerCase() !== clean) {
+          if (isValidTurkish(tr)) {
             primary = tr.charAt(0).toUpperCase() + tr.slice(1);
             all.push(primary);
           }
@@ -175,42 +268,47 @@ export class DictionaryApiService {
           for (const match of data.matches) {
             if (match.translation) {
               const cleanTr = match.translation.trim();
-              const capTr = cleanTr.charAt(0).toUpperCase() + cleanTr.slice(1);
-              if (cleanTr && cleanTr.toLowerCase() !== clean && !all.includes(capTr) && cleanTr.length < 35) {
-                all.push(capTr);
+              if (isValidTurkish(cleanTr) && cleanTr.length < 35) {
+                const capTr = cleanTr.charAt(0).toUpperCase() + cleanTr.slice(1);
+                if (!all.includes(capTr)) {
+                  all.push(capTr);
+                }
               }
             }
             if (all.length >= 6) break;
           }
         }
 
-        return {
-          primary: primary || clean,
-          all: all.length > 0 ? all : [primary || clean],
-          meanings: [],
-        };
+        if (primary || all.length > 0) {
+          return {
+            primary: primary || all[0] || '',
+            all: all.length > 0 ? all : (primary ? [primary] : []),
+            meanings: [],
+          };
+        }
       }
     } catch (_) {}
 
-    return { primary: clean, all: [clean], meanings: [] };
+    // NEVER return clean (English word) as Turkish! Return empty if not found.
+    return { primary: '', all: [], meanings: [] };
   }
 
   /**
-   * Translates an English example sentence to Turkish using Google Translate (<100ms)
+   * Translates an English example sentence to Turkish using Google Translate (4500ms timeout)
    */
   static async translateSentence(sentence: string, signal?: AbortSignal): Promise<string> {
     if (!sentence || sentence.trim().length === 0) return '';
     const cleanSentence = sentence.trim();
 
-    // 1. Google Translate dict-chrome-ex
+    // 1. Google Translate gtx
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 1800);
+      const timeoutId = setTimeout(() => controller.abort(), 4500);
 
       const onParentAbort = () => controller.abort();
       if (signal) signal.addEventListener('abort', onParentAbort);
 
-      const url = `https://translate.googleapis.com/translate_a/single?client=dict-chrome-ex&sl=en&tl=tr&dt=t&q=${encodeURIComponent(
+      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=tr&dt=t&q=${encodeURIComponent(
         cleanSentence
       )}`;
       const response = await fetch(url, {
@@ -236,16 +334,20 @@ export class DictionaryApiService {
       }
     } catch (_) {}
 
-    // 2. Fallback to MyMemory
+    // 2. Fallback to MyMemory (4000ms timeout)
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 1200);
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+      const onParentAbort = () => controller.abort();
+      if (signal) signal.addEventListener('abort', onParentAbort);
 
       const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
         cleanSentence
       )}&langpair=en|tr`;
       const response = await fetch(url, { signal: controller.signal });
       clearTimeout(timeoutId);
+      if (signal) signal.removeEventListener('abort', onParentAbort);
 
       if (response.ok) {
         const data = await response.json();
@@ -272,7 +374,7 @@ export class DictionaryApiService {
     const clean = word.trim().toLowerCase();
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 1800);
+      const timeoutId = setTimeout(() => controller.abort(), 4500);
 
       const onParentAbort = () => controller.abort();
       if (signal) signal.addEventListener('abort', onParentAbort);
@@ -337,8 +439,7 @@ export class DictionaryApiService {
 
   /**
    * Complete rich word lookup:
-   * Combines instant cache/local DB + ultra-fast Google neural translation (<100ms) + Datamuse IPA phonetic definitions (<100ms).
-   * Total response time: ~120ms - 200ms!
+   * Combines instant cache/local DB + ultra-fast Google neural translation + Datamuse IPA phonetic definitions.
    */
   static async lookupWord(
     word: string,
@@ -385,7 +486,7 @@ export class DictionaryApiService {
         return localResult;
       }
 
-      // 2. Ultra-fast parallel online fetch (<180ms)
+      // 2. High-speed parallel online fetch with generous timeouts
       const [trData, datamuseData] = await Promise.all([
         this.fetchTurkishTranslations(clean, options?.signal),
         this.fetchDatamuseDetails(clean, options?.signal),
@@ -410,19 +511,29 @@ export class DictionaryApiService {
         } catch (_) {}
       }
 
+      // STRICT VALIDATION: Never accept English word as Turkish translation
+      const primaryTurkish =
+        trData.primary && trData.primary.toLowerCase() !== clean ? trData.primary : '';
+      const allTurkishMeanings = (trData.all || []).filter(
+        (m) => m && m.toLowerCase() !== clean
+      );
+
       const result: RichDictionaryResult = {
         word: clean,
         phonetic: datamuseData.phonetic,
         audioUrl: undefined,
-        primaryTurkish: trData.primary || clean,
-        allTurkishMeanings: trData.all.length > 0 ? trData.all : [trData.primary],
+        primaryTurkish,
+        allTurkishMeanings,
         meanings: finalMeanings,
         exampleEn,
         exampleTr,
         isFromApi: true,
       };
 
-      this.cache.set(clean, result);
+      // Only cache if valid translation was actually found
+      if (primaryTurkish) {
+        this.cache.set(clean, result);
+      }
       return result;
     } catch (err) {
       console.warn('lookupWord API error:', err);

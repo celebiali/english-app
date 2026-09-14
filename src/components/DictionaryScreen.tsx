@@ -126,7 +126,7 @@ export const DictionaryScreen: React.FC = () => {
             setIsSearching(false);
           }
         }
-      }, 100);
+      }, 280);
 
       return () => {
         isMounted = false;
@@ -694,8 +694,8 @@ export const DictionaryScreen: React.FC = () => {
                         style={[styles.resultMeaningText, { color: colors.text }]}
                         numberOfLines={1}
                       >
-                        {apiResult.primaryTurkish}
-                        {apiResult.allTurkishMeanings.length > 1
+                        {apiResult.primaryTurkish || '(Anlam bulunamadı)'}
+                        {apiResult.allTurkishMeanings && apiResult.allTurkishMeanings.length > 1
                           ? ` (${apiResult.allTurkishMeanings.slice(1, 3).join(', ')})`
                           : ''}
                       </Text>

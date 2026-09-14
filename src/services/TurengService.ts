@@ -437,11 +437,11 @@ Return ONLY valid JSON matching this exact structure:
       console.warn('Tureng live lookup fallback:', err);
     }
 
-    // 3. Fallback item
+    // 3. Fallback item (Never use English word as Turkish meaning)
     const fallback: TurengWordDetail = {
       word: cleanWord,
-      primaryMeaning: cleanWord,
-      meanings: [{ category: 'Genel', type: 'kelime', turkish: cleanWord }],
+      primaryMeaning: '',
+      meanings: [],
       synonyms: [],
       antonyms: [],
     };

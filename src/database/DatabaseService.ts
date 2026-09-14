@@ -1769,6 +1769,11 @@ class DatabaseService {
     // Randevu saatini sabah 06:00'ya sabitler; böylece sabah 09:00 bildirimi geldiğinde tüm kelimeler hazır olur!
     const getMorningReviewDate = (daysAhead: number): Date => {
       const target = new Date();
+      // Gece yarısı ile 06:00 arasında çalışılıyorsa 1 gün sonrası kastedilen aynı günün sabahı 06:00'dır
+      if (target.getHours() < 6 && daysAhead === 1) {
+        target.setHours(6, 0, 0, 0);
+        return target;
+      }
       target.setDate(target.getDate() + daysAhead);
       target.setHours(6, 0, 0, 0);
       return target;
@@ -1858,9 +1863,12 @@ class DatabaseService {
 
       // Record to daily_stats for words_reviewed
       await this.dbInstance.runAsync(
-        `INSERT INTO daily_stats (study_date, words_reviewed) VALUES (date('now'), 1)
-         ON CONFLICT(study_date) DO UPDATE SET words_reviewed = words_reviewed + 1`
-      ).catch(() => {});
+        `INSERT INTO daily_stats (date, words_reviewed, updated_at)
+         VALUES (date('now'), 1, datetime('now'))
+         ON CONFLICT(date) DO UPDATE SET
+          words_reviewed = words_reviewed + 1,
+          updated_at = datetime('now')`
+      );
     } else {
       this.memoryDb.progress.set(wordId, updatedProg);
     }
@@ -1943,17 +1951,16 @@ class DatabaseService {
         isCooldown: false,
       }));
 
-      // Hedef havuzdan en fazla newWordsLimit kadar tekrar ve yeni kelime al
-      const limitedReviews = reviewWords.slice(0, newWordsLimit);
-      const remainingSlots = Math.max(0, newWordsLimit - limitedReviews.length);
-
+      // Tekrar kelimeleri ile yeni kelimeler ayrılır: newWordsLimit KADAR YENİ KELİME ALINIR
       const targetFolderWords = allWords.filter(isMatchingFolder);
       const newWords: CardWord[] = [];
-      if (remainingSlots > 0) {
+      const newWordsTarget = newWordsLimit;
+
+      if (newWordsTarget > 0) {
         // 1. Önce kullanıcının yeni eklediği ve henüz çalışmadığı özel kelimeleri ekle
         const customUnstudied = allWords.filter((w) => w.is_custom && !this.memoryDb.progress.get(w.id));
         for (const w of customUnstudied) {
-          if (newWords.length < remainingSlots) {
+          if (newWords.length < newWordsTarget) {
             newWords.push({
               ...w,
               cardType: 'NEW',
@@ -1965,7 +1972,7 @@ class DatabaseService {
 
         // 2. Kalan yer varsa aktif klasörden ekle
         for (const w of targetFolderWords) {
-          if (newWords.length >= remainingSlots) break;
+          if (newWords.length >= newWordsTarget) break;
           const prog = this.memoryDb.progress.get(w.id);
           if (!prog && !newWords.some((nw) => nw.id === w.id)) {
             newWords.push({
@@ -1979,7 +1986,7 @@ class DatabaseService {
 
         // 3. Hâlâ yer varsa genel kelime havuzundan tamamla
         for (const w of allWords) {
-          if (newWords.length >= remainingSlots) break;
+          if (newWords.length >= newWordsTarget) break;
           const prog = this.memoryDb.progress.get(w.id);
           if (!prog && !newWords.some((nw) => nw.id === w.id)) {
             newWords.push({
@@ -1992,7 +1999,8 @@ class DatabaseService {
         }
       }
 
-      return [...limitedReviews, ...newWords].slice(0, newWordsLimit);
+      // Tekrarlar + Tam Yeni Kelime Paketi (Tekrarlar yeni kelimelerden çalmaz)
+      return [...reviewWords, ...newWords];
     }
 
     // Native SQLite implementation
@@ -2023,16 +2031,16 @@ class DatabaseService {
       }
     }
 
-    // 1. Vadesi gelmiş kelimeleri TÜM klasörlerden çek (azami newWordsLimit kadar)
+    // 1. Vadesi gelmiş kelimeleri TÜM klasörlerden çek (azami 100 adet tekrar)
     const nowIso = new Date().toISOString();
     const reviewSql = `SELECT w.*, p.box as prog_box, p.status as prog_status, p.correct_count as prog_correct, p.incorrect_count as prog_incorrect, p.last_reviewed_at as prog_last_reviewed, p.next_review_at as prog_next_review, p.box_entry_date as prog_entry_date
          FROM words w
          INNER JOIN user_word_progress p ON w.id = p.word_id
          WHERE p.next_review_at IS NOT NULL AND (datetime(p.next_review_at) <= datetime('now') OR p.next_review_at <= ?)
          ORDER BY p.next_review_at ASC
-         LIMIT ?`;
+         LIMIT 100`;
 
-    const reviewRows = await this.dbInstance.getAllAsync(reviewSql, [nowIso, newWordsLimit]);
+    const reviewRows = await this.dbInstance.getAllAsync(reviewSql, [nowIso]);
 
     const reviewWords: CardWord[] = reviewRows.map((r: any) => {
       const { badgeText, daysOverdue } = computeBadgeInfo(r.prog_box, r.prog_next_review);
@@ -2067,11 +2075,11 @@ class DatabaseService {
       };
     });
 
-    // 2. Kalan kontenjan varsa:
+    // 2. Yeni kelimeler için KOTA TAM ALINIR (Tekrarlar kotayı düşürmez! Örn: 30 yeni + 5 tekrar = 35)
     // ADIM A: Önce kullanıcının yeni eklediği ve henüz çalışmadığı özel kelimeleri (is_custom = 1) en başa al!
     // ADIM B: Aktif klasörden doldur
     // ADIM C: Hâlâ yer varsa genel kelimelerden tamamla
-    const remainingSlots = Math.max(0, newWordsLimit - reviewWords.length);
+    const remainingSlots = newWordsLimit;
     let newWords: CardWord[] = [];
 
     if (remainingSlots > 0) {
@@ -2175,7 +2183,7 @@ class DatabaseService {
       }
     }
 
-    return [...reviewWords, ...newWords].slice(0, newWordsLimit);
+    return [...reviewWords, ...newWords];
   }
 
   // ==========================================

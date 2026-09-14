@@ -373,7 +373,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
             setIsSearchingApi(false);
           }
         });
-    }, 120);
+    }, 280);
 
     return () => {
       isMounted = false;
@@ -472,8 +472,15 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
       Keyboard.dismiss();
 
       if ('isFromApi' in wordToAdd) {
+        // Eğer API Türkçe anlam bulamadıysa doğrudan İngilizceyi ekleme; kullanıcıya düzenleme penceresini aç
+        const cleanTr = (wordToAdd.primaryTurkish || wordToAdd.allTurkishMeanings[0] || '').trim();
+        if (!cleanTr || cleanTr.toLowerCase() === wordToAdd.word.trim().toLowerCase()) {
+          handleOpenEditApiMeaning(wordToAdd);
+          return;
+        }
+
         const item = DictionaryApiService.convertToWordItem(wordToAdd);
-        item.meaning = (wordToAdd.primaryTurkish || wordToAdd.allTurkishMeanings[0] || '').trim();
+        item.meaning = cleanTr;
         item.subcategory = targetFolderName;
         item.folder_name = targetFolderName;
         await dbService.insertCustomWord(item);
@@ -1196,8 +1203,18 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
                     onPress={() => handleOpenEditApiMeaning(apiResult)}
                     activeOpacity={0.7}
                   >
-                    <Text style={[styles.wordMeaning, { color: colors.textSecondary, flexShrink: 1 }]} numberOfLines={1}>
-                      {apiResult.primaryTurkish}
+                    <Text
+                      style={[
+                        styles.wordMeaning,
+                        {
+                          color: apiResult.primaryTurkish ? colors.textSecondary : '#F59E0B',
+                          flexShrink: 1,
+                          fontStyle: apiResult.primaryTurkish ? 'normal' : 'italic',
+                        },
+                      ]}
+                      numberOfLines={1}
+                    >
+                      {apiResult.primaryTurkish || '⚠️ Anlam eklemek için dokunun'}
                     </Text>
                     <View style={[styles.apiEditIconBtn, { backgroundColor: colors.brandLight }]}>
                       <Edit3 size={12} color={colors.brand} />

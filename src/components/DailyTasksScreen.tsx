@@ -182,9 +182,13 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
 
   const totalVaultWords = (dictionaryWords || []).length;
   // If user has words in their vault, goal cannot exceed available words; otherwise fallback to dailyLimit
-  const vocabGoal = totalVaultWords > 0
+  const baseVocabGoal = totalVaultWords > 0
     ? Math.min(dailyLimit || 25, totalVaultWords)
     : (dailyLimit || 25);
+
+  // Günün toplam kelime hedefi: Yeni kelime hedefi + dünden kalan/vadesi gelen tekrarlar
+  const activeVocabCount = (sessionWords || []).length;
+  const vocabGoal = Math.max(baseVocabGoal, activeVocabCount);
 
   // Authoritative completed count from SQLite and store
   const actualVocabDone = Math.max(
@@ -317,7 +321,7 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
   // VIEW: DEDICATED DAILY VOCABULARY SESSION (GÜNÜN 25 KELİMESİ)
   // =========================================================================
   if (isVocabSolvingMode) {
-    const dailyBatchWords = (sessionWords || []).slice(0, vocabGoal || 25);
+    const dailyBatchWords = sessionWords || [];
 
     // If there are no words to study at all:
     if (dailyBatchWords.length === 0) {

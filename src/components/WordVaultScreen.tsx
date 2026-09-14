@@ -2011,7 +2011,7 @@ const styles = StyleSheet.create({
   progressColRight: {
     alignItems: 'flex-end',
     justifyContent: 'center',
-    gap: 3,
+    gap: 4,
   },
   progressStatusText: {
     fontSize: 10,

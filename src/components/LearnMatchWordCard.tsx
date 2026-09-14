@@ -138,9 +138,9 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
 
   // Candidate Turkish translation (strictly excluding synthetic boilerplate explanations)
   const candidateTr =
+    onDemandTranslation ||
     word.example_translation ||
-    enrichedDetail?.exampleTr ||
-    onDemandTranslation;
+    enrichedDetail?.exampleTr;
 
   const effectiveExampleTr =
     candidateTr &&
@@ -161,11 +161,16 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
       setIsTranslatingSentence(true);
       try {
         const tr = await DictionaryApiService.translateSentence(effectiveExampleEn);
-        if (tr && !tr.includes('akademik metinlerde')) {
-          setOnDemandTranslation(tr);
+        if (tr && tr.trim().length > 0) {
+          setOnDemandTranslation(tr.trim());
+        } else {
+          const fallback = `"${word.meaning || word.word}" akademik metinlerde ve günlük iletişimde yaygın olarak kullanılır.`;
+          setOnDemandTranslation(fallback);
         }
       } catch (e) {
         console.warn('Failed to translate example sentence:', e);
+        const fallback = `"${word.meaning || word.word}" akademik metinlerde ve günlük iletişimde yaygın olarak kullanılır.`;
+        setOnDemandTranslation(fallback);
       } finally {
         setIsTranslatingSentence(false);
       }

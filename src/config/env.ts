@@ -11,7 +11,7 @@ export const ENV_CONFIG = {
 
   // Apple StoreKit / RevenueCat Yapılandırması
   // RevenueCat Dashboard > Project Settings > API Keys > Public Apple API Key
-  REVENUECAT_APPLE_API_KEY: 'appl_YDSpRatIKPrOmasterKey2025',
+  REVENUECAT_APPLE_API_KEY: 'appl_BxTgMghGONzZkLkDmtDVOqzUbyO',
 
   // Apple In-App Purchase Product IDs (App Store Connect ile birebir eşleşmeli)
   APPLE_PRODUCT_IDS: {

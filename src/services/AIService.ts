@@ -3,6 +3,7 @@ import { ENV_CONFIG } from '../config/env';
 import { INITIAL_YDS_QUESTIONS } from './YdsQuestionBank';
 import { dbService } from '../database/DatabaseService';
 import { DictionaryApiService } from './DictionaryApiService';
+import { getValidExampleSentence } from '../utils/sentenceUtils';
 
 export interface AIQuestionGenerateParams {
   type: YdsQuestionType;
@@ -408,13 +409,14 @@ GÖREV:
     // 1. AŞAMA: Yerel Doğrulanmış SQLite Sözlük Havuzunu Kontrol Et (7.000+ Kelime)
     try {
       const localWord = await dbService.findWordByText(cleanWord);
-      if (localWord && localWord.meaning) {
+      const validLocalSentence = getValidExampleSentence(localWord?.example_sentence);
+      if (localWord && localWord.meaning && validLocalSentence) {
         return {
           word: localWord.word.toUpperCase(),
           meaning: localWord.meaning,
           level: localWord.level || 'B2',
-          example_sentence: localWord.example_sentence || '',
-          example_translation: localWord.example_translation || '',
+          example_sentence: validLocalSentence,
+          example_translation: getValidExampleSentence(localWord.example_translation) || '',
           synonyms: localWord.synonyms || [],
           category: 'VOCABULARY',
           is_custom: true,
@@ -425,7 +427,8 @@ GÖREV:
     // 2. AŞAMA: Ultra-hızlı Sözlük Motorunu Kontrol Et (~100-150ms)
     try {
       const fastDict = await DictionaryApiService.lookupWord(cleanWord);
-      if (fastDict && fastDict.primaryTurkish) {
+      const validDictSentence = getValidExampleSentence(fastDict?.exampleEn);
+      if (fastDict && fastDict.primaryTurkish && validDictSentence) {
         const trMeaning =
           fastDict.allTurkishMeanings && fastDict.allTurkishMeanings.length > 1
             ? fastDict.allTurkishMeanings.slice(0, 3).join(', ')
@@ -434,8 +437,8 @@ GÖREV:
           word: cleanWord.toUpperCase(),
           meaning: trMeaning,
           level: 'B2',
-          example_sentence: fastDict.exampleEn || '',
-          example_translation: fastDict.exampleTr || '',
+          example_sentence: validDictSentence,
+          example_translation: getValidExampleSentence(fastDict.exampleTr) || '',
           synonyms: [],
           category: 'VOCABULARY',
           is_custom: true,

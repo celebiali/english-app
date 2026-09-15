@@ -21,6 +21,7 @@ import { useLearningStore } from '../store/useLearningStore';
 import { useThemeStore } from '../store/useThemeStore';
 import { CardComponent } from './CardComponent';
 import { CustomWordModal } from './CustomWordModal';
+import { getValidExampleSentence } from '../utils/sentenceUtils';
 
 interface Props {
   words: WordWithProgress[];
@@ -288,14 +289,14 @@ export const CustomVaultView: React.FC<Props> = ({ words = [] }) => {
                     </View>
 
                     {/* Example Sentence */}
-                    {item.example_sentence && (
+                    {getValidExampleSentence(item.example_sentence) ? (
                       <View style={[styles.exampleBox, { borderLeftColor: colors.brand }]}>
-                        <Text style={[styles.exampleEn, { color: colors.text }]}>"{item.example_sentence}"</Text>
-                        {item.example_translation && (
-                          <Text style={[styles.exampleTr, { color: colors.textSecondary }]}>{item.example_translation}</Text>
-                        )}
+                        <Text style={[styles.exampleEn, { color: colors.text }]}>"{getValidExampleSentence(item.example_sentence)}"</Text>
+                        {getValidExampleSentence(item.example_translation) ? (
+                          <Text style={[styles.exampleTr, { color: colors.textSecondary }]}>{getValidExampleSentence(item.example_translation)}</Text>
+                        ) : null}
                       </View>
-                    )}
+                    ) : null}
 
                     {/* Synonyms Chips */}
                     {item.synonyms && item.synonyms.length > 0 && (

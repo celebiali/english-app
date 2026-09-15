@@ -1,5 +1,7 @@
 import { WordItem } from '../types';
 import { dbService } from '../database/DatabaseService';
+import { isBoilerplateSentence, getValidExampleSentence } from '../utils/sentenceUtils';
+import { TurengService } from './TurengService';
 
 export interface ApiDefinitionItem {
   definition: string;
@@ -477,8 +479,13 @@ export class DictionaryApiService {
               synonyms: localWord.synonyms || [],
             },
           ],
-          exampleEn: localWord.example_sentence || undefined,
-          exampleTr: localWord.example_translation || undefined,
+          exampleEn:
+            getValidExampleSentence(localWord.example_sentence) ||
+            TurengService.getBuiltinSentence(clean)?.sampleSentenceEn,
+          exampleTr:
+            getValidExampleSentence(localWord.example_sentence)
+              ? getValidExampleSentence(localWord.example_translation) || undefined
+              : TurengService.getBuiltinSentence(clean)?.sampleSentenceTr,
           isFromApi: false,
         };
 
@@ -498,13 +505,17 @@ export class DictionaryApiService {
         finalMeanings = datamuseData.meanings;
       }
 
-      // High quality academic example sentence
-      let exampleEn = datamuseData.firstExample || `The term "${clean}" is widely used in academic and professional contexts.`;
-      let exampleTr = '';
+      // High quality academic example sentence (avoid synthetic boilerplate)
+      const builtinExample = TurengService.getBuiltinSentence(clean);
+      let exampleEn =
+        getValidExampleSentence(datamuseData.firstExample) ||
+        builtinExample?.sampleSentenceEn ||
+        undefined;
+      let exampleTr = builtinExample?.sampleSentenceTr || '';
 
       if (options?.skipSentenceTranslation) {
         exampleTr = '';
-      } else if (exampleEn) {
+      } else if (exampleEn && !exampleTr) {
         // Fast sentence translation in background/parallel
         try {
           exampleTr = await this.translateSentence(exampleEn, options?.signal);

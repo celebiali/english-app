@@ -3,6 +3,7 @@ import {
   RAW_CONNECTORS_LIST,
   RAW_ETYMOLOGY_ROOTS,
 } from './FullDataset';
+import { BUILTIN_ACADEMIC_DICT } from './TurengService';
 
 /**
  * Base Core Vocabulary Words Stems
@@ -244,14 +245,15 @@ export class DataParserService {
 
     // 1. CONNECTORS (~500 items)
     RAW_CONNECTORS_LIST.forEach((c) => {
+      const builtin = BUILTIN_ACADEMIC_DICT[c.word.toLowerCase()];
       list.push({
         word: c.word,
         meaning: c.meaning,
         category: 'CONNECTOR',
         subcategory: c.subcategory || 'Genel',
         level: 'B1', // Guaranteed level string!
-        example_sentence: `The connector "${c.word}" is frequently tested in YDS.`,
-        example_translation: `"${c.word}" bağlacı YDS'de sıklıkla sorulur.`
+        example_sentence: builtin?.sampleSentenceEn,
+        example_translation: builtin?.sampleSentenceTr,
       });
     });
 
@@ -271,13 +273,14 @@ export class DataParserService {
 
     // 3. BASE OXFORD VOCABULARY (~6,000 items)
     BASE_VOCAB_STEMS.forEach((v) => {
+      const builtin = BUILTIN_ACADEMIC_DICT[v.word.toLowerCase()];
       list.push({
         word: v.word,
         meaning: v.meaning,
         category: 'VOCABULARY',
         level: v.level || 'B1', // Guaranteed level string!
-        example_sentence: `The word "${v.word}" frequently appears in YDS passages.`,
-        example_translation: `"${v.word}" kelimesi YDS metinlerinde sıkça geçer.`
+        example_sentence: builtin?.sampleSentenceEn,
+        example_translation: builtin?.sampleSentenceTr,
       });
     });
 
@@ -296,8 +299,6 @@ export class DataParserService {
         meaning: baseWordObj.meaning,
         category: cat,
         level: (baseWordObj.level as WordLevel) || 'B1', // Guaranteed level string!
-        example_sentence: `Usage example for "${baseWordObj.word}${wordSuffix}" in YDS exam context.`,
-        example_translation: `"${baseWordObj.word}${wordSuffix}" kelimesinin YDS bağlamındaki kullanımı.`
       });
       index++;
     }

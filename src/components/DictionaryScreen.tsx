@@ -37,6 +37,7 @@ import {
   RichDictionaryResult,
 } from '../services/DictionaryApiService';
 import { SelectFolderModal } from './SelectFolderModal';
+import { getValidExampleSentence } from '../utils/sentenceUtils';
 
 const POPULAR_SEARCH_TAGS = [
   'money',
@@ -225,12 +226,13 @@ export const DictionaryScreen: React.FC = () => {
       selectedWord.image_url || getSafeAIImageUrl(selectedWord.word, primaryMeaning);
 
     const activeExampleEn =
-      selectedWordDetail?.exampleEn ||
-      selectedWord.example_sentence ||
-      `The concept of ${selectedWord.word} is frequently studied in modern literature.`;
+      getValidExampleSentence(selectedWordDetail?.exampleEn) ||
+      getValidExampleSentence(selectedWord.example_sentence) ||
+      '';
 
     const activeExampleTr =
-      selectedWordDetail?.exampleTr || selectedWord.example_translation;
+      getValidExampleSentence(selectedWordDetail?.exampleTr) ||
+      (activeExampleEn ? getValidExampleSentence(selectedWord.example_translation) : null);
 
     const phonetic =
       selectedWordDetail?.phonetic || selectedWord.etymology_note;
@@ -420,21 +422,23 @@ export const DictionaryScreen: React.FC = () => {
           )}
 
           {/* Section: Örnekler */}
-          <View style={styles.detailSection}>
-            <Text style={[styles.sectionTitleLabel, { color: colors.textSecondary }]}>
-              ÖRNEKLER
-            </Text>
-            <View style={[styles.exampleBox, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
-              <Text style={[styles.exampleSentenceEn, { color: colors.text }]}>
-                {activeExampleEn}
+          {activeExampleEn ? (
+            <View style={styles.detailSection}>
+              <Text style={[styles.sectionTitleLabel, { color: colors.textSecondary }]}>
+                ÖRNEKLER
               </Text>
-              {activeExampleTr ? (
-                <Text style={[styles.exampleSentenceTr, { color: colors.textSecondary }]}>
-                  {activeExampleTr}
+              <View style={[styles.exampleBox, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+                <Text style={[styles.exampleSentenceEn, { color: colors.text }]}>
+                  {activeExampleEn}
                 </Text>
-              ) : null}
+                {activeExampleTr ? (
+                  <Text style={[styles.exampleSentenceTr, { color: colors.textSecondary }]}>
+                    {activeExampleTr}
+                  </Text>
+                ) : null}
+              </View>
             </View>
-          </View>
+          ) : null}
 
           {/* Section: Resim */}
           <View style={styles.detailSection}>
@@ -753,12 +757,12 @@ export const DictionaryScreen: React.FC = () => {
                       </Text>
                     </View>
 
-                    {item.example_sentence ? (
+                    {getValidExampleSentence(item.example_sentence) ? (
                       <Text
                         style={[styles.resultExampleText, { color: colors.textSecondary }]}
                         numberOfLines={1}
                       >
-                        {item.example_sentence}
+                        {getValidExampleSentence(item.example_sentence)}
                       </Text>
                     ) : null}
                   </View>

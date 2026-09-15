@@ -15,6 +15,8 @@ import { CardWord } from '../types';
 import { TurengService, TurengWordDetail } from '../services/TurengService';
 import { AIService } from '../services/AIService';
 import { useThemeStore } from '../store/useThemeStore';
+import { getValidExampleSentence, isBoilerplateSentence } from '../utils/sentenceUtils';
+import { dbService } from '../database/DatabaseService';
 
 // Safe dynamic native module resolution to prevent launch crashes on binaries without ExpoSpeech linked
 let SpeechModule: any = null;
@@ -52,6 +54,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
   const [matchedWith, setMatchedWith] = useState<string>('');
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
   const [turengDetail, setTurengDetail] = useState<TurengWordDetail | null>(null);
+  const [enrichedSentence, setEnrichedSentence] = useState<{ en: string; tr: string } | null>(null);
 
   // When word changes, reset input and fetch Tureng details
   useEffect(() => {
@@ -61,11 +64,20 @@ export const CardComponent: React.FC<CardComponentProps> = ({
     setIsCorrectAnswer(false);
     setIsFlipped(false);
     setMatchedWith('');
+    setEnrichedSentence(null);
 
     // Fetch Tureng data
     TurengService.lookupWord(cardWord.word)
       .then((detail) => {
         setTurengDetail(detail);
+        const validEn = getValidExampleSentence(detail?.sampleSentenceEn);
+        if (validEn) {
+          const validTr = getValidExampleSentence(detail?.sampleSentenceTr) || '';
+          setEnrichedSentence({ en: validEn, tr: validTr });
+          if (cardWord.id) {
+            dbService.updateWordExample(cardWord.id, validEn, validTr).catch(() => {});
+          }
+        }
       })
       .finally(() => {});
   }, [cardWord.id]);
@@ -152,6 +164,18 @@ export const CardComponent: React.FC<CardComponentProps> = ({
       console.warn('Speech error:', e);
     }
   };
+
+  const validDbSentence = getValidExampleSentence(cardWord.example_sentence);
+  const effectiveExampleEn =
+    validDbSentence ||
+    enrichedSentence?.en ||
+    getValidExampleSentence(turengDetail?.sampleSentenceEn);
+
+  const validDbTr = getValidExampleSentence(cardWord.example_translation);
+  const effectiveExampleTr =
+    (validDbSentence ? validDbTr : undefined) ||
+    enrichedSentence?.tr ||
+    getValidExampleSentence(turengDetail?.sampleSentenceTr);
 
   return (
     <View style={styles.container}>
@@ -289,7 +313,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
               )}
 
               {/* Example Sentence */}
-              {cardWord.example_sentence && (
+              {effectiveExampleEn && (
                 <View style={[styles.fbEx, { backgroundColor: colors.subtleBackground, borderLeftColor: colors.brand }]}>
                   <Text style={[
                     styles.fbExEn,
@@ -300,9 +324,9 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                       lineHeight: Math.round(dynamicFontSize * 1.45),
                     }
                   ]}>
-                    "{cardWord.example_sentence}"
+                    "{effectiveExampleEn}"
                   </Text>
-                  {cardWord.example_translation && (
+                  {effectiveExampleTr ? (
                     <Text style={[
                       styles.fbExTr,
                       {
@@ -311,9 +335,9 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                         fontSize: Math.max(12, dynamicFontSize - 2),
                       }
                     ]}>
-                      {cardWord.example_translation}
+                      {effectiveExampleTr}
                     </Text>
-                  )}
+                  ) : null}
                 </View>
               )}
             </View>

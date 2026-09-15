@@ -10,9 +10,10 @@ import {
 } from 'react-native';
 import { X, Volume2, Languages } from 'lucide-react-native';
 import { useThemeStore } from '../store/useThemeStore';
-import { WordWithProgress } from '../database/DatabaseService';
+import { WordWithProgress, dbService } from '../database/DatabaseService';
 import { CardWord } from '../types';
 import { DictionaryApiService } from '../services/DictionaryApiService';
+import { getValidExampleSentence, isBoilerplateSentence } from '../utils/sentenceUtils';
 
 let SpeechModule: any = null;
 try {
@@ -71,17 +72,33 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
   useEffect(() => {
     let isMounted = true;
 
-    // If word doesn't have an example sentence or translation, asynchronously fetch from Dictionary API
-    if (!word.example_sentence || !word.example_translation) {
+    const validDbEn = getValidExampleSentence(word.example_sentence);
+    const validDbTr = getValidExampleSentence(word.example_translation);
+
+    // If word doesn't have an authentic example sentence or translation, asynchronously fetch from Dictionary API
+    if (!validDbEn || !validDbTr) {
       setIsLoadingSentence(true);
       DictionaryApiService.lookupWord(word.word)
         .then((res) => {
           if (isMounted && res) {
-            setEnrichedDetail({
-              phonetic: res.phonetic,
-              exampleEn: res.exampleEn,
-              exampleTr: res.exampleTr,
-            });
+            const enrichedEn = getValidExampleSentence(res.exampleEn);
+            const enrichedTr = getValidExampleSentence(res.exampleTr);
+            if (enrichedEn) {
+              setEnrichedDetail({
+                phonetic: res.phonetic,
+                exampleEn: enrichedEn,
+                exampleTr: enrichedTr || undefined,
+              });
+              if (word.id) {
+                dbService.updateWordExample(word.id, enrichedEn, enrichedTr || undefined).catch(() => {});
+              }
+            } else {
+              setEnrichedDetail({
+                phonetic: res.phonetic,
+                exampleEn: undefined,
+                exampleTr: undefined,
+              });
+            }
           }
         })
         .catch(() => {})
@@ -130,23 +147,22 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
 
   const progressPercent = totalCards > 0 ? Math.min(100, Math.round(((currentIndex + 1) / totalCards) * 100)) : 0;
 
-  // Effective English example sentence
+  // Effective English example sentence (strictly non-boilerplate)
+  const validDbEn = getValidExampleSentence(word.example_sentence);
   const effectiveExampleEn =
-    word.example_sentence ||
-    enrichedDetail?.exampleEn ||
-    `The ${word.word.toLowerCase()} is widely used in academic texts and daily communication.`;
+    validDbEn ||
+    getValidExampleSentence(enrichedDetail?.exampleEn) ||
+    '';
 
-  // Candidate Turkish translation (strictly excluding synthetic boilerplate explanations)
+  // Candidate Turkish translation (strictly non-boilerplate)
+  const validDbTr = getValidExampleSentence(word.example_translation);
   const candidateTr =
     onDemandTranslation ||
-    word.example_translation ||
-    enrichedDetail?.exampleTr;
+    (validDbEn ? validDbTr : undefined) ||
+    getValidExampleSentence(enrichedDetail?.exampleTr);
 
   const effectiveExampleTr =
-    candidateTr &&
-    !candidateTr.includes('akademik metinlerde ve günlük iletişimde sıkça kullanılır')
-      ? candidateTr
-      : onDemandTranslation;
+    candidateTr && !isBoilerplateSentence(candidateTr) ? candidateTr : onDemandTranslation;
 
   const handleToggleTranslation = async () => {
     if (showTranslation) {
@@ -334,7 +350,7 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
                   Örnek cümle yükleniyor...
                 </Text>
               </View>
-            ) : (
+            ) : effectiveExampleEn ? (
               <View
                 style={[
                   styles.sentenceCard,
@@ -404,7 +420,7 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
                   </View>
                 )}
               </View>
-            )}
+            ) : null}
           </View>
         </View>
       </ScrollView>

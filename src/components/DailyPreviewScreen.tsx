@@ -9,6 +9,7 @@ import {
 import { BookMarked, Eye, EyeOff, Play } from 'lucide-react-native';
 import { CardWord } from '../types';
 import { useThemeStore } from '../store/useThemeStore';
+import { getValidExampleSentence } from '../utils/sentenceUtils';
 
 export interface DailyPreviewScreenProps {
   words: CardWord[];
@@ -83,18 +84,18 @@ export const DailyPreviewScreen: React.FC<DailyPreviewScreenProps> = ({
         )}
 
         {/* Example Sentence */}
-        {!hideMeanings && item.example_sentence && (
+        {!hideMeanings && getValidExampleSentence(item.example_sentence) ? (
           <View style={[styles.exampleContainer, { borderLeftColor: colors.brand }]}>
             <Text style={[styles.exampleSentence, { color: colors.text }]}>
-              "{item.example_sentence}"
+              "{getValidExampleSentence(item.example_sentence)}"
             </Text>
-            {item.example_translation && (
+            {getValidExampleSentence(item.example_translation) ? (
               <Text style={[styles.exampleTranslation, { color: colors.textSecondary }]}>
-                {item.example_translation}
+                {getValidExampleSentence(item.example_translation)}
               </Text>
-            )}
+            ) : null}
           </View>
-        )}
+        ) : null}
 
         {/* Etymology Note */}
         {!hideMeanings && item.etymology_note && (

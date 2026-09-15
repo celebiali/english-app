@@ -21,7 +21,7 @@ export interface TurengWordDetail {
 const TURENG_CACHE = new Map<string, TurengWordDetail>();
 
 // Rich built-in academic lookup for high-frequency connectors & YDS core vocabulary
-const BUILTIN_ACADEMIC_DICT: Record<string, TurengWordDetail> = {
+export const BUILTIN_ACADEMIC_DICT: Record<string, TurengWordDetail> = {
   'because': {
     word: 'because',
     phonetic: '/bɪˈkɒz/',
@@ -390,6 +390,21 @@ const SEMANTIC_GROUPS: { keywords: string[]; equivalents: string[] }[] = [
 
 export class TurengService {
   /**
+   * Fast synchronous check for built-in high-quality academic example sentences.
+   */
+  static getBuiltinSentence(word: string): { sampleSentenceEn?: string; sampleSentenceTr?: string } | null {
+    const cleanWord = (word || '').trim().toLowerCase();
+    const item = BUILTIN_ACADEMIC_DICT[cleanWord];
+    if (item && item.sampleSentenceEn) {
+      return {
+        sampleSentenceEn: item.sampleSentenceEn,
+        sampleSentenceTr: item.sampleSentenceTr,
+      };
+    }
+    return null;
+  }
+
+  /**
    * Fetches Tureng-style detailed academic Turkish meanings for any English word.
    */
   static async lookupWord(word: string): Promise<TurengWordDetail> {
@@ -423,8 +438,8 @@ Return ONLY valid JSON matching this exact structure:
   ],
   "synonyms": ["worsen", "aggravate", "decline"],
   "antonyms": ["improve", "alleviate", "ameliorate"],
-  "sampleSentenceEn": "A formal academic YDS example sentence using ${cleanWord}.",
-  "sampleSentenceTr": "Bu cümlenin Türkçe akademik çevirisi."
+  "sampleSentenceEn": "A formal academic YDS exam sentence where '${cleanWord}' is actively used in natural grammatical context. Never use meta templates like 'the word X is used'.",
+  "sampleSentenceTr": "Bu cümlenin akıcı Türkçe akademik çevirisi."
 }`;
 
       const aiData = await AIService.generateCustomJSON<TurengWordDetail>(prompt);

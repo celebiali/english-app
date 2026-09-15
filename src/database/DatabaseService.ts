@@ -285,6 +285,19 @@ class DatabaseService {
       `);
     } catch (_) {}
 
+    // Purge generic template/boilerplate example sentences so authentic academic sentences can be displayed
+    try {
+      await this.dbInstance.execAsync(`
+        UPDATE words 
+        SET example_sentence = NULL, example_translation = NULL
+        WHERE example_sentence LIKE '%frequently appears in YDS%'
+           OR example_sentence LIKE '%frequently tested in YDS%'
+           OR example_sentence LIKE '%in YDS exam context%'
+           OR example_sentence LIKE '%widely used in academic%'
+           OR example_sentence LIKE '%Usage example for%';
+      `);
+    } catch (_) {}
+
     // Reset streak if user has 0 completed activity
     try {
       await this.dbInstance.execAsync(`
@@ -1421,6 +1434,62 @@ class DatabaseService {
       `UPDATE words SET meaning = ? WHERE id = ?`,
       [cleanMeaning, wordId]
     );
+  }
+
+  /**
+   * Updates or enriches the authentic example sentence and Turkish translation of a word
+   */
+  async updateWordExample(wordId: number | string, sentenceEn: string, sentenceTr?: string): Promise<void> {
+    const cleanEn = (sentenceEn || '').trim();
+    if (!cleanEn) return;
+
+    if (!this.isNative) {
+      const numId = Number(wordId);
+      const w = this.memoryDb.words.get(numId);
+      if (w) {
+        w.example_sentence = cleanEn;
+        if (sentenceTr) w.example_translation = sentenceTr.trim();
+      }
+      return;
+    }
+
+    try {
+      await this.dbInstance.runAsync(
+        `UPDATE words SET example_sentence = ?, example_translation = ? WHERE id = ?`,
+        [cleanEn, sentenceTr ? sentenceTr.trim() : null, wordId]
+      );
+    } catch (e) {
+      console.warn('Failed to update word example in SQLite:', e);
+    }
+  }
+
+  /**
+   * Updates example sentence by matching the English word text (case-insensitive)
+   */
+  async updateWordExampleByText(cleanWord: string, sentenceEn: string, sentenceTr?: string): Promise<void> {
+    const cleanEn = (sentenceEn || '').trim();
+    const wordText = (cleanWord || '').trim().toLowerCase();
+    if (!cleanEn || !wordText) return;
+
+    if (!this.isNative) {
+      for (const w of this.memoryDb.words.values()) {
+        if (w.word.toLowerCase() === wordText) {
+          w.example_sentence = cleanEn;
+          if (sentenceTr) w.example_translation = sentenceTr.trim();
+          break;
+        }
+      }
+      return;
+    }
+
+    try {
+      await this.dbInstance.runAsync(
+        `UPDATE words SET example_sentence = ?, example_translation = ? WHERE LOWER(word) = ?`,
+        [cleanEn, sentenceTr ? sentenceTr.trim() : null, wordText]
+      );
+    } catch (e) {
+      console.warn('Failed to update word example by text in SQLite:', e);
+    }
   }
 
   async updateWordBox(wordId: number, boxNumber: number): Promise<void> {

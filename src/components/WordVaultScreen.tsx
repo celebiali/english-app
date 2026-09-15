@@ -40,6 +40,7 @@ import {
   DictionaryApiService,
   RichDictionaryResult,
 } from '../services/DictionaryApiService';
+import { getValidExampleSentence } from '../utils/sentenceUtils';
 import { CardComponent } from './CardComponent';
 import { LearnMatchWordCard } from './LearnMatchWordCard';
 import { SearchInputBar } from './SearchInputBar';
@@ -1475,21 +1476,32 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               </View>
 
               {/* Örnek Cümle */}
-              {(selectedWordDetail?.exampleEn || selectedWord.example_sentence) ? (
-                <View style={styles.modalExampleSection}>
-                  <Text style={[styles.modalExampleTitle, { color: colors.textSecondary }]}>
-                    Örnek Cümle:
-                  </Text>
-                  <Text style={[styles.modalExampleEn, { color: colors.text }]}>
-                    {selectedWordDetail?.exampleEn || selectedWord.example_sentence}
-                  </Text>
-                  {(selectedWordDetail?.exampleTr || selectedWord.example_translation) ? (
-                    <Text style={[styles.modalExampleTr, { color: colors.textSecondary }]}>
-                      {selectedWordDetail?.exampleTr || selectedWord.example_translation}
+              {(() => {
+                const validEn =
+                  getValidExampleSentence(selectedWordDetail?.exampleEn) ||
+                  getValidExampleSentence(selectedWord.example_sentence);
+                const validTr =
+                  getValidExampleSentence(selectedWordDetail?.exampleTr) ||
+                  (validEn ? getValidExampleSentence(selectedWord.example_translation) : null);
+
+                if (!validEn) return null;
+
+                return (
+                  <View style={styles.modalExampleSection}>
+                    <Text style={[styles.modalExampleTitle, { color: colors.textSecondary }]}>
+                      Örnek Cümle:
                     </Text>
-                  ) : null}
-                </View>
-              ) : null}
+                    <Text style={[styles.modalExampleEn, { color: colors.text }]}>
+                      {validEn}
+                    </Text>
+                    {validTr ? (
+                      <Text style={[styles.modalExampleTr, { color: colors.textSecondary }]}>
+                        {validTr}
+                      </Text>
+                    ) : null}
+                  </View>
+                );
+              })()}
 
               {/* Modal Alt Butonlar: Kaldır & Tamam */}
               <View style={styles.modalButtonsRow}>

@@ -8,7 +8,16 @@ import {
   TouchableOpacity,
   Animated,
   ActivityIndicator,
+  LogBox,
 } from 'react-native';
+
+// Suppress known non-fatal dev warnings in simulator / development
+LogBox.ignoreLogs([
+  'Require cycle:',
+  '[RevenueCat]',
+  'Error fetching offerings',
+  "There's a problem with your configuration",
+]);
 
 import { User } from 'lucide-react-native';
 import { useLearningStore } from './src/store/useLearningStore';

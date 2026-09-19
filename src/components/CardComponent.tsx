@@ -55,6 +55,20 @@ export const CardComponent: React.FC<CardComponentProps> = ({
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
   const [turengDetail, setTurengDetail] = useState<TurengWordDetail | null>(null);
   const [enrichedSentence, setEnrichedSentence] = useState<{ en: string; tr: string } | null>(null);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+
+    const showSub = Keyboard.addListener(showEvent, () => setIsKeyboardVisible(true));
+    const hideSub = Keyboard.addListener(hideEvent, () => setIsKeyboardVisible(false));
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   // When word changes, reset input and fetch Tureng details
   useEffect(() => {
@@ -180,14 +194,37 @@ export const CardComponent: React.FC<CardComponentProps> = ({
   return (
     <View style={styles.container}>
       {/* FLASH WRAP */}
-      <View style={styles.flashWrap}>
+      <View
+        style={[
+          styles.flashWrap,
+          !isFlipped
+            ? isKeyboardVisible
+              ? styles.flashWrapCompact
+              : styles.flashWrapStandard
+            : styles.flashWrapFlipped,
+        ]}
+      >
         <Pressable
-          style={[styles.flashCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}
+          style={[
+            styles.flashCard,
+            { backgroundColor: colors.cardBackground, borderColor: colors.border },
+            !isFlipped
+              ? isKeyboardVisible
+                ? styles.flashCardCompact
+                : styles.flashCardStandard
+              : styles.flashCardFlipped,
+          ]}
           onPress={handleFlipCard}
         >
           {!isFlipped ? (
             /* FRONT FACE (ENGLISH & YDS BADGE) */
-            <View style={[styles.flashFront, { backgroundColor: colors.cardBackground }]}>
+            <View
+              style={[
+                styles.flashFront,
+                { backgroundColor: colors.cardBackground },
+                isKeyboardVisible && styles.flashFrontCompact,
+              ]}
+            >
               <View style={styles.frontTopRow}>
                 <View style={[styles.levelBadge, { backgroundColor: colors.brandLight }]}>
                   <Text style={[styles.levelBadgeText, { color: colors.brand }]}>{cardWord.level || 'B2 / C1'}</Text>
@@ -213,9 +250,17 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                 </View>
               </View>
 
-              <View style={styles.wordCenterBox}>
+              <View style={[styles.wordCenterBox, isKeyboardVisible && styles.wordCenterBoxCompact]}>
                 <View style={styles.wordAudioRow}>
-                  <Text style={[styles.flashWord, { color: colors.text, fontFamily: dynamicFontFamily }]}>{cardWord.word}</Text>
+                  <Text
+                    style={[
+                      styles.flashWord,
+                      { color: colors.text, fontFamily: dynamicFontFamily },
+                      isKeyboardVisible && styles.flashWordCompact,
+                    ]}
+                  >
+                    {cardWord.word}
+                  </Text>
                   <TouchableOpacity
                     onPress={(e) => {
                       e.stopPropagation();
@@ -225,19 +270,21 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                     hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
                     activeOpacity={0.7}
                   >
-                    <Volume2 size={20} color={colors.brand} />
+                    <Volume2 size={isKeyboardVisible ? 18 : 20} color={colors.brand} />
                   </TouchableOpacity>
                 </View>
-                {(cardWord.etymology_note || turengDetail?.phonetic) ? (
+                {(cardWord.etymology_note || turengDetail?.phonetic) && !isKeyboardVisible ? (
                   <Text style={[styles.flashPhon, { color: colors.textSecondary }]}>
                     {cardWord.etymology_note || turengDetail?.phonetic}
                   </Text>
                 ) : null}
               </View>
 
-              <View style={styles.bottomHintBox}>
-                <Text style={[styles.cardTapHint, { color: colors.textSecondary }]}>👆 Anlamı görmek için karta dokun</Text>
-              </View>
+              {!isKeyboardVisible ? (
+                <View style={styles.bottomHintBox}>
+                  <Text style={[styles.cardTapHint, { color: colors.textSecondary }]}>👆 Anlamı görmek için karta dokun</Text>
+                </View>
+              ) : null}
             </View>
           ) : (
             /* BACK FACE (ACADEMIC DEFINITIONS & EXAMPLES) */
@@ -430,12 +477,21 @@ const styles = StyleSheet.create({
   },
   flashWrap: {
     width: '100%',
-    minHeight: 350,
-    marginBottom: 18,
+  },
+  flashWrapCompact: {
+    minHeight: 130,
+    marginBottom: 10,
+  },
+  flashWrapStandard: {
+    minHeight: 220,
+    marginBottom: 16,
+  },
+  flashWrapFlipped: {
+    minHeight: 300,
+    marginBottom: 16,
   },
   flashCard: {
     flex: 1,
-    minHeight: 350,
     borderRadius: 24,
     borderWidth: 1.5,
     overflow: 'hidden',
@@ -444,12 +500,25 @@ const styles = StyleSheet.create({
     shadowRadius: 16,
     elevation: 4,
   },
+  flashCardCompact: {
+    minHeight: 130,
+  },
+  flashCardStandard: {
+    minHeight: 220,
+  },
+  flashCardFlipped: {
+    minHeight: 300,
+  },
   flashFront: {
     flex: 1,
-    minHeight: 350,
-    padding: 24,
+    padding: 20,
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  flashFrontCompact: {
+    minHeight: 130,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
   },
   frontTopRow: {
     width: '100%',
@@ -479,14 +548,17 @@ const styles = StyleSheet.create({
   wordCenterBox: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 20,
+    marginVertical: 14,
+  },
+  wordCenterBoxCompact: {
+    marginVertical: 2,
   },
   wordAudioRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    marginBottom: 8,
+    marginBottom: 4,
   },
   audioBtn: {
     width: 38,
@@ -496,10 +568,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   flashWord: {
-    fontSize: 32,
+    fontSize: 30,
     fontWeight: '900',
     letterSpacing: -0.5,
     textAlign: 'center',
+  },
+  flashWordCompact: {
+    fontSize: 22,
+    lineHeight: 26,
   },
   flashPhon: {
     fontSize: 14,

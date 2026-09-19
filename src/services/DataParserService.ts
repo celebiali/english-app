@@ -3,7 +3,7 @@ import {
   RAW_CONNECTORS_LIST,
   RAW_ETYMOLOGY_ROOTS,
 } from './FullDataset';
-import { BUILTIN_ACADEMIC_DICT } from './TurengService';
+import { BUILTIN_ACADEMIC_DICT } from './BuiltinAcademicDictionary';
 
 /**
  * Base Core Vocabulary Words Stems

@@ -14,6 +14,7 @@ import { WordWithProgress, dbService } from '../database/DatabaseService';
 import { CardWord } from '../types';
 import { DictionaryApiService } from '../services/DictionaryApiService';
 import { getValidExampleSentence, isBoilerplateSentence } from '../utils/sentenceUtils';
+import { getBuiltinAcademicSentence } from '../services/BuiltinAcademicDictionary';
 
 let SpeechModule: any = null;
 try {
@@ -67,37 +68,71 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
     setShowTranslation(false);
     setOnDemandTranslation('');
     setIsTranslatingSentence(false);
+    setEnrichedDetail(null);
   }, [word.word, currentIndex]);
+
+  // Synchronous resolution of immediate sentence data (0ms latency, eliminates flicker)
+  const builtinSentence = getBuiltinAcademicSentence(word.word);
+  const cachedLookup = DictionaryApiService.getCachedWord(word.word);
+
+  const synchronousEn =
+    getValidExampleSentence(word.example_sentence) ||
+    getValidExampleSentence(builtinSentence?.sampleSentenceEn) ||
+    getValidExampleSentence(cachedLookup?.exampleEn) ||
+    '';
+
+  const synchronousTr =
+    getValidExampleSentence(word.example_translation) ||
+    getValidExampleSentence(builtinSentence?.sampleSentenceTr) ||
+    getValidExampleSentence(cachedLookup?.exampleTr) ||
+    '';
 
   useEffect(() => {
     let isMounted = true;
 
-    const validDbEn = getValidExampleSentence(word.example_sentence);
-    const validDbTr = getValidExampleSentence(word.example_translation);
+    // If we already have an English sentence, NEVER show a loading spinner/card
+    const hasImmediateSentence = Boolean(synchronousEn);
 
-    // If word doesn't have an authentic example sentence or translation, asynchronously fetch from Dictionary API
-    if (!validDbEn || !validDbTr) {
+    if (!hasImmediateSentence) {
       setIsLoadingSentence(true);
+    } else {
+      setIsLoadingSentence(false);
+    }
+
+    // Background fetch if anything is missing
+    const needsSentenceFetch = !hasImmediateSentence;
+    const needsTranslationFetch = !synchronousTr;
+
+    if (needsSentenceFetch || needsTranslationFetch) {
       DictionaryApiService.lookupWord(word.word)
-        .then((res) => {
-          if (isMounted && res) {
-            const enrichedEn = getValidExampleSentence(res.exampleEn);
-            const enrichedTr = getValidExampleSentence(res.exampleTr);
-            if (enrichedEn) {
+        .then(async (res) => {
+          if (!isMounted) return;
+          let enrichedEn = getValidExampleSentence(res?.exampleEn);
+          let enrichedTr = getValidExampleSentence(res?.exampleTr);
+
+          // If lookupWord didn't have a sentence and we don't have one yet, try authentic sentence resolver
+          if (!hasImmediateSentence && !enrichedEn) {
+            const fallback = await DictionaryApiService.fetchAuthenticSentence(word.word);
+            if (fallback?.en) {
+              enrichedEn = getValidExampleSentence(fallback.en);
+              enrichedTr = getValidExampleSentence(fallback.tr);
+            }
+          }
+
+          if (isMounted) {
+            if (enrichedEn || res?.phonetic) {
               setEnrichedDetail({
-                phonetic: res.phonetic,
-                exampleEn: enrichedEn,
+                phonetic: res?.phonetic,
+                exampleEn: enrichedEn || undefined,
                 exampleTr: enrichedTr || undefined,
               });
-              if (word.id) {
-                dbService.updateWordExample(word.id, enrichedEn, enrichedTr || undefined).catch(() => {});
+              if (enrichedEn) {
+                if (word.id) {
+                  dbService.updateWordExample(word.id, enrichedEn, enrichedTr || undefined).catch(() => {});
+                } else {
+                  dbService.updateWordExampleByText(word.word, enrichedEn, enrichedTr || undefined).catch(() => {});
+                }
               }
-            } else {
-              setEnrichedDetail({
-                phonetic: res.phonetic,
-                exampleEn: undefined,
-                exampleTr: undefined,
-              });
             }
           }
         })
@@ -106,14 +141,24 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
           if (isMounted) setIsLoadingSentence(false);
         });
     } else {
-      setEnrichedDetail(null);
-      setIsLoadingSentence(false);
+      // Both sentence and translation already available, silently enrich phonetic if needed
+      DictionaryApiService.lookupWord(word.word)
+        .then((res) => {
+          if (isMounted && res?.phonetic) {
+            setEnrichedDetail((prev) => ({
+              phonetic: res.phonetic,
+              exampleEn: prev?.exampleEn,
+              exampleTr: prev?.exampleTr,
+            }));
+          }
+        })
+        .catch(() => {});
     }
 
     return () => {
       isMounted = false;
     };
-  }, [word.word, word.example_sentence, word.example_translation]);
+  }, [word.word, word.example_sentence, word.example_translation, synchronousEn, synchronousTr]);
 
   const handleSpeakWord = () => {
     try {
@@ -148,17 +193,15 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
   const progressPercent = totalCards > 0 ? Math.min(100, Math.round(((currentIndex + 1) / totalCards) * 100)) : 0;
 
   // Effective English example sentence (strictly non-boilerplate)
-  const validDbEn = getValidExampleSentence(word.example_sentence);
   const effectiveExampleEn =
-    validDbEn ||
+    synchronousEn ||
     getValidExampleSentence(enrichedDetail?.exampleEn) ||
     '';
 
   // Candidate Turkish translation (strictly non-boilerplate)
-  const validDbTr = getValidExampleSentence(word.example_translation);
   const candidateTr =
     onDemandTranslation ||
-    (validDbEn ? validDbTr : undefined) ||
+    synchronousTr ||
     getValidExampleSentence(enrichedDetail?.exampleTr);
 
   const effectiveExampleTr =
@@ -336,7 +379,8 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
               <TouchableOpacity
                 onPress={() => handleSpeakSentence(effectiveExampleEn)}
                 hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                style={styles.sentenceAudioIconBtn}
+                style={[styles.sentenceAudioIconBtn, !effectiveExampleEn && { opacity: 0.35 }]}
+                disabled={!effectiveExampleEn}
                 accessibilityLabel="Cümleyi Dinle"
               >
                 <Volume2 size={16} color={colors.brand} />
@@ -344,11 +388,39 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
             </View>
 
             {isLoadingSentence ? (
-              <View style={styles.sentenceLoadingBox}>
-                <ActivityIndicator size="small" color={colors.brand} />
-                <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
-                  Örnek cümle yükleniyor...
-                </Text>
+              <View
+                style={[
+                  styles.sentenceCard,
+                  {
+                    backgroundColor: colors.subtleBackground,
+                    borderColor: colors.border,
+                    minHeight: 74,
+                    justifyContent: 'center',
+                    gap: 8,
+                    paddingVertical: 16,
+                  },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.skeletonLine,
+                    {
+                      backgroundColor: colors.border,
+                      width: '88%',
+                      opacity: 0.6,
+                    },
+                  ]}
+                />
+                <View
+                  style={[
+                    styles.skeletonLine,
+                    {
+                      backgroundColor: colors.border,
+                      width: '54%',
+                      opacity: 0.35,
+                    },
+                  ]}
+                />
               </View>
             ) : effectiveExampleEn ? (
               <View
@@ -420,7 +492,48 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
                   </View>
                 )}
               </View>
-            ) : null}
+            ) : (
+              <TouchableOpacity
+                style={[
+                  styles.sentenceCard,
+                  {
+                    backgroundColor: colors.subtleBackground,
+                    borderColor: colors.border,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingVertical: 14,
+                  },
+                ]}
+                onPress={() => {
+                  setIsLoadingSentence(true);
+                  DictionaryApiService.fetchAuthenticSentence(word.word)
+                    .then((res) => {
+                      if (res?.en) {
+                        setEnrichedDetail({
+                          exampleEn: res.en,
+                          exampleTr: res.tr || undefined,
+                        });
+                        if (word.id) {
+                          dbService.updateWordExample(word.id, res.en, res.tr || undefined).catch(() => {});
+                        } else {
+                          dbService.updateWordExampleByText(word.word, res.en, res.tr || undefined).catch(() => {});
+                        }
+                      }
+                    })
+                    .finally(() => setIsLoadingSentence(false));
+                }}
+                activeOpacity={0.7}
+              >
+                <Text
+                  style={[
+                    styles.loadingText,
+                    { color: colors.textSecondary, fontFamily: dynamicFontFamily },
+                  ]}
+                >
+                  Örnek cümleyi yüklemek için dokunun
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -586,10 +699,14 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   sentenceLoadingBox: {
-    paddingVertical: 20,
+    paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
+  },
+  skeletonLine: {
+    height: 12,
+    borderRadius: 6,
   },
   loadingText: {
     fontSize: 12,

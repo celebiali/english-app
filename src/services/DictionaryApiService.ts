@@ -1,7 +1,7 @@
 import { WordItem } from '../types';
 import { dbService } from '../database/DatabaseService';
 import { isBoilerplateSentence, getValidExampleSentence } from '../utils/sentenceUtils';
-import { TurengService } from './TurengService';
+import { getBuiltinAcademicSentence } from './BuiltinAcademicDictionary';
 
 export interface ApiDefinitionItem {
   definition: string;
@@ -34,6 +34,11 @@ export interface LookupOptions {
 
 export class DictionaryApiService {
   private static cache = new Map<string, RichDictionaryResult>();
+
+  static getCachedWord(word: string): RichDictionaryResult | undefined {
+    return this.cache.get((word || '').trim().toLowerCase());
+  }
+
   private static readonly USER_AGENT =
     'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1';
 
@@ -440,6 +445,117 @@ export class DictionaryApiService {
   }
 
   /**
+   * High-resilience authentic sentence resolver for any English vocabulary.
+   * Priority:
+   * 1. Built-in Academic Dictionary (instant 0ms)
+   * 2. Tatoeba human-translated bilingual corpus API (real EN & TR sentences)
+   * 3. Wiktionary API definition examples + Google Translate
+   */
+  static async fetchAuthenticSentence(
+    word: string,
+    signal?: AbortSignal
+  ): Promise<{ en: string; tr: string } | null> {
+    const clean = (word || '').trim().toLowerCase();
+    if (!clean) return null;
+
+    // 1. Built-in Academic Dictionary check (0ms)
+    const builtin = getBuiltinAcademicSentence(clean);
+    if (builtin?.sampleSentenceEn) {
+      return {
+        en: builtin.sampleSentenceEn,
+        tr: builtin.sampleSentenceTr || '',
+      };
+    }
+
+    // 2. Tatoeba API: millions of human-translated bilingual English-Turkish pairs
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3500);
+      const onParentAbort = () => controller.abort();
+      if (signal) signal.addEventListener('abort', onParentAbort);
+
+      const url = `https://tatoeba.org/en/api_v0/search?from=eng&to=tur&query=${encodeURIComponent(
+        clean
+      )}&trans_filter=limit&limit=6`;
+      const response = await fetch(url, {
+        headers: { 'User-Agent': this.USER_AGENT },
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+      if (signal) signal.removeEventListener('abort', onParentAbort);
+
+      if (response.ok) {
+        const data = await response.json();
+        const wordRegex = new RegExp(`\\b${clean}\\b`, 'i');
+        const candidates = (data.results || [])
+          .map((r: any) => ({
+            en: (r.text || '').trim(),
+            tr: (r.translations?.[0]?.[0]?.text || '').trim(),
+          }))
+          .filter(
+            (item: any) =>
+              item.en &&
+              item.tr &&
+              wordRegex.test(item.en) &&
+              item.en.length >= 18 &&
+              item.en.length <= 160 &&
+              !isBoilerplateSentence(item.en)
+          );
+
+        candidates.sort((a: any, b: any) => b.en.length - a.en.length);
+        if (candidates.length > 0) {
+          const chosen = candidates[0];
+          return { en: chosen.en, tr: chosen.tr };
+        }
+      }
+    } catch (_) {}
+
+    // 3. Wiktionary API definition examples
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3500);
+      const onParentAbort = () => controller.abort();
+      if (signal) signal.addEventListener('abort', onParentAbort);
+
+      const url = `https://en.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(clean)}`;
+      const response = await fetch(url, {
+        headers: { 'User-Agent': this.USER_AGENT },
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+      if (signal) signal.removeEventListener('abort', onParentAbort);
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data && Array.isArray(data.en)) {
+          for (const item of data.en) {
+            for (const def of item.definitions || []) {
+              if (Array.isArray(def.examples)) {
+                for (const ex of def.examples) {
+                  const stripped = String(ex).replace(/<[^>]+>/g, '').trim();
+                  if (
+                    stripped.length >= 20 &&
+                    stripped.length <= 160 &&
+                    !isBoilerplateSentence(stripped)
+                  ) {
+                    let tr = '';
+                    try {
+                      tr = await this.translateSentence(stripped, signal);
+                    } catch (_) {}
+                    return { en: stripped, tr };
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (_) {}
+
+    return null;
+  }
+
+  /**
    * Complete rich word lookup:
    * Combines instant cache/local DB + ultra-fast Google neural translation + Datamuse IPA phonetic definitions.
    */
@@ -466,6 +582,28 @@ export class DictionaryApiService {
         const primary = parts[0] || localWord.meaning;
         const all = parts.length > 0 ? parts.slice(0, 8) : [localWord.meaning];
 
+        let exampleEn =
+          getValidExampleSentence(localWord.example_sentence) ||
+          getBuiltinAcademicSentence(clean)?.sampleSentenceEn;
+        let exampleTr =
+          getValidExampleSentence(localWord.example_sentence)
+            ? getValidExampleSentence(localWord.example_translation) || undefined
+            : getBuiltinAcademicSentence(clean)?.sampleSentenceTr;
+
+        // If example sentence is missing from local SQLite, enrich it asynchronously
+        if (!exampleEn) {
+          const authentic = await this.fetchAuthenticSentence(clean, options?.signal);
+          if (authentic?.en) {
+            exampleEn = authentic.en;
+            exampleTr = authentic.tr || undefined;
+            if (localWord.id) {
+              dbService.updateWordExample(localWord.id, exampleEn, exampleTr).catch(() => {});
+            } else {
+              dbService.updateWordExampleByText(clean, exampleEn, exampleTr).catch(() => {});
+            }
+          }
+        }
+
         const localResult: RichDictionaryResult = {
           word: clean,
           phonetic: localWord.etymology_note || undefined,
@@ -479,13 +617,8 @@ export class DictionaryApiService {
               synonyms: localWord.synonyms || [],
             },
           ],
-          exampleEn:
-            getValidExampleSentence(localWord.example_sentence) ||
-            TurengService.getBuiltinSentence(clean)?.sampleSentenceEn,
-          exampleTr:
-            getValidExampleSentence(localWord.example_sentence)
-              ? getValidExampleSentence(localWord.example_translation) || undefined
-              : TurengService.getBuiltinSentence(clean)?.sampleSentenceTr,
+          exampleEn,
+          exampleTr,
           isFromApi: false,
         };
 
@@ -506,12 +639,20 @@ export class DictionaryApiService {
       }
 
       // High quality academic example sentence (avoid synthetic boilerplate)
-      const builtinExample = TurengService.getBuiltinSentence(clean);
+      const builtinExample = getBuiltinAcademicSentence(clean);
       let exampleEn =
         getValidExampleSentence(datamuseData.firstExample) ||
         builtinExample?.sampleSentenceEn ||
         undefined;
       let exampleTr = builtinExample?.sampleSentenceTr || '';
+
+      if (!exampleEn) {
+        const authentic = await this.fetchAuthenticSentence(clean, options?.signal);
+        if (authentic?.en) {
+          exampleEn = authentic.en;
+          exampleTr = authentic.tr || '';
+        }
+      }
 
       if (options?.skipSentenceTranslation) {
         exampleTr = '';

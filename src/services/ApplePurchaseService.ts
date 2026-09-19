@@ -56,7 +56,7 @@ class ApplePurchaseServiceImpl {
         return true;
       }
 
-      Purchases.setLogLevel(__DEV__ ? LOG_LEVEL.DEBUG : LOG_LEVEL.INFO);
+      Purchases.setLogLevel(__DEV__ ? LOG_LEVEL.WARN : LOG_LEVEL.INFO);
 
       if (userId) {
         await Purchases.configure({ apiKey, appUserID: userId });

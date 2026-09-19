@@ -8,6 +8,7 @@ import {
   Modal,
   useWindowDimensions,
   Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {
   ChevronLeft,
@@ -446,20 +447,27 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
         )}
 
         {!isFinished && currentCard ? (
-          <ScrollView
-            contentContainerStyle={styles.practiceScrollContent}
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 88 : 0}
           >
-            <CardComponent
-              cardWord={currentCard}
-              onAnswer={async (isCorrect) => {
-                await answerCurrentVocabCard(isCorrect);
-              }}
-              cardIndex={currentVocabIndex}
-              totalCards={dailyBatchWords.length || 0}
-            />
-          </ScrollView>
+            <ScrollView
+              contentContainerStyle={styles.practiceScrollContent}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="on-drag"
+            >
+              <CardComponent
+                cardWord={currentCard}
+                onAnswer={async (isCorrect) => {
+                  await answerCurrentVocabCard(isCorrect);
+                }}
+                cardIndex={currentVocabIndex}
+                totalCards={dailyBatchWords.length || 0}
+              />
+            </ScrollView>
+          </KeyboardAvoidingView>
         ) : (
           <View style={styles.sessionFinishedCenter}>
             <CheckCircle2 size={54} color="#10B981" />
@@ -1266,8 +1274,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 20,
     paddingTop: 16,
-    paddingBottom: 36,
-    justifyContent: 'center',
+    paddingBottom: 32,
+    justifyContent: 'flex-start',
   },
   sessionFinishedCenter: {
     flex: 1,

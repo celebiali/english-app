@@ -368,35 +368,6 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                   ))}
                 </View>
               )}
-
-              {/* Example Sentence */}
-              {effectiveExampleEn && (
-                <View style={[styles.fbEx, { backgroundColor: colors.subtleBackground, borderLeftColor: colors.brand }]}>
-                  <Text style={[
-                    styles.fbExEn,
-                    {
-                      color: colors.text,
-                      fontFamily: dynamicFontFamily,
-                      fontSize: dynamicFontSize,
-                      lineHeight: Math.round(dynamicFontSize * 1.45),
-                    }
-                  ]}>
-                    "{effectiveExampleEn}"
-                  </Text>
-                  {effectiveExampleTr ? (
-                    <Text style={[
-                      styles.fbExTr,
-                      {
-                        color: colors.textSecondary,
-                        fontFamily: dynamicFontFamily,
-                        fontSize: Math.max(12, dynamicFontSize - 2),
-                      }
-                    ]}>
-                      {effectiveExampleTr}
-                    </Text>
-                  ) : null}
-                </View>
-              )}
             </View>
           )}
         </Pressable>
@@ -493,9 +464,8 @@ export const CardComponent: React.FC<CardComponentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     width: '100%',
-    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   containerKeyboardOpen: {
     justifyContent: 'flex-start',
@@ -504,56 +474,47 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   flashWrapCompact: {
-    minHeight: 120,
-    maxHeight: 150,
-    marginBottom: 10,
+    minHeight: 110,
+    marginBottom: 8,
   },
   flashWrapStandard: {
-    flex: 1,
-    minHeight: 280,
-    maxHeight: 440,
-    marginBottom: 16,
+    minHeight: 180,
+    marginBottom: 14,
   },
   flashWrapFlipped: {
-    flex: 1,
-    minHeight: 300,
-    maxHeight: 460,
-    marginBottom: 16,
+    minHeight: 140,
+    marginBottom: 14,
   },
   flashCard: {
-    flex: 1,
-    borderRadius: Platform.select({ ios: 24, android: 16 }),
+    width: '100%',
+    borderRadius: Platform.select({ ios: 22, android: 16 }),
     borderWidth: 1.5,
     overflow: 'hidden',
-    shadowOffset: { width: 0, height: 6 },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
-    shadowRadius: 16,
-    elevation: 4,
+    shadowRadius: 12,
+    elevation: 3,
   },
   flashCardCompact: {
-    minHeight: 120,
-    maxHeight: 150,
+    minHeight: 110,
   },
   flashCardStandard: {
-    flex: 1,
-    minHeight: 280,
-    maxHeight: 440,
+    minHeight: 180,
   },
   flashCardFlipped: {
-    flex: 1,
-    minHeight: 300,
-    maxHeight: 460,
+    minHeight: 140,
   },
   flashFront: {
-    flex: 1,
-    padding: 20,
+    padding: 18,
     alignItems: 'center',
     justifyContent: 'space-between',
+    minHeight: 180,
   },
   flashFrontCompact: {
-    minHeight: 120,
+    minHeight: 110,
     paddingHorizontal: 16,
     paddingVertical: 10,
+    justifyContent: 'space-between',
   },
   frontTopRow: {
     width: '100%',
@@ -627,10 +588,10 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
   flashBack: {
-    flex: 1,
-    padding: 20,
+    padding: 18,
     justifyContent: 'flex-start',
-    gap: 12,
+    gap: 8,
+    minHeight: 140,
   },
   fbHeaderRow: {
     flexDirection: 'row',
@@ -689,16 +650,17 @@ const styles = StyleSheet.create({
   fbSyn: {
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 6,
+    borderRadius: 8,
   },
   fbSynText: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '700',
   },
   fbEx: {
+    padding: 10,
     borderRadius: 10,
-    padding: 8,
     borderLeftWidth: 3,
+    marginTop: 6,
   },
   fbExEn: {
     fontSize: 11.5,
@@ -712,9 +674,7 @@ const styles = StyleSheet.create({
   // Input Area Styles
   inputContainer: {
     width: '100%',
-    marginTop: 'auto',
-    paddingTop: 8,
-    paddingBottom: Platform.OS === 'ios' ? 12 : 8,
+    marginTop: 10,
     gap: 10,
   },
   inputWrapper: {
@@ -765,9 +725,7 @@ const styles = StyleSheet.create({
   // Feedback Styles
   feedbackContainer: {
     width: '100%',
-    marginTop: 'auto',
-    paddingTop: 8,
-    paddingBottom: Platform.OS === 'ios' ? 12 : 8,
+    marginTop: 10,
     gap: 12,
   },
   feedbackSuccess: {

@@ -1276,7 +1276,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 16,
     paddingBottom: Platform.OS === 'ios' ? 24 : 16,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
   },
   sessionFinishedCenter: {
     flex: 1,

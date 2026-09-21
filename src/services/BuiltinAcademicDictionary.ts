@@ -431,6 +431,31 @@ export const BUILTIN_ACADEMIC_DICT: Record<string, TurengWordDetail> = {
     sampleSentenceEn: 'Bioluminescence is a fascinating natural phenomenon observed predominantly in marine life.',
     sampleSentenceTr: 'Biyolüminesans, ağırlıklı olarak deniz canlılarında gözlemlenen büyüleyici bir doğa olgusudur.',
   },
+  'thriving': {
+    word: 'thriving',
+    phonetic: '/ˈθraɪ.vɪŋ/',
+    primaryMeaning: 'gelişen, büyüyen, başarılı, müreffeh',
+    meanings: [
+      { category: 'Akademik', type: 'sıfat', turkish: 'gelişen, büyüyen, müreffeh' },
+      { category: 'Genel', type: 'sıfat', turkish: 'başarılı, serpilip gelişen' },
+    ],
+    synonyms: ['flourishing', 'prospering', 'booming', 'blooming'],
+    antonyms: ['declining', 'struggling', 'failing'],
+    sampleSentenceEn: 'The coastal city has transformed into a thriving center for biotechnology and international trade.',
+    sampleSentenceTr: 'Kıyı şehri, biyoteknoloji ve uluslararası ticaret için gelişen ve müreffeh bir merkeze dönüştü.',
+  },
+  'thrive': {
+    word: 'thrive',
+    phonetic: '/θraɪv/',
+    primaryMeaning: 'gelişmek, büyümek, serpilmek, başarılı olmak',
+    meanings: [
+      { category: 'Akademik', type: 'fiil', turkish: 'gelişmek, serpilmek, başarılı olmak' },
+    ],
+    synonyms: ['flourish', 'prosper', 'burgeon'],
+    antonyms: ['wither', 'deteriorate', 'languish'],
+    sampleSentenceEn: 'Certain species of desert vegetation thrive under extreme temperatures and minimal rainfall.',
+    sampleSentenceTr: 'Bazı çöl bitkisi türleri, aşırı sıcaklıklar ve minimum yağış altında bile gelişip serpilebilir.',
+  },
 };
 
 

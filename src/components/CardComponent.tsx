@@ -56,6 +56,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
   const [turengDetail, setTurengDetail] = useState<TurengWordDetail | null>(null);
   const [enrichedSentence, setEnrichedSentence] = useState<{ en: string; tr: string } | null>(null);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState<boolean>(false);
+  const [isProceeding, setIsProceeding] = useState<boolean>(false);
 
   useEffect(() => {
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
@@ -70,7 +71,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
     };
   }, []);
 
-  // When word changes, reset input and fetch Tureng details
+  // When word or card index changes, reset input and fetch Tureng details
   useEffect(() => {
     setUserInput('');
     setIsChecking(false);
@@ -79,6 +80,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
     setIsFlipped(false);
     setMatchedWith('');
     setEnrichedSentence(null);
+    setIsProceeding(false);
 
     // Fetch Tureng data
     TurengService.lookupWord(cardWord.word)
@@ -94,7 +96,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
         }
       })
       .finally(() => {});
-  }, [cardWord.id]);
+  }, [cardWord?.id, cardWord?.word, cardIndex]);
 
   // Flipping the card means the user couldn't remember without looking -> Treat as Hatırlayamadım (incorrect)
   const handleFlipCard = () => {
@@ -159,8 +161,16 @@ export const CardComponent: React.FC<CardComponentProps> = ({
     setIsChecking(false);
   };
 
-  const handleProceed = () => {
-    onAnswer(isCorrectAnswer);
+  const handleProceed = async () => {
+    if (isProceeding) return;
+    setIsProceeding(true);
+    try {
+      await Promise.resolve(onAnswer(isCorrectAnswer));
+    } catch (err) {
+      console.warn('CardComponent handleProceed error:', err);
+    } finally {
+      setIsProceeding(false);
+    }
   };
 
   const handleSpeak = () => {
@@ -192,15 +202,15 @@ export const CardComponent: React.FC<CardComponentProps> = ({
     getValidExampleSentence(turengDetail?.sampleSentenceTr);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isKeyboardVisible && styles.containerKeyboardOpen]}>
       {/* FLASH WRAP */}
       <View
         style={[
           styles.flashWrap,
-          !isFlipped
-            ? isKeyboardVisible
-              ? styles.flashWrapCompact
-              : styles.flashWrapStandard
+          isKeyboardVisible
+            ? styles.flashWrapCompact
+            : !isFlipped
+            ? styles.flashWrapStandard
             : styles.flashWrapFlipped,
         ]}
       >
@@ -451,17 +461,28 @@ export const CardComponent: React.FC<CardComponentProps> = ({
           )}
 
           <TouchableOpacity
-            style={[styles.proceedBtn, { backgroundColor: colors.brand }]}
+            style={[
+              styles.proceedBtn,
+              { backgroundColor: colors.brand },
+              isProceeding && { opacity: 0.8 },
+            ]}
             onPress={handleProceed}
+            disabled={isProceeding}
             activeOpacity={0.85}
           >
-            <Text style={[styles.proceedBtnText, { color: colors.textOnBrand }]}>
-              {totalCards > 0 && cardIndex >= totalCards - 1 ? 'Tamamla' : 'Sonraki Kelimeye Geç'}
-            </Text>
-            {totalCards > 0 && cardIndex >= totalCards - 1 ? (
-              <CheckCircle2 size={18} color={colors.textOnBrand} />
+            {isProceeding ? (
+              <ActivityIndicator size="small" color={colors.textOnBrand} />
             ) : (
-              <ArrowRight size={18} color={colors.textOnBrand} />
+              <>
+                <Text style={[styles.proceedBtnText, { color: colors.textOnBrand }]}>
+                  {totalCards > 0 && cardIndex >= totalCards - 1 ? 'Tamamla' : 'Sonraki Kelimeye Geç'}
+                </Text>
+                {totalCards > 0 && cardIndex >= totalCards - 1 ? (
+                  <CheckCircle2 size={18} color={colors.textOnBrand} />
+                ) : (
+                  <ArrowRight size={18} color={colors.textOnBrand} />
+                )}
+              </>
             )}
           </TouchableOpacity>
         </View>
@@ -472,27 +493,36 @@ export const CardComponent: React.FC<CardComponentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     width: '100%',
-    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  containerKeyboardOpen: {
+    justifyContent: 'flex-start',
   },
   flashWrap: {
     width: '100%',
   },
   flashWrapCompact: {
-    minHeight: 130,
+    minHeight: 120,
+    maxHeight: 150,
     marginBottom: 10,
   },
   flashWrapStandard: {
-    minHeight: 220,
+    flex: 1,
+    minHeight: 280,
+    maxHeight: 440,
     marginBottom: 16,
   },
   flashWrapFlipped: {
+    flex: 1,
     minHeight: 300,
+    maxHeight: 460,
     marginBottom: 16,
   },
   flashCard: {
     flex: 1,
-    borderRadius: 24,
+    borderRadius: Platform.select({ ios: 24, android: 16 }),
     borderWidth: 1.5,
     overflow: 'hidden',
     shadowOffset: { width: 0, height: 6 },
@@ -501,13 +531,18 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   flashCardCompact: {
-    minHeight: 130,
+    minHeight: 120,
+    maxHeight: 150,
   },
   flashCardStandard: {
-    minHeight: 220,
+    flex: 1,
+    minHeight: 280,
+    maxHeight: 440,
   },
   flashCardFlipped: {
+    flex: 1,
     minHeight: 300,
+    maxHeight: 460,
   },
   flashFront: {
     flex: 1,
@@ -516,7 +551,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   flashFrontCompact: {
-    minHeight: 130,
+    minHeight: 120,
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
@@ -594,12 +629,14 @@ const styles = StyleSheet.create({
   flashBack: {
     flex: 1,
     padding: 20,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    gap: 12,
   },
   fbHeaderRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 4,
   },
   fbWordAudioRow: {
     flexDirection: 'row',
@@ -614,13 +651,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   fbWordTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '900',
   },
   fbTr: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '900',
-    lineHeight: 26,
+    lineHeight: 28,
     marginVertical: 4,
   },
   categoriesWrap: {
@@ -675,6 +712,9 @@ const styles = StyleSheet.create({
   // Input Area Styles
   inputContainer: {
     width: '100%',
+    marginTop: 'auto',
+    paddingTop: 8,
+    paddingBottom: Platform.OS === 'ios' ? 12 : 8,
     gap: 10,
   },
   inputWrapper: {
@@ -725,7 +765,10 @@ const styles = StyleSheet.create({
   // Feedback Styles
   feedbackContainer: {
     width: '100%',
-    gap: 10,
+    marginTop: 'auto',
+    paddingTop: 8,
+    paddingBottom: Platform.OS === 'ios' ? 12 : 8,
+    gap: 12,
   },
   feedbackSuccess: {
     flexDirection: 'row',
@@ -752,23 +795,23 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   feedbackSub: {
-    fontSize: 11.5,
-    marginTop: 1,
+    fontSize: 12,
+    marginTop: 2,
   },
   proceedBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    paddingVertical: 14,
-    borderRadius: 16,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
+    height: 52,
+    borderRadius: Platform.select({ ios: 16, android: 12 }),
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
     elevation: 3,
   },
   proceedBtnText: {
-    fontSize: 14.5,
+    fontSize: 15.5,
     fontWeight: '800',
   },
 });

@@ -846,28 +846,70 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     const currentWord = sessionWords[currentVocabIndex];
     if (!currentWord) return;
 
-    const updatedProg = await srEngine.processAnswer(currentWord.id, isCorrect);
-    const updatedVocabStreak = await dbService.checkAndUpdateVocabStreak();
     const nextIdx = currentVocabIndex + 1;
-    const summary = await srEngine.fetchBoxSummary();
 
-    // In-memory update for dictionaryWords so UI & filters update immediately
-    const updatedDictionary = (get().dictionaryWords || []).map((w) =>
-      w.id === currentWord.id
-        ? {
-            ...w,
-            box: updatedProg.box,
-            status: updatedProg.status,
-            correctCount: updatedProg.correct_count,
-            incorrectCount: updatedProg.incorrect_count,
-            nextReviewAt: updatedProg.next_review_at,
-            isStudied: true,
+    try {
+      const updatedProg = await srEngine.processAnswer(currentWord.id, isCorrect);
+      const updatedVocabStreak = await dbService.checkAndUpdateVocabStreak();
+      const summary = await srEngine.fetchBoxSummary();
+
+      // In-memory update for dictionaryWords so UI & filters update immediately
+      const updatedDictionary = (get().dictionaryWords || []).map((w) =>
+        w.id === currentWord.id
+          ? {
+              ...w,
+              box: updatedProg.box,
+              status: updatedProg.status,
+              correctCount: updatedProg.correct_count,
+              incorrectCount: updatedProg.incorrect_count,
+              nextReviewAt: updatedProg.next_review_at,
+              isStudied: true,
+            }
+          : w
+      );
+
+      // If this is a custom folder session, we DO NOT auto-fetch infinite words when finished
+      if (isCustomSession) {
+        set((state) => ({
+          dictionaryWords: updatedDictionary,
+          currentVocabIndex: nextIdx,
+          boxSummary: summary,
+          vocabStreakCount: updatedVocabStreak,
+          completedTodayCount: state.completedTodayCount + 1,
+          dailyTasksProgress: {
+            ...state.dailyTasksProgress,
+            vocabCompleted: state.dailyTasksProgress.vocabCompleted + 1,
+          },
+        }));
+        return;
+      }
+
+      // Seamless continuous learning for global daily queue:
+      if (nextIdx >= sessionWords.length) {
+        const moreWords = await srEngine.loadDailyBatch(dailyLimit || 30, activeStudyFolderId);
+        if (moreWords && moreWords.length > 0) {
+          // Filter out already seen in this session to prevent duplicate immediate loops
+          const existingIds = new Set(sessionWords.map((w) => w.id));
+          const freshWords = moreWords.filter((w) => !existingIds.has(w.id));
+
+          if (freshWords.length > 0) {
+            set((state) => ({
+              dictionaryWords: updatedDictionary,
+              sessionWords: [...state.sessionWords, ...freshWords],
+              currentVocabIndex: nextIdx,
+              boxSummary: summary,
+              vocabStreakCount: updatedVocabStreak,
+              completedTodayCount: state.completedTodayCount + 1,
+              dailyTasksProgress: {
+                ...state.dailyTasksProgress,
+                vocabCompleted: state.dailyTasksProgress.vocabCompleted + 1,
+              },
+            }));
+            return;
           }
-        : w
-    );
+        }
+      }
 
-    // If this is a custom folder session, we DO NOT auto-fetch infinite words when finished
-    if (isCustomSession) {
       set((state) => ({
         dictionaryWords: updatedDictionary,
         currentVocabIndex: nextIdx,
@@ -879,46 +921,18 @@ export const useLearningStore = create<LearningState>((set, get) => ({
           vocabCompleted: state.dailyTasksProgress.vocabCompleted + 1,
         },
       }));
-      return;
+    } catch (err) {
+      console.warn('answerCurrentVocabCard safe fallback on error:', err);
+      // DEFENSIVE: Always increment index so the card ALWAYS advances smoothly!
+      set((state) => ({
+        currentVocabIndex: nextIdx,
+        completedTodayCount: state.completedTodayCount + 1,
+        dailyTasksProgress: {
+          ...state.dailyTasksProgress,
+          vocabCompleted: state.dailyTasksProgress.vocabCompleted + 1,
+        },
+      }));
     }
-
-    // Seamless continuous learning for global daily queue:
-    if (nextIdx >= sessionWords.length) {
-      const moreWords = await srEngine.loadDailyBatch(dailyLimit || 30, activeStudyFolderId);
-      if (moreWords && moreWords.length > 0) {
-        // Filter out already seen in this session to prevent duplicate immediate loops
-        const existingIds = new Set(sessionWords.map((w) => w.id));
-        const freshWords = moreWords.filter((w) => !existingIds.has(w.id));
-
-        if (freshWords.length > 0) {
-          set((state) => ({
-            dictionaryWords: updatedDictionary,
-            sessionWords: [...state.sessionWords, ...freshWords],
-            currentVocabIndex: nextIdx,
-            boxSummary: summary,
-            vocabStreakCount: updatedVocabStreak,
-            completedTodayCount: state.completedTodayCount + 1,
-            dailyTasksProgress: {
-              ...state.dailyTasksProgress,
-              vocabCompleted: state.dailyTasksProgress.vocabCompleted + 1,
-            },
-          }));
-          return;
-        }
-      }
-    }
-
-    set((state) => ({
-      dictionaryWords: updatedDictionary,
-      currentVocabIndex: nextIdx,
-      boxSummary: summary,
-      vocabStreakCount: updatedVocabStreak,
-      completedTodayCount: state.completedTodayCount + 1,
-      dailyTasksProgress: {
-        ...state.dailyTasksProgress,
-        vocabCompleted: state.dailyTasksProgress.vocabCompleted + 1,
-      },
-    }));
   },
 
   resetVocabSession: async () => {

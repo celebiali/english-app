@@ -453,7 +453,8 @@ export class DictionaryApiService {
    */
   static async fetchAuthenticSentence(
     word: string,
-    signal?: AbortSignal
+    signal?: AbortSignal,
+    skipTranslation?: boolean
   ): Promise<{ en: string; tr: string } | null> {
     const clean = (word || '').trim().toLowerCase();
     if (!clean) return null;
@@ -539,9 +540,11 @@ export class DictionaryApiService {
                     !isBoilerplateSentence(stripped)
                   ) {
                     let tr = '';
-                    try {
-                      tr = await this.translateSentence(stripped, signal);
-                    } catch (_) {}
+                    if (!skipTranslation) {
+                      try {
+                        tr = await this.translateSentence(stripped, signal);
+                      } catch (_) {}
+                    }
                     return { en: stripped, tr };
                   }
                 }
@@ -592,7 +595,11 @@ export class DictionaryApiService {
 
         // If example sentence is missing from local SQLite, enrich it asynchronously
         if (!exampleEn) {
-          const authentic = await this.fetchAuthenticSentence(clean, options?.signal);
+          const authentic = await this.fetchAuthenticSentence(
+            clean,
+            options?.signal,
+            options?.skipSentenceTranslation
+          );
           if (authentic?.en) {
             exampleEn = authentic.en;
             exampleTr = authentic.tr || undefined;
@@ -647,7 +654,11 @@ export class DictionaryApiService {
       let exampleTr = builtinExample?.sampleSentenceTr || '';
 
       if (!exampleEn) {
-        const authentic = await this.fetchAuthenticSentence(clean, options?.signal);
+        const authentic = await this.fetchAuthenticSentence(
+          clean,
+          options?.signal,
+          options?.skipSentenceTranslation
+        );
         if (authentic?.en) {
           exampleEn = authentic.en;
           exampleTr = authentic.tr || '';

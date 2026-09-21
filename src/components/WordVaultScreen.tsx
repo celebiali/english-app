@@ -927,6 +927,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               keyboardDismissMode="on-drag"
             >
               <CardComponent
+                key={`vault_${currentCard.id || currentCard.word}_${currentVocabIndex}`}
                 cardWord={currentCard}
                 onAnswer={async (isCorrect) => {
                   await answerCurrentVocabCard(isCorrect);
@@ -2238,8 +2239,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 20,
     paddingTop: 16,
-    paddingBottom: 32,
-    justifyContent: 'flex-start',
+    paddingBottom: Platform.OS === 'ios' ? 24 : 16,
+    justifyContent: 'space-between',
   },
   sessionFinishedCenter: {
     flex: 1,

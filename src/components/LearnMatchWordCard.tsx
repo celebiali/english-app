@@ -8,7 +8,7 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import { X, Volume2, Languages } from 'lucide-react-native';
+import { X, Volume2, Languages, Sparkles, ChevronDown, ChevronUp } from 'lucide-react-native';
 import { useThemeStore } from '../store/useThemeStore';
 import { WordWithProgress, dbService } from '../database/DatabaseService';
 import { CardWord } from '../types';
@@ -59,12 +59,14 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
     exampleTr?: string;
   } | null>(null);
   const [isLoadingSentence, setIsLoadingSentence] = useState<boolean>(false);
+  const [isSentenceExpanded, setIsSentenceExpanded] = useState<boolean>(false);
   const [showTranslation, setShowTranslation] = useState<boolean>(false);
   const [isTranslatingSentence, setIsTranslatingSentence] = useState<boolean>(false);
   const [onDemandTranslation, setOnDemandTranslation] = useState<string>('');
 
-  // Reset translation toggle and on-demand translation when word changes
+  // Reset states when word or index changes
   useEffect(() => {
+    setIsSentenceExpanded(false);
     setShowTranslation(false);
     setOnDemandTranslation('');
     setIsTranslatingSentence(false);
@@ -87,32 +89,26 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
     getValidExampleSentence(cachedLookup?.exampleTr) ||
     '';
 
+  // 1. Sayfa açıldığı an: Sadece İngilizce örnek cümleyi arka planda sessizce yükletiriz (pre-fetch)
+  // skipSentenceTranslation: true sayesinde sayfayı ağırlaştıracak çeviri beklemesi yapılmaz, çok hızlı gelir
   useEffect(() => {
     let isMounted = true;
-
-    // If we already have an English sentence, NEVER show a loading spinner/card
     const hasImmediateSentence = Boolean(synchronousEn);
 
     if (!hasImmediateSentence) {
       setIsLoadingSentence(true);
-    } else {
-      setIsLoadingSentence(false);
-    }
-
-    // Background fetch if anything is missing
-    const needsSentenceFetch = !hasImmediateSentence;
-    const needsTranslationFetch = !synchronousTr;
-
-    if (needsSentenceFetch || needsTranslationFetch) {
-      DictionaryApiService.lookupWord(word.word)
+      DictionaryApiService.lookupWord(word.word, { skipSentenceTranslation: true })
         .then(async (res) => {
           if (!isMounted) return;
           let enrichedEn = getValidExampleSentence(res?.exampleEn);
           let enrichedTr = getValidExampleSentence(res?.exampleTr);
 
-          // If lookupWord didn't have a sentence and we don't have one yet, try authentic sentence resolver
-          if (!hasImmediateSentence && !enrichedEn) {
-            const fallback = await DictionaryApiService.fetchAuthenticSentence(word.word);
+          if (!enrichedEn) {
+            const fallback = await DictionaryApiService.fetchAuthenticSentence(
+              word.word,
+              undefined,
+              true
+            );
             if (fallback?.en) {
               enrichedEn = getValidExampleSentence(fallback.en);
               enrichedTr = getValidExampleSentence(fallback.tr);
@@ -141,8 +137,9 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
           if (isMounted) setIsLoadingSentence(false);
         });
     } else {
-      // Both sentence and translation already available, silently enrich phonetic if needed
-      DictionaryApiService.lookupWord(word.word)
+      setIsLoadingSentence(false);
+      // Phonetic bilgisi eksikse arka planda sessizce zenginleştir
+      DictionaryApiService.lookupWord(word.word, { skipSentenceTranslation: true })
         .then((res) => {
           if (isMounted && res?.phonetic) {
             setEnrichedDetail((prev) => ({
@@ -158,7 +155,7 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
     return () => {
       isMounted = false;
     };
-  }, [word.word, word.example_sentence, word.example_translation, synchronousEn, synchronousTr]);
+  }, [word.word, word.example_sentence, synchronousEn]);
 
   const handleSpeakWord = () => {
     try {
@@ -169,6 +166,8 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
           pitch: 1.0,
           rate: 0.88,
         });
+      } else {
+        console.warn('Native speech module is not available in this binary build.');
       }
     } catch (e) {
       console.warn('Speech error:', e);
@@ -207,6 +206,73 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
   const effectiveExampleTr =
     candidateTr && !isBoilerplateSentence(candidateTr) ? candidateTr : onDemandTranslation;
 
+  // 2. Cümle içinde kullanımına tıklandığında:
+  // İngilizce cümle arka planda zaten indirildiği için anında açılır.
+  // Tam bu tıklama anında Türkçe çevirisi arka planda getirilmeye başlanır!
+  const handleExpandSentence = () => {
+    setIsSentenceExpanded(true);
+
+    if (!effectiveExampleTr && effectiveExampleEn && !isTranslatingSentence) {
+      setIsTranslatingSentence(true);
+      DictionaryApiService.translateSentence(effectiveExampleEn)
+        .then((tr) => {
+          if (tr && tr.trim().length > 0) {
+            setOnDemandTranslation(tr.trim());
+            if (word.id) {
+              dbService.updateWordExample(word.id, effectiveExampleEn, tr.trim()).catch(() => {});
+            } else {
+              dbService.updateWordExampleByText(word.word, effectiveExampleEn, tr.trim()).catch(() => {});
+            }
+          }
+        })
+        .catch((e) => {
+          console.warn('Cümle çevirisi hazırlama hatası:', e);
+        })
+        .finally(() => {
+          setIsTranslatingSentence(false);
+        });
+    }
+  };
+
+  const handleToggleSentence = () => {
+    if (isSentenceExpanded) {
+      setIsSentenceExpanded(false);
+      setShowTranslation(false);
+    } else {
+      handleExpandSentence();
+    }
+  };
+
+  // Kullanıcı cümle indirilirken "Cümle İçinde Gör"e basmışsa, cümle indiği an Türkçe çeviriyi arka planda başlat
+  useEffect(() => {
+    if (
+      isSentenceExpanded &&
+      effectiveExampleEn &&
+      !effectiveExampleTr &&
+      !isTranslatingSentence &&
+      !onDemandTranslation
+    ) {
+      setIsTranslatingSentence(true);
+      DictionaryApiService.translateSentence(effectiveExampleEn)
+        .then((tr) => {
+          if (tr && tr.trim().length > 0) {
+            setOnDemandTranslation(tr.trim());
+            if (word.id) {
+              dbService.updateWordExample(word.id, effectiveExampleEn, tr.trim()).catch(() => {});
+            } else {
+              dbService.updateWordExampleByText(word.word, effectiveExampleEn, tr.trim()).catch(() => {});
+            }
+          }
+        })
+        .catch(() => {})
+        .finally(() => {
+          setIsTranslatingSentence(false);
+        });
+    }
+  }, [isSentenceExpanded, effectiveExampleEn, effectiveExampleTr]);
+
+  // 3. Kullanıcı Türkçe Çeviri butonuna bastığında:
+  // Cümle açıldığı andan beri arka planda hazırlandığı için Türkçe çeviri de neredeyse anında açılır!
   const handleToggleTranslation = async () => {
     if (showTranslation) {
       setShowTranslation(false);
@@ -215,13 +281,17 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
 
     setShowTranslation(true);
 
-    // If Turkish translation is not available yet, dynamically translate the sentence on demand
-    if (!effectiveExampleTr && effectiveExampleEn) {
+    if (!effectiveExampleTr && effectiveExampleEn && !isTranslatingSentence) {
       setIsTranslatingSentence(true);
       try {
         const tr = await DictionaryApiService.translateSentence(effectiveExampleEn);
         if (tr && tr.trim().length > 0) {
           setOnDemandTranslation(tr.trim());
+          if (word.id) {
+            dbService.updateWordExample(word.id, effectiveExampleEn, tr.trim()).catch(() => {});
+          } else {
+            dbService.updateWordExampleByText(word.word, effectiveExampleEn, tr.trim()).catch(() => {});
+          }
         } else {
           const fallback = `"${word.meaning || word.word}" akademik metinlerde ve günlük iletişimde yaygın olarak kullanılır.`;
           setOnDemandTranslation(fallback);
@@ -376,53 +446,87 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
               <Text style={[styles.sectionMetaLabel, { color: colors.textSecondary }]}>
                 CÜMLE İÇİNDE KULLANIMI
               </Text>
-              <TouchableOpacity
-                onPress={() => handleSpeakSentence(effectiveExampleEn)}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                style={[styles.sentenceAudioIconBtn, !effectiveExampleEn && { opacity: 0.35 }]}
-                disabled={!effectiveExampleEn}
-                accessibilityLabel="Cümleyi Dinle"
-              >
-                <Volume2 size={16} color={colors.brand} />
-              </TouchableOpacity>
+              {isSentenceExpanded && effectiveExampleEn ? (
+                <TouchableOpacity
+                  onPress={handleToggleSentence}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  style={styles.sentenceCollapseIconBtn}
+                  accessibilityLabel="Cümleyi Kapat"
+                >
+                  <ChevronUp size={16} color={colors.textSecondary} />
+                </TouchableOpacity>
+              ) : null}
             </View>
 
-            {isLoadingSentence ? (
+            {!isSentenceExpanded ? (
+              /* Progressive Disclosure Trigger: Appears instantly without ugly skeleton */
+              <TouchableOpacity
+                style={[
+                  styles.showSentenceBtn,
+                  {
+                    backgroundColor: colors.subtleBackground,
+                    borderColor: colors.border,
+                  },
+                ]}
+                onPress={handleExpandSentence}
+                activeOpacity={0.7}
+                accessibilityLabel="Cümle içinde kullanımını gör"
+              >
+                <View style={styles.showSentenceBtnLeft}>
+                  <View style={[styles.showSentenceIconCircle, { backgroundColor: colors.brandLight }]}>
+                    <Sparkles size={16} color={colors.brand} />
+                  </View>
+                  <Text
+                    style={[
+                      styles.showSentenceBtnText,
+                      {
+                        color: colors.text,
+                        fontFamily: dynamicFontFamily,
+                        fontSize: Math.round(dynamicFontSize * 0.94),
+                      },
+                    ]}
+                  >
+                    Cümle içinde kullanımını gör
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.showSentencePill,
+                    { backgroundColor: colors.cardBackground, borderColor: colors.border },
+                  ]}
+                >
+                  <ChevronDown size={15} color={colors.brand} />
+                </View>
+              </TouchableOpacity>
+            ) : isLoadingSentence && !effectiveExampleEn ? (
+              /* Only if user tapped immediately and sentence is still loading */
               <View
                 style={[
                   styles.sentenceCard,
                   {
                     backgroundColor: colors.subtleBackground,
                     borderColor: colors.border,
-                    minHeight: 74,
+                    minHeight: 64,
+                    flexDirection: 'row',
                     justifyContent: 'center',
-                    gap: 8,
-                    paddingVertical: 16,
+                    alignItems: 'center',
+                    gap: 10,
+                    paddingVertical: 14,
                   },
                 ]}
               >
-                <View
+                <ActivityIndicator size="small" color={colors.brand} />
+                <Text
                   style={[
-                    styles.skeletonLine,
-                    {
-                      backgroundColor: colors.border,
-                      width: '88%',
-                      opacity: 0.6,
-                    },
+                    styles.loadingText,
+                    { color: colors.textSecondary, fontFamily: dynamicFontFamily },
                   ]}
-                />
-                <View
-                  style={[
-                    styles.skeletonLine,
-                    {
-                      backgroundColor: colors.border,
-                      width: '54%',
-                      opacity: 0.35,
-                    },
-                  ]}
-                />
+                >
+                  Örnek cümle hazırlanıyor...
+                </Text>
               </View>
             ) : effectiveExampleEn ? (
+              /* Expanded English sentence card */
               <View
                 style={[
                   styles.sentenceCard,
@@ -437,21 +541,49 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
                   {renderFormattedSentence(effectiveExampleEn)}
                 </View>
 
-                {/* Translation Toggle Button (Icon only) */}
-                <TouchableOpacity
-                  style={[
-                    styles.translationIconBtn,
-                    {
-                      backgroundColor: showTranslation ? colors.brandLight : colors.cardBackground,
-                      borderColor: showTranslation ? colors.brand : colors.border,
-                    },
-                  ]}
-                  onPress={handleToggleTranslation}
-                  activeOpacity={0.75}
-                  accessibilityLabel="Çeviri"
-                >
-                  <Languages size={16} color={colors.brand} strokeWidth={2.2} />
-                </TouchableOpacity>
+                {/* Translation & Audio Action Row */}
+                <View style={styles.translationActionRow}>
+                  <TouchableOpacity
+                    style={[
+                      styles.showTranslationBtn,
+                      {
+                        backgroundColor: showTranslation ? colors.brandLight : colors.cardBackground,
+                        borderColor: showTranslation ? colors.brand : colors.border,
+                      },
+                    ]}
+                    onPress={handleToggleTranslation}
+                    activeOpacity={0.75}
+                    accessibilityLabel="Türkçe Çeviriyi Gör"
+                  >
+                    <Languages size={15} color={showTranslation ? colors.brand : colors.textSecondary} strokeWidth={2.2} />
+                    <Text
+                      style={[
+                        styles.showTranslationBtnText,
+                        {
+                          color: showTranslation ? colors.brand : colors.textSecondary,
+                          fontFamily: dynamicFontFamily,
+                          fontSize: Math.max(12, dynamicFontSize - 2.5),
+                          fontWeight: showTranslation ? '700' : '600',
+                        },
+                      ]}
+                    >
+                      {showTranslation ? 'Türkçe Çeviriyi Gizle' : 'Türkçe Çevirisi'}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => handleSpeakSentence(effectiveExampleEn)}
+                    style={[
+                      styles.sentenceInlineAudioBtn,
+                      { backgroundColor: colors.cardBackground, borderColor: colors.border },
+                    ]}
+                    activeOpacity={0.7}
+                    hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                    accessibilityLabel="Cümleyi Dinle"
+                  >
+                    <Volume2 size={15} color={colors.brand} />
+                  </TouchableOpacity>
+                </View>
 
                 {/* Turkish Translation (Revealed on demand) */}
                 {showTranslation && (
@@ -460,32 +592,41 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
                     {isTranslatingSentence ? (
                       <View style={styles.translationLoadingRow}>
                         <ActivityIndicator size="small" color={colors.brand} />
-                        <Text style={[styles.translatingText, { color: colors.textSecondary }]}>
+                        <Text
+                          style={[
+                            styles.translatingText,
+                            { color: colors.textSecondary, fontFamily: dynamicFontFamily },
+                          ]}
+                        >
                           Türkçe çeviri hazırlanıyor...
                         </Text>
                       </View>
                     ) : effectiveExampleTr ? (
-                      <Text style={[
-                        styles.turkishSentenceText,
-                        {
-                          color: colors.textSecondary,
-                          fontSize: Math.max(12, dynamicFontSize - 2),
-                          lineHeight: Math.round((dynamicFontSize - 2) * 1.45),
-                          fontFamily: dynamicFontFamily,
-                        }
-                      ]}>
+                      <Text
+                        style={[
+                          styles.turkishSentenceText,
+                          {
+                            color: colors.textSecondary,
+                            fontSize: Math.max(12, dynamicFontSize - 2),
+                            lineHeight: Math.round((dynamicFontSize - 2) * 1.45),
+                            fontFamily: dynamicFontFamily,
+                          },
+                        ]}
+                      >
                         {effectiveExampleTr}
                       </Text>
                     ) : (
-                      <Text style={[
-                        styles.turkishSentenceText,
-                        {
-                          color: colors.textSecondary,
-                          fontStyle: 'italic',
-                          fontSize: Math.max(12, dynamicFontSize - 2),
-                          fontFamily: dynamicFontFamily,
-                        }
-                      ]}>
+                      <Text
+                        style={[
+                          styles.turkishSentenceText,
+                          {
+                            color: colors.textSecondary,
+                            fontStyle: 'italic',
+                            fontSize: Math.max(12, dynamicFontSize - 2),
+                            fontFamily: dynamicFontFamily,
+                          },
+                        ]}
+                      >
                         Çeviri bulunamadı.
                       </Text>
                     )}
@@ -530,7 +671,7 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
                     { color: colors.textSecondary, fontFamily: dynamicFontFamily },
                   ]}
                 >
-                  Örnek cümleyi yüklemek için dokunun
+                  Örnek cümleyi tekrar dene
                 </Text>
               </TouchableOpacity>
             )}
@@ -698,6 +839,42 @@ const styles = StyleSheet.create({
   sentenceAudioIconBtn: {
     padding: 4,
   },
+  sentenceCollapseIconBtn: {
+    padding: 4,
+  },
+  showSentenceBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    borderRadius: Platform.select({ ios: 14, android: 10 }),
+    borderWidth: 1,
+  },
+  showSentenceBtnLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  showSentenceIconCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  showSentenceBtnText: {
+    fontWeight: '600',
+    letterSpacing: 0.1,
+  },
+  showSentencePill: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   sentenceLoadingBox: {
     paddingVertical: 16,
     alignItems: 'center',
@@ -726,6 +903,32 @@ const styles = StyleSheet.create({
   underlinedWord: {
     paddingHorizontal: 3,
     borderRadius: 3,
+  },
+  translationActionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 8,
+  },
+  showTranslationBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: Platform.select({ ios: 10, android: 8 }),
+    borderWidth: 1,
+  },
+  showTranslationBtnText: {
+    letterSpacing: 0.1,
+  },
+  sentenceInlineAudioBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   sentenceInnerDivider: {
     height: 1,

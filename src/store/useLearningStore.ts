@@ -222,9 +222,6 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       await dbService.initDatabase();
       await dbService.seedQuestionsIfEmpty();
 
-      // Purge non-custom words so only user's custom words remain
-      await dbService.purgeNonCustomWords();
-
       const qStreak = await dbService.getQuestionStreakCount();
       const vStreak = await dbService.getVocabStreakCount();
       const examHist = await dbService.getExamHistory();
@@ -816,7 +813,13 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       dbService.getAllWordsWithProgress(),
     ]);
 
-    const folders = await dbService.getVocabFolders(dictionary);
+    let finalDictionary = dictionary;
+    if (!finalDictionary.some((w) => Boolean(w.folder_name))) {
+      await dbService.seedKutuphaneWordsIfMissing();
+      finalDictionary = await dbService.getAllWordsWithProgress();
+    }
+
+    const folders = await dbService.getVocabFolders(finalDictionary);
 
     set({
       sessionWords: words,
@@ -824,7 +827,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       boxSummary: summary,
       weeklyWords: weekly,
       monthlyWords: monthly,
-      dictionaryWords: dictionary,
+      dictionaryWords: finalDictionary,
       vocabFolders: folders,
       isCustomSession: false,
     });

@@ -33,7 +33,6 @@ import {
   Edit3,
   Clock,
   Library,
-  Lock,
 } from 'lucide-react-native';
 import { KUTUPHANE_THEMATIC_FOLDERS } from '../services/KutuphaneThematicDataset';
 import * as Speech from 'expo-speech';
@@ -1042,14 +1041,11 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
             </TouchableOpacity>
             <View style={styles.folderTitleWrap}>
               <Text style={[styles.folderTitleText, { color: colors.text }]} numberOfLines={1}>
-                {subFolder?.name || 'Alt Klasör'}
+                {subFolder?.name || (selectedKutuphaneSubFolderId === 'all' ? `Tüm ${selectedKutuphaneFolder.name.replace('Kütüphane: ', '')}` : 'Alt Klasör')}
               </Text>
               <Text style={[styles.folderSubtitleText, { color: colors.textSecondary }]}>
-                {kutuphaneWordsList.length} kelime • Salt okunur
+                {kutuphaneWordsList.length} kelime
               </Text>
-            </View>
-            <View style={[styles.kutuphaneLockBadge, { backgroundColor: colors.subtleBackground }]}>
-              <Lock size={14} color={colors.textSecondary} />
             </View>
           </View>
 
@@ -1121,9 +1117,6 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               {mainStats.wordCount} kelime • {mainStats.learnedCount} öğrenildi
             </Text>
           </View>
-          <View style={[styles.kutuphaneLockBadge, { backgroundColor: colors.subtleBackground }]}>
-            <Lock size={14} color={colors.textSecondary} />
-          </View>
         </View>
 
         {/* Alt Klasör Listesi */}
@@ -1153,6 +1146,36 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
           {/* Alt Klasörler */}
           <View style={styles.sectionGroup}>
             <Text style={[styles.sectionHeading, { color: colors.textSecondary, marginBottom: 8 }]}>ALT KLASÖRLER</Text>
+
+            {/* Tüm Kelimeleri Gör Kartı */}
+            {mainStats.wordCount > 0 && (
+              <TouchableOpacity
+                style={[styles.singleFolderCard, { backgroundColor: colors.cardBackground, borderColor: colors.border, marginBottom: 8 }]}
+                onPress={() => setSelectedKutuphaneSubFolderId('all')}
+                activeOpacity={0.75}
+              >
+                <View style={[styles.folderIconBadge, { backgroundColor: `${selectedKutuphaneFolder.color}20` }]}>
+                  <BookOpen size={20} color={selectedKutuphaneFolder.color} />
+                </View>
+                <View style={styles.folderInfo}>
+                  <View style={styles.folderTitleLine}>
+                    <Text style={[styles.folderItemTitle, { color: colors.text }]} numberOfLines={1}>
+                      Tüm Kelimeler
+                    </Text>
+                    <View style={[styles.badgePill, { backgroundColor: `${selectedKutuphaneFolder.color}15` }]}>
+                      <Text style={[styles.badgePillText, { color: selectedKutuphaneFolder.color }]}>
+                        {mainStats.wordCount} KELİME
+                      </Text>
+                    </View>
+                  </View>
+                  <Text style={[styles.folderItemSubtitle, { color: colors.textSecondary }]} numberOfLines={1}>
+                    Tüm alt klasörlerin toplu listesi
+                  </Text>
+                </View>
+                <ChevronRight size={18} color={colors.textSecondary} style={styles.folderChevron} />
+              </TouchableOpacity>
+            )}
+
             {kutuphaneSubFolders.map((sub) => {
               const subStats = getKutuphaneFolderWordCount(sub.id);
               const subPct = subStats.wordCount > 0 ? Math.round((subStats.learnedCount / subStats.wordCount) * 100) : 0;
@@ -1191,7 +1214,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
                       </Text>
                     </View>
                   </View>
-                  <ChevronRight size={18} color={colors.textSecondary} />
+                  <ChevronRight size={18} color={colors.textSecondary} style={styles.folderChevron} />
                 </TouchableOpacity>
               );
             })}
@@ -1631,7 +1654,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
                   </View>
 
                   {/* Right Arrow */}
-                  <ChevronRight size={20} color={colors.textSecondary} />
+                  <ChevronRight size={20} color={colors.textSecondary} style={styles.folderChevron} />
                 </TouchableOpacity>
               );
             })}
@@ -1646,9 +1669,6 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
                   <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
                     KÜTÜPHANE SERİSİ
                   </Text>
-                </View>
-                <View style={[styles.kutuphaneLockBadge, { backgroundColor: colors.subtleBackground }]}>
-                  <Lock size={12} color={colors.textSecondary} />
                 </View>
               </View>
 
@@ -1698,7 +1718,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
                       </View>
                     </View>
 
-                    <ChevronRight size={18} color={colors.textSecondary} />
+                    <ChevronRight size={18} color={colors.textSecondary} style={styles.folderChevron} />
                   </TouchableOpacity>
                 );
               })}
@@ -2093,6 +2113,7 @@ const styles = StyleSheet.create({
   },
   folderTitleWrap: {
     flex: 1,
+    minWidth: 0,
   },
   folderTitleWithEdit: {
     flexDirection: 'row',
@@ -2176,40 +2197,53 @@ const styles = StyleSheet.create({
   singleFolderCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 14,
     borderRadius: 16,
     borderWidth: 1,
-    gap: 14,
+    gap: 12,
   },
   folderIconBadge: {
-    width: 48,
-    height: 48,
-    borderRadius: 14,
+    width: 44,
+    height: 44,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
   },
   folderInfo: {
     flex: 1,
-    gap: 3,
+    minWidth: 0,
+    gap: 4,
   },
   folderTitleLine: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     gap: 8,
+    minWidth: 0,
   },
   folderItemTitle: {
-    fontSize: 16,
-    fontWeight: '800',
+    fontSize: 15,
+    fontWeight: '700',
+    flex: 1,
+    flexShrink: 1,
   },
   badgePill: {
     paddingHorizontal: 7,
-    paddingVertical: 3,
+    paddingVertical: 2.5,
     borderRadius: 6,
+    flexShrink: 0,
+    alignSelf: 'center',
   },
   badgePillText: {
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 0.3,
+  },
+  folderChevron: {
+    flexShrink: 0,
+    marginLeft: 2,
   },
   folderItemSubtitle: {
     fontSize: 12,
@@ -2873,12 +2907,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-  },
-  kutuphaneLockBadge: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

@@ -27,7 +27,7 @@ import {
 } from '../types';
 import { YdsQuestionBankService } from '../services/YdsQuestionBank';
 import { DataParserService } from '../services/DataParserService';
-import { KUTUPHANE_THEMATIC_FOLDERS } from '../services/KutuphaneThematicDataset';
+import { KUTUPHANE_THEMATIC_FOLDERS, KUTUPHANE_THEMATIC_WORDS } from '../services/KutuphaneThematicDataset';
 
 export interface WordWithProgress extends WordItem {
   isStudied: boolean;
@@ -168,6 +168,7 @@ class DatabaseService {
         await this.execNativeSchema();
         await this.seedQuestionsIfEmpty();
         await this.seedWordsIfEmpty();
+        await this.seedKutuphaneWordsIfMissing();
         return;
       }
     } catch (e) {
@@ -177,6 +178,7 @@ class DatabaseService {
     await this.memoryDb.init();
     await this.seedQuestionsIfEmpty();
     await this.seedWordsIfEmpty();
+    await this.seedKutuphaneWordsIfMissing();
   }
 
   private async execNativeSchema(): Promise<void> {
@@ -190,7 +192,21 @@ class DatabaseService {
     await this.dbInstance.execAsync(CREATE_EXAM_HISTORY_TABLE);
     await this.dbInstance.execAsync(CREATE_USER_SESSION_TABLE);
     await this.dbInstance.execAsync(CREATE_VOCAB_FOLDERS_TABLE);
-    await this.dbInstance.execAsync(CREATE_INDEXES);
+
+    // Safely add columns to words table before creating indexes
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE words ADD COLUMN folder_name TEXT;`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE words ADD COLUMN part_of_speech TEXT;`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE words ADD COLUMN image_url TEXT;`);
+    } catch (_) {}
+
+    try {
+      await this.dbInstance.execAsync(CREATE_INDEXES);
+    } catch (_) {}
 
     // Safely ensure daily_stats columns exist in existing SQLite DBs
     try {
@@ -606,6 +622,7 @@ class DatabaseService {
           await this.memoryDb.insertWord(w);
         }
       }
+      await this.seedKutuphaneWordsIfMissing();
       return;
     }
 
@@ -637,42 +654,75 @@ class DatabaseService {
             await this.dbInstance.runAsync(sql, params);
           }
         });
-      } else {
-        // If words table was populated in earlier version, ensure Kütüphane words with folder_name are safely added
-        const hasKutuphane: any = await this.dbInstance.getFirstAsync(
-          `SELECT COUNT(*) as cnt FROM words WHERE folder_name IS NOT NULL`
-        );
-        if (!hasKutuphane || hasKutuphane.cnt === 0) {
-          const kutuphaneWords = initialList.filter((w) => Boolean(w.folder_name));
-          const CHUNK_SIZE = 50;
-          await this.dbInstance.withTransactionAsync(async () => {
-            for (let i = 0; i < kutuphaneWords.length; i += CHUNK_SIZE) {
-              const chunk = kutuphaneWords.slice(i, i + CHUNK_SIZE);
-              const placeholders = chunk.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).join(', ');
-              const sql = `INSERT INTO words (word, meaning, category, subcategory, folder_name, level, synonyms, example_sentence, example_translation, etymology_note, part_of_speech) VALUES ${placeholders}`;
-              const params: any[] = [];
-              for (const w of chunk) {
-                params.push(
-                  w.word,
-                  w.meaning,
-                  w.category || 'VOCABULARY',
-                  w.subcategory || null,
-                  w.folder_name || null,
-                  w.level || 'B1',
-                  w.synonyms ? JSON.stringify(w.synonyms) : null,
-                  w.example_sentence || null,
-                  w.example_translation || null,
-                  w.etymology_note || null,
-                  w.part_of_speech || null
-                );
-              }
-              await this.dbInstance.runAsync(sql, params);
-            }
-          });
-        }
       }
     } catch (e) {
-      console.warn('Failed to seed words in SQLite:', e);
+      console.warn('Failed to seed base words in SQLite:', e);
+    }
+
+    await this.seedKutuphaneWordsIfMissing();
+  }
+
+  /**
+   * Guaranteed seeding of Kütüphane Serisi (2,498 thematic exam words)
+   */
+  async seedKutuphaneWordsIfMissing(): Promise<void> {
+    if (!this.isNative) {
+      const existingFolderWords = Array.from(this.memoryDb.words.values()).filter((w) => Boolean(w.folder_name));
+      if (existingFolderWords.length < KUTUPHANE_THEMATIC_WORDS.length) {
+        for (const kw of KUTUPHANE_THEMATIC_WORDS) {
+          await this.memoryDb.insertWord(kw);
+        }
+      }
+      return;
+    }
+
+    try {
+      try {
+        await this.dbInstance.execAsync(`ALTER TABLE words ADD COLUMN folder_name TEXT;`);
+      } catch (_) {}
+      try {
+        await this.dbInstance.execAsync(`ALTER TABLE words ADD COLUMN part_of_speech TEXT;`);
+      } catch (_) {}
+
+      const hasKutuphane: any = await this.dbInstance.getFirstAsync(
+        `SELECT COUNT(*) as cnt FROM words WHERE folder_name IS NOT NULL`
+      );
+
+      if (!hasKutuphane || hasKutuphane.cnt < KUTUPHANE_THEMATIC_WORDS.length) {
+        if (hasKutuphane && hasKutuphane.cnt > 0) {
+          await this.dbInstance.runAsync(
+            `DELETE FROM words WHERE folder_name IS NOT NULL AND (is_custom IS NULL OR is_custom = 0)`
+          );
+        }
+
+        const CHUNK_SIZE = 50;
+        await this.dbInstance.withTransactionAsync(async () => {
+          for (let i = 0; i < KUTUPHANE_THEMATIC_WORDS.length; i += CHUNK_SIZE) {
+            const chunk = KUTUPHANE_THEMATIC_WORDS.slice(i, i + CHUNK_SIZE);
+            const placeholders = chunk.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).join(', ');
+            const sql = `INSERT INTO words (word, meaning, category, subcategory, folder_name, level, synonyms, example_sentence, example_translation, etymology_note, part_of_speech) VALUES ${placeholders}`;
+            const params: any[] = [];
+            for (const w of chunk) {
+              params.push(
+                w.word,
+                w.meaning,
+                w.category || 'VOCABULARY',
+                w.subcategory || null,
+                w.folder_name || null,
+                w.level || 'B1',
+                w.synonyms ? JSON.stringify(w.synonyms) : null,
+                w.example_sentence || null,
+                w.example_translation || null,
+                w.etymology_note || null,
+                w.part_of_speech || null
+              );
+            }
+            await this.dbInstance.runAsync(sql, params);
+          }
+        });
+      }
+    } catch (e) {
+      console.warn('Failed to seed Kutuphane words in SQLite:', e);
     }
   }
 
@@ -1836,6 +1886,7 @@ class DatabaseService {
       example_sentence: r.example_sentence,
       example_translation: r.example_translation,
       etymology_note: r.etymology_note,
+      part_of_speech: r.part_of_speech || null,
       is_custom: r.is_custom === 1,
       isStudied: r.box !== null && ((r.correct_count || 0) > 0 || (r.incorrect_count || 0) > 0),
       box: r.box,

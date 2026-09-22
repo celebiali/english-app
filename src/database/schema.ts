@@ -162,8 +162,6 @@ CREATE INDEX IF NOT EXISTS idx_words_word ON words(word);
 CREATE INDEX IF NOT EXISTS idx_words_level ON words(level);
 CREATE INDEX IF NOT EXISTS idx_words_category ON words(category);
 CREATE INDEX IF NOT EXISTS idx_words_subcategory ON words(subcategory);
-CREATE INDEX IF NOT EXISTS idx_words_folder_name ON words(folder_name);
-CREATE INDEX IF NOT EXISTS idx_words_folder_subcat ON words(folder_name, subcategory);
 CREATE INDEX IF NOT EXISTS idx_progress_box_next ON user_word_progress(box, next_review_at);
 CREATE INDEX IF NOT EXISTS idx_progress_word_id ON user_word_progress(word_id);
 CREATE INDEX IF NOT EXISTS idx_questions_type_status ON questions(type, status);

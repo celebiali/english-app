@@ -1,0 +1,397 @@
+=== KÜTÜPHANE: SIFATLAR & ZARFLAR > AKADEMIK ZARFLAR (-LY / DERECE) (79 KELİME) ===
+
+1. actively [zarf] (B2)
+   Anlam: bilfiil, aktif olarak, etkin bir şekilde
+   Örnek: The empirical results of the study were remarkably actively.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece bilfiil olduğu görüldü.
+--------------------------------------------------
+2. apply [zarf] (B1) | Eş Anlam: implement, conduct, practice, execute
+   Anlam: uygulamak, yürürlüğe koymak, başvurmak
+   Örnek: May I apply for asylum?
+   Çeviri: Sığınma için başvurabilir miyim?
+--------------------------------------------------
+3. approximately [zarf] (C1)
+   Anlam: takriben, yaklaşık olarak, aşağı yukarı
+   Örnek: We're approximately the same age.
+   Çeviri: Biz yaklaşık olarak aynı yaştayız.
+--------------------------------------------------
+4. attentively [zarf] (C1)
+   Anlam: dikkatlice, dikkatle
+   Örnek: Listen attentively to what I say.
+   Çeviri: Söylediğimi dikkatlice dinle.
+--------------------------------------------------
+5. carefully [zarf] (B2)
+   Anlam: özenle, idareli biçimde, itinayla
+   Örnek: Let's do this carefully.
+   Çeviri: Bunu özenle yapalım.
+--------------------------------------------------
+6. cautiously [zarf] (C1)
+   Anlam: ihtiyatla, dikkatlice, temkinli bir şekilde
+   Örnek: You have to move cautiously in this matter.
+   Çeviri: Bu konuda temkinli hareket etmek zorundayız.
+--------------------------------------------------
+7. clearly [zarf] (B2) | Eş Anlam: openly, frankly, plainly
+   Anlam: açık bir biçimde, açıkça, ayan beyan
+   Örnek: It's clearly a fake.
+   Çeviri: Bunun sahte olduğu çok belli.
+--------------------------------------------------
+8. cleverly [zarf] (B2)
+   Anlam: zekice, akıllıca
+   Örnek: The empirical results of the study were remarkably cleverly.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece zekice olduğu görüldü.
+--------------------------------------------------
+9. completely [zarf] (C1)
+   Anlam: büsbütün, tamamen, komple
+   Örnek: I'm not completely sure.
+   Çeviri: Tam olarak emin değilim.
+--------------------------------------------------
+10. consciously [zarf] (C1)
+   Anlam: bile bile, kasten, bilinçli olarak
+   Örnek: The empirical results of the study were remarkably consciously.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece bile bile olduğu görüldü.
+--------------------------------------------------
+11. continuously [zarf] (C1)
+   Anlam: aralıksız, sürekli, harıl harıl
+   Örnek: It rained continuously all day.
+   Çeviri: Tüm gün sürekli yağmur yağdı.
+--------------------------------------------------
+12. culturally [zarf] (C1)
+   Anlam: kültürel olarak
+   Örnek: The empirical results of the study were remarkably culturally.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece kültürel olarak olduğu görüldü.
+--------------------------------------------------
+13. definitely [zarf] (C1)
+   Anlam: kesinlikle, tamamen, elbette
+   Örnek: I'll definitely do that.
+   Çeviri: Bunu kesinlikle yapacağım.
+--------------------------------------------------
+14. deliberately [zarf] (C1)
+   Anlam: kasten, bilerek, kasti olarak
+   Örnek: I didn't do it deliberately.
+   Çeviri: Kasten yapmadım.
+--------------------------------------------------
+15. early [zarf] (B1)
+   Anlam: erken, erken olan şey, erken olgunlaşan meyve ya da çiçek
+   Örnek: I know I'm early.
+   Çeviri: Erken geldiğimi biliyorum.
+--------------------------------------------------
+16. easily [zarf] (B1)
+   Anlam: rahatlıkla, rahatça, kolayca
+   Örnek: I don't cry easily.
+   Çeviri: Kolay kolay ağlamam.
+--------------------------------------------------
+17. effectively [zarf] (C1)
+   Anlam: etkili bir şekilde, etkileyici, etkin olarak
+   Örnek: Last year, I spent so much time by myself that I almost forgot how to communicate effectively with others.
+   Çeviri: Geçen yıl tek başıma o kadar uzun bir zaman geçirdim ki diğerleriyle etkili şekilde nasıl iletişim kuracağımı neredeyse unuttum.
+--------------------------------------------------
+18. efficiently [zarf] (C1)
+   Anlam: yeterli olarak, verimli biçimde, etkin
+   Örnek: You have to use your time efficiently.
+   Çeviri: Vaktini verimli kullanmalısın.
+--------------------------------------------------
+19. entirely [zarf] (B2)
+   Anlam: tümüyle, külliyen, büsbütün
+   Örnek: I'm entirely to blame.
+   Çeviri: Tamamen suçlanacağım.
+--------------------------------------------------
+20. especially [zarf] (C1)
+   Anlam: özellikle, hele, ille
+   Örnek: It is especially hot today.
+   Çeviri: Hava bugün özellikle çok sıcak.
+--------------------------------------------------
+21. exceptionally [zarf] (C1)
+   Anlam: fevkalade, müstesna olarak, son derece
+   Örnek: We've done exceptionally well.
+   Çeviri: Son derece iyi yaptık.
+--------------------------------------------------
+22. extremely [zarf] (B2)
+   Anlam: gayetle, feci, aşırı
+   Örnek: I've been extremely busy.
+   Çeviri: Son derece meşguldüm.
+--------------------------------------------------
+23. fairly [zarf] (B1)
+   Anlam: büsbütün, adil bir şekilde, uygunca
+   Örnek: It may be fairly old.
+   Çeviri: Bu oldukça eski olabilir.
+--------------------------------------------------
+24. formerly [zarf] (B2)
+   Anlam: vaktiyle, evvel zaman, eskiden
+   Örnek: She was formerly a bank clerk.
+   Çeviri: O eskiden bir banka memuruydu.
+--------------------------------------------------
+25. fortunately [zarf] (C1)
+   Anlam: şükür ki, neyse ki, bereket versin
+   Örnek: Fortunately, I was on time.
+   Çeviri: Neyse ki zamanında oradaydım.
+--------------------------------------------------
+26. frankly [zarf] (B2) | Eş Anlam: openly, clearly, honestly
+   Anlam: açıkça, açık söylemek gerekirse, açıkçası
+   Örnek: Frankly, I don't care.
+   Çeviri: Açıkça, umurumda değil.
+--------------------------------------------------
+27. fully [zarf] (B1)
+   Anlam: tamamıyla, iyice, iyiden iyiye
+   Örnek: I fully agree with you.
+   Çeviri: Tamamen seninle aynı fikirdeyim.
+--------------------------------------------------
+28. generally [zarf] (B2)
+   Anlam: genelde, genel olarak, genellikle
+   Örnek: I generally agree with Tom.
+   Çeviri: Genel olarak Tom'a katılıyorum.
+--------------------------------------------------
+29. gently [zarf] (B1)
+   Anlam: nazikçe, kibarca, nazik bir şekilde
+   Örnek: She laid the child down gently.
+   Çeviri: O, çocuğu yumuşak bir biçimde yere yatırdı.
+--------------------------------------------------
+30. gradually [zarf] (B2)
+   Anlam: yavaş yavaş, gitgide, derece derece
+   Örnek: The wind gradually died down.
+   Çeviri: Rüzgar yavaş yavaş kesildi.
+--------------------------------------------------
+31. highly [zarf] (B1)
+   Anlam: ziyadesiyle, yüksek derecede, pek çok
+   Örnek: He spoke highly of you.
+   Çeviri: O senden övgüyle bahsetti.
+--------------------------------------------------
+32. honestly [zarf] (B2) | Eş Anlam: frankly
+   Anlam: dürüst olarak, gerçekten, dürüst olmak gerekirse
+   Örnek: I can honestly say no.
+   Çeviri: Dürüstçe hayır diyebilirim.
+--------------------------------------------------
+33. incessantly [zarf] (C1)
+   Anlam: aralıksız olarak, ardı arkası kesilmeden, biteviye
+   Örnek: The empirical results of the study were remarkably incessantly.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece aralıksız olarak olduğu görüldü.
+--------------------------------------------------
+34. increasingly [zarf] (C1)
+   Anlam: gitgide artarak, gitgide, gittikçe artarak
+   Örnek: Modern finance is becoming increasingly complicated and sophisticated.
+   Çeviri: Modern finans giderek karmaşık ve sofistike hale geliyor.
+--------------------------------------------------
+35. independently [zarf] (C1)
+   Anlam: başlı başına, birbirini etkilemeden, müstakilen
+   Örnek: The empirical results of the study were remarkably independently.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece başlı başına olduğu görüldü.
+--------------------------------------------------
+36. influentially [zarf] (C1)
+   Anlam: güçlü bir şekilde, etkili bir biçimde
+   Örnek: The empirical results of the study were remarkably influentially.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece güçlü bir şekilde olduğu görüldü.
+--------------------------------------------------
+37. initially [zarf] (B2)
+   Anlam: başlangıçta, ilkin, baştan
+   Örnek: Initially I found it difficult to deal with my new environment.
+   Çeviri: Başlangıçta yeni ortamımla baş etmeyi zor buldum.
+--------------------------------------------------
+38. intellectually [zarf] (C1)
+   Anlam: anlayarak, akıl ile, zeka ile
+   Örnek: The discussion was intellectually stimulating.
+   Çeviri: Münazara entelektüel olarak aydınlatıcıydı.
+--------------------------------------------------
+39. intentionally [zarf] (C1)
+   Anlam: kasten, kasıtlı olarak, taammüden
+   Örnek: Did you do that intentionally?
+   Çeviri: Sen onu kasıtlı olarak mı yaptın?
+--------------------------------------------------
+40. kindly [zarf] (B1)
+   Anlam: merhametli, iyi, içten
+   Örnek: You will be treated kindly.
+   Çeviri: Size nazikçe davranılacak.
+--------------------------------------------------
+41. likely [zarf] (B1)
+   Anlam: büyük ihtimalle, mantıklı, geleceği parlak
+   Örnek: He's likely to come.
+   Çeviri: O, muhtemelen gelecektir.
+--------------------------------------------------
+42. luckily [zarf] (B2)
+   Anlam: çok şükür, talihine, şans eseri
+   Örnek: Luckily, we have a plan.
+   Çeviri: Şansımıza bir planımız var.
+--------------------------------------------------
+43. meticulously [zarf] (C1)
+   Anlam: özenle, titizlikle, özenli biçimde
+   Örnek: The school was meticulously clean.
+   Çeviri: Okul özenle temizlendi.
+--------------------------------------------------
+44. nearly [zarf] (B1)
+   Anlam: hemen hemen, neredeyse, az kaldı
+   Örnek: A car nearly hit Tom.
+   Çeviri: Tom'a neredeyse bir araba çarpıyordu.
+--------------------------------------------------
+45. newly [zarf] (B1)
+   Anlam: yeni, yeni olarak, yakın zamanlarda
+   Örnek: Newly printed books smell good.
+   Çeviri: Yeni basılmış kitaplar güzel kokuyor.
+--------------------------------------------------
+46. nicely [zarf] (B1)
+   Anlam: hoşça, hoş, iyi
+   Örnek: It has worked out nicely.
+   Çeviri: Bu güzelce işe yaradı.
+--------------------------------------------------
+47. normally [zarf] (B2)
+   Anlam: normalde, normal bir şekilde, genelde
+   Örnek: I don't normally lie.
+   Çeviri: Normalde yalan söylemem.
+--------------------------------------------------
+48. openly [zarf] (B1) | Eş Anlam: clearly, frankly, candidly
+   Anlam: açıkça, resmen, açık
+   Örnek: He openly confessed his faults.
+   Çeviri: Hatalarını açıkça itiraf etti.
+--------------------------------------------------
+49. orderly [zarf] (B2)
+   Anlam: yazıcı, hastane hademesi, emir eri
+   Örnek: The empirical results of the study were remarkably orderly.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece yazıcı olduğu görüldü.
+--------------------------------------------------
+50. passionately [zarf] (C1)
+   Anlam: hararetle, tutkuyla
+   Örnek: Even if you go away, I'll still passionately love you.
+   Çeviri: Uzaklara gitsen bile, seni yine de tutkuyla seveceğim.
+--------------------------------------------------
+51. politely [zarf] (B2)
+   Anlam: kibarca, nezaketle, nazikçe
+   Örnek: She bowed to me politely.
+   Çeviri: O kibarca bana selam verdi.
+--------------------------------------------------
+52. potently [zarf] (B2)
+   Anlam: yoğun bir şekilde, güçlü bir şekilde
+   Örnek: The empirical results of the study were remarkably potently.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece yoğun bir şekilde olduğu görüldü.
+--------------------------------------------------
+53. precisely [zarf] (B2)
+   Anlam: açık olarak, tam, belli
+   Örnek: What precisely did you do?
+   Çeviri: Tam olarak ne yaptın?
+--------------------------------------------------
+54. previously [zarf] (C1)
+   Anlam: önceden, daha önce, evvelce
+   Örnek: The empirical results of the study were remarkably previously.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece önceden olduğu görüldü.
+--------------------------------------------------
+55. progressively [zarf] (C1)
+   Anlam: devamlı olarak, ilerledikçe, artan bir şekilde
+   Örnek: The empirical results of the study were remarkably progressively.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece devamlı olarak olduğu görüldü.
+--------------------------------------------------
+56. properly [zarf] (B2)
+   Anlam: uygun bir şekilde, doğru dürüst, düzgün bir şekilde
+   Örnek: Let's do this properly.
+   Çeviri: Hadi bunu doğru düzgün yapalım.
+--------------------------------------------------
+57. purposely [zarf] (B2)
+   Anlam: kasti olarak, inadına, kasten
+   Örnek: Did you do that purposely?
+   Çeviri: Onu kasıtlı olarak mı yaptın?
+--------------------------------------------------
+58. quickly [zarf] (B2)
+   Anlam: hızla, aceleyle, süratle
+   Örnek: I had to act quickly.
+   Çeviri: Çabuk hareket etmek zorunda kaldım.
+--------------------------------------------------
+59. rapidly [zarf] (B2)
+   Anlam: hızla, süratle, çarçabuk
+   Örnek: She tends to speak rapidly.
+   Çeviri: O, hızlı konuşmaya eğilimlidir.
+--------------------------------------------------
+60. readily [zarf] (B2)
+   Anlam: kolaylıkla, rahatlıkla, hemen anında
+   Örnek: He readily agreed to it.
+   Çeviri: O onu kolayca kabul etti.
+--------------------------------------------------
+61. really [zarf] (B1)
+   Anlam: hakikaten, gerçekten, cidden
+   Örnek: It's really a must.
+   Çeviri: Bu gerçekten bir zorunluluktur.
+--------------------------------------------------
+62. regularly [zarf] (B2)
+   Anlam: düzenli olarak, sürekli, devamlı olarak
+   Örnek: Do you work out regularly?
+   Çeviri: Düzenli çalışıyor musunuz?
+--------------------------------------------------
+63. reply [zarf] (B1)
+   Anlam: yanıtlamak, cevap, yanıt
+   Örnek: Here's Tom's reply.
+   Çeviri: İşte Tom'un cevabı.
+--------------------------------------------------
+64. roughly [zarf] (B2)
+   Anlam: yaklaşık olarak, tahminen, kabaca
+   Örnek: I'm roughly the same age as Tom.
+   Çeviri: Ben aşağı yukarı Tom'la aynı yaştayım.
+--------------------------------------------------
+65. scholarly [zarf] (B2)
+   Anlam: ilmi, bilgili, bilimsel
+   Örnek: The empirical results of the study were remarkably scholarly.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece ilmi olduğu görüldü.
+--------------------------------------------------
+66. significantly [zarf] (C1)
+   Anlam: önemli ölçüde, anlamlı, önemli
+   Örnek: My grades have improved significantly.
+   Çeviri: Benim notlarım önemli ölçüde arttı.
+--------------------------------------------------
+67. simply [zarf] (B1)
+   Anlam: basit bir şekilde, basitçe, bayağı
+   Örnek: I simply don't know.
+   Çeviri: Sadece bilmiyorum.
+--------------------------------------------------
+68. smartly [zarf] (B2)
+   Anlam: ustalıkla, zekice, sert/sıkı bir şekilde
+   Örnek: The empirical results of the study were remarkably smartly.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece ustalıkla olduğu görüldü.
+--------------------------------------------------
+69. steadily [zarf] (B2)
+   Anlam: durmadan, sabit şekilde, boyuna
+   Örnek: We're steadily moving forward.
+   Çeviri: Durmadan ileriye gidiyoruz.
+--------------------------------------------------
+70. supply [zarf] (B1)
+   Anlam: tedarik etmek, sağlamak, tedarik
+   Örnek: Cows supply us with milk.
+   Çeviri: İnekler bize süt sağlar.
+--------------------------------------------------
+71. swiftly [zarf] (B2)
+   Anlam: süratle, hızla, fişek gibi
+   Örnek: His fingers ran swiftly over the keys.
+   Çeviri: Parmakları klavyenin üzerinde hızla hareket etti.
+--------------------------------------------------
+72. systematically [zarf] (C1)
+   Anlam: sistematik olarak, sistemli olarak
+   Örnek: Her sewing basket, dresser drawers and pantry shelves are all systematically arranged in apple-pie order.
+   Çeviri: Onun dikiş sepeti, şifonyer çekmeceleri ve külotlu çorap rafları hepsi sistemli olarak yerli yerinde düzenlenir.
+--------------------------------------------------
+73. tirelessly [zarf] (C1)
+   Anlam: yorgunluk nedir bilmeden, hiç yorulmaksızın, usanmadan
+   Örnek: The empirical results of the study were remarkably tirelessly.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece yorgunluk nedir bilmeden olduğu görüldü.
+--------------------------------------------------
+74. totally [zarf] (B2)
+   Anlam: bütünüyle, tamamen, tamamıyla
+   Örnek: He's totally lost it.
+   Çeviri: O delirdi.
+--------------------------------------------------
+75. unfortunately [zarf] (C1)
+   Anlam: maalesef, aksi gibi, ne yazık ki
+   Örnek: Unfortunately, it's a hoax.
+   Çeviri: Ne yazık ki bu bir aldatmaca.
+--------------------------------------------------
+76. unluckily [zarf] (B2)
+   Anlam: şanssızlık eseri, aksi tesadüf, maalesef
+   Örnek: The empirical results of the study were remarkably unluckily.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece şanssızlık eseri olduğu görüldü.
+--------------------------------------------------
+77. usually [zarf] (B2)
+   Anlam: genellikle, çoğunlukla, çoğu zaman
+   Örnek: I don't usually cry.
+   Çeviri: Genellikle ağlamam.
+--------------------------------------------------
+78. utterly [zarf] (B2)
+   Anlam: tümüyle, tamamen, düpedüz
+   Örnek: The report is utterly false.
+   Çeviri: Rapor tamamen yanlış.
+--------------------------------------------------
+79. wisely [zarf] (B1)
+   Anlam: akıllıca, bilgece
+   Örnek: You must act more wisely.
+   Çeviri: Daha akıllıca hareket etmelisin.
+--------------------------------------------------

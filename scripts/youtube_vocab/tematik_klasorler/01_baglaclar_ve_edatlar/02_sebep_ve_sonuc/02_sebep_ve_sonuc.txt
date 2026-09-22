@@ -1,0 +1,27 @@
+=== KÜTÜPHANE: BAĞLAÇLAR & EDATLAR > SEBEP VE SONUÇ (5 KELİME) ===
+
+1. as [bağlaç] (B1)
+   Anlam: olarak, gibi, dahi
+   Örnek: Do as I tell you.
+   Çeviri: Sana söylediğim gibi yap.
+--------------------------------------------------
+2. because [bağlaç] (B2)
+   Anlam: çünkü, -dığı için, zira
+   Örnek: I came because of Tom.
+   Çeviri: Tom'dan dolayı geldim.
+--------------------------------------------------
+3. hence [bağlaç] (B1)
+   Anlam: buradan, bunun sonucu olarak, bundan
+   Örnek: Hence rigorous clinical testing, some uncertainty remained.
+   Çeviri: Kapsamlı klinik testlere rağmen / esnasında (buradan) bazı belirsizlikler devam etti.
+--------------------------------------------------
+4. since [bağlaç] (B1)
+   Anlam: ondan sonra, o zamandan beri, sonradan
+   Örnek: I've been up since 2:30.
+   Çeviri: 2:30'dan beri ayaktayım.
+--------------------------------------------------
+5. therefore [bağlaç] (B2)
+   Anlam: bu sebeple, bu yüzden, bu nedenle
+   Örnek: Therefore, it is necessary to reduce the cost.
+   Çeviri: Bu nedenle, maliyetin düşürülmesi gereklidir.
+--------------------------------------------------

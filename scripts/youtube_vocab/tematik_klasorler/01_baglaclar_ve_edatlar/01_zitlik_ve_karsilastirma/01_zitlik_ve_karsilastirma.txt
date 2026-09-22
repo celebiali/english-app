@@ -1,0 +1,42 @@
+=== KÜTÜPHANE: BAĞLAÇLAR & EDATLAR > ZITLIK VE KARŞILAŞTIRMA (8 KELİME) ===
+
+1. although [bağlaç] (B2)
+   Anlam: her ne kadar, rağmen, gerçi
+   Örnek: Although it is snowing, I must go.
+   Çeviri: Kar yağmasına rağmen gitmek zorundayım.
+--------------------------------------------------
+2. but [bağlaç] (B1)
+   Anlam: ancak, fakat, itiraz
+   Örnek: He is but a child.
+   Çeviri: O, ancak bir çocuk.
+--------------------------------------------------
+3. despite [edat] (B2)
+   Anlam: rağmen, kin, garez
+   Örnek: I love him despite his faults.
+   Çeviri: Ben onun hatalarına rağmen onu seviyorum.
+--------------------------------------------------
+4. however [bağlaç] (B2)
+   Anlam: bununla birlikte, yine de, her nasılsa
+   Örnek: However, that didn't happen.
+   Çeviri: Ancak, o olmadı.
+--------------------------------------------------
+5. notwithstanding [bağlaç] (B2)
+   Anlam: buna rağmen, bağlı olmaksızın, gerçi
+   Örnek: Notwithstanding rigorous clinical testing, some uncertainty remained.
+   Çeviri: Kapsamlı klinik testlere rağmen / esnasında (buna rağmen) bazı belirsizlikler devam etti.
+--------------------------------------------------
+6. though [bağlaç] (B1)
+   Anlam: gerçi, -diği halde, fakat
+   Örnek: It looks as though it may rain.
+   Çeviri: Sanki yağmur yağabilir gibi görünüyor.
+--------------------------------------------------
+7. while [bağlaç] (B1)
+   Anlam: sırasında, iken, olduğu halde
+   Örnek: It's been a while.
+   Çeviri: Bir süre oldu.
+--------------------------------------------------
+8. yet [bağlaç] (B1)
+   Anlam: henüz, gerçi, yine de
+   Örnek: I can't go yet.
+   Çeviri: Henüz gidemiyorum.
+--------------------------------------------------

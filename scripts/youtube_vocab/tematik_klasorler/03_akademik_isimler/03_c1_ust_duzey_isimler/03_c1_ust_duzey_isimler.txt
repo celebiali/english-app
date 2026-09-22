@@ -1,0 +1,907 @@
+=== KÜTÜPHANE: AKADEMIK İSIMLER > C1 ÜST DÜZEY AKADEMIK İSIMLER (181 KELİME) ===
+
+1. accessibility [isim] (C1)
+   Anlam: ulaşılırlık, giriş imkanı, kolaylıkla görüşülebilir olma
+   Örnek: The investigation highlighted the critical role of accessibility.
+   Çeviri: Soruşturma ulaşılırlık kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+2. accommodation [isim] (C1)
+   Anlam: konaklama, kalacak yer, konfor
+   Örnek: We need accommodation for six.
+   Çeviri: Altı kişi için kalacak yere ihtiyacımız var.
+--------------------------------------------------
+3. accomplishment [isim] (C1)
+   Anlam: başarma, becerme, başarılan iş
+   Örnek: It's a great accomplishment.
+   Çeviri: Bu büyük bir başarı.
+--------------------------------------------------
+4. achievement [isim] (C1)
+   Anlam: başarı, eser, edinim
+   Örnek: It's a big achievement.
+   Çeviri: O büyük bir başarı.
+--------------------------------------------------
+5. activities [isim] (C1)
+   Anlam: icraat, aktiviteler, etkinlikler
+   Örnek: I'm fully aware of Tom's activities.
+   Çeviri: Tom'un faaliyetlerinin tamamen farkındayım.
+--------------------------------------------------
+6. addressing [isim] (C1)
+   Anlam: retorik, sesleniş, hitabet
+   Örnek: He always talks as though he were addressing a public meeting.
+   Çeviri: O her zaman halka açık bir toplantıya sesleniyor gibi konuşur.
+--------------------------------------------------
+7. administer [isim] (C1)
+   Anlam: yönetmek, idare etmek, tatbik etmek
+   Örnek: He administered his friend's affairs.
+   Çeviri: O, arkadaşlarının işlerini idare etti.
+--------------------------------------------------
+8. adolescence [isim] (C1)
+   Anlam: ergenlik çağı, ergenlik, büyüme çağı
+   Örnek: The investigation highlighted the critical role of adolescence.
+   Çeviri: Soruşturma ergenlik çağı kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+9. advancement [isim] (C1)
+   Anlam: ilerleme, yükselme, gelişme
+   Örnek: Does this job offer opportunities for advancement?
+   Çeviri: Bu iş, ilerleme için fırsatlar sunuyor mu?
+--------------------------------------------------
+10. advancements [isim] (C1)
+   Anlam: teknolojik gelişmeler
+   Örnek: The investigation highlighted the critical role of advancements.
+   Çeviri: Soruşturma teknolojik gelişmeler kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+11. alteration [isim] (C1)
+   Anlam: değişiklik, değişim, değiştirme
+   Örnek: The investigation highlighted the critical role of alteration.
+   Çeviri: Soruşturma değişiklik kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+12. alternatives [isim] (C1)
+   Anlam: çareler, seçenekler, seçilebilecek yollar
+   Örnek: Let's look at alternatives.
+   Çeviri: Alternatiflere bakalım.
+--------------------------------------------------
+13. antibodies [isim] (C1)
+   Anlam: antikorlar
+   Örnek: Antibodies fight off infections and viruses.
+   Çeviri: Antikorlar enfeksiyonları ve virüsleri defeder.
+--------------------------------------------------
+14. appearance [isim] (C1)
+   Anlam: dış görünüş, görünüm, görünüş
+   Örnek: Avoid the appearance of evil.
+   Çeviri: Şeytanın hilesinden sakının.
+--------------------------------------------------
+15. application [isim] (C1)
+   Anlam: tatbik, uygulama, başvuru
+   Örnek: I lied on my job application.
+   Çeviri: İş başvurumda yalan söyledim.
+--------------------------------------------------
+16. applications [isim] (C1)
+   Anlam: uygulamalar
+   Örnek: Applications are due by Monday.
+   Çeviri: Başvurular için süre sonu pazartesi.
+--------------------------------------------------
+17. architects [isim] (C1)
+   Anlam: mimarlar
+   Örnek: The investigation highlighted the critical role of architects.
+   Çeviri: Soruşturma mimarlar kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+18. assortment [isim] (C1)
+   Anlam: karışım, ayırma, çeşitlilik
+   Örnek: The investigation highlighted the critical role of assortment.
+   Çeviri: Soruşturma karışım kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+19. astronomers [isim] (C1)
+   Anlam: astronomlar
+   Örnek: Ancient astronomers noticed constellations and gave them names.
+   Çeviri: Eski astronomlar takımyıldızları fark ettiler ve onlara isimler verdiler.
+--------------------------------------------------
+20. attempting [isim] (C1)
+   Anlam: girişimde bulunma, yeltenme, kalkışma
+   Örnek: I'm attempting to win here.
+   Çeviri: Burada kazanmaya çalışıyorum.
+--------------------------------------------------
+21. automobile [isim] (C1)
+   Anlam: otomobil, otomobilde seyahat etmek, araba
+   Örnek: An automobile ran over him.
+   Çeviri: Bir otomobil onu ezdi.
+--------------------------------------------------
+22. background [isim] (C1)
+   Anlam: arka plan, fon, ardyöre
+   Örnek: I'll stay in the background.
+   Çeviri: Ben arka planda kalacağım.
+--------------------------------------------------
+23. backgrounds [isim] (C1)
+   Anlam: şeffaf zemin, web arka planları
+   Örnek: I want to meet people from all types of backgrounds.
+   Çeviri: Her türlü kökenden insanlarla tanışmak istiyorum.
+--------------------------------------------------
+24. belongings [isim] (C1)
+   Anlam: ayniyat, özel eşya, kişisel eşyalar
+   Örnek: He lost all his belongings.
+   Çeviri: O, bütün eşyalarını kaybetti.
+--------------------------------------------------
+25. benefiting [isim] (C1)
+   Anlam: asılanma, yararlanma
+   Örnek: The investigation highlighted the critical role of benefiting.
+   Çeviri: Soruşturma asılanma kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+26. blamelessness [isim] (C1)
+   Anlam: suçsuzluk, kusursuzluk, masumluk
+   Örnek: The investigation highlighted the critical role of blamelessness.
+   Çeviri: Soruşturma suçsuzluk kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+27. breakthrough [isim] (C1)
+   Anlam: ilerleme, atılım, buluş
+   Örnek: This is a real breakthrough.
+   Çeviri: Bu gerçek bir atılım.
+--------------------------------------------------
+28. businesses [isim] (C1)
+   Anlam: aile işletmeleri, emlak işleri, işlerin çoğunun fiziksel temsilciler vasıtası ile fiziksel ürünler satarak gerçekleştirildiği eski ve geleneksel ticaret yöntemi
+   Örnek: As businesses failed, workers lost their jobs.
+   Çeviri: İşler başarısız sonuçlanınca işçiler işlerini kaybettiler.
+--------------------------------------------------
+29. capabilities [isim] (C1)
+   Anlam: yetenekler
+   Örnek: The investigation highlighted the critical role of capabilities.
+   Çeviri: Soruşturma yetenekler kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+30. capability [isim] (C1)
+   Anlam: kabiliyet, iktidar, yararlılık
+   Örnek: The investigation highlighted the critical role of capability.
+   Çeviri: Soruşturma kabiliyet kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+31. challenges [isim] (C1)
+   Anlam: zorluklar
+   Örnek: We do have some challenges.
+   Çeviri: Bazı zorluklarımız var.
+--------------------------------------------------
+32. characterization [isim] (C1)
+   Anlam: niteleme, nitelendirme, nitelendirilme
+   Örnek: The investigation highlighted the critical role of characterization.
+   Çeviri: Soruşturma niteleme kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+33. circumference [isim] (C1)
+   Anlam: daire çevresi, dairenin etrafını dolaşan çizgi, dairenin çevresi
+   Örnek: The investigation highlighted the critical role of circumference.
+   Çeviri: Soruşturma daire çevresi kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+34. clarification [isim] (C1)
+   Anlam: açıklık kazanma, açıklığa kavuşma, açıklığa kavuşturma
+   Örnek: The investigation highlighted the critical role of clarification.
+   Çeviri: Soruşturma açıklık kazanma kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+35. classification [isim] (C1)
+   Anlam: sınıflandırma, klasman, adlandırma
+   Örnek: The investigation highlighted the critical role of classification.
+   Çeviri: Soruşturma sınıflandırma kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+36. comedian's [isim] (C1)
+   Anlam: komedi yazarı, komedyen, güldürücü
+   Örnek: The investigation highlighted the critical role of comedian's.
+   Çeviri: Soruşturma komedi yazarı kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+37. communication [isim] (C1)
+   Anlam: iletişim, temas, mesaj
+   Örnek: English is a means of communication.
+   Çeviri: İngilizce bir haberleşme aracıdır.
+--------------------------------------------------
+38. competence [isim] (C1)
+   Anlam: yeterlik, kabiliyet, yeterlilik
+   Örnek: I'm not questioning your competence.
+   Çeviri: Ben senin yeterliliğini sorgulamıyorum.
+--------------------------------------------------
+39. complement [isim] (C1)
+   Anlam: tamamlamak, tümlemek, mürettebat
+   Örnek: The wine complemented the meal perfectly.
+   Çeviri: Şarap yemeği mükemmel şekilde tamamladı.
+--------------------------------------------------
+40. compliment [isim] (C1)
+   Anlam: kompliman, iltifat, övgü
+   Örnek: He paid me a compliment.
+   Çeviri: O bana iltifat etti.
+--------------------------------------------------
+41. compliments [isim] (C1)
+   Anlam: selamlar, saygılar, tebrikler
+   Örnek: I got a lot of compliments on it.
+   Çeviri: Onun üzerine birçok övgü aldım.
+--------------------------------------------------
+42. conclusion [isim] (C1)
+   Anlam: sonuç, bitim, ceza
+   Örnek: It's a foregone conclusion.
+   Çeviri: Bu kaçınılmaz bir sonuç.
+--------------------------------------------------
+43. conclusions [isim] (C1)
+   Anlam: sonuçlar bildirgesi, sonuçlar
+   Örnek: Don't jump to conclusions.
+   Çeviri: Sonuçlara atlamayın.
+--------------------------------------------------
+44. conditions [isim] (C1)
+   Anlam: koşullar, şartlar, ahval
+   Örnek: It depends on the conditions.
+   Çeviri: Şartlara bağlıdır.
+--------------------------------------------------
+45. confidence [isim] (C1)
+   Anlam: güven, mahremiyet, itimat
+   Örnek: I had confidence in him.
+   Çeviri: Ona güvenim vardı.
+--------------------------------------------------
+46. connection [isim] (C1)
+   Anlam: bağ, bağlantı, alaka
+   Örnek: What's Tom's connection?
+   Çeviri: Tom'un bağlantısı nedir?
+--------------------------------------------------
+47. connectivity [isim] (C1)
+   Anlam: bağlanırlık, bağlantısallık, bağlanabilirlik
+   Örnek: The investigation highlighted the critical role of connectivity.
+   Çeviri: Soruşturma bağlanırlık kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+48. consequence [isim] (C1)
+   Anlam: netice, sonuç, semere
+   Örnek: It's of no consequence.
+   Çeviri: Bu önemsiz.
+--------------------------------------------------
+49. constraint [isim] (C1)
+   Anlam: kısıtlama, baskı, kısıtlamak
+   Örnek: There are few legal constraints on the sale of firearms in the U.S.
+   Çeviri: ABD'de ateşli silah satışı üzerine birkaç yasal sınırlama vardır.
+--------------------------------------------------
+50. construction [isim] (C1)
+   Anlam: yapı, inşaat, inşa
+   Örnek: I'm a construction worker.
+   Çeviri: Ben bir inşaat işçisiyım.
+--------------------------------------------------
+51. containers [isim] (C1)
+   Anlam: içecek kapları, yiyecek kapları, kap adedi
+   Örnek: Do you know what's in those containers?
+   Çeviri: Şu konteynerlerde ne olduğunu biliyor musun?
+--------------------------------------------------
+52. containment [isim] (C1)
+   Anlam: tutma, kapsama, önleme
+   Örnek: The investigation highlighted the critical role of containment.
+   Çeviri: Soruşturma tutma kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+53. corporation [isim] (C1)
+   Anlam: kurum, dernek, lonca
+   Örnek: She works for a large American corporation.
+   Çeviri: Büyük bir Amerikan şirketi için çalışıyor.
+--------------------------------------------------
+54. depression [isim] (C1)
+   Anlam: çöküntü, depresyon, bunalım
+   Örnek: She's in a depression.
+   Çeviri: O bir depresyonda.
+--------------------------------------------------
+55. development [isim] (C1)
+   Anlam: gelişim, gelişme, adet edinme
+   Örnek: This is a huge development.
+   Çeviri: Bu büyük bir gelişme.
+--------------------------------------------------
+56. difficulty [isim] (C1)
+   Anlam: zorluk, güçlük, açmazlık
+   Örnek: Are you in any difficulty?
+   Çeviri: Herhangi bir sıkıntı içinde misin?
+--------------------------------------------------
+57. disappearance [isim] (C1)
+   Anlam: gözden kaybolma, kaybolma, yok olma
+   Örnek: Everyone knows about Tom's disappearance.
+   Çeviri: Herkes Tom'un kaybolduğunu biliyor.
+--------------------------------------------------
+58. disappointment [isim] (C1)
+   Anlam: hüsran, hayal kırıklığı, ümidi boşa çıkma
+   Örnek: It was a huge disappointment.
+   Çeviri: Bu büyük bir hayal kırıklığıydı.
+--------------------------------------------------
+59. discomfort [isim] (C1)
+   Anlam: rahatsız etmek, rahatsızlık, bozmak
+   Örnek: Are you experiencing any discomfort?
+   Çeviri: Bir rahatsızlık hissediyor musunuz?
+--------------------------------------------------
+60. discussion [isim] (C1)
+   Anlam: tartışma, müzakere, bahis
+   Örnek: We had a heated discussion.
+   Çeviri: Hararetli bir tartışmamız vardı.
+--------------------------------------------------
+61. disturbance [isim] (C1)
+   Anlam: kargaşa, rahatsızlık, rahatsız etme
+   Örnek: The police intervened in the disturbance.
+   Çeviri: Polis rahatsızlığa müdahale etti.
+--------------------------------------------------
+62. disturbances [isim] (C1)
+   Anlam: fitne
+   Örnek: The investigation highlighted the critical role of disturbances.
+   Çeviri: Soruşturma fitne kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+63. efficiency [isim] (C1)
+   Anlam: liyakat, yeterlik, hızlı ve verimli çalışma
+   Örnek: The investigation highlighted the critical role of efficiency.
+   Çeviri: Soruşturma liyakat kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+64. electricity [isim] (C1)
+   Anlam: elektrik, cereyan, çıngı
+   Örnek: There's no more electricity.
+   Çeviri: Artık elektrik yok.
+--------------------------------------------------
+65. empowering [isim] (C1)
+   Anlam: salahiyet tanıma, müsaade etme, salahiyet verme
+   Örnek: The investigation highlighted the critical role of empowering.
+   Çeviri: Soruşturma salahiyet tanıma kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+66. enhancement [isim] (C1)
+   Anlam: artırılma, iyileştirme, artış
+   Örnek: Numerous other enhancements were added.
+   Çeviri: Sayısız başka iyileştirme eklendi.
+--------------------------------------------------
+67. entertainment [isim] (C1)
+   Anlam: eğlence, alem, ziyafet
+   Örnek: Music is a form of entertainment.
+   Çeviri: Müzik bir eğlence şeklidir.
+--------------------------------------------------
+68. enthusiasm [isim] (C1)
+   Anlam: heves, coşkunluk, coşku
+   Örnek: I love Tom's enthusiasm.
+   Çeviri: Tom'un hevesini seviyorum.
+--------------------------------------------------
+69. equilibrium [isim] (C1)
+   Anlam: denge, balans, kararlılık
+   Örnek: The investigation highlighted the critical role of equilibrium.
+   Çeviri: Soruşturma denge kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+70. establishing [isim] (C1)
+   Anlam: tesis, kurma, tesbit
+   Örnek: The investigation highlighted the critical role of establishing.
+   Çeviri: Soruşturma tesis kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+71. establishment [isim] (C1)
+   Anlam: kuruluş, kurum, tesis
+   Örnek: The investigation highlighted the critical role of establishment.
+   Çeviri: Soruşturma kuruluş kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+72. evaluation [isim] (C1)
+   Anlam: değerlendirme, ölçüm, değer tahmini
+   Örnek: We want a complete evaluation.
+   Çeviri: Tam bir değerlendirme istiyoruz.
+--------------------------------------------------
+73. excitement [isim] (C1)
+   Anlam: heyecan, galeyan, coşku
+   Örnek: What's all the excitement?
+   Çeviri: Bütün bu heyecan ne?
+--------------------------------------------------
+74. exhibition [isim] (C1)
+   Anlam: sergi, gösteri, şölen
+   Örnek: The exhibition is now open.
+   Çeviri: Sergi şimdi açık.
+--------------------------------------------------
+75. expectation [isim] (C1)
+   Anlam: beklenti, ümit, olasılık
+   Örnek: It fell short of my expectation.
+   Çeviri: O, beklentimi karşılamadı.
+--------------------------------------------------
+76. expectations [isim] (C1)
+   Anlam: beklentiler, bekleyiş, tahmin
+   Örnek: Tom's expectations are clear.
+   Çeviri: Tom'un beklentileri açık.
+--------------------------------------------------
+77. experience [isim] (C1)
+   Anlam: deneyim, tecrübe, görmek
+   Örnek: It was a bad experience.
+   Çeviri: Kötü bir deneyimdi.
+--------------------------------------------------
+78. experiences [isim] (C1)
+   Anlam: deneyimler, yaşananlar
+   Örnek: I've had similar experiences.
+   Çeviri: Benzer deneyimler yaşadım.
+--------------------------------------------------
+79. experiencing [isim] (C1)
+   Anlam: deneyim, deneyim etme
+   Örnek: Are you experiencing any discomfort?
+   Çeviri: Bir rahatsızlık hissediyor musunuz?
+--------------------------------------------------
+80. expertness [isim] (C1)
+   Anlam: bilirkişilik, ustalık, uzmanlık
+   Örnek: The investigation highlighted the critical role of expertness.
+   Çeviri: Soruşturma bilirkişilik kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+81. exploration [isim] (C1)
+   Anlam: keşif, araştırma, inceleme
+   Örnek: The investigation highlighted the critical role of exploration.
+   Çeviri: Soruşturma keşif kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+82. extinction [isim] (C1)
+   Anlam: söndürme, feshetme, sönme
+   Örnek: They are in danger of extinction.
+   Çeviri: Onlar yok olma tehdidi altında.
+--------------------------------------------------
+83. foundation [isim] (C1)
+   Anlam: dayanak, vakıf, kuruluş
+   Örnek: The rumor was without foundation.
+   Çeviri: Söylenti temelsizdi.
+--------------------------------------------------
+84. frustration [isim] (C1)
+   Anlam: hüsran, eziklik, hayal inkisarı
+   Örnek: I understand Tom's frustration.
+   Çeviri: Tom'un hayal kırıklığını anlıyorum.
+--------------------------------------------------
+85. greenhouse [isim] (C1)
+   Anlam: sera, kış bahçesi, camekan
+   Örnek: I grow orchids in my greenhouse.
+   Çeviri: Seramda orkide yetiştiririm.
+--------------------------------------------------
+86. guidelines [isim] (C1)
+   Anlam: öneriler, ana esaslar, yönlendirici ilkeler
+   Örnek: I'm following the guidelines.
+   Çeviri: Ben yönergeleri izliyorum.
+--------------------------------------------------
+87. headlights [isim] (C1)
+   Anlam: farlar
+   Örnek: The headlights don't work.
+   Çeviri: Farlar çalışmıyor.
+--------------------------------------------------
+88. hypothesis [isim] (C1)
+   Anlam: hipotez, varsayım, kaziye
+   Örnek: It was only a hypothesis.
+   Çeviri: O sadece bir hipotezdi.
+--------------------------------------------------
+89. implementation [isim] (C1)
+   Anlam: uygulama, yürürlüğe koyma, uyarlama
+   Örnek: The investigation highlighted the critical role of implementation.
+   Çeviri: Soruşturma uygulama kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+90. impression [isim] (C1)
+   Anlam: izlenim, etki, baskı
+   Örnek: He makes a bad impression.
+   Çeviri: Kötü bir izlenim bırakıyor.
+--------------------------------------------------
+91. improvement [isim] (C1)
+   Anlam: gelişim, ilerleme, iyileşme
+   Örnek: That would be an improvement.
+   Çeviri: Bu bir gelişme olur.
+--------------------------------------------------
+92. independence [isim] (C1)
+   Anlam: özgürlük, bağımsızlık, serbestlik
+   Örnek: The nation recently declared its independence.
+   Çeviri: Ulus son zamanlarda bağımsızlığını ilan etti.
+--------------------------------------------------
+93. indication [isim] (C1)
+   Anlam: belirti, anlatma, ölçüm
+   Örnek: I see no indication of that ever happening.
+   Çeviri: Onun olup bittiğine dair bir işaret görmüyorum.
+--------------------------------------------------
+94. information [isim] (C1) | Eş Anlam: knowledge, data, intel
+   Anlam: bilgi, ilmi vukuf, iddia
+   Örnek: I'd like some information.
+   Çeviri: Biraz bilgi istiyorum.
+--------------------------------------------------
+95. ingredient [isim] (C1)
+   Anlam: cüz, bir şeyin terkibine giren madde, bileşim maddesi
+   Örnek: What's the secret ingredient?
+   Çeviri: Gizli madde nedir?
+--------------------------------------------------
+96. inheritance [isim] (C1)
+   Anlam: veraset, miras, kalıt
+   Örnek: I've already spent my inheritance.
+   Çeviri: Mirasımı çoktan harcadım.
+--------------------------------------------------
+97. innovators [isim] (C1)
+   Anlam: yenilikçiler
+   Örnek: The investigation highlighted the critical role of innovators.
+   Çeviri: Soruşturma yenilikçiler kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+98. inoculation [isim] (C1)
+   Anlam: aşılama, aşı, aşılanma
+   Örnek: The investigation highlighted the critical role of inoculation.
+   Çeviri: Soruşturma aşılama kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+99. instructor [isim] (C1)
+   Anlam: eğitmen, eğitici, asistan
+   Örnek: Is your brother a ski instructor?
+   Çeviri: Erkek kardeşin kayak eğitmeni mi?
+--------------------------------------------------
+100. instrument [isim] (C1)
+   Anlam: enstrüman, alet, belgit
+   Örnek: Do you play an instrument?
+   Çeviri: Bir enstrüman çalıyor musun?
+--------------------------------------------------
+101. instruments [isim] (C1)
+   Anlam: edevat, araç gereç, araçlar
+   Örnek: Do you play any instruments?
+   Çeviri: Herhangi bir müzik aleti çalıyor musun?
+--------------------------------------------------
+102. intelligence [isim] (C1)
+   Anlam: istihbarat, zeka, akıl
+   Örnek: Don't insult my intelligence.
+   Çeviri: Benim zekama hakaret etmeyin.
+--------------------------------------------------
+103. interactions [isim] (C1)
+   Anlam: ayrık etkileşimler, elektron-fonon etkileşimleri, geçişim etkileşimleri
+   Örnek: The investigation highlighted the critical role of interactions.
+   Çeviri: Soruşturma ayrık etkileşimler kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+104. interference [isim] (C1)
+   Anlam: karışma, müdahale, girişim
+   Örnek: The investigation highlighted the critical role of interference.
+   Çeviri: Soruşturma karışma kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+105. interruption [isim] (C1)
+   Anlam: sekte, kesinti, kesilme
+   Örnek: We're sorry for the interruption.
+   Çeviri: Böldüğümüz için üzgünüz.
+--------------------------------------------------
+106. interruptions [isim] (C1)
+   Anlam: kısa kesintiler ve gerilim değişmeleri ile ilgili bağışıklık deneyleri, kısa kesintiler, makine denetim kesilmeleri
+   Örnek: He doesn't allow interruptions.
+   Çeviri: O, kesintilere izin vermez.
+--------------------------------------------------
+107. intervention [isim] (C1)
+   Anlam: araya girme, müdahale, aracılık
+   Örnek: The investigation highlighted the critical role of intervention.
+   Çeviri: Soruşturma araya girme kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+108. introduction [isim] (C1)
+   Anlam: giriş, tanıtım, tavsiye mektubu
+   Örnek: Thank you for the introduction.
+   Çeviri: Tanıtım için teşekkür ederim.
+--------------------------------------------------
+109. limitation [isim] (C1)
+   Anlam: kısıtlama, sınırlama, limit
+   Örnek: It is important to know your own limitations.
+   Çeviri: Kendi sınırlarını bilmen önemlidir.
+--------------------------------------------------
+110. limitations [isim] (C1)
+   Anlam: kısıtlamalar, kısıtlar, sınırlar
+   Örnek: It is important to know your own limitations.
+   Çeviri: Kendi sınırlarını bilmen önemlidir.
+--------------------------------------------------
+111. literature [isim] (C1)
+   Anlam: literatür, edebiyat, kaynak
+   Örnek: Do you like French literature?
+   Çeviri: Fransız edebiyatını beğenir misin?
+--------------------------------------------------
+112. magician's [isim] (C1)
+   Anlam: sihirbaz, büyücü, gözbağcı
+   Örnek: The investigation highlighted the critical role of magician's.
+   Çeviri: Soruşturma sihirbaz kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+113. maintaining [isim] (C1)
+   Anlam: koruma, kollama
+   Örnek: Maintaining that tie is important.
+   Çeviri: O kravata bakım yapmak önemlidir.
+--------------------------------------------------
+114. maintenance [isim] (C1)
+   Anlam: bakım, muhafaza, idame
+   Örnek: The website was down for maintenance.
+   Çeviri: Web sitesi bakım için devre dışıydı.
+--------------------------------------------------
+115. management [isim] (C1)
+   Anlam: işletme, idare, yönetim
+   Örnek: We're under new management.
+   Çeviri: Yeni yönetim altındayız.
+--------------------------------------------------
+116. manufacture [isim] (C1)
+   Anlam: imal etmek, üretim, uydurmak
+   Örnek: Robots are used to manufacture cars.
+   Çeviri: Robotlar araba üretmek içindir.
+--------------------------------------------------
+117. manufacturer [isim] (C1)
+   Anlam: imalatçı, yapımcı, üreticisi
+   Örnek: The manufacturer guaranteed the new machine for 5 years.
+   Çeviri: Üretici yeni makineye 5 yıl garanti verdi.
+--------------------------------------------------
+118. measurement [isim] (C1)
+   Anlam: ölçüm, ölçü, mesaha
+   Örnek: That's an exact measurement.
+   Çeviri: O bir tam ölçüm.
+--------------------------------------------------
+119. measurements [isim] (C1)
+   Anlam: ölçüler, ölçü birimi
+   Örnek: The measurements must be precise.
+   Çeviri: Ölçümler hassas olmalı.
+--------------------------------------------------
+120. neighborhood [isim] (C1)
+   Anlam: mahalle, muhit, komşular
+   Örnek: It's a bad neighborhood.
+   Çeviri: Bu kötü bir mahalle.
+--------------------------------------------------
+121. nutritionist [isim] (C1)
+   Anlam: diyetisyen, beslenme uzmanı, nütritiyonist
+   Örnek: The investigation highlighted the critical role of nutritionist.
+   Çeviri: Soruşturma diyetisyen kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+122. observation [isim] (C1)
+   Anlam: gözetleme, gözlem, rasat
+   Örnek: Can I make one observation?
+   Çeviri: Ben bir gözlem yapabilir miyim?
+--------------------------------------------------
+123. opportunities [isim] (C1)
+   Anlam: fırsatlar, imkanlar
+   Örnek: Don't let opportunities pass by.
+   Çeviri: Fırsatların geçip gitmesine izin vermeyin.
+--------------------------------------------------
+124. opportunity [isim] (C1)
+   Anlam: olanak, imkan, fırsat
+   Örnek: It's a huge opportunity.
+   Çeviri: O büyük bir fırsat.
+--------------------------------------------------
+125. perception [isim] (C1)
+   Anlam: algı, algılanma, feraset
+   Örnek: Maybe it's a question of perception.
+   Çeviri: Belki bu bir algılama sorunudur.
+--------------------------------------------------
+126. performance [isim] (C1)
+   Anlam: performans, oynanma, gösteri
+   Örnek: I loved Tom's performance.
+   Çeviri: Tom'un performansını sevdim.
+--------------------------------------------------
+127. personality [isim] (C1)
+   Anlam: kişilik, şahsiyet, önemli kişi
+   Örnek: I like Tom's personality.
+   Çeviri: Tom'un kişiliğini seviyorum.
+--------------------------------------------------
+128. persuasion [isim] (C1)
+   Anlam: ikna etme, inandırma, ikna
+   Örnek: The investigation highlighted the critical role of persuasion.
+   Çeviri: Soruşturma ikna etme kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+129. pharmacist [isim] (C1)
+   Anlam: eczacı
+   Örnek: You should be a pharmacist.
+   Çeviri: Sen bir eczacı olmalısın.
+--------------------------------------------------
+130. phenomenon [isim] (C1)
+   Anlam: algılanabilen şey, olağanüstülük, olgu
+   Örnek: It's a normal phenomenon.
+   Çeviri: Bu normal bir olgudur.
+--------------------------------------------------
+131. photosynthesis [isim] (C1)
+   Anlam: fotosentez, ışılbireşim, ışık yardımı ile besin biriktirme süreçi
+   Örnek: The investigation highlighted the critical role of photosynthesis.
+   Çeviri: Soruşturma fotosentez kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+132. population [isim] (C1)
+   Anlam: nüfus, ahali, sekene
+   Örnek: What's Boston's population?
+   Çeviri: Boston'un nüfusu nedir?
+--------------------------------------------------
+133. practicality [isim] (C1)
+   Anlam: kullanışlılık, uygulanabilirlik, pratiklik
+   Örnek: He is inclined to look at everything from the standpoint of its practicality and is neither stingy nor extravagant.
+   Çeviri: O her şeye pratikliği bakımından bakma eğilimindedir ve ne pinti ne de savurgandır.
+--------------------------------------------------
+134. precaution [isim] (C1)
+   Anlam: önlem, tedbir, ihtiyat
+   Örnek: It's just a precaution.
+   Çeviri: Bu sadece bir önlem.
+--------------------------------------------------
+135. precautions [isim] (C1)
+   Anlam: önlemler
+   Örnek: Didn't you take precautions?
+   Çeviri: Önlemler almadın mı?
+--------------------------------------------------
+136. predictions [isim] (C1)
+   Anlam: tahminler, kehanetler
+   Örnek: I'm making no predictions.
+   Çeviri: Tahmin yapmıyorum.
+--------------------------------------------------
+137. prejudgment [isim] (C1)
+   Anlam: önyargı, yargılamadan verilen hüküm, peşin hüküm
+   Örnek: The investigation highlighted the critical role of prejudgment.
+   Çeviri: Soruşturma önyargı kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+138. presentation [isim] (C1)
+   Anlam: sunum, sahneleme, arz
+   Örnek: How did the presentation go?
+   Çeviri: Sunum nasıl gitti?
+--------------------------------------------------
+139. presentations [isim] (C1)
+   Anlam: sunular
+   Örnek: The investigation highlighted the critical role of presentations.
+   Çeviri: Soruşturma sunular kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+140. prevention [isim] (C1)
+   Anlam: menetme, önlem, engelleme
+   Örnek: Prevention is the best medicine.
+   Çeviri: Korunmak en iyi ilaçtır.
+--------------------------------------------------
+141. production [isim] (C1)
+   Anlam: üretme, yapım, imal
+   Örnek: Production of rice has decreased.
+   Çeviri: Pirinç üretimi azaldı.
+--------------------------------------------------
+142. professionals [isim] (C1)
+   Anlam: profesyonel
+   Örnek: Leave it to the professionals.
+   Çeviri: Bunu profesyonellere bırak.
+--------------------------------------------------
+143. progression [isim] (C1)
+   Anlam: ilerleme, devamlılık, sıra
+   Örnek: What's the chord progression?
+   Çeviri: Akort ilerlemesi nedir?
+--------------------------------------------------
+144. proportion [isim] (C1)
+   Anlam: orantı, oran, ayarlamak
+   Örnek: Each man's pay was in proportion to his work.
+   Çeviri: Her birinin ödemesi onun eseri ile orantılıydı.
+--------------------------------------------------
+145. protection [isim] (C1)
+   Anlam: himaye, koruma, korunma
+   Örnek: I don't need protection.
+   Çeviri: Korumaya ihtiyacım yok.
+--------------------------------------------------
+146. psychology [isim] (C1)
+   Anlam: ruh bilimi, psikoloji, tinbilim
+   Örnek: I have a degree in psychology.
+   Çeviri: Psikoloji diplomam var.
+--------------------------------------------------
+147. reachability [isim] (C1)
+   Anlam: ulaşılabilirlik, erişilebilirlik
+   Örnek: The investigation highlighted the critical role of reachability.
+   Çeviri: Soruşturma ulaşılabilirlik kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+148. recommendation [isim] (C1)
+   Anlam: tavsiye, tavsiyename, iş başarı belgesi
+   Örnek: Do you have a recommendation?
+   Çeviri: Bir tavsiyen var mı?
+--------------------------------------------------
+149. recovering [isim] (C1)
+   Anlam: ihya, geri alma, kendine gelme
+   Örnek: He has no chance of recovering.
+   Çeviri: Onun iyileşme şansı yok.
+--------------------------------------------------
+150. rehabilitation [isim] (C1)
+   Anlam: rehabilitasyon, ıslah, haklarını geri verme
+   Örnek: Making amends is the first step toward rehabilitation.
+   Çeviri: Telafi etmek rehabilitasyona doğru ilk adımdır.
+--------------------------------------------------
+151. relativity [isim] (C1)
+   Anlam: izafiyet, bağıntıcılık, mensubiyet
+   Örnek: Few scientists understand the theory of relativity.
+   Çeviri: Görecelik teorisini az sayıda bilimci anlıyor.
+--------------------------------------------------
+152. relaxation [isim] (C1)
+   Anlam: dinlenme, relaksasyon, istirahat
+   Örnek: What do you do for relaxation?
+   Çeviri: Rahatlamak için ne yapıyorsun?
+--------------------------------------------------
+153. represents [isim] (C1)
+   Anlam: aşağıdaki tutarlardan daha yüksek olanını aşan, her nokta, ilgili boyut
+   Örnek: A talent agency represents actors.
+   Çeviri: Bir yetenek ajansı aktörleri temsil eder.
+--------------------------------------------------
+154. resilience [isim] (C1)
+   Anlam: elastikiyet, geri tepme, çabuk iyileşme gücü
+   Örnek: The investigation highlighted the critical role of resilience.
+   Çeviri: Soruşturma elastikiyet kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+155. restlessness [isim] (C1)
+   Anlam: yerinde duramama, huzursuzluk, uykusuzluk
+   Örnek: His restlessness gave her a hint that something was wrong.
+   Çeviri: Onun huzursuzluğu ona bir şeylerin yanlış olduğuna dair bir ipucu verdi.
+--------------------------------------------------
+156. restoration [isim] (C1)
+   Anlam: restore etme, restorasyon, restorasyon dönemi
+   Örnek: The investigation highlighted the critical role of restoration.
+   Çeviri: Soruşturma restore etme kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+157. restriction [isim] (C1)
+   Anlam: sınırlama, kısıtlama, tahdit
+   Örnek: They decided to abolish the old restriction.
+   Çeviri: Eski kısıtlamayı kaldırmaya karar verdiler.
+--------------------------------------------------
+158. revolution [isim] (C1)
+   Anlam: ihtilal, devrim, inkılap
+   Örnek: The French Revolution began in 1789.
+   Çeviri: Fransız Devrimi 1789 yılında başladı.
+--------------------------------------------------
+159. scientists [isim] (C1)
+   Anlam: bilim adamları, bilim insanları
+   Örnek: The scientists analyzed the data.
+   Çeviri: Bilim adamları veriyi analiz ettiler.
+--------------------------------------------------
+160. segregation [isim] (C1)
+   Anlam: ırk ayrımı, ayrı depolama, ayrı tutma
+   Örnek: The investigation highlighted the critical role of segregation.
+   Çeviri: Soruşturma ırk ayrımı kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+161. skyscraper [isim] (C1)
+   Anlam: gökdelen
+   Örnek: The skyscraper was built on a solid foundation.
+   Çeviri: Gökdelen sağlam bir temel üzerine inşa edildi.
+--------------------------------------------------
+162. skyscrapers [isim] (C1)
+   Anlam: gökdelenler
+   Örnek: The investigation highlighted the critical role of skyscrapers.
+   Çeviri: Soruşturma gökdelenler kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+163. specialist [isim] (C1)
+   Anlam: uzman, kompetan, uzman doktor
+   Örnek: I'm not a specialist.
+   Çeviri: Ben bir uzman değilim.
+--------------------------------------------------
+164. storytelling [isim] (C1)
+   Anlam: hikaye anlatıcılığı, hikaye anlatma sanatı, hikaye anlatma
+   Örnek: The investigation highlighted the critical role of storytelling.
+   Çeviri: Soruşturma hikaye anlatıcılığı kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+165. substances [isim] (C1)
+   Anlam: tehlikeli atıklar, zehirli nesneler, tehlikeli maddeler
+   Örnek: Do you use any illegal substances?
+   Çeviri: Yasa dışı madde kullanıyor musunuz?
+--------------------------------------------------
+166. suggesting [isim] (C1)
+   Anlam: gösteren, farzedelim ki, öne süren
+   Örnek: I'm not suggesting that.
+   Çeviri: Onu önermiyorum.
+--------------------------------------------------
+167. suggestion [isim] (C1)
+   Anlam: telkin, öneri, telkin etme
+   Örnek: I've got a suggestion.
+   Çeviri: Bir önerim var.
+--------------------------------------------------
+168. suitability [isim] (C1)
+   Anlam: uygunluk, uygun olma, liyakat
+   Örnek: The investigation highlighted the critical role of suitability.
+   Çeviri: Soruşturma uygunluk kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+169. supervision [isim] (C1)
+   Anlam: teftiş, nezaret, denetim
+   Örnek: The children need adult supervision.
+   Çeviri: Çocukların yetişkin gözetimine ihtiyaçları vardır.
+--------------------------------------------------
+170. supplement [isim] (C1)
+   Anlam: ek, tamamlamak, eklemek
+   Örnek: You had better supplement your diet with vitamins.
+   Çeviri: Diyetini vitaminlerle tamamlasan iyi olur.
+--------------------------------------------------
+171. supplements [isim] (C1)
+   Anlam: ücret ve maaşlara ek ödemeler, yan ödemeler, beslenme ve diyet destekleri
+   Örnek: The investigation highlighted the critical role of supplements.
+   Çeviri: Soruşturma ücret ve maaşlara ek ödemeler kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+172. techniques [isim] (C1)
+   Anlam: taktikler, prosedürler, yöntemler
+   Örnek: I've learned a lot of techniques from Tom.
+   Çeviri: Tom'dan bir sürü teknik öğrendim.
+--------------------------------------------------
+173. temperature [isim] (C1)
+   Anlam: sıcaklık, ısı derecesi, ısı
+   Örnek: I took Tom's temperature.
+   Çeviri: Tom'un ateşini ölçtüm.
+--------------------------------------------------
+174. temperatures [isim] (C1)
+   Anlam: düşük sıcaklıklar, tüm dünyadaki en uç ortam sıcaklıkları, hafifçe yükselen sıcaklıklar
+   Örnek: Milder temperatures are expected next week.
+   Çeviri: Gelecek hafta daha hafif sıcaklıklar bekleniyor.
+--------------------------------------------------
+175. transformation [isim] (C1)
+   Anlam: dönüşüm, dönüştürme, inkılap
+   Örnek: The investigation highlighted the critical role of transformation.
+   Çeviri: Soruşturma dönüşüm kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+176. transparency [isim] (C1)
+   Anlam: şeffaflık, saydamlık, diyapozitif
+   Örnek: Is transparency a bad thing?
+   Çeviri: Şeffaflık kötü bir şey mi?
+--------------------------------------------------
+177. transportation [isim] (C1)
+   Anlam: taşıma, nakliye, ulaştırma
+   Örnek: We have no means of transportation.
+   Çeviri: Taşımacılık araçlarımız yok.
+--------------------------------------------------
+178. typewriter [isim] (C1)
+   Anlam: daktilo, yazı makinesi, daktilo makinesi
+   Örnek: May I use your typewriter?
+   Çeviri: Ben senin daktilonu kullanabilir miyim?
+--------------------------------------------------
+179. understanding [isim] (C1)
+   Anlam: kavrayış, anlama, anlayış
+   Örnek: I keep on not understanding.
+   Çeviri: Anlamamaya devam ediyorum.
+--------------------------------------------------
+180. unevenness [isim] (C1)
+   Anlam: düzgünsüzlük, pürüz, yamukluk
+   Örnek: The investigation highlighted the critical role of unevenness.
+   Çeviri: Soruşturma düzgünsüzlük kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+181. usefulness [isim] (C1)
+   Anlam: fayda, hayır, faydalılık
+   Örnek: The investigation highlighted the critical role of usefulness.
+   Çeviri: Soruşturma fayda kavramının kritik rolünü vurguladı.
+--------------------------------------------------

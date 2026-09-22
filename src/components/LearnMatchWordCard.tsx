@@ -64,6 +64,22 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
   const [isTranslatingSentence, setIsTranslatingSentence] = useState<boolean>(false);
   const [onDemandTranslation, setOnDemandTranslation] = useState<string>('');
 
+  const wordText = word?.word || '';
+  const wordMeaning = word?.meaning || '';
+
+  const safeSynonyms = React.useMemo(() => {
+    const rawSyn = (word as any)?.synonyms;
+    if (!rawSyn) return [];
+    if (Array.isArray(rawSyn)) return rawSyn;
+    if (typeof rawSyn === 'string') {
+      try {
+        const parsed = JSON.parse(rawSyn);
+        if (Array.isArray(parsed)) return parsed;
+      } catch (_) {}
+    }
+    return [];
+  }, [word]);
+
   // Reset states when word or index changes
   useEffect(() => {
     setIsSentenceExpanded(false);
@@ -71,20 +87,20 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
     setOnDemandTranslation('');
     setIsTranslatingSentence(false);
     setEnrichedDetail(null);
-  }, [word.word, currentIndex]);
+  }, [wordText, currentIndex]);
 
   // Synchronous resolution of immediate sentence data (0ms latency, eliminates flicker)
-  const builtinSentence = getBuiltinAcademicSentence(word.word);
-  const cachedLookup = DictionaryApiService.getCachedWord(word.word);
+  const builtinSentence = wordText ? getBuiltinAcademicSentence(wordText) : null;
+  const cachedLookup = wordText ? DictionaryApiService.getCachedWord(wordText) : null;
 
   const synchronousEn =
-    getValidExampleSentence(word.example_sentence) ||
+    getValidExampleSentence(word?.example_sentence) ||
     getValidExampleSentence(builtinSentence?.sampleSentenceEn) ||
     getValidExampleSentence(cachedLookup?.exampleEn) ||
     '';
 
   const synchronousTr =
-    getValidExampleSentence(word.example_translation) ||
+    getValidExampleSentence(word?.example_translation) ||
     getValidExampleSentence(builtinSentence?.sampleSentenceTr) ||
     getValidExampleSentence(cachedLookup?.exampleTr) ||
     '';
@@ -95,9 +111,14 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
     let isMounted = true;
     const hasImmediateSentence = Boolean(synchronousEn);
 
+    if (!wordText) {
+      setIsLoadingSentence(false);
+      return;
+    }
+
     if (!hasImmediateSentence) {
       setIsLoadingSentence(true);
-      DictionaryApiService.lookupWord(word.word, { skipSentenceTranslation: true })
+      DictionaryApiService.lookupWord(wordText, { skipSentenceTranslation: true })
         .then(async (res) => {
           if (!isMounted) return;
           let enrichedEn = getValidExampleSentence(res?.exampleEn);
@@ -105,7 +126,7 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
 
           if (!enrichedEn) {
             const fallback = await DictionaryApiService.fetchAuthenticSentence(
-              word.word,
+              wordText,
               undefined,
               true
             );
@@ -123,10 +144,10 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
                 exampleTr: enrichedTr || undefined,
               });
               if (enrichedEn) {
-                if (word.id) {
+                if (word?.id) {
                   dbService.updateWordExample(word.id, enrichedEn, enrichedTr || undefined).catch(() => {});
                 } else {
-                  dbService.updateWordExampleByText(word.word, enrichedEn, enrichedTr || undefined).catch(() => {});
+                  dbService.updateWordExampleByText(wordText, enrichedEn, enrichedTr || undefined).catch(() => {});
                 }
               }
             }
@@ -139,7 +160,7 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
     } else {
       setIsLoadingSentence(false);
       // Phonetic bilgisi eksikse arka planda sessizce zenginleştir
-      DictionaryApiService.lookupWord(word.word, { skipSentenceTranslation: true })
+      DictionaryApiService.lookupWord(wordText, { skipSentenceTranslation: true })
         .then((res) => {
           if (isMounted && res?.phonetic) {
             setEnrichedDetail((prev) => ({
@@ -155,13 +176,14 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
     return () => {
       isMounted = false;
     };
-  }, [word.word, word.example_sentence, synchronousEn]);
+  }, [wordText, word?.example_sentence, synchronousEn]);
 
   const handleSpeakWord = () => {
+    if (!wordText) return;
     try {
       if (SpeechModule && typeof SpeechModule.speak === 'function') {
         SpeechModule.stop();
-        SpeechModule.speak(word.word, {
+        SpeechModule.speak(wordText, {
           language: 'en-US',
           pitch: 1.0,
           rate: 0.88,
@@ -214,14 +236,17 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
 
     if (!effectiveExampleTr && effectiveExampleEn && !isTranslatingSentence) {
       setIsTranslatingSentence(true);
+      const targetWord = wordText;
       DictionaryApiService.translateSentence(effectiveExampleEn)
         .then((tr) => {
-          if (tr && tr.trim().length > 0) {
-            setOnDemandTranslation(tr.trim());
-            if (word.id) {
-              dbService.updateWordExample(word.id, effectiveExampleEn, tr.trim()).catch(() => {});
+          if (targetWord !== (word?.word || '') || !tr || tr.trim().length === 0) return;
+          const cleanTr = tr.trim();
+          if (!isBoilerplateSentence(cleanTr)) {
+            setOnDemandTranslation(cleanTr);
+            if (word?.id) {
+              dbService.updateWordExample(word.id, effectiveExampleEn, cleanTr).catch(() => {});
             } else {
-              dbService.updateWordExampleByText(word.word, effectiveExampleEn, tr.trim()).catch(() => {});
+              dbService.updateWordExampleByText(targetWord, effectiveExampleEn, cleanTr).catch(() => {});
             }
           }
         })
@@ -229,7 +254,9 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
           console.warn('Cümle çevirisi hazırlama hatası:', e);
         })
         .finally(() => {
-          setIsTranslatingSentence(false);
+          if (targetWord === (word?.word || '')) {
+            setIsTranslatingSentence(false);
+          }
         });
     }
   };
@@ -253,20 +280,25 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
       !onDemandTranslation
     ) {
       setIsTranslatingSentence(true);
+      const targetWord = wordText;
       DictionaryApiService.translateSentence(effectiveExampleEn)
         .then((tr) => {
-          if (tr && tr.trim().length > 0) {
-            setOnDemandTranslation(tr.trim());
-            if (word.id) {
-              dbService.updateWordExample(word.id, effectiveExampleEn, tr.trim()).catch(() => {});
+          if (targetWord !== (word?.word || '') || !tr || tr.trim().length === 0) return;
+          const cleanTr = tr.trim();
+          if (!isBoilerplateSentence(cleanTr)) {
+            setOnDemandTranslation(cleanTr);
+            if (word?.id) {
+              dbService.updateWordExample(word.id, effectiveExampleEn, cleanTr).catch(() => {});
             } else {
-              dbService.updateWordExampleByText(word.word, effectiveExampleEn, tr.trim()).catch(() => {});
+              dbService.updateWordExampleByText(targetWord, effectiveExampleEn, cleanTr).catch(() => {});
             }
           }
         })
         .catch(() => {})
         .finally(() => {
-          setIsTranslatingSentence(false);
+          if (targetWord === (word?.word || '')) {
+            setIsTranslatingSentence(false);
+          }
         });
     }
   }, [isSentenceExpanded, effectiveExampleEn, effectiveExampleTr]);
@@ -283,37 +315,57 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
 
     if (!effectiveExampleTr && effectiveExampleEn && !isTranslatingSentence) {
       setIsTranslatingSentence(true);
+      const targetWord = wordText;
       try {
         const tr = await DictionaryApiService.translateSentence(effectiveExampleEn);
-        if (tr && tr.trim().length > 0) {
-          setOnDemandTranslation(tr.trim());
-          if (word.id) {
-            dbService.updateWordExample(word.id, effectiveExampleEn, tr.trim()).catch(() => {});
-          } else {
-            dbService.updateWordExampleByText(word.word, effectiveExampleEn, tr.trim()).catch(() => {});
+        if (targetWord === (word?.word || '') && tr && tr.trim().length > 0) {
+          const cleanTr = tr.trim();
+          if (!isBoilerplateSentence(cleanTr)) {
+            setOnDemandTranslation(cleanTr);
+            if (word?.id) {
+              dbService.updateWordExample(word.id, effectiveExampleEn, cleanTr).catch(() => {});
+            } else {
+              dbService.updateWordExampleByText(targetWord, effectiveExampleEn, cleanTr).catch(() => {});
+            }
           }
-        } else {
-          const fallback = `"${word.meaning || word.word}" akademik metinlerde ve günlük iletişimde yaygın olarak kullanılır.`;
-          setOnDemandTranslation(fallback);
         }
       } catch (e) {
         console.warn('Failed to translate example sentence:', e);
-        const fallback = `"${word.meaning || word.word}" akademik metinlerde ve günlük iletişimde yaygın olarak kullanılır.`;
-        setOnDemandTranslation(fallback);
       } finally {
-        setIsTranslatingSentence(false);
+        if (targetWord === (word?.word || '')) {
+          setIsTranslatingSentence(false);
+        }
       }
     }
   };
 
   const phoneticText = enrichedDetail?.phonetic || '';
 
-  // Render English sentence with target word highlighted
+  // Render English sentence with target word highlighted (regex-safe against special characters)
   const renderFormattedSentence = (sentence: string) => {
     if (!sentence) return null;
 
-    const cleanTarget = word.word.replace(/^\(to\)\s*/i, '').trim();
-    const regex = new RegExp(`(${cleanTarget})`, 'gi');
+    const cleanTarget = wordText.replace(/^\(to\)\s*/i, '').trim();
+    if (!cleanTarget) {
+      return (
+        <Text
+          style={[
+            styles.exampleSentenceText,
+            {
+              color: colors.text,
+              fontSize: dynamicFontSize,
+              lineHeight: Math.round(dynamicFontSize * 1.48),
+              fontFamily: dynamicFontFamily,
+            },
+          ]}
+        >
+          {sentence}
+        </Text>
+      );
+    }
+
+    const escaped = cleanTarget.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escaped})`, 'gi');
     const parts = sentence.split(regex);
 
     return (
@@ -385,297 +437,206 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
             {
               backgroundColor: colors.cardBackground,
               borderColor: colors.border,
-              shadowColor: colors.isDark ? '#000000' : '#1F1B2E',
+              shadowColor: colors.text,
             },
           ]}
         >
-          {/* TOP SECTION: TARGET WORD & PRONUNCIATION */}
-          <View style={styles.wordHeaderSection}>
-            <View style={styles.wordTitleRow}>
+          {/* 1. TOP META ROW: LEVEL & PART OF SPEECH PILLS */}
+          <View style={styles.cardTopMetaRow}>
+            {word?.level ? (
+              <View style={[styles.metaPill, { backgroundColor: colors.brandLight }]}>
+                <Text style={[styles.metaPillText, { color: colors.brand }]}>
+                  {word.level}
+                </Text>
+              </View>
+            ) : null}
+            {word?.part_of_speech || word?.subcategory ? (
+              <View style={[styles.metaPillSubtle, { backgroundColor: colors.subtleBackground }]}>
+                <Text style={[styles.metaPillSubtleText, { color: colors.textSecondary }]}>
+                  {word.part_of_speech || word.subcategory}
+                </Text>
+              </View>
+            ) : null}
+          </View>
+
+          {/* 2. HERO TARGET WORD & PRONUNCIATION */}
+          <View style={styles.heroWordSection}>
+            <View style={styles.heroWordRow}>
               <Text
                 style={[
-                  styles.targetWordText,
-                  { color: colors.brand, fontFamily: dynamicFontFamily },
+                  styles.heroWordText,
+                  { color: colors.text, fontFamily: dynamicFontFamily },
                 ]}
                 numberOfLines={2}
               >
-                {word.word}
+                {wordText}
               </Text>
               <TouchableOpacity
-                style={[styles.audioPillBtn, { backgroundColor: colors.brandLight }]}
+                style={[styles.audioRoundBtn, { backgroundColor: colors.brandLight }]}
                 onPress={handleSpeakWord}
                 activeOpacity={0.7}
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                 accessibilityLabel="Telaffuzu Dinle"
               >
-                <Volume2 size={20} color={colors.brand} strokeWidth={2.4} />
+                <Volume2 size={19} color={colors.brand} strokeWidth={2.4} />
               </TouchableOpacity>
             </View>
 
             {phoneticText ? (
-              <Text style={[styles.phoneticText, { color: colors.textSecondary }]}>
+              <Text style={[styles.phoneticMuted, { color: colors.textSecondary }]}>
                 {phoneticText}
               </Text>
             ) : null}
           </View>
 
-          {/* DIVIDER */}
-          <View style={[styles.divider, { backgroundColor: colors.border }]} />
-
-          {/* TURKISH MEANING SECTION */}
-          <View style={styles.meaningSection}>
-            <Text style={[styles.sectionMetaLabel, { color: colors.textSecondary }]}>
-              TÜRKÇE ANLAMI
-            </Text>
+          {/* 3. TURKISH MEANING SECTION */}
+          <View style={[styles.meaningCard, { backgroundColor: colors.subtleBackground }]}>
             <Text
               style={[
-                styles.turkishMeaningText,
+                styles.meaningText,
                 { color: colors.text, fontFamily: dynamicFontFamily },
               ]}
             >
-              {word.meaning}
+              {wordMeaning}
             </Text>
           </View>
 
-          {/* DIVIDER */}
-          <View style={[styles.divider, { backgroundColor: colors.border }]} />
-
-          {/* CONTEXT / EXAMPLE SENTENCE SECTION */}
-          <View style={styles.contextSection}>
-            <View style={styles.contextHeaderRow}>
-              <Text style={[styles.sectionMetaLabel, { color: colors.textSecondary }]}>
-                CÜMLE İÇİNDE KULLANIMI
+          {/* 4. SYNONYMS SECTION (EŞ ANLAMLILAR) */}
+          {safeSynonyms.length > 0 && (
+            <View style={styles.synonymsSection}>
+              <Text style={[styles.subtleMetaLabel, { color: colors.textSecondary }]}>
+                EŞ ANLAMLILAR
               </Text>
-              {isSentenceExpanded && effectiveExampleEn ? (
-                <TouchableOpacity
-                  onPress={handleToggleSentence}
-                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                  style={styles.sentenceCollapseIconBtn}
-                  accessibilityLabel="Cümleyi Kapat"
-                >
-                  <ChevronUp size={16} color={colors.textSecondary} />
-                </TouchableOpacity>
-              ) : null}
-            </View>
-
-            {!isSentenceExpanded ? (
-              /* Progressive Disclosure Trigger: Appears instantly without ugly skeleton */
-              <TouchableOpacity
-                style={[
-                  styles.showSentenceBtn,
-                  {
-                    backgroundColor: colors.subtleBackground,
-                    borderColor: colors.border,
-                  },
-                ]}
-                onPress={handleExpandSentence}
-                activeOpacity={0.7}
-                accessibilityLabel="Cümle içinde kullanımını gör"
-              >
-                <View style={styles.showSentenceBtnLeft}>
-                  <View style={[styles.showSentenceIconCircle, { backgroundColor: colors.brandLight }]}>
-                    <Sparkles size={16} color={colors.brand} />
-                  </View>
-                  <Text
+              <View style={styles.synonymsChipsWrap}>
+                {safeSynonyms.map((syn: string, idx: number) => (
+                  <View
+                    key={idx}
                     style={[
-                      styles.showSentenceBtnText,
+                      styles.synChipPill,
                       {
-                        color: colors.text,
-                        fontFamily: dynamicFontFamily,
-                        fontSize: Math.round(dynamicFontSize * 0.94),
+                        backgroundColor: colors.brandLight,
                       },
                     ]}
                   >
-                    Cümle içinde kullanımını gör
-                  </Text>
-                </View>
-                <View
-                  style={[
-                    styles.showSentencePill,
-                    { backgroundColor: colors.cardBackground, borderColor: colors.border },
-                  ]}
-                >
-                  <ChevronDown size={15} color={colors.brand} />
-                </View>
-              </TouchableOpacity>
-            ) : isLoadingSentence && !effectiveExampleEn ? (
-              /* Only if user tapped immediately and sentence is still loading */
-              <View
-                style={[
-                  styles.sentenceCard,
-                  {
-                    backgroundColor: colors.subtleBackground,
-                    borderColor: colors.border,
-                    minHeight: 64,
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: 10,
-                    paddingVertical: 14,
-                  },
-                ]}
-              >
-                <ActivityIndicator size="small" color={colors.brand} />
-                <Text
-                  style={[
-                    styles.loadingText,
-                    { color: colors.textSecondary, fontFamily: dynamicFontFamily },
-                  ]}
-                >
-                  Örnek cümle hazırlanıyor...
-                </Text>
-              </View>
-            ) : effectiveExampleEn ? (
-              /* Expanded English sentence card */
-              <View
-                style={[
-                  styles.sentenceCard,
-                  {
-                    backgroundColor: colors.subtleBackground,
-                    borderColor: colors.border,
-                  },
-                ]}
-              >
-                {/* English Sentence */}
-                <View style={styles.enSentenceBox}>
-                  {renderFormattedSentence(effectiveExampleEn)}
-                </View>
-
-                {/* Translation & Audio Action Row */}
-                <View style={styles.translationActionRow}>
-                  <TouchableOpacity
-                    style={[
-                      styles.showTranslationBtn,
-                      {
-                        backgroundColor: showTranslation ? colors.brandLight : colors.cardBackground,
-                        borderColor: showTranslation ? colors.brand : colors.border,
-                      },
-                    ]}
-                    onPress={handleToggleTranslation}
-                    activeOpacity={0.75}
-                    accessibilityLabel="Türkçe Çeviriyi Gör"
-                  >
-                    <Languages size={15} color={showTranslation ? colors.brand : colors.textSecondary} strokeWidth={2.2} />
                     <Text
                       style={[
-                        styles.showTranslationBtnText,
+                        styles.synChipPillText,
+                        { color: colors.brand, fontFamily: dynamicFontFamily },
+                      ]}
+                    >
+                      {syn}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          )}
+
+          {/* 5. CONTEXT / EXAMPLE SENTENCE SECTION */}
+          {effectiveExampleEn ? (
+            <View style={[styles.sentenceCardUnified, { backgroundColor: colors.subtleBackground }]}>
+              <View style={styles.sentenceHeaderRow}>
+                <Text style={[styles.subtleMetaLabel, { color: colors.textSecondary }]}>
+                  ÖRNEK CÜMLE
+                </Text>
+                <TouchableOpacity
+                  onPress={() => handleSpeakSentence(effectiveExampleEn)}
+                  style={[styles.audioMiniBtn, { backgroundColor: colors.cardBackground }]}
+                  hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                  accessibilityLabel="Cümleyi Dinle"
+                >
+                  <Volume2 size={15} color={colors.brand} />
+                </TouchableOpacity>
+              </View>
+
+              {/* English Sentence */}
+              <View style={styles.enSentenceBox}>
+                {renderFormattedSentence(effectiveExampleEn)}
+              </View>
+
+              {/* Translation Toggle Pill */}
+              <TouchableOpacity
+                style={[
+                  styles.translationToggleBtn,
+                  {
+                    backgroundColor: showTranslation ? colors.brandLight : colors.cardBackground,
+                    borderColor: showTranslation ? colors.brand : colors.border,
+                  },
+                ]}
+                onPress={handleToggleTranslation}
+                activeOpacity={0.75}
+                accessibilityLabel="Türkçe Çeviriyi Gör"
+              >
+                <Languages size={14} color={showTranslation ? colors.brand : colors.textSecondary} strokeWidth={2.2} />
+                <Text
+                  style={[
+                    styles.translationToggleBtnText,
+                    {
+                      color: showTranslation ? colors.brand : colors.textSecondary,
+                      fontFamily: dynamicFontFamily,
+                      fontSize: Math.max(12, dynamicFontSize - 2.5),
+                      fontWeight: showTranslation ? '700' : '600',
+                    },
+                  ]}
+                >
+                  {showTranslation ? 'Türkçe Çeviriyi Gizle' : 'Türkçe Çevirisi'}
+                </Text>
+              </TouchableOpacity>
+
+              {/* Turkish Translation Display */}
+              {showTranslation && (
+                <View style={styles.translationContainer}>
+                  <View style={[styles.sentenceInnerDivider, { backgroundColor: colors.border }]} />
+                  {isTranslatingSentence ? (
+                    <View style={styles.translationLoadingRow}>
+                      <ActivityIndicator size="small" color={colors.brand} />
+                      <Text
+                        style={[
+                          styles.translatingText,
+                          { color: colors.textSecondary, fontFamily: dynamicFontFamily },
+                        ]}
+                      >
+                        Türkçe çeviri hazırlanıyor...
+                      </Text>
+                    </View>
+                  ) : effectiveExampleTr ? (
+                    <Text
+                      style={[
+                        styles.turkishSentenceText,
                         {
-                          color: showTranslation ? colors.brand : colors.textSecondary,
+                          color: colors.textSecondary,
+                          fontSize: Math.max(12, dynamicFontSize - 2),
+                          lineHeight: Math.round((dynamicFontSize - 2) * 1.48),
                           fontFamily: dynamicFontFamily,
-                          fontSize: Math.max(12, dynamicFontSize - 2.5),
-                          fontWeight: showTranslation ? '700' : '600',
                         },
                       ]}
                     >
-                      {showTranslation ? 'Türkçe Çeviriyi Gizle' : 'Türkçe Çevirisi'}
+                      {effectiveExampleTr}
                     </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => handleSpeakSentence(effectiveExampleEn)}
-                    style={[
-                      styles.sentenceInlineAudioBtn,
-                      { backgroundColor: colors.cardBackground, borderColor: colors.border },
-                    ]}
-                    activeOpacity={0.7}
-                    hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
-                    accessibilityLabel="Cümleyi Dinle"
-                  >
-                    <Volume2 size={15} color={colors.brand} />
-                  </TouchableOpacity>
+                  ) : null}
                 </View>
-
-                {/* Turkish Translation (Revealed on demand) */}
-                {showTranslation && (
-                  <View style={styles.translationContainer}>
-                    <View style={[styles.sentenceInnerDivider, { backgroundColor: colors.border }]} />
-                    {isTranslatingSentence ? (
-                      <View style={styles.translationLoadingRow}>
-                        <ActivityIndicator size="small" color={colors.brand} />
-                        <Text
-                          style={[
-                            styles.translatingText,
-                            { color: colors.textSecondary, fontFamily: dynamicFontFamily },
-                          ]}
-                        >
-                          Türkçe çeviri hazırlanıyor...
-                        </Text>
-                      </View>
-                    ) : effectiveExampleTr ? (
-                      <Text
-                        style={[
-                          styles.turkishSentenceText,
-                          {
-                            color: colors.textSecondary,
-                            fontSize: Math.max(12, dynamicFontSize - 2),
-                            lineHeight: Math.round((dynamicFontSize - 2) * 1.45),
-                            fontFamily: dynamicFontFamily,
-                          },
-                        ]}
-                      >
-                        {effectiveExampleTr}
-                      </Text>
-                    ) : (
-                      <Text
-                        style={[
-                          styles.turkishSentenceText,
-                          {
-                            color: colors.textSecondary,
-                            fontStyle: 'italic',
-                            fontSize: Math.max(12, dynamicFontSize - 2),
-                            fontFamily: dynamicFontFamily,
-                          },
-                        ]}
-                      >
-                        Çeviri bulunamadı.
-                      </Text>
-                    )}
-                  </View>
-                )}
-              </View>
-            ) : (
-              <TouchableOpacity
+              )}
+            </View>
+          ) : isLoadingSentence ? (
+            <View
+              style={[
+                styles.sentenceLoadingBox,
+                {
+                  backgroundColor: colors.subtleBackground,
+                },
+              ]}
+            >
+              <ActivityIndicator size="small" color={colors.brand} />
+              <Text
                 style={[
-                  styles.sentenceCard,
-                  {
-                    backgroundColor: colors.subtleBackground,
-                    borderColor: colors.border,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    paddingVertical: 14,
-                  },
+                  styles.loadingText,
+                  { color: colors.textSecondary, fontFamily: dynamicFontFamily },
                 ]}
-                onPress={() => {
-                  setIsLoadingSentence(true);
-                  DictionaryApiService.fetchAuthenticSentence(word.word)
-                    .then((res) => {
-                      if (res?.en) {
-                        setEnrichedDetail({
-                          exampleEn: res.en,
-                          exampleTr: res.tr || undefined,
-                        });
-                        if (word.id) {
-                          dbService.updateWordExample(word.id, res.en, res.tr || undefined).catch(() => {});
-                        } else {
-                          dbService.updateWordExampleByText(word.word, res.en, res.tr || undefined).catch(() => {});
-                        }
-                      }
-                    })
-                    .finally(() => setIsLoadingSentence(false));
-                }}
-                activeOpacity={0.7}
               >
-                <Text
-                  style={[
-                    styles.loadingText,
-                    { color: colors.textSecondary, fontFamily: dynamicFontFamily },
-                  ]}
-                >
-                  Örnek cümleyi tekrar dene
-                </Text>
-              </TouchableOpacity>
-            )}
-          </View>
+                Örnek cümle hazırlanıyor...
+              </Text>
+            </View>
+          ) : null}
         </View>
       </ScrollView>
 
@@ -718,7 +679,7 @@ export const LearnMatchWordCard: React.FC<LearnMatchWordCardProps> = ({
             onPress={onNext}
             activeOpacity={0.88}
           >
-            <Text style={styles.nextBtnText}>{nextButtonText || 'Sonraki'}</Text>
+            <Text style={[styles.nextBtnText, { color: colors.textOnBrand }]}>{nextButtonText || 'Sonraki'}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -739,216 +700,187 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   closeBtn: {
-    padding: 4,
+    padding: 6,
+    borderRadius: 18,
   },
   progressBarTrack: {
     flex: 1,
-    height: 8,
-    borderRadius: 4,
+    height: 4,
+    borderRadius: 2,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
-    borderRadius: 4,
+    borderRadius: 2,
   },
   topRightCounter: {
-    paddingHorizontal: 6,
+    paddingHorizontal: 4,
   },
   counterText: {
-    fontSize: 13,
+    fontSize: 12.5,
     fontWeight: '700',
   },
   scrollContent: {
-    paddingHorizontal: 18,
-    paddingTop: 12,
+    paddingHorizontal: 16,
+    paddingTop: 8,
     paddingBottom: 24,
     alignItems: 'center',
   },
   cardContainer: {
     width: '100%',
     maxWidth: 420,
-    borderRadius: 20,
+    borderRadius: Platform.select({ ios: 20, android: 12 }),
     borderWidth: 1,
-    paddingHorizontal: 20,
-    paddingTop: 24,
-    paddingBottom: 24,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.05,
-    shadowRadius: 12,
+    paddingHorizontal: 18,
+    paddingTop: 20,
+    paddingBottom: 20,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.04,
+    shadowRadius: 16,
     elevation: 2,
   },
-  wordHeaderSection: {
-    alignItems: 'center',
+  cardTopMetaRow: {
     width: '100%',
-  },
-  wordTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
+    gap: 8,
+    marginBottom: 14,
   },
-  targetWordText: {
+  metaPill: {
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+    borderRadius: Platform.select({ ios: 8, android: 6 }),
+  },
+  metaPillText: {
+    fontSize: 11.5,
+    fontWeight: '700',
+    letterSpacing: 0.3,
+  },
+  metaPillSubtle: {
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+    borderRadius: Platform.select({ ios: 8, android: 6 }),
+  },
+  metaPillSubtleText: {
+    fontSize: 11.5,
+    fontWeight: '600',
+    textTransform: 'capitalize',
+  },
+  heroWordSection: {
+    width: '100%',
+    marginBottom: 14,
+  },
+  heroWordRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  heroWordText: {
     fontSize: 28,
     fontWeight: '800',
-    textAlign: 'center',
-    letterSpacing: -0.3,
+    letterSpacing: -0.4,
+    flex: 1,
   },
-  audioPillBtn: {
+  audioRoundBtn: {
     width: 38,
     height: 38,
     borderRadius: 19,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  phoneticText: {
+  phoneticMuted: {
     fontSize: 13.5,
-    marginTop: 4,
+    marginTop: 3,
     fontStyle: 'italic',
   },
-  divider: {
+  meaningCard: {
     width: '100%',
-    height: 1,
-    marginVertical: 18,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: Platform.select({ ios: 14, android: 10 }),
+    marginBottom: 14,
   },
-  meaningSection: {
-    width: '100%',
-    alignItems: 'center',
+  meaningText: {
+    fontSize: 18.5,
+    fontWeight: '700',
+    lineHeight: 25,
   },
-  sectionMetaLabel: {
+  subtleMetaLabel: {
     fontSize: 11,
     fontWeight: '700',
-    letterSpacing: 0.8,
-    marginBottom: 6,
-    textTransform: 'uppercase',
-  },
-  turkishMeaningText: {
-    fontSize: 20,
-    fontWeight: '700',
-    textAlign: 'center',
-    lineHeight: 26,
-  },
-  contextSection: {
-    width: '100%',
-  },
-  contextHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    letterSpacing: 0.7,
     marginBottom: 8,
   },
-  sentenceAudioIconBtn: {
-    padding: 4,
+  synonymsSection: {
+    width: '100%',
+    marginBottom: 16,
   },
-  sentenceCollapseIconBtn: {
-    padding: 4,
-  },
-  showSentenceBtn: {
+  synonymsChipsWrap: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-    borderRadius: Platform.select({ ios: 14, android: 10 }),
-    borderWidth: 1,
-  },
-  showSentenceBtnLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  showSentenceIconCircle: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  showSentenceBtnText: {
-    fontWeight: '600',
-    letterSpacing: 0.1,
-  },
-  showSentencePill: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  sentenceLoadingBox: {
-    paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexWrap: 'wrap',
     gap: 8,
   },
-  skeletonLine: {
-    height: 12,
-    borderRadius: 6,
+  synChipPill: {
+    paddingHorizontal: 11,
+    paddingVertical: 5.5,
+    borderRadius: Platform.select({ ios: 10, android: 7 }),
   },
-  loadingText: {
-    fontSize: 12,
+  synChipPillText: {
+    fontSize: 13,
+    fontWeight: '700',
   },
-  sentenceCard: {
-    borderRadius: 14,
-    borderWidth: 1,
-    padding: 14,
+  sentenceCardUnified: {
+    width: '100%',
+    padding: 16,
+    borderRadius: Platform.select({ ios: 16, android: 12 }),
+  },
+  sentenceHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  audioMiniBtn: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   enSentenceBox: {
-    marginBottom: 8,
+    marginBottom: 12,
   },
   exampleSentenceText: {
     fontSize: 15,
     lineHeight: 22,
   },
   underlinedWord: {
-    paddingHorizontal: 3,
-    borderRadius: 3,
+    paddingHorizontal: 4,
+    paddingVertical: 1,
+    borderRadius: 4,
+    fontWeight: '700',
   },
-  translationActionRow: {
+  translationToggleBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 8,
-  },
-  showTranslationBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    alignSelf: 'flex-start',
     gap: 6,
     paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: Platform.select({ ios: 10, android: 8 }),
+    paddingHorizontal: 14,
+    borderRadius: 20,
     borderWidth: 1,
   },
-  showTranslationBtnText: {
+  translationToggleBtnText: {
     letterSpacing: 0.1,
   },
-  sentenceInlineAudioBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  translationContainer: {
+    marginTop: 8,
   },
   sentenceInnerDivider: {
     height: 1,
     marginVertical: 8,
-  },
-  turkishSentenceText: {
-    fontSize: 13.5,
-    lineHeight: 20,
-  },
-  translationIconBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 8,
-  },
-  translationContainer: {
-    marginTop: 4,
+    opacity: 0.6,
   },
   translationLoadingRow: {
     flexDirection: 'row',
@@ -960,10 +892,24 @@ const styles = StyleSheet.create({
     fontSize: 12.5,
     fontStyle: 'italic',
   },
+  turkishSentenceText: {
+    fontSize: 13.5,
+    lineHeight: 20,
+  },
+  sentenceLoadingBox: {
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    borderRadius: Platform.select({ ios: 14, android: 10 }),
+  },
+  loadingText: {
+    fontSize: 12,
+  },
   bottomBar: {
     paddingHorizontal: 16,
     paddingTop: 12,
-    paddingBottom: 24,
+    paddingBottom: Platform.select({ ios: 34, android: 20 }),
     borderTopWidth: 1,
   },
   bottomButtonsRow: {
@@ -972,28 +918,27 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   prevBtn: {
-    height: 52,
+    height: 50,
     paddingHorizontal: 20,
-    borderRadius: 14,
+    borderRadius: Platform.select({ ios: 16, android: 12 }),
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   prevBtnText: {
-    fontSize: 15.5,
+    fontSize: 15,
     fontWeight: '600',
   },
   nextBtn: {
     width: '100%',
-    height: 52,
-    borderRadius: 14,
+    height: 50,
+    borderRadius: Platform.select({ ios: 16, android: 12 }),
     alignItems: 'center',
     justifyContent: 'center',
   },
   nextBtnText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
     letterSpacing: 0.2,
   },
 });

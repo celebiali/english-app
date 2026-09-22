@@ -1,0 +1,247 @@
+=== KÜTÜPHANE: BAĞLAÇLAR & EDATLAR > KOŞUL VE EKLEMELER (49 KELİME) ===
+
+1. about [edat] (B1)
+   Anlam: hemen hemen, aşağı yukarı, yaklaşık
+   Örnek: He's about to go.
+   Çeviri: Gitmek üzere.
+--------------------------------------------------
+2. above [edat] (B1)
+   Anlam: üzerine, yukarısında, yukarıda
+   Örnek: It's right above you.
+   Çeviri: O tam senin üzerinde.
+--------------------------------------------------
+3. against [edat] (B2)
+   Anlam: aykırı, karşı, ters olarak
+   Örnek: I'm against the war.
+   Çeviri: Savaşa karşıyım.
+--------------------------------------------------
+4. among [edat] (B1)
+   Anlam: arasına, arasında, içinde
+   Örnek: He is popular among us.
+   Çeviri: O, aramızda popülerdir.
+--------------------------------------------------
+5. and [bağlaç] (A1)
+   Anlam: ile, ve, ek şart
+   Örnek: I'll go and see.
+   Çeviri: Gideceğim ve göreceğim.
+--------------------------------------------------
+6. around [edat] (B1)
+   Anlam: sularında, çevrede, etrafında
+   Örnek: I move around a lot.
+   Çeviri: Ben çok gezinirim.
+--------------------------------------------------
+7. at [edat] (A1)
+   Anlam: üzere, nezdinde, üzerinde
+   Örnek: I'm at Tom's.
+   Çeviri: Tom'lardayım.
+--------------------------------------------------
+8. behind [edat] (B1)
+   Anlam: ardındaki, arkaya, geriye
+   Örnek: I hid behind a rock.
+   Çeviri: Bir kayanın arkasına saklandım.
+--------------------------------------------------
+9. below [edat] (B1)
+   Anlam: alttaki, aşağıdaki, altta
+   Örnek: My room is just below.
+   Çeviri: Odam tam aşağıda.
+--------------------------------------------------
+10. beneath [edat] (B2)
+   Anlam: altında, aşağıda, aşağıdan
+   Örnek: The money was hidden beneath the floorboards.
+   Çeviri: Para döşeme tahtalarının altında gizlenmişti.
+--------------------------------------------------
+11. beside [edat] (B1)
+   Anlam: yanında, üstelik, diğer taraftan
+   Örnek: Can I sit beside Tom?
+   Çeviri: Tom'un yanına oturabilir miyim?
+--------------------------------------------------
+12. besides [bağlaç] (B2)
+   Anlam: ayrıca, hem, üstelik
+   Örnek: Ask someone else besides me.
+   Çeviri: Benden başka birine sorun.
+--------------------------------------------------
+13. between [edat] (B2)
+   Anlam: arasında, arasına, ortada
+   Örnek: I was the go-between.
+   Çeviri: Ben arabulucuydum.
+--------------------------------------------------
+14. by [edat] (A1)
+   Anlam: geçecek biçimde, yakın, evde
+   Örnek: I'll go by bus.
+   Çeviri: Otobüsle gideceğim.
+--------------------------------------------------
+15. considering [edat] (B2)
+   Anlam: hesaba katma, sıçrama, dikkate alma
+   Örnek: I'm considering suing Tom.
+   Çeviri: Tom'a dava açmayı düşünüyorum.
+--------------------------------------------------
+16. down [edat] (B1)
+   Anlam: aşağıya doğru, aşağı, alaşağı etmek
+   Örnek: Don't let me down.
+   Çeviri: Benim yüzümü kara çıkarma.
+--------------------------------------------------
+17. except [edat] (B1)
+   Anlam: haricinde, hariç, dışında
+   Örnek: No one came except Tom.
+   Çeviri: Tom hariç hiç kimse gelmedi.
+--------------------------------------------------
+18. excluding [edat] (B2)
+   Anlam: hariç, dışlama, müstesna
+   Örnek: We're not excluding anybody.
+   Çeviri: Biz kimseyi dışarıda bırakmıyoruz.
+--------------------------------------------------
+19. for [edat] (A1)
+   Anlam: için, yönünden, zarfında
+   Örnek: I'm OK for now.
+   Çeviri: Şimdilik iyiyim.
+--------------------------------------------------
+20. from [edat] (A1)
+   Anlam: itibaren, -den beri, -den
+   Örnek: I'm from the FBI.
+   Çeviri: Ben FBI'danım.
+--------------------------------------------------
+21. in [edat] (A1)
+   Anlam: içeri, içinde, iç
+   Örnek: I'm in a fix.
+   Çeviri: Zor durumdayım.
+--------------------------------------------------
+22. inside [edat] (B1)
+   Anlam: iç taraf, içeri, içte
+   Örnek: I'll see you inside.
+   Çeviri: Seni içeride göreceğim.
+--------------------------------------------------
+23. into [edat] (B1)
+   Anlam: içine, şekline, biçimine
+   Örnek: I got into my car.
+   Çeviri: Arabama bindim.
+--------------------------------------------------
+24. like [edat] (B1)
+   Anlam: beğenmek, hoşlanmak, sevmek
+   Örnek: I'd like a hug.
+   Çeviri: Ben sarılmak istiyorum.
+--------------------------------------------------
+25. near [edat] (A1)
+   Anlam: yakın, yakınlaşmak, yaklaşmak
+   Örnek: Don't go near Tom.
+   Çeviri: Tom'a yaklaşma.
+--------------------------------------------------
+26. nor [bağlaç] (B1)
+   Anlam: ne de, ne, nor operatörü
+   Örnek: He can't see nor hear.
+   Çeviri: O ne görebilir ne de duyabilir.
+--------------------------------------------------
+27. of [edat] (A1)
+   Anlam: karşı, olan, hakkında
+   Örnek: I'm one of you.
+   Çeviri: Ben sizden biriyim.
+--------------------------------------------------
+28. off [edat] (B1)
+   Anlam: kapalı, dışında, kalkmak
+   Örnek: I'm off to bed.
+   Çeviri: Yatmaya gidiyorum.
+--------------------------------------------------
+29. on [edat] (A1)
+   Anlam: üstünde, üzerinde, yanmak
+   Örnek: I can't go on.
+   Çeviri: Ben devam edemem.
+--------------------------------------------------
+30. onto [edat] (B1)
+   Anlam: üstüne, üzerine, onto
+   Örnek: He jumped onto the table.
+   Çeviri: O masanın üstüne atladı.
+--------------------------------------------------
+31. or [bağlaç] (B1)
+   Anlam: ya da, veya, altın sarısı
+   Örnek: It's now or never.
+   Çeviri: Ya şimdi ya da asla.
+--------------------------------------------------
+32. out [edat] (B1)
+   Anlam: çıkış, dışarıda, dışarı
+   Örnek: I can't go out.
+   Çeviri: Ben dışarı çıkamam.
+--------------------------------------------------
+33. outside [edat] (B2)
+   Anlam: dıştan, dışarı, dışarısı
+   Örnek: I didn't go outside.
+   Çeviri: Ben dışarıya gitmedim.
+--------------------------------------------------
+34. over [edat] (B1)
+   Anlam: bitmiş, üzerine, üstüne
+   Örnek: I'm not over it.
+   Çeviri: Bunu atlatmış değilim.
+--------------------------------------------------
+35. per [edat] (B1)
+   Anlam: her, beher, rücuen
+   Örnek: What is the rate per day?
+   Çeviri: Günlük oran nedir?
+--------------------------------------------------
+36. providing [bağlaç] (B2)
+   Anlam: temin etme, sağlama, eğer
+   Örnek: We're providing an affordable service.
+   Çeviri: Uygun fiyatlı bir hizmet sağlıyoruz.
+--------------------------------------------------
+37. so [bağlaç] (B1)
+   Anlam: bu yüzden, öyle, böyle
+   Örnek: I'm not so old.
+   Çeviri: O kadar da yaşlı değilim.
+--------------------------------------------------
+38. than [edat] (B1)
+   Anlam: hariç, -den, -mektense
+   Örnek: I'm older than Tom.
+   Çeviri: Ben Tom'dan daha yaşlıyım.
+--------------------------------------------------
+39. times [edat] (B1)
+   Anlam: kere, defa, kez
+   Örnek: I did it many times.
+   Çeviri: Onu defalarca yaptım.
+--------------------------------------------------
+40. to [edat] (A1)
+   Anlam: karşı, -mek/-mak, kadar
+   Örnek: It's up to me.
+   Çeviri: Bu bana bağlı.
+--------------------------------------------------
+41. under [edat] (B1)
+   Anlam: altında, alt, az
+   Örnek: It's under the bed.
+   Çeviri: Yatağın altında.
+--------------------------------------------------
+42. underneath [edat] (B2)
+   Anlam: altında, bir şeyin alt bölümü, bir şeyin alt kısmı
+   Örnek: The mouse ran underneath the bed.
+   Çeviri: Fare yatağın altına kaçtı.
+--------------------------------------------------
+43. up [edat] (B1)
+   Anlam: yukarı, yükseltmek, artırmak
+   Örnek: It's up to me.
+   Çeviri: Bu bana bağlı.
+--------------------------------------------------
+44. via [edat] (B1)
+   Anlam: vasıtasıyla, aracılığıyla, kanalıyla
+   Örnek: She went to Europe via America.
+   Çeviri: O Amerika üzerinden Avrupa'ya gitti.
+--------------------------------------------------
+45. when [bağlaç] (B1)
+   Anlam: ne zaman, zaman, ne vakit
+   Örnek: I come when I can.
+   Çeviri: Gelebildiğim zaman gelirim.
+--------------------------------------------------
+46. which [bağlaç] (B1)
+   Anlam: hangi, kaçıncı, hangisini
+   Örnek: Which way do I go?
+   Çeviri: Hangi yoldan giderim?
+--------------------------------------------------
+47. who [bağlaç] (B1)
+   Anlam: kim, kimi, kime
+   Örnek: I am who I am.
+   Çeviri: Ben neysem oyum.
+--------------------------------------------------
+48. with [edat] (A1)
+   Anlam: ile, -lı, beraberinde
+   Örnek: I'm OK with it.
+   Çeviri: Benim için sorun değil.
+--------------------------------------------------
+49. without [edat] (B2)
+   Anlam: dış, dıştan, dışarıda
+   Örnek: Don't go without me.
+   Çeviri: Bensiz gitme.
+--------------------------------------------------

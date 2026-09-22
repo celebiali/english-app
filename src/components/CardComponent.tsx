@@ -73,6 +73,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
 
   // When word or card index changes, reset input and fetch Tureng details
   useEffect(() => {
+    let isMounted = true;
     setUserInput('');
     setIsChecking(false);
     setIsEvaluated(false);
@@ -82,20 +83,29 @@ export const CardComponent: React.FC<CardComponentProps> = ({
     setEnrichedSentence(null);
     setIsProceeding(false);
 
-    // Fetch Tureng data
-    TurengService.lookupWord(cardWord.word)
-      .then((detail) => {
-        setTurengDetail(detail);
-        const validEn = getValidExampleSentence(detail?.sampleSentenceEn);
-        if (validEn) {
-          const validTr = getValidExampleSentence(detail?.sampleSentenceTr) || '';
-          setEnrichedSentence({ en: validEn, tr: validTr });
-          if (cardWord.id) {
-            dbService.updateWordExample(cardWord.id, validEn, validTr).catch(() => {});
+    // Fetch Tureng data safely with mount guard
+    if (cardWord?.word) {
+      TurengService.lookupWord(cardWord.word)
+        .then((detail) => {
+          if (!isMounted) return;
+          setTurengDetail(detail);
+          const validEn = getValidExampleSentence(detail?.sampleSentenceEn);
+          if (validEn) {
+            const validTr = getValidExampleSentence(detail?.sampleSentenceTr) || '';
+            if (isMounted) {
+              setEnrichedSentence({ en: validEn, tr: validTr });
+            }
+            if (cardWord.id) {
+              dbService.updateWordExample(cardWord.id, validEn, validTr).catch(() => {});
+            }
           }
-        }
-      })
-      .finally(() => {});
+        })
+        .catch(() => {});
+    }
+
+    return () => {
+      isMounted = false;
+    };
   }, [cardWord?.id, cardWord?.word, cardIndex]);
 
   // Flipping the card means the user couldn't remember without looking -> Treat as Hatırlayamadım (incorrect)
@@ -174,6 +184,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
   };
 
   const handleSpeak = () => {
+    if (!cardWord?.word) return;
     try {
       if (SpeechModule && typeof SpeechModule.speak === 'function') {
         SpeechModule.stop();
@@ -189,13 +200,25 @@ export const CardComponent: React.FC<CardComponentProps> = ({
     }
   };
 
-  const validDbSentence = getValidExampleSentence(cardWord.example_sentence);
+  const safeSynonyms = React.useMemo(() => {
+    if (!cardWord?.synonyms) return [];
+    if (Array.isArray(cardWord.synonyms)) return cardWord.synonyms;
+    if (typeof cardWord.synonyms === 'string') {
+      try {
+        const parsed = JSON.parse(cardWord.synonyms);
+        if (Array.isArray(parsed)) return parsed;
+      } catch (_) {}
+    }
+    return [];
+  }, [cardWord?.synonyms]);
+
+  const validDbSentence = getValidExampleSentence(cardWord?.example_sentence);
   const effectiveExampleEn =
     validDbSentence ||
     enrichedSentence?.en ||
     getValidExampleSentence(turengDetail?.sampleSentenceEn);
 
-  const validDbTr = getValidExampleSentence(cardWord.example_translation);
+  const validDbTr = getValidExampleSentence(cardWord?.example_translation);
   const effectiveExampleTr =
     (validDbSentence ? validDbTr : undefined) ||
     enrichedSentence?.tr ||
@@ -359,9 +382,9 @@ export const CardComponent: React.FC<CardComponentProps> = ({
               )}
 
               {/* Synonyms */}
-              {cardWord.synonyms && cardWord.synonyms.length > 0 && (
+              {safeSynonyms.length > 0 && (
                 <View style={styles.fbSynRow}>
-                  {cardWord.synonyms.map((syn, idx) => (
+                  {safeSynonyms.map((syn, idx) => (
                     <View key={idx} style={[styles.fbSyn, { backgroundColor: colors.subtleBackground }]}>
                       <Text style={[styles.fbSynText, { color: colors.brand }]}>{syn}</Text>
                     </View>
@@ -487,13 +510,13 @@ const styles = StyleSheet.create({
   },
   flashCard: {
     width: '100%',
-    borderRadius: Platform.select({ ios: 22, android: 16 }),
-    borderWidth: 1.5,
+    borderRadius: Platform.select({ ios: 20, android: 14 }),
+    borderWidth: 1,
     overflow: 'hidden',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 12,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
   },
   flashCardCompact: {
     minHeight: 110,
@@ -525,17 +548,17 @@ const styles = StyleSheet.create({
   levelBadge: {
     paddingHorizontal: 10,
     paddingVertical: 4.5,
-    borderRadius: 8,
+    borderRadius: Platform.select({ ios: 8, android: 6 }),
   },
   levelBadgeText: {
-    fontSize: 11.5,
-    fontWeight: '800',
+    fontSize: 11,
+    fontWeight: '700',
     letterSpacing: 0.5,
   },
   cardTypeBadge: {
     paddingHorizontal: 9,
     paddingVertical: 4,
-    borderRadius: 8,
+    borderRadius: Platform.select({ ios: 8, android: 6 }),
   },
   cardTypeBadgeText: {
     fontSize: 11,
@@ -557,16 +580,16 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   audioBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
   },
   flashWord: {
-    fontSize: 30,
-    fontWeight: '900',
-    letterSpacing: -0.5,
+    fontSize: 28,
+    fontWeight: '800',
+    letterSpacing: -0.4,
     textAlign: 'center',
   },
   flashWordCompact: {
@@ -574,8 +597,9 @@ const styles = StyleSheet.create({
     lineHeight: 26,
   },
   flashPhon: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 13.5,
+    fontWeight: '500',
+    fontStyle: 'italic',
   },
   bottomHintBox: {
     alignItems: 'center',
@@ -613,12 +637,12 @@ const styles = StyleSheet.create({
   },
   fbWordTitle: {
     fontSize: 18,
-    fontWeight: '900',
+    fontWeight: '800',
   },
   fbTr: {
-    fontSize: 22,
-    fontWeight: '900',
-    lineHeight: 28,
+    fontSize: 20,
+    fontWeight: '700',
+    lineHeight: 26,
     marginVertical: 4,
   },
   categoriesWrap: {
@@ -681,12 +705,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    borderWidth: 1.5,
-    borderRadius: 18,
+    borderWidth: 1,
+    borderRadius: Platform.select({ ios: 16, android: 12 }),
     padding: 6,
     paddingLeft: 16,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
     shadowRadius: 8,
     elevation: 2,
   },
@@ -699,17 +723,17 @@ const styles = StyleSheet.create({
   submitBtn: {
     paddingHorizontal: 18,
     paddingVertical: 12,
-    borderRadius: 14,
-    minWidth: 100,
+    borderRadius: Platform.select({ ios: 12, android: 8 }),
+    minWidth: 96,
     alignItems: 'center',
     justifyContent: 'center',
   },
   submitBtnDisabled: {
-    opacity: 0.4,
+    opacity: 0.45,
   },
   submitBtnText: {
     fontSize: 14,
-    fontWeight: '800',
+    fontWeight: '700',
   },
   giveUpBtn: {
     flexDirection: 'row',

@@ -1,0 +1,622 @@
+=== KÜTÜPHANE: SIFATLAR & ZARFLAR > C1 İLERI NITELEME SIFATLARI (124 KELİME) ===
+
+1. accessible [sıfat] (C1)
+   Anlam: ulaşılabilir, erişilebilir, kolaylıkla görüşülebilen
+   Örnek: The town is accessible by rail.
+   Çeviri: Şehre demir yolu ile erişilebilir.
+--------------------------------------------------
+2. accomplished [sıfat] (C1)
+   Anlam: başarıyla sonlandırılmış, başarılmış, yetenekli
+   Örnek: We've accomplished a lot.
+   Çeviri: Çok şey başardık.
+--------------------------------------------------
+3. additional [sıfat] (C1)
+   Anlam: fazladan, ek, ilave
+   Örnek: There is an additional problem.
+   Çeviri: Ek bir sorun var.
+--------------------------------------------------
+4. adjustable [sıfat] (C1)
+   Anlam: ayarlı, ayarlanır, ayarlanabilir
+   Örnek: The empirical results of the study were remarkably adjustable.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece ayarlı olduğu görüldü.
+--------------------------------------------------
+5. adolescent [sıfat] (C1)
+   Anlam: ergen, gençlik, genç
+   Örnek: The audience were mostly adolescents.
+   Çeviri: Seyirciler genellikle gençti.
+--------------------------------------------------
+6. affordable [sıfat] (C1)
+   Anlam: bütçeye uygun, ekonomik, düşük maliyetli
+   Örnek: We want to make it affordable.
+   Çeviri: Bunu satın alınabilir yapmak istiyoruz.
+--------------------------------------------------
+7. alternative [sıfat] (C1)
+   Anlam: alternatif, çare, şık
+   Örnek: We've got no alternative.
+   Çeviri: Hiç alternatifimiz yok.
+--------------------------------------------------
+8. attractive [sıfat] (C1)
+   Anlam: cazibeli, cazip, çekici
+   Örnek: Do you find me attractive?
+   Çeviri: Beni çekici buluyor musun?
+--------------------------------------------------
+9. behavioral [sıfat] (C1)
+   Anlam: davranışla ilgili, davranış, davranışsal
+   Örnek: The empirical results of the study were remarkably behavioral.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece davranışla ilgili olduğu görüldü.
+--------------------------------------------------
+10. beneficial [sıfat] (C1)
+   Anlam: yararlı, faydalı, kazançlı
+   Örnek: That would be very beneficial.
+   Çeviri: Bu çok yararlı olacaktı.
+--------------------------------------------------
+11. bewildered [sıfat] (C1)
+   Anlam: şaşkın, afallamış, sersemlemiş
+   Örnek: The empirical results of the study were remarkably bewildered.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece şaşkın olduğu görüldü.
+--------------------------------------------------
+12. biological [sıfat] (C1)
+   Anlam: yaşambilimsel, dirimbilimsel, biyolojik
+   Örnek: He's my biological father.
+   Çeviri: O benim biyolojik babam.
+--------------------------------------------------
+13. calibrated [sıfat] (C1)
+   Anlam: taksimatlı, ayarlanmış, ayarlı
+   Örnek: This instrument needs to be calibrated.
+   Çeviri: Bu alet ayarlanmalı.
+--------------------------------------------------
+14. cardiovascular [sıfat] (C1)
+   Anlam: kardiyovasküler, kalp ve damarlara ilişkin
+   Örnek: Kickboxing is great cardiovascular exercise.
+   Çeviri: Kick boks yapmak harika bir kardiyo egzersizidir.
+--------------------------------------------------
+15. challenging [sıfat] (C1)
+   Anlam: dürtücü, zorlu, meydan okuma
+   Örnek: Are you challenging my authority?
+   Çeviri: Benim otoriteme karşı mı çıkıyorsun?
+--------------------------------------------------
+16. collaborative [sıfat] (C1)
+   Anlam: işbirlikçi, ortak çalışmaya dayalı
+   Örnek: It was a collaborative effort.
+   Çeviri: Ortak çalışmaya dayalı bir çabaydı.
+--------------------------------------------------
+17. collective [sıfat] (C1)
+   Anlam: toplu, müşterek, kolektif
+   Örnek: Collective interests must be protected.
+   Çeviri: Toplu çıkarlar korunmalıdır.
+--------------------------------------------------
+18. comfortable [sıfat] (C1)
+   Anlam: rahat, rahatlatıcı, teselli edici
+   Örnek: I'm comfortable with it.
+   Çeviri: Ben onunla rahatım.
+--------------------------------------------------
+19. complicated [sıfat] (C1)
+   Anlam: çetrefil, komplike, çetrefilli
+   Örnek: It's a complicated story.
+   Çeviri: Bu anlaşılması zor bir hikaye.
+--------------------------------------------------
+20. comprehensive [sıfat] (C1)
+   Anlam: etraflı, kapsamlı, tam veya her şey dahil
+   Örnek: This is a comprehensive approach.
+   Çeviri: Bu kapsamlı bir yaklaşımdır.
+--------------------------------------------------
+21. computational [sıfat] (C1)
+   Anlam: sayısal, hesaba dayalı, bilgisayımsal
+   Örnek: The empirical results of the study were remarkably computational.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece sayısal olduğu görüldü.
+--------------------------------------------------
+22. considerable [sıfat] (C1)
+   Anlam: hatırı sayılır derecede, kaydadeğer, hatırı sayılır
+   Örnek: He has a considerable income.
+   Çeviri: O önemli bir gelire sahiptir.
+--------------------------------------------------
+23. considered [sıfat] (C1)
+   Anlam: dikkate alınan, saygıdeğer, dikkate alınmış
+   Örnek: I hadn't considered that.
+   Çeviri: Ben onu dikkate almadım.
+--------------------------------------------------
+24. consistent [sıfat] (C1)
+   Anlam: istikrarlı, tutarlı, bağıntılı
+   Örnek: We're just being consistent.
+   Çeviri: Her şeye bakıyoruz.
+--------------------------------------------------
+25. contagious [sıfat] (C1)
+   Anlam: bulaşıcı, geçici, salgın
+   Örnek: Tom's smile was contagious.
+   Çeviri: Tom'un gülümsemesi bulaşıcıydı.
+--------------------------------------------------
+26. contemporary [sıfat] (C1)
+   Anlam: modern, çağdaş, günümüze ait
+   Örnek: Scott was a contemporary of Byron.
+   Çeviri: Scott, çağdaş bir Byron'du.
+--------------------------------------------------
+27. convenient [sıfat] (C1)
+   Anlam: müsait, münasip, uygun
+   Örnek: It's much more convenient.
+   Çeviri: Bu çok daha uygun.
+--------------------------------------------------
+28. conventional [sıfat] (C1)
+   Anlam: geleneksel, itibari, basmakalıp
+   Örnek: Why are conventional language classes so boring?
+   Çeviri: Neden geleneksel dil dersleri bu kadar sıkıcı?
+--------------------------------------------------
+29. convincing [sıfat] (C1)
+   Anlam: inandırıcı, ikna edici, ikna
+   Örnek: That wasn't very convincing.
+   Çeviri: Bu çok inandırıcı değildi.
+--------------------------------------------------
+30. cooperative [sıfat] (C1)
+   Anlam: kooperatif, işbirliği, yardımcı
+   Örnek: I tried to be cooperative.
+   Çeviri: Yardımcı olmaya çalıştım.
+--------------------------------------------------
+31. demonstrated [sıfat] (C1)
+   Anlam: ispat edilmiş, ispat edilen
+   Örnek: The salesman demonstrated how to use it.
+   Çeviri: Satıcı onun nasıl kullanılacağını gösterdi.
+--------------------------------------------------
+32. dependable [sıfat] (C1)
+   Anlam: güvenilir, güvenli, güvenilebilir
+   Örnek: I'm pretty sure Tom's dependable.
+   Çeviri: Tom'un güvenilebilir olduğuna oldukça eminim.
+--------------------------------------------------
+33. determined [sıfat] (C1) | Eş Anlam: persistent
+   Anlam: azimli, belirlenmiş, kararlı
+   Örnek: She's a determined woman.
+   Çeviri: O, kararlı bir kadın.
+--------------------------------------------------
+34. detrimental [sıfat] (C1)
+   Anlam: zararlı, muzır, zarar veren
+   Örnek: Tom's stressful job is having a detrimental effect on his health.
+   Çeviri: Tom'un stresli işi sağlığı üzerinde zararlı bir etkiye sahiptir.
+--------------------------------------------------
+35. diagnostic [sıfat] (C1)
+   Anlam: teşhis, tanısal, kontrol
+   Örnek: The empirical results of the study were remarkably diagnostic.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece teşhis olduğu görüldü.
+--------------------------------------------------
+36. disappointed [sıfat] (C1)
+   Anlam: hayal kırıklığına uğramış, hüsrana uğramış, hayal kırıklığı uğramış
+   Örnek: I'm disappointed in you.
+   Çeviri: Senin hayal kırıklığına uğrattım.
+--------------------------------------------------
+37. disgusting [sıfat] (C1)
+   Anlam: tiksindirici, iğrenç, çirkef
+   Örnek: I think it's disgusting.
+   Çeviri: Bunun iğrenç olduğunu düşünüyorum.
+--------------------------------------------------
+38. ecological [sıfat] (C1)
+   Anlam: çevre, çevrebilimsel, ekolojik
+   Örnek: The world's tropical rainforests are critical links in the ecological chain of life on the planet.
+   Çeviri: Dünyadaki tropikal yağmur ormanları, gezegende yaşamın ekolojik zincirine kritik bağlantılıdır.
+--------------------------------------------------
+39. educational [sıfat] (C1)
+   Anlam: eğitsel, eğitimsel, eğitici
+   Örnek: I found the field trip very educational.
+   Çeviri: Saha gezisini çok eğitici buldum.
+--------------------------------------------------
+40. endangered [sıfat] (C1)
+   Anlam: tehlikeye atılmış, tehlikede, nesli tükenmekte olan
+   Örnek: It is an endangered species.
+   Çeviri: Nesli tükenmekte olan bir türdür.
+--------------------------------------------------
+41. entertained [sıfat] (C1)
+   Anlam: ağırlanmış, eğlendirilmiş, meşgul edilmiş
+   Örnek: They entertained us at dinner.
+   Çeviri: Bizi akşam yemeğinde ağırladılar.
+--------------------------------------------------
+42. environmental [sıfat] (C1)
+   Anlam: çevre, çevresel, muhite ait
+   Örnek: This is a major environmental disaster.
+   Çeviri: Bu büyük bir çevre felaketi.
+--------------------------------------------------
+43. exceptional [sıfat] (C1)
+   Anlam: fevkalade, müstesna, istisnai
+   Örnek: I had an exceptional year.
+   Çeviri: Olağanüstü bir yıl geçirdim.
+--------------------------------------------------
+44. experienced [sıfat] (C1)
+   Anlam: tecrübeli, deneyimli, deneyim edilmiş
+   Örnek: I'm not experienced enough.
+   Çeviri: Yeterince deneyimli değilim.
+--------------------------------------------------
+45. experimental [sıfat] (C1)
+   Anlam: deneysel, tecrübi, deneyde kullanılan
+   Örnek: The empirical results of the study were remarkably experimental.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece deneysel olduğu görüldü.
+--------------------------------------------------
+46. extraordinary [sıfat] (C1)
+   Anlam: fevkalade, olağandışı, olağanüstü
+   Örnek: It was an extraordinary year.
+   Çeviri: Bu olağanüstü bir yıldı.
+--------------------------------------------------
+47. frightened [sıfat] (C1)
+   Anlam: ürkmüş, korkan, korkmuş
+   Örnek: Now don't be frightened.
+   Çeviri: Artık korkma.
+--------------------------------------------------
+48. frightening [sıfat] (C1)
+   Anlam: korkutucu, korkulu, muhatara
+   Örnek: This is a frightening place.
+   Çeviri: Burası korkutucu bir mekan.
+--------------------------------------------------
+49. frustrated [sıfat] (C1)
+   Anlam: hakkı yenmiş, boşa çıkmış, boşuna didinmiş
+   Örnek: I know you're frustrated.
+   Çeviri: Sinirli olduğunu biliyorum.
+--------------------------------------------------
+50. functional [sıfat] (C1)
+   Anlam: pratik, görevci, fonksiyonel
+   Örnek: I think everything is functional.
+   Çeviri: Sanırım her şey işlevsel.
+--------------------------------------------------
+51. functioning [sıfat] (C1)
+   Anlam: çalıştırma, işleyiş, faal
+   Örnek: The machine has stopped functioning.
+   Çeviri: Makine çalışmayı durdurdu.
+--------------------------------------------------
+52. fundamental [sıfat] (C1)
+   Anlam: esas, asli, temel ilke
+   Örnek: That was a fundamental error.
+   Çeviri: O temel bir hataydı.
+--------------------------------------------------
+53. geological [sıfat] (C1)
+   Anlam: yerbilimsel, jeolojik, yerbilimine değin
+   Örnek: The empirical results of the study were remarkably geological.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece yerbilimsel olduğu görüldü.
+--------------------------------------------------
+54. geopolitical [sıfat] (C1)
+   Anlam: jeopolitik
+   Örnek: The empirical results of the study were remarkably geopolitical.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece jeopolitik olduğu görüldü.
+--------------------------------------------------
+55. historical [sıfat] (C1)
+   Anlam: tarihi, tarihle ilgili, tarihsel
+   Örnek: Do you like historical novels?
+   Çeviri: Tarihsel romanlardan hoşlanıyor musun?
+--------------------------------------------------
+56. horrifying [sıfat] (C1)
+   Anlam: korkutma, korkunç, ürkünç
+   Örnek: That's a horrifying thought.
+   Çeviri: O korkunç bir düşünce.
+--------------------------------------------------
+57. implemented [sıfat] (C1)
+   Anlam: uygulanmış, yerine getirilmiş, azı dişli
+   Örnek: The plan was never implemented.
+   Çeviri: Plan hiç uygulanmadı.
+--------------------------------------------------
+58. impressive [sıfat] (C1) | Eş Anlam: dazzling
+   Anlam: etkileyici, duyguları etkileyen, çarpıcı
+   Örnek: Tom's resume's impressive.
+   Çeviri: Tom'un özgeçmişi etkileyici.
+--------------------------------------------------
+59. inconvenient [sıfat] (C1)
+   Anlam: zahmetli, uygunsuz, zor
+   Örnek: I'm sure it's inconvenient.
+   Çeviri: Bunun sakıncalı olduğundan eminim.
+--------------------------------------------------
+60. independent [sıfat] (C1)
+   Anlam: bağımsız, müstakil, özgür
+   Örnek: He's an independent thinker.
+   Çeviri: O bağımsız bir düşünür.
+--------------------------------------------------
+61. indicative [sıfat] (C1)
+   Anlam: belirten, gösteren, haber kipi
+   Örnek: The empirical results of the study were remarkably indicative.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece belirten olduğu görüldü.
+--------------------------------------------------
+62. indispensable [sıfat] (C1)
+   Anlam: zaruri, zorunlu, vazgeçilmez
+   Örnek: None of us are indispensable.
+   Çeviri: Hiçbirimiz vazgeçilmez değiliz.
+--------------------------------------------------
+63. inefficient [sıfat] (C1)
+   Anlam: liyakatsiz, ehliyetsiz, zaman ve enerjiyi ekonomik bir şekilde kullanmayan
+   Örnek: The empirical results of the study were remarkably inefficient.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece liyakatsiz olduğu görüldü.
+--------------------------------------------------
+64. infectious [sıfat] (C1)
+   Anlam: bulaşıcı, başkalarına kolay geçen, intani
+   Örnek: Mumps is an infectious disease.
+   Çeviri: Kabakulak bulaşıcı bir hastalıktır.
+--------------------------------------------------
+65. inflammatory [sıfat] (C1)
+   Anlam: iltihaplı, kışkırtıcı, yangılı
+   Örnek: The empirical results of the study were remarkably inflammatory.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece iltihaplı olduğu görüldü.
+--------------------------------------------------
+66. influential [sıfat] (C1)
+   Anlam: etkili, etkileyici, ağababa
+   Örnek: We're not that influential.
+   Çeviri: O kadar etkili değiliz.
+--------------------------------------------------
+67. innovative [sıfat] (C1)
+   Anlam: yaratıcı, yenilikçi, yeniliklere açık
+   Örnek: I try to be innovative.
+   Çeviri: Yenilikçi olmaya çalışıyorum.
+--------------------------------------------------
+68. insufficient [sıfat] (C1)
+   Anlam: kıt, yetersiz, yeterli değil
+   Örnek: His knowledge of geography is insufficient.
+   Çeviri: Onun coğrafya bilgisi yetersizdir.
+--------------------------------------------------
+69. international [sıfat] (C1)
+   Anlam: devletlerarası, enternasyonal, milletlerarası
+   Örnek: The drug problem is international.
+   Çeviri: Uyuşturucu problemi uluslararasıdır.
+--------------------------------------------------
+70. investigated [sıfat] (C1)
+   Anlam: soruşturulmuş, incelenmiş, araştırılmış
+   Örnek: We investigated the matter from all angles.
+   Çeviri: Konuyu tüm açılardan araştırdık.
+--------------------------------------------------
+71. irritating [sıfat] (C1)
+   Anlam: rahatsız etme, sinirlendirme, sinir
+   Örnek: Sometimes you're so irritating.
+   Çeviri: Sen bazen çok rahatsız edicisin.
+--------------------------------------------------
+72. meaningless [sıfat] (C1)
+   Anlam: manasız, anlamsız, ipsiz sapsız
+   Örnek: Life is meaningless without you.
+   Çeviri: Sensiz hayat anlamsız.
+--------------------------------------------------
+73. modernized [sıfat] (C1)
+   Anlam: modernize, modernleştirilmiş
+   Örnek: The empirical results of the study were remarkably modernized.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece modernize olduğu görüldü.
+--------------------------------------------------
+74. monotonous [sıfat] (C1)
+   Anlam: monoton, monotonluk, yavan
+   Örnek: She says her life is monotonous.
+   Çeviri: Yaşantısının monoton olduğunu söylüyor.
+--------------------------------------------------
+75. motionless [sıfat] (C1)
+   Anlam: hareketsiz, duruk, devinimsiz
+   Örnek: A cat jumped onto the chair and lay motionless.
+   Çeviri: Bir kedi sandalyeye atladı ve hareketsiz yatıyor.
+--------------------------------------------------
+76. multicultural [sıfat] (C1)
+   Anlam: multikültürel, çok kültürlü
+   Örnek: The empirical results of the study were remarkably multicultural.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece multikültürel olduğu görüldü.
+--------------------------------------------------
+77. multifunctional [sıfat] (C1)
+   Anlam: çok fonksiyonlu cihaz, çok fonksiyonlu yazıcı, multifonksiyonel peptid
+   Örnek: The empirical results of the study were remarkably multifunctional.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece çok fonksiyonlu cihaz olduğu görüldü.
+--------------------------------------------------
+78. mysterious [sıfat] (C1)
+   Anlam: esrarengiz, gizemli, anlaşılmaz
+   Örnek: Tom's death was mysterious.
+   Çeviri: Tom'un ölümü gizemliydi.
+--------------------------------------------------
+79. nourishing [sıfat] (C1)
+   Anlam: besi, besleyici, besin değeri yüksek
+   Örnek: This food's not nourishing enough.
+   Çeviri: Bu yiyecek yeterince besleyici değil.
+--------------------------------------------------
+80. nutritional [sıfat] (C1)
+   Anlam: beslenme ile ilgili, nutrisyonel, besin
+   Örnek: Sugary drinks have no nutritional value and contribute significantly to weight gain.
+   Çeviri: Şekerli içeceklerin hiçbir besin değeri yoktur ve kilo almaya önemli ölçüde etki ederler.
+--------------------------------------------------
+81. obligatory [sıfat] (C1)
+   Anlam: mecburi, zorunlu, vacip
+   Örnek: The empirical results of the study were remarkably obligatory.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece mecburi olduğu görüldü.
+--------------------------------------------------
+82. outstanding [sıfat] (C1)
+   Anlam: üstün, göze çarpan, seçkin
+   Örnek: She is an outstanding poet.
+   Çeviri: O seçkin bir şairdir.
+--------------------------------------------------
+83. particular [sıfat] (C1)
+   Anlam: özel, belirli, nokta
+   Örnek: She's particular about food.
+   Çeviri: Yemek konusunda çok titizdir.
+--------------------------------------------------
+84. peripheral [sıfat] (C1)
+   Anlam: çevresel, periferik, çevre
+   Örnek: The empirical results of the study were remarkably peripheral.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece çevresel olduğu görüldü.
+--------------------------------------------------
+85. persistent [sıfat] (C1) | Eş Anlam: constant, relentless, determined, tenacious
+   Anlam: ısrar eden, ısrarlı, ısrarcı
+   Örnek: I can be very persistent.
+   Çeviri: Çok ısrarcı olabilirim.
+--------------------------------------------------
+86. perspective [sıfat] (C1)
+   Anlam: bakış açısı, perspektif, derinlemesine inceleme yeteneği
+   Örnek: Let's keep it in perspective.
+   Çeviri: Ona bir bütün olarak bakalım.
+--------------------------------------------------
+87. physiological [sıfat] (C1)
+   Anlam: işlevbilimsel, diriksel, fizyolojik
+   Örnek: The empirical results of the study were remarkably physiological.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece işlevbilimsel olduğu görüldü.
+--------------------------------------------------
+88. preventing [sıfat] (C1)
+   Anlam: önleyen, engelleyen
+   Örnek: Nothing's preventing you from leaving.
+   Çeviri: Hiçbir şey sizin gitmenizi engellemiyor.
+--------------------------------------------------
+89. preventive [sıfat] (C1)
+   Anlam: önleyici, önleyici ilaç, önlem
+   Örnek: Preventive measures are much more effective than the actual treatment.
+   Çeviri: Önleyici tedbirler gerçek tedaviden çok daha etkilidir.
+--------------------------------------------------
+90. productive [sıfat] (C1)
+   Anlam: üretken, verimli, kazançlı
+   Örnek: I hope you had a productive day.
+   Çeviri: Umarım üretken bir gün geçirdiniz.
+--------------------------------------------------
+91. progressive [sıfat] (C1)
+   Anlam: ileri düşünceli kimse, müterakki, ilerleyici
+   Örnek: His policies were too progressive.
+   Çeviri: Onun politikaları çok yenilikçi idi.
+--------------------------------------------------
+92. protective [sıfat] (C1)
+   Anlam: koruyucu, sahip çıkan, koruma
+   Örnek: He's very protective of him.
+   Çeviri: O kendine karşı çok koruyucu.
+--------------------------------------------------
+93. psychological [sıfat] (C1)
+   Anlam: ruhbilimsel, ruhi, tinbilimsel
+   Örnek: The doctor thinks Tom's problem is psychological.
+   Çeviri: Doktor Tom'un sorununun psikolojik olduğunu düşünüyor.
+--------------------------------------------------
+94. purchasable [sıfat] (C1)
+   Anlam: alınabilir, satın alınabilir, satın alınır
+   Örnek: The empirical results of the study were remarkably purchasable.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece alınabilir olduğu görüldü.
+--------------------------------------------------
+95. recommended [sıfat] (C1)
+   Anlam: tavsiye edilmiş, tavsiye edilen, önerilen
+   Örnek: I'll do as you recommended.
+   Çeviri: Senin tavsiye ettiğin gibi yapacağım.
+--------------------------------------------------
+96. remarkable [sıfat] (C1)
+   Anlam: dikkat çekici, göze çarpan, dikkate değer
+   Örnek: You're the remarkable one.
+   Çeviri: Sen dikkat çekici birisin.
+--------------------------------------------------
+97. repetitious [sıfat] (C1)
+   Anlam: tekrarlayan, tekrarlayıp duran, tekrarlarla dolu
+   Örnek: The empirical results of the study were remarkably repetitious.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece tekrarlayan olduğu görüldü.
+--------------------------------------------------
+98. repetitive [sıfat] (C1)
+   Anlam: tekrarlayıp duran, tekrarlı, tekrarlanan
+   Örnek: We must try not to be repetitive.
+   Çeviri: Tekrarcı olmamaya çalışmalıyız.
+--------------------------------------------------
+99. responsible [sıfat] (C1)
+   Anlam: mesul, sorumlu, yükümlü
+   Örnek: I'm responsible for Tom.
+   Çeviri: Tom'dan sorumluyum.
+--------------------------------------------------
+100. restricted [sıfat] (C1)
+   Anlam: sınırlı, kısıtlı, gizli
+   Örnek: This is a restricted area.
+   Çeviri: Bu yasak bir alandır.
+--------------------------------------------------
+101. retributive [sıfat] (C1)
+   Anlam: intikamcı, kinci, cezalandırıcı
+   Örnek: The empirical results of the study were remarkably retributive.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece intikamcı olduğu görüldü.
+--------------------------------------------------
+102. scientific [sıfat] (C1)
+   Anlam: ilmi, bilimsel, fenni
+   Örnek: Is that a scientific fact?
+   Çeviri: O bilimsel bir gerçek mi?
+--------------------------------------------------
+103. sentimental [sıfat] (C1)
+   Anlam: duygusal, içli, hassas
+   Örnek: Don't be so sentimental.
+   Çeviri: Bu kadar duygusal olmayın.
+--------------------------------------------------
+104. significant [sıfat] (C1)
+   Anlam: dikkate değer, kayda değer, belirli
+   Örnek: It was a significant moment.
+   Çeviri: O önemli bir andı.
+--------------------------------------------------
+105. substantial [sıfat] (C1)
+   Anlam: varlıklı, önemli, azımsanmayacak
+   Örnek: The money involved is substantial.
+   Çeviri: İlgili para önemli.
+--------------------------------------------------
+106. successful [sıfat] (C1)
+   Anlam: başarılı, başarıya ulaşan şey, muvaffak
+   Örnek: I want to be successful.
+   Çeviri: Ben başarılı olmak istiyorum.
+--------------------------------------------------
+107. sufficient [sıfat] (C1)
+   Anlam: kafi, yeterli, elverişli
+   Örnek: I had to be self-sufficient.
+   Çeviri: Kendi kendime yeterli olmak zorundaydım.
+--------------------------------------------------
+108. surprising [sıfat] (C1)
+   Anlam: şaşırtıcı, şaşılası, hayret verici
+   Örnek: It was a little surprising.
+   Çeviri: Biraz şaşırtıcıydı.
+--------------------------------------------------
+109. surrounding [sıfat] (C1)
+   Anlam: çevre, sarma, kuşatma
+   Örnek: The surrounding area was very quiet.
+   Çeviri: Etraf çok sakindi.
+--------------------------------------------------
+110. susceptible [sıfat] (C1) | Eş Anlam: vulnerable
+   Anlam: duyarlı, duygulu, duygularına kolaylıkla kapılan
+   Örnek: She was susceptible to colds.
+   Çeviri: O, soğuk algınlığına duyarlıydı.
+--------------------------------------------------
+111. territorial [sıfat] (C1)
+   Anlam: gönüllü asker, kara, belirli bir bölgeye ait
+   Örnek: The empirical results of the study were remarkably territorial.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece gönüllü asker olduğu görüldü.
+--------------------------------------------------
+112. traditional [sıfat] (C1)
+   Anlam: geleneksel, ananevi, göreneksel
+   Örnek: Sing me a traditional song.
+   Çeviri: Bana geleneksel bir şarkı söyle.
+--------------------------------------------------
+113. transforming [sıfat] (C1)
+   Anlam: dönüştürücü, dönüşmekte olan, dönüşen
+   Örnek: The empirical results of the study were remarkably transforming.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece dönüştürücü olduğu görüldü.
+--------------------------------------------------
+114. transnational [sıfat] (C1)
+   Anlam: uluslaraşırı, transnasyonal, uluslararası
+   Örnek: The empirical results of the study were remarkably transnational.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece uluslaraşırı olduğu görüldü.
+--------------------------------------------------
+115. trustworthy [sıfat] (C1)
+   Anlam: güvenilir, harbi, sağlam
+   Örnek: I believe that he's trustworthy.
+   Çeviri: Onun güvenilir olduğuna inanıyorum.
+--------------------------------------------------
+116. undergoing [sıfat] (C1)
+   Anlam: süregelen, süren
+   Örnek: The website was undergoing maintenance.
+   Çeviri: Web sitesi bakım geçiriyor.
+--------------------------------------------------
+117. unexpected [sıfat] (C1)
+   Anlam: beklenmedik, beklenmeyen, ummadık
+   Örnek: It's just so unexpected.
+   Çeviri: Bu sadece çok beklenmedik.
+--------------------------------------------------
+118. unfavorable [sıfat] (C1)
+   Anlam: elverişsiz, olumsuz, ters
+   Örnek: The empirical results of the study were remarkably unfavorable.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece elverişsiz olduğu görüldü.
+--------------------------------------------------
+119. unfinished [sıfat] (C1)
+   Anlam: işlenmemiş, yarım kalmış, yarım
+   Örnek: We had some unfinished business.
+   Çeviri: Biraz bitmemiş işimiz vardı.
+--------------------------------------------------
+120. unparallel [sıfat] (C1)
+   Anlam: eğri, paralel olmayan
+   Örnek: The empirical results of the study were remarkably unparallel.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece eğri olduğu görüldü.
+--------------------------------------------------
+121. unprecedented [sıfat] (C1)
+   Anlam: eşi benzeri görülmemiş, eşi görülmemiş, yeni
+   Örnek: The price jump was unprecedented.
+   Çeviri: Fiyat sıçramasının eşi benzeri görülmemişti.
+--------------------------------------------------
+122. unsuitable [sıfat] (C1)
+   Anlam: uygunsuz, olmayacak, uymaz
+   Örnek: In my opinion, it's quite unsuitable.
+   Çeviri: Bence, o oldukça uygunsuz.
+--------------------------------------------------
+123. untreatable [sıfat] (C1)
+   Anlam: tedavisiz, tedavisi imkansız, tedavi edilemez
+   Örnek: The empirical results of the study were remarkably untreatable.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece tedavisiz olduğu görüldü.
+--------------------------------------------------
+124. widespread [sıfat] (C1)
+   Anlam: yaygın, alabildiğine açılmış, geniş alana yayılmış
+   Örnek: The decision caused widespread anger.
+   Çeviri: Karar yaygın öfkeye neden oldu.
+--------------------------------------------------

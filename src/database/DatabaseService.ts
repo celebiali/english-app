@@ -27,6 +27,7 @@ import {
 } from '../types';
 import { YdsQuestionBankService } from '../services/YdsQuestionBank';
 import { DataParserService } from '../services/DataParserService';
+import { KUTUPHANE_THEMATIC_FOLDERS } from '../services/KutuphaneThematicDataset';
 
 export interface WordWithProgress extends WordItem {
   isStudied: boolean;
@@ -129,6 +130,11 @@ class MemoryDatabase {
         color: '#F97316',
         icon: 'Star',
         is_system: false,
+      });
+
+      // Kütüphane Serisi Tematik Klasörleri
+      KUTUPHANE_THEMATIC_FOLDERS.forEach((f) => {
+        this.folders.set(f.id, f);
       });
     }
   }
@@ -264,7 +270,16 @@ class DatabaseService {
       await this.dbInstance.execAsync(`ALTER TABLE words ADD COLUMN part_of_speech TEXT;`);
     } catch (_) {}
     try {
+      await this.dbInstance.execAsync(`ALTER TABLE words ADD COLUMN folder_name TEXT;`);
+    } catch (_) {}
+    try {
       await this.dbInstance.execAsync(`ALTER TABLE words ADD COLUMN image_url TEXT;`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`CREATE INDEX IF NOT EXISTS idx_words_folder_name ON words(folder_name);`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`CREATE INDEX IF NOT EXISTS idx_words_folder_subcat ON words(folder_name, subcategory);`);
     } catch (_) {}
 
     // Clean up any unstudied dummy rows from user_word_progress
@@ -402,6 +417,16 @@ class DatabaseService {
         category_type: null,
         level_filter: null,
       },
+      ...KUTUPHANE_THEMATIC_FOLDERS.map((kf) => ({
+        id: kf.id,
+        name: kf.name,
+        description: kf.description,
+        color: kf.color,
+        icon: kf.icon,
+        is_system: 1,
+        category_type: kf.category_type || 'VOCABULARY',
+        level_filter: null,
+      })),
     ];
 
     if (!this.isNative) {
@@ -591,8 +616,8 @@ class DatabaseService {
         await this.dbInstance.withTransactionAsync(async () => {
           for (let i = 0; i < initialList.length; i += CHUNK_SIZE) {
             const chunk = initialList.slice(i, i + CHUNK_SIZE);
-            const placeholders = chunk.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?)`).join(', ');
-            const sql = `INSERT INTO words (word, meaning, category, subcategory, level, synonyms, example_sentence, example_translation, etymology_note) VALUES ${placeholders}`;
+            const placeholders = chunk.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).join(', ');
+            const sql = `INSERT INTO words (word, meaning, category, subcategory, folder_name, level, synonyms, example_sentence, example_translation, etymology_note, part_of_speech) VALUES ${placeholders}`;
             const params: any[] = [];
             for (const w of chunk) {
               params.push(
@@ -600,16 +625,51 @@ class DatabaseService {
                 w.meaning,
                 w.category || 'VOCABULARY',
                 w.subcategory || null,
+                w.folder_name || null,
                 w.level || 'B1',
                 w.synonyms ? JSON.stringify(w.synonyms) : null,
                 w.example_sentence || null,
                 w.example_translation || null,
-                w.etymology_note || null
+                w.etymology_note || null,
+                w.part_of_speech || null
               );
             }
             await this.dbInstance.runAsync(sql, params);
           }
         });
+      } else {
+        // If words table was populated in earlier version, ensure Kütüphane words with folder_name are safely added
+        const hasKutuphane: any = await this.dbInstance.getFirstAsync(
+          `SELECT COUNT(*) as cnt FROM words WHERE folder_name IS NOT NULL`
+        );
+        if (!hasKutuphane || hasKutuphane.cnt === 0) {
+          const kutuphaneWords = initialList.filter((w) => Boolean(w.folder_name));
+          const CHUNK_SIZE = 50;
+          await this.dbInstance.withTransactionAsync(async () => {
+            for (let i = 0; i < kutuphaneWords.length; i += CHUNK_SIZE) {
+              const chunk = kutuphaneWords.slice(i, i + CHUNK_SIZE);
+              const placeholders = chunk.map(() => `(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).join(', ');
+              const sql = `INSERT INTO words (word, meaning, category, subcategory, folder_name, level, synonyms, example_sentence, example_translation, etymology_note, part_of_speech) VALUES ${placeholders}`;
+              const params: any[] = [];
+              for (const w of chunk) {
+                params.push(
+                  w.word,
+                  w.meaning,
+                  w.category || 'VOCABULARY',
+                  w.subcategory || null,
+                  w.folder_name || null,
+                  w.level || 'B1',
+                  w.synonyms ? JSON.stringify(w.synonyms) : null,
+                  w.example_sentence || null,
+                  w.example_translation || null,
+                  w.etymology_note || null,
+                  w.part_of_speech || null
+                );
+              }
+              await this.dbInstance.runAsync(sql, params);
+            }
+          });
+        }
       }
     } catch (e) {
       console.warn('Failed to seed words in SQLite:', e);
@@ -1062,7 +1122,11 @@ class DatabaseService {
 
       return Array.from(this.memoryDb.folders.values()).map((f) => {
         let matchingWords: WordWithProgress[] = [];
-        if (f.is_system && f.category_type) {
+        if (f.id.startsWith('kutuphane_')) {
+          matchingWords = allWords.filter(
+            (w) => w.subcategory === f.name || w.folder_name === f.name
+          );
+        } else if (f.is_system && f.category_type) {
           if (f.level_filter) {
             const allowed = f.level_filter.split(',').map((s) => s.trim());
             matchingWords = allWords.filter(
@@ -1113,7 +1177,11 @@ class DatabaseService {
       };
 
       let matchingWords: WordWithProgress[] = [];
-      if (folder.is_system && folder.category_type) {
+      if (folder.id.startsWith('kutuphane_')) {
+        matchingWords = allWords.filter(
+          (w) => w.subcategory === folder.name || w.folder_name === folder.name
+        );
+      } else if (folder.is_system && folder.category_type) {
         if (folder.level_filter) {
           const allowed = folder.level_filter.split(',').map((s) => s.trim());
           matchingWords = allWords.filter(
@@ -1349,22 +1417,17 @@ class DatabaseService {
     }
 
     try {
-      const rows: any[] = await this.dbInstance.getAllAsync(
+      // Step 1: Ultra-fast prefix search using idx_words_word index (0-2ms)
+      // SQLite LIKE is case-insensitive for ASCII and utilizes the B-Tree index when there is no leading wildcard
+      const prefixRows: any[] = await this.dbInstance.getAllAsync(
         `SELECT * FROM words 
-         WHERE LOWER(word) LIKE ? OR LOWER(meaning) LIKE ? 
-         ORDER BY 
-           CASE 
-             WHEN LOWER(word) = ? THEN 1
-             WHEN LOWER(word) LIKE ? THEN 2
-             WHEN LOWER(meaning) LIKE ? THEN 3
-             ELSE 4
-           END,
-           LENGTH(word) ASC
+         WHERE word LIKE ? 
+         ORDER BY LENGTH(word) ASC, word ASC
          LIMIT ?`,
-        [`%${clean}%`, `%${clean}%`, clean, `${clean}%`, `${clean}%`, limit]
+        [`${clean}%`, limit]
       );
 
-      return rows.map((r) => {
+      const mapRow = (r: any): WordItem => {
         let synonyms: string[] = [];
         try {
           if (r.synonyms) synonyms = JSON.parse(r.synonyms);
@@ -1374,7 +1437,38 @@ class DatabaseService {
           is_custom: r.is_custom === 1,
           synonyms,
         };
-      });
+      };
+
+      const results = prefixRows.map(mapRow);
+      const seenIds = new Set(results.map((r) => r.id));
+
+      // Step 2: If we have room and query is >= 2 chars, search inside word or meaning for broader matches
+      if (results.length < limit && clean.length >= 2) {
+        const remaining = limit - results.length;
+        const broaderRows: any[] = await this.dbInstance.getAllAsync(
+          `SELECT * FROM words 
+           WHERE (word LIKE ? OR meaning LIKE ?)
+           ORDER BY 
+             CASE 
+               WHEN word LIKE ? THEN 1 
+               WHEN meaning LIKE ? THEN 2 
+               ELSE 3 
+             END,
+             LENGTH(word) ASC
+           LIMIT ?`,
+          [`%${clean}%`, `%${clean}%`, `${clean}%`, `${clean}%`, remaining * 2]
+        );
+
+        for (const row of broaderRows) {
+          if (!seenIds.has(row.id)) {
+            seenIds.add(row.id);
+            results.push(mapRow(row));
+            if (results.length >= limit) break;
+          }
+        }
+      }
+
+      return results;
     } catch (err) {
       console.warn('searchDictionary error:', err);
       return [];
@@ -1978,6 +2072,9 @@ class DatabaseService {
         if (targetFolder.id === 'custom_default') {
           return !!w.is_custom || (!!w.subcategory && !['VOCABULARY', 'CONNECTOR', 'PREFIX_ROOT', 'IDIOM'].includes(w.subcategory));
         }
+        if (targetFolder.id.startsWith('kutuphane_')) {
+          return w.subcategory === targetFolder.name || w.folder_name === targetFolder.name;
+        }
         if (targetFolder.is_system && targetFolder.category_type) {
           if (targetFolder.level_filter) {
             const allowed = targetFolder.level_filter.split(',').map((s) => s.trim());
@@ -2084,6 +2181,9 @@ class DatabaseService {
     if (targetFolder) {
       if (targetFolder.id === 'custom_default') {
         folderFilterSql = `(w.is_custom = 1 OR (w.subcategory IS NOT NULL AND w.subcategory NOT IN ('VOCABULARY', 'CONNECTOR', 'PREFIX_ROOT', 'IDIOM')))`;
+      } else if (targetFolder.id.startsWith('kutuphane_')) {
+        folderFilterSql = `(w.subcategory = ? OR w.folder_name = ?)`;
+        folderParams = [targetFolder.name, targetFolder.name];
       } else if (targetFolder.is_system === 1 && targetFolder.category_type) {
         if (targetFolder.level_filter) {
           const levels = targetFolder.level_filter.split(',').map((s: string) => s.trim());

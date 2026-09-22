@@ -1,0 +1,3372 @@
+=== KÜTÜPHANE: SIFATLAR & ZARFLAR (TÜMÜ - 674 KELİME) ===
+
+1. able [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: hünerli, kadir, gücü yeten
+   Örnek: I'm able to run.
+   Çeviri: Koşabilirim.
+--------------------------------------------------
+2. abrupt [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: birdenbire oluveren, ani, sert
+   Örnek: Don't make abrupt moves.
+   Çeviri: Ani hareket yapmayın.
+--------------------------------------------------
+3. absolute [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tam, mutlak, salt
+   Örnek: He's an absolute fool.
+   Çeviri: O katışıksız bir aptal.
+--------------------------------------------------
+4. academic [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: akademik, üniversite öğretim görevlisi, öğretim görevlisi
+   Örnek: My interest in politics is strictly academic.
+   Çeviri: Siyasete ilgim tamamen akademik.
+--------------------------------------------------
+5. accessible [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: ulaşılabilir, erişilebilir, kolaylıkla görüşülebilen
+   Örnek: The town is accessible by rail.
+   Çeviri: Şehre demir yolu ile erişilebilir.
+--------------------------------------------------
+6. accomplished [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: başarıyla sonlandırılmış, başarılmış, yetenekli
+   Örnek: We've accomplished a lot.
+   Çeviri: Çok şey başardık.
+--------------------------------------------------
+7. accused [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: zanlı, sanık, suçlu
+   Örnek: He is accused of murder.
+   Çeviri: O cinayetle suçlanıyor.
+--------------------------------------------------
+8. actively [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: bilfiil, aktif olarak, etkin bir şekilde
+   Örnek: The empirical results of the study were remarkably actively.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece bilfiil olduğu görüldü.
+--------------------------------------------------
+9. adaptable [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: uyabilen, uyumlu, yeni koşullara uyarlanabilen
+   Örnek: The empirical results of the study were remarkably adaptable.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece uyabilen olduğu görüldü.
+--------------------------------------------------
+10. adaptive [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: uyarlanır, uyabilen, uyar
+   Örnek: The empirical results of the study were remarkably adaptive.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece uyarlanır olduğu görüldü.
+--------------------------------------------------
+11. added [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: munzam, katma, ekli
+   Örnek: He added to his savings.
+   Çeviri: O, birikimlerini topladı.
+--------------------------------------------------
+12. additional [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: fazladan, ek, ilave
+   Örnek: There is an additional problem.
+   Çeviri: Ek bir sorun var.
+--------------------------------------------------
+13. adjustable [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: ayarlı, ayarlanır, ayarlanabilir
+   Örnek: The empirical results of the study were remarkably adjustable.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece ayarlı olduğu görüldü.
+--------------------------------------------------
+14. admitted [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kabul edilen, kabul edilmiş, herkesçe bilinen
+   Örnek: I admitted I did it.
+   Çeviri: Bunu yaptığımı itiraf ettim.
+--------------------------------------------------
+15. adolescent [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: ergen, gençlik, genç
+   Örnek: The audience were mostly adolescents.
+   Çeviri: Seyirciler genellikle gençti.
+--------------------------------------------------
+16. adult [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yetişkin, er kişi, yetişkin kişi
+   Örnek: I'm an adult now.
+   Çeviri: Artık bir yetişkinim.
+--------------------------------------------------
+17. adverse [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: olumsuz, aksi, ters
+   Örnek: Is there any adverse reaction?
+   Çeviri: Herhangi bir olumsuz reaksiyon var mı?
+--------------------------------------------------
+18. affluent [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ırmak ayağı, bir nehrin ayağı, gürül gürül akan
+   Örnek: The empirical results of the study were remarkably affluent.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece ırmak ayağı olduğu görüldü.
+--------------------------------------------------
+19. affordable [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: bütçeye uygun, ekonomik, düşük maliyetli
+   Örnek: We want to make it affordable.
+   Çeviri: Bunu satın alınabilir yapmak istiyoruz.
+--------------------------------------------------
+20. airless [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: havasız, boğucu, sakin
+   Örnek: The empirical results of the study were remarkably airless.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece havasız olduğu görüldü.
+--------------------------------------------------
+21. all [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tüm, bütün, hepsi
+   Örnek: I'm all for it.
+   Çeviri: Ben tamamen destekliyorum.
+--------------------------------------------------
+22. allied [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bağlaşık, müttefik, birbirine bağlı
+   Örnek: Germany was once allied with Italy.
+   Çeviri: Almanya bir zamanlar İtalya ile müttefikti.
+--------------------------------------------------
+23. allowing [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: izin verilen
+   Örnek: I'm allowing you to go.
+   Çeviri: Gitmene izin veriyorum.
+--------------------------------------------------
+24. alone [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yalnız, bir, kimsesiz
+   Örnek: I can't go alone.
+   Çeviri: Tek başıma gidemem.
+--------------------------------------------------
+25. alternative [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: alternatif, çare, şık
+   Örnek: We've got no alternative.
+   Çeviri: Hiç alternatifimiz yok.
+--------------------------------------------------
+26. amused [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: memnuniyet içinde, mutlu, eğlenen
+   Örnek: The joke amused the audience.
+   Çeviri: Espri seyirciyi eğlendirdi.
+--------------------------------------------------
+27. amusing [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: eğlenceli, zevkli, komik
+   Örnek: I found her very amusing.
+   Çeviri: Ben onu çok eğlenceli buldum.
+--------------------------------------------------
+28. ancient [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: antik, çok yaşlı kimse, uzun zaman önce yaşamış kimse
+   Örnek: This is an ancient law.
+   Çeviri: Bu eski bir yasadır.
+--------------------------------------------------
+29. animal [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: hayvan, yetenekli kimse, izbandut gibi adam
+   Örnek: I'm a party animal.
+   Çeviri: Ben parti hayvanıyım.
+--------------------------------------------------
+30. anxious [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: endişeli, kaygılı, huzursuz
+   Örnek: I'm a bit anxious.
+   Çeviri: Biraz endişeliyim.
+--------------------------------------------------
+31. any [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: her, hiçbir, herhangi
+   Örnek: I don't have any.
+   Çeviri: Bende hiç yok.
+--------------------------------------------------
+32. appalling [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: müthiş, dehşete düşüren, korkunç
+   Örnek: I think that's appalling.
+   Çeviri: Onun korkunç olduğunu düşünüyorum.
+--------------------------------------------------
+33. apparent [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: aşikar, ortada, belirgin
+   Örnek: The apparent truth was really a lie.
+   Çeviri: Bariz gerçek gerçekten bir yalandı.
+--------------------------------------------------
+34. apply [zarf] (B1) [Akademik Zarflar (-ly / Derece)] | Eş Anlam: implement, conduct, practice, execute
+   Anlam: uygulamak, yürürlüğe koymak, başvurmak
+   Örnek: May I apply for asylum?
+   Çeviri: Sığınma için başvurabilir miyim?
+--------------------------------------------------
+35. approximately [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: takriben, yaklaşık olarak, aşağı yukarı
+   Örnek: We're approximately the same age.
+   Çeviri: Biz yaklaşık olarak aynı yaştayız.
+--------------------------------------------------
+36. arrival [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: varış, varma, geliş
+   Örnek: What's our arrival time?
+   Çeviri: Bizim varış saatimiz nedir?
+--------------------------------------------------
+37. arrive [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: varmak, ulaşmak, başarmak
+   Örnek: Will we arrive in time?
+   Çeviri: Zamanında varır mıyız?
+--------------------------------------------------
+38. asleep [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: uyuyan, tembel, uyuşuk
+   Örnek: I'm not asleep yet.
+   Çeviri: Henüz uyumuyorum.
+--------------------------------------------------
+39. ative [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: -den, ilgili anlamı veren son ek, ilişkili anlamı veren son ek
+   Örnek: The empirical results of the study were remarkably ative.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece -den olduğu görüldü.
+--------------------------------------------------
+40. attentively [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: dikkatlice, dikkatle
+   Örnek: Listen attentively to what I say.
+   Çeviri: Söylediğimi dikkatlice dinle.
+--------------------------------------------------
+41. attractive [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: cazibeli, cazip, çekici
+   Örnek: Do you find me attractive?
+   Çeviri: Beni çekici buluyor musun?
+--------------------------------------------------
+42. available [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: elde hazır bulunan, boş, mevcut
+   Örnek: A free demo is available.
+   Çeviri: Ücretsiz bir gösteri mevcuttur.
+--------------------------------------------------
+43. aware [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: haberdar, farkında, vakıf
+   Örnek: I'm aware of it.
+   Çeviri: Ben bunun farkındayım.
+--------------------------------------------------
+44. awful [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: berbat, çok kötü, fena
+   Örnek: I know it's awful.
+   Çeviri: Korkunç olduğunu biliyorum.
+--------------------------------------------------
+45. balanced [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: dengeli, dengelenmiş, muvazeneli
+   Örnek: The budget must be balanced.
+   Çeviri: Bütçe dengeli olmalıdır.
+--------------------------------------------------
+46. based [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: esaslı, yerleşik, temeli
+   Örnek: This is based on fact.
+   Çeviri: Bu gerçeğe dayalıdır.
+--------------------------------------------------
+47. behavioral [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: davranışla ilgili, davranış, davranışsal
+   Örnek: The empirical results of the study were remarkably behavioral.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece davranışla ilgili olduğu görüldü.
+--------------------------------------------------
+48. beneficial [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: yararlı, faydalı, kazançlı
+   Örnek: That would be very beneficial.
+   Çeviri: Bu çok yararlı olacaktı.
+--------------------------------------------------
+49. best [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: en iyi, geçmek, baskın çıkmak
+   Örnek: I'll do my best.
+   Çeviri: Ben elimden gelenin en iyisini yapacağım.
+--------------------------------------------------
+50. bewildered [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: şaşkın, afallamış, sersemlemiş
+   Örnek: The empirical results of the study were remarkably bewildered.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece şaşkın olduğu görüldü.
+--------------------------------------------------
+51. biologic [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: biyoloji ile ilgili, biyolojik
+   Örnek: The empirical results of the study were remarkably biologic.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece biyoloji ile ilgili olduğu görüldü.
+--------------------------------------------------
+52. biological [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: yaşambilimsel, dirimbilimsel, biyolojik
+   Örnek: He's my biological father.
+   Çeviri: O benim biyolojik babam.
+--------------------------------------------------
+53. biting [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ısırma, sokma, iğneli
+   Örnek: The dog is biting Tom.
+   Çeviri: Köpek Tom'u ısırıyor.
+--------------------------------------------------
+54. blind [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kör, kör etmek, körletmek
+   Örnek: I didn't go blind.
+   Çeviri: Kör olmadım.
+--------------------------------------------------
+55. boiling [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kaynama, haşlama, kaynatma
+   Örnek: It's boiling in here.
+   Çeviri: Burada hava çok bunaltıcı.
+--------------------------------------------------
+56. bored [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sıkılmış, delinmiş, bıkkın
+   Örnek: I'm bored right now.
+   Çeviri: Şu anda sıkıldım.
+--------------------------------------------------
+57. botanical [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bitkibilimsel, bitkisel, botanik
+   Örnek: We found many strange plants in a botanical garden.
+   Çeviri: Biz bir botanik bahçesinde çok tuhaf bitkiler bulduk.
+--------------------------------------------------
+58. both [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: her ikisi de, her iki, her ikisi
+   Örnek: We can both do it.
+   Çeviri: İkimiz bunu yapabiliriz.
+--------------------------------------------------
+59. british [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ingiliz, ingiliz halkı, ingilizler
+   Örnek: The British climbed the hill.
+   Çeviri: İngilizler tepeye tırmandı.
+--------------------------------------------------
+60. broke [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: parasız, züğürt, meteliksiz
+   Örnek: I broke Tom's nose.
+   Çeviri: Ben Tom'un burnunu kırdım.
+--------------------------------------------------
+61. calibrated [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: taksimatlı, ayarlanmış, ayarlı
+   Örnek: This instrument needs to be calibrated.
+   Çeviri: Bu alet ayarlanmalı.
+--------------------------------------------------
+62. calm [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sakinleştirmek, sakinlik, soğukkanlı
+   Örnek: I have to stay calm.
+   Çeviri: Sakin kalmak zorundayım.
+--------------------------------------------------
+63. calming [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yatıştırıcı, teskin, huzur veren
+   Örnek: The empirical results of the study were remarkably calming.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece yatıştırıcı olduğu görüldü.
+--------------------------------------------------
+64. captured [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: mazbut, yakalanmış, esir edilmiş
+   Örnek: I won't stay and be captured.
+   Çeviri: Kalmayacağım ve yakalanmayacağım.
+--------------------------------------------------
+65. cardiovascular [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: kardiyovasküler, kalp ve damarlara ilişkin
+   Örnek: Kickboxing is great cardiovascular exercise.
+   Çeviri: Kick boks yapmak harika bir kardiyo egzersizidir.
+--------------------------------------------------
+66. carefully [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: özenle, idareli biçimde, itinayla
+   Örnek: Let's do this carefully.
+   Çeviri: Bunu özenle yapalım.
+--------------------------------------------------
+67. carried [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: taşınan, taşınmış, kabul edildi/edilmiştir!
+   Örnek: Don't get carried away.
+   Çeviri: Abartma.
+--------------------------------------------------
+68. cautiously [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: ihtiyatla, dikkatlice, temkinli bir şekilde
+   Örnek: You have to move cautiously in this matter.
+   Çeviri: Bu konuda temkinli hareket etmek zorundayız.
+--------------------------------------------------
+69. celestial [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: gökyüzü ile ilgili, gök, göksel
+   Örnek: The empirical results of the study were remarkably celestial.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece gökyüzü ile ilgili olduğu görüldü.
+--------------------------------------------------
+70. cellular [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: hücresel, cep telefonu, gözeli
+   Örnek: The empirical results of the study were remarkably cellular.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece hücresel olduğu görüldü.
+--------------------------------------------------
+71. certain [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar] | Eş Anlam: inevitable
+   Anlam: kesin, belirli, belli
+   Örnek: I can't be certain.
+   Çeviri: Emin olamıyorum.
+--------------------------------------------------
+72. challenging [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: dürtücü, zorlu, meydan okuma
+   Örnek: Are you challenging my authority?
+   Çeviri: Benim otoriteme karşı mı çıkıyorsun?
+--------------------------------------------------
+73. changed [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: değiştirilmiş, değişmiş, değişime uğramış
+   Örnek: I'm a changed man.
+   Çeviri: Ben değişmiş bir insanım.
+--------------------------------------------------
+74. charged [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yüklenmiş, şarj edilmiş, dolu
+   Örnek: You charged me too much.
+   Çeviri: Siz bana çok fazla ücret ödettiniz.
+--------------------------------------------------
+75. charming [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: cazibeli, alımlı, çekici
+   Örnek: She has a charming face.
+   Çeviri: Onun çekici bir yüzü var.
+--------------------------------------------------
+76. cheerful [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: neşeli, mutluluk veren, şen
+   Örnek: He is a cheerful boy.
+   Çeviri: O, neşeli bir çocuktur.
+--------------------------------------------------
+77. cheery [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: neşeyle, neşeli, keyifli
+   Örnek: The empirical results of the study were remarkably cheery.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece neşeyle olduğu görüldü.
+--------------------------------------------------
+78. chemical [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kimyasal madde, kimyasal, kimyevi
+   Örnek: Magnesium is a chemical element.
+   Çeviri: Magnezyum kimyasal bir elementtir.
+--------------------------------------------------
+79. choice [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tercih, seçenek, ayırma
+   Örnek: Do I have a choice?
+   Çeviri: Bir seçeneğim var mı?
+--------------------------------------------------
+80. chronic [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kronik, müzmin, devamlı
+   Örnek: She suffers from a chronic illness.
+   Çeviri: O kronik bir hastalıktan muzdarip.
+--------------------------------------------------
+81. classic [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: klasik, klas, değerini kanıtlamış yapıt
+   Örnek: This song is a classic.
+   Çeviri: Bu şarkı bir klasik.
+--------------------------------------------------
+82. classical [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: klasik, klas, eski dile ait
+   Örnek: Do you like classical music?
+   Çeviri: Klasik müzik hoşuna gidiyor mu?
+--------------------------------------------------
+83. clear [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: belirgin, açık, net
+   Örnek: It's a clear day.
+   Çeviri: Bu açık bir gün.
+--------------------------------------------------
+84. clearly [zarf] (B2) [Akademik Zarflar (-ly / Derece)] | Eş Anlam: openly, frankly, plainly
+   Anlam: açık bir biçimde, açıkça, ayan beyan
+   Örnek: It's clearly a fake.
+   Çeviri: Bunun sahte olduğu çok belli.
+--------------------------------------------------
+85. cleverly [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: zekice, akıllıca
+   Örnek: The empirical results of the study were remarkably cleverly.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece zekice olduğu görüldü.
+--------------------------------------------------
+86. cloudy [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bulutlu, gölgeli, töhmet altında
+   Örnek: It's a cloudy day.
+   Çeviri: Bulutlu bir gün.
+--------------------------------------------------
+87. collaborative [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: işbirlikçi, ortak çalışmaya dayalı
+   Örnek: It was a collaborative effort.
+   Çeviri: Ortak çalışmaya dayalı bir çabaydı.
+--------------------------------------------------
+88. collected [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: toplu, aklı başında, sakinleşmiş
+   Örnek: He collected a lot of stamps.
+   Çeviri: O, çok sayıda pul topladı.
+--------------------------------------------------
+89. collective [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: toplu, müşterek, kolektif
+   Örnek: Collective interests must be protected.
+   Çeviri: Toplu çıkarlar korunmalıdır.
+--------------------------------------------------
+90. colorless [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: renksiz, sıkıcı, soluk
+   Örnek: The empirical results of the study were remarkably colorless.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece renksiz olduğu görüldü.
+--------------------------------------------------
+91. colossal [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: şaşırtıcı, iri yarı, ızbandut gibi
+   Örnek: What a colossal waste of time!
+   Çeviri: Ne devasa bir zaman kaybı!
+--------------------------------------------------
+92. combined [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: karma, birleşik, bileşik
+   Örnek: He combined two ideas into one.
+   Çeviri: O, iki fikri teke dönüştürdü.
+--------------------------------------------------
+93. comfortable [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: rahat, rahatlatıcı, teselli edici
+   Örnek: I'm comfortable with it.
+   Çeviri: Ben onunla rahatım.
+--------------------------------------------------
+94. coming [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: geliş, gelme, varış
+   Örnek: I'm coming to you.
+   Çeviri: Sana geliyorum.
+--------------------------------------------------
+95. common [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: alışılmış, alelade, yaygın
+   Örnek: It's a common name.
+   Çeviri: Bu yaygın bir isim.
+--------------------------------------------------
+96. compared [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: karşılaştırılmış, karşılaştırılan
+   Örnek: I compared notes with Tom.
+   Çeviri: Tom'la görüş alışverişinde bulundum.
+--------------------------------------------------
+97. competing [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yarışma, rekabet, rakip
+   Örnek: I want to keep competing.
+   Çeviri: Ben yarışmaya devam etmek istiyorum.
+--------------------------------------------------
+98. complete [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tamamlamak, tam, bütün
+   Örnek: I hope it's complete.
+   Çeviri: Umarım o tamdır.
+--------------------------------------------------
+99. completely [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: büsbütün, tamamen, komple
+   Örnek: I'm not completely sure.
+   Çeviri: Tam olarak emin değilim.
+--------------------------------------------------
+100. complicated [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: çetrefil, komplike, çetrefilli
+   Örnek: It's a complicated story.
+   Çeviri: Bu anlaşılması zor bir hikaye.
+--------------------------------------------------
+101. comprehensive [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: etraflı, kapsamlı, tam veya her şey dahil
+   Örnek: This is a comprehensive approach.
+   Çeviri: Bu kapsamlı bir yaklaşımdır.
+--------------------------------------------------
+102. computational [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: sayısal, hesaba dayalı, bilgisayımsal
+   Örnek: The empirical results of the study were remarkably computational.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece sayısal olduğu görüldü.
+--------------------------------------------------
+103. conceal [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: gizlemek, gizli tutmak, örtbas etmek
+   Örnek: I can't conceal it from you.
+   Çeviri: Onu senden gizleyemem.
+--------------------------------------------------
+104. concealed [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: gizlenen, gizlenmiş, saklı
+   Örnek: He concealed the fact from me.
+   Çeviri: O, gerçeği benden gizledi.
+--------------------------------------------------
+105. concerned [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ilgili, endişeli, alakadar
+   Örnek: I'm a little concerned.
+   Çeviri: Biraz endişeliyim.
+--------------------------------------------------
+106. conducted [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bir rehber ya da lider tarafından idare edilen, yürütülen
+   Örnek: An autopsy will be conducted.
+   Çeviri: Bir otopsi yapılacak.
+--------------------------------------------------
+107. confined [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sınırlı, sınırlanmış, sınırlandırılmış
+   Örnek: He is confined to bed now.
+   Çeviri: O, şimdi yatağa mahkûm.
+--------------------------------------------------
+108. confused [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: şaşkın, zihni bulanık, karmakarışık
+   Örnek: I'm a bit confused.
+   Çeviri: Biraz kafam karıştı.
+--------------------------------------------------
+109. confusing [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: şaşırtma, çetrefil, kafa karıştırıcı
+   Örnek: It was confusing to me.
+   Çeviri: Bu benim kafamı karıştırıyordu.
+--------------------------------------------------
+110. consciously [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: bile bile, kasten, bilinçli olarak
+   Örnek: The empirical results of the study were remarkably consciously.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece bile bile olduğu görüldü.
+--------------------------------------------------
+111. considerable [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: hatırı sayılır derecede, kaydadeğer, hatırı sayılır
+   Örnek: He has a considerable income.
+   Çeviri: O önemli bir gelire sahiptir.
+--------------------------------------------------
+112. considered [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: dikkate alınan, saygıdeğer, dikkate alınmış
+   Örnek: I hadn't considered that.
+   Çeviri: Ben onu dikkate almadım.
+--------------------------------------------------
+113. consistent [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: istikrarlı, tutarlı, bağıntılı
+   Örnek: We're just being consistent.
+   Çeviri: Her şeye bakıyoruz.
+--------------------------------------------------
+114. constant [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar] | Eş Anlam: persistent
+   Anlam: sabit, durağan, değişmez
+   Örnek: I'm in constant danger.
+   Çeviri: Sürekli tehlikedeyim.
+--------------------------------------------------
+115. consumed [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tamamen harcanmış
+   Örnek: The fire consumed the whole house.
+   Çeviri: Yangın bütün evi yuttu.
+--------------------------------------------------
+116. consuming [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yakan, tüketici, bitiren
+   Örnek: This is a very time-consuming task.
+   Çeviri: Bu çok zaman alan bir görevdir.
+--------------------------------------------------
+117. contagious [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: bulaşıcı, geçici, salgın
+   Örnek: Tom's smile was contagious.
+   Çeviri: Tom'un gülümsemesi bulaşıcıydı.
+--------------------------------------------------
+118. contemporary [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: modern, çağdaş, günümüze ait
+   Örnek: Scott was a contemporary of Byron.
+   Çeviri: Scott, çağdaş bir Byron'du.
+--------------------------------------------------
+119. continual [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ardı arkası kesilmeyen, durmadan, ardı arkası gelmeyen
+   Örnek: Today is the fifth day of continual stock price decline.
+   Çeviri: Bugün süregelen hisse senedi fiyat düşüşünün beşinci günüdür.
+--------------------------------------------------
+120. continued [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: devamlı, aralıksız, devam eden
+   Örnek: He continued to mock me.
+   Çeviri: O beni taklit etmeye devam etti.
+--------------------------------------------------
+121. continuously [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: aralıksız, sürekli, harıl harıl
+   Örnek: It rained continuously all day.
+   Çeviri: Tüm gün sürekli yağmur yağdı.
+--------------------------------------------------
+122. convenient [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: müsait, münasip, uygun
+   Örnek: It's much more convenient.
+   Çeviri: Bu çok daha uygun.
+--------------------------------------------------
+123. conventional [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: geleneksel, itibari, basmakalıp
+   Örnek: Why are conventional language classes so boring?
+   Çeviri: Neden geleneksel dil dersleri bu kadar sıkıcı?
+--------------------------------------------------
+124. convincing [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: inandırıcı, ikna edici, ikna
+   Örnek: That wasn't very convincing.
+   Çeviri: Bu çok inandırıcı değildi.
+--------------------------------------------------
+125. cool [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: soğutmak, serinlik, serin
+   Örnek: I'm so not cool.
+   Çeviri: Hiç cool değilim.
+--------------------------------------------------
+126. cooperative [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: kooperatif, işbirliği, yardımcı
+   Örnek: I tried to be cooperative.
+   Çeviri: Yardımcı olmaya çalıştım.
+--------------------------------------------------
+127. countless [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sayısız, çok, hadsiz hesapsız
+   Örnek: Countless lives have been lost.
+   Çeviri: Pek çok hayat kayboldu.
+--------------------------------------------------
+128. crazy [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: deli, çıldırmış, çılgın
+   Örnek: I am a bit crazy.
+   Çeviri: Ben biraz deliyim.
+--------------------------------------------------
+129. creamy [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kremalı, kaymaklı, kremsi
+   Örnek: I love thick, creamy mushroom soup.
+   Çeviri: Koyu, kremalı mantar çorbası severim.
+--------------------------------------------------
+130. credible [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: inandırıcı, güvenilir, inanılır
+   Örnek: Tom's story sounded credible.
+   Çeviri: Tom'un hikayesi kulağa inanılır gibi geliyordu.
+--------------------------------------------------
+131. critical [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kritik, ciddi, hassas
+   Örnek: Don't be so critical.
+   Çeviri: Bu kadar eleştirici olmayın.
+--------------------------------------------------
+132. crucial [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: çok önemli, kritik, önemli
+   Örnek: The timing will be crucial.
+   Çeviri: Zamanlama çok önemli olacak.
+--------------------------------------------------
+133. cultural [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kültürel, ekinsel
+   Örnek: It's a cultural thing.
+   Çeviri: Bu kültürel bir şey.
+--------------------------------------------------
+134. culturally [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: kültürel olarak
+   Örnek: The empirical results of the study were remarkably culturally.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece kültürel olarak olduğu görüldü.
+--------------------------------------------------
+135. customary [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: göreneksel, alışılmış, adet olan
+   Örnek: It's customary for waiters and waitresses to introduce themselves using only their first names.
+   Çeviri: Bay ve bayan garsonların ilk isimlerini kullanarak kendilerini tanıtması gelenekseldir.
+--------------------------------------------------
+136. dangerous [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tehlikeli, çekinceli, riskli
+   Örnek: I think it's dangerous.
+   Çeviri: Sanırım o tehlikeli.
+--------------------------------------------------
+137. dark [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: karanlık, koyu, belirsizlik
+   Örnek: It's dark in here.
+   Çeviri: Burası karanlık.
+--------------------------------------------------
+138. dated [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tarihli, eski, tarih verilmiş
+   Örnek: It's a little dated.
+   Çeviri: O biraz demode.
+--------------------------------------------------
+139. dazzling [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar] | Eş Anlam: stunning, marvelous, impressive
+   Anlam: göz kamaştırıcı, baş döndürücü, baş döndüren
+   Örnek: The empirical results of the study were remarkably dazzling.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece göz kamaştırıcı olduğu görüldü.
+--------------------------------------------------
+140. decided [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kararlı, karar verilmiş, tartışmasız
+   Örnek: I've decided to go.
+   Çeviri: Gitmeye karar verdim.
+--------------------------------------------------
+141. deep [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: derin, deniz, derince
+   Örnek: He's deep in debt.
+   Çeviri: O, borca batmış.
+--------------------------------------------------
+142. defined [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tanımlanmış, belirtili, tamlanan
+   Örnek: Tom's muscles are well-defined.
+   Çeviri: Tom'un kasları iyi tanımlanmıştır.
+--------------------------------------------------
+143. definite [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: belirli, belli, mahdut
+   Örnek: I have no definite plans.
+   Çeviri: Kesin planlarım yok.
+--------------------------------------------------
+144. definitely [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: kesinlikle, tamamen, elbette
+   Örnek: I'll definitely do that.
+   Çeviri: Bunu kesinlikle yapacağım.
+--------------------------------------------------
+145. delayed [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: rötarlı, geciktirilmiş, tehirli
+   Örnek: Tom's flight was delayed.
+   Çeviri: Tom'un uçuşu ertelendi.
+--------------------------------------------------
+146. deliberately [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: kasten, bilerek, kasti olarak
+   Örnek: I didn't do it deliberately.
+   Çeviri: Kasten yapmadım.
+--------------------------------------------------
+147. delicious [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: nefis, leziz, lezzetli
+   Örnek: I think this is delicious.
+   Çeviri: Bunun lezzetli olduğunu düşünüyorum.
+--------------------------------------------------
+148. demonstrated [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: ispat edilmiş, ispat edilen
+   Örnek: The salesman demonstrated how to use it.
+   Çeviri: Satıcı onun nasıl kullanılacağını gösterdi.
+--------------------------------------------------
+149. dependable [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: güvenilir, güvenli, güvenilebilir
+   Örnek: I'm pretty sure Tom's dependable.
+   Çeviri: Tom'un güvenilebilir olduğuna oldukça eminim.
+--------------------------------------------------
+150. dependent [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bağımlı, bağımlı kimse, başkasına muhtaç kimse
+   Örnek: We're dependent on each other.
+   Çeviri: Biz birbirimize bağlıyız.
+--------------------------------------------------
+151. desired [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: geçer, arzu edilen, gerekli
+   Örnek: We all want to be desired.
+   Çeviri: Hepimiz arzulanmak istiyoruz.
+--------------------------------------------------
+152. detailed [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ayrıntılı, detaylı, ayrıntılandırılmış
+   Örnek: I expect a detailed report.
+   Çeviri: Ayrıntılı bir rapor bekliyorum.
+--------------------------------------------------
+153. determined [sıfat] (C1) [C1 İleri Niteleme Sıfatları] | Eş Anlam: persistent
+   Anlam: azimli, belirlenmiş, kararlı
+   Örnek: She's a determined woman.
+   Çeviri: O, kararlı bir kadın.
+--------------------------------------------------
+154. detrimental [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: zararlı, muzır, zarar veren
+   Örnek: Tom's stressful job is having a detrimental effect on his health.
+   Çeviri: Tom'un stresli işi sağlığı üzerinde zararlı bir etkiye sahiptir.
+--------------------------------------------------
+155. developed [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: gelişmiş, bayındırlaşmak, bayındır
+   Örnek: He developed his own theory.
+   Çeviri: O, kendi teorisini geliştirdi.
+--------------------------------------------------
+156. diagnosed [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: teşhis edilmiş
+   Örnek: Have you ever been diagnosed with HIV?
+   Çeviri: Hiç HIV tanısı aldınız mı?
+--------------------------------------------------
+157. diagnostic [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: teşhis, tanısal, kontrol
+   Örnek: The empirical results of the study were remarkably diagnostic.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece teşhis olduğu görüldü.
+--------------------------------------------------
+158. dietary [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: rejim kuralları, rejim yemeği, perhiz yemeği
+   Örnek: The empirical results of the study were remarkably dietary.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece rejim kuralları olduğu görüldü.
+--------------------------------------------------
+159. different [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: farklı, değişik, başka
+   Örnek: It's all so different.
+   Çeviri: Onun hepsi çok farklı.
+--------------------------------------------------
+160. difficult [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: çetin, zor, zorlu
+   Örnek: It's a difficult job.
+   Çeviri: Bu zor bir iş.
+--------------------------------------------------
+161. digital [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: dijital, tuş, parmağa ait
+   Örnek: Can I borrow your digital camera tonight?
+   Çeviri: Bu gece senin dijital kameranı ödünç alabilir miyim?
+--------------------------------------------------
+162. diminish [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar] | Eş Anlam: decrease, reduce, lessen, decline
+   Anlam: azalmak, eksiltmek, hafifletmek
+   Örnek: The rights of every man are diminished when the rights of one man are threatened.
+   Çeviri: Bir insanın haklarının tehdit edildiğinde, her insanın hakları azaltılır.
+--------------------------------------------------
+163. direct [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yönlendirmek, yöneltmek, yönetmek
+   Örnek: Is it a direct flight?
+   Çeviri: O bir direkt uçuş mu?
+--------------------------------------------------
+164. disabled [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: engelli, özürlü, etkisiz kılınmış
+   Örnek: That poor lady is disabled.
+   Çeviri: Şu zavallı kadın engelli.
+--------------------------------------------------
+165. disappointed [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: hayal kırıklığına uğramış, hüsrana uğramış, hayal kırıklığı uğramış
+   Örnek: I'm disappointed in you.
+   Çeviri: Senin hayal kırıklığına uğrattım.
+--------------------------------------------------
+166. discussed [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: görüşülmüş, tartışılmış
+   Örnek: I discussed it with Tom.
+   Çeviri: Onu Tom'la tartıştım.
+--------------------------------------------------
+167. disgusting [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: tiksindirici, iğrenç, çirkef
+   Örnek: I think it's disgusting.
+   Çeviri: Bunun iğrenç olduğunu düşünüyorum.
+--------------------------------------------------
+168. distant [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: uzakta, uzak, mesafeli
+   Örnek: Why are you being so distant?
+   Çeviri: Neden bu kadar samimiyetsiz davranıyorsun?
+--------------------------------------------------
+169. distinct [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: belirgin, seçik, şüphesiz
+   Örnek: That's a distinct possibility.
+   Çeviri: Bu ayrı bir olasılık.
+--------------------------------------------------
+170. diverse [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: çeşit çeşit, türlü, değişik
+   Örnek: It is an ethnically diverse school.
+   Çeviri: Bu, etnik açıdan farklı bir okul.
+--------------------------------------------------
+171. domestic [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: iç, evcil, hizmetçi
+   Örnek: The horse is a domestic animal.
+   Çeviri: At evcil bir hayvandır.
+--------------------------------------------------
+172. done [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yapılmış, iyi pişmiş, olmuş
+   Örnek: I've done a lot.
+   Çeviri: Ben çok yaptım.
+--------------------------------------------------
+173. driving [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sürme, sevk, sürücü
+   Örnek: He is bad at driving.
+   Çeviri: O araba sürmede kötüdür.
+--------------------------------------------------
+174. due [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: vadesi dolmuş, hak vergi, alacak
+   Örnek: When is the baby due?
+   Çeviri: Bebek ne zaman doğacak?
+--------------------------------------------------
+175. dull [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: donuk, sıkıcı, mat
+   Örnek: I have a dull ache here.
+   Çeviri: Burada künt bir ağrım var.
+--------------------------------------------------
+176. early [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: erken, erken olan şey, erken olgunlaşan meyve ya da çiçek
+   Örnek: I know I'm early.
+   Çeviri: Erken geldiğimi biliyorum.
+--------------------------------------------------
+177. easily [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: rahatlıkla, rahatça, kolayca
+   Örnek: I don't cry easily.
+   Çeviri: Kolay kolay ağlamam.
+--------------------------------------------------
+178. eaten [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yenmiş, yenilmiş
+   Örnek: I haven't eaten yet.
+   Çeviri: Henüz yemek yemedim.
+--------------------------------------------------
+179. eating [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yeme, yiyim, yemek
+   Örnek: I'm eating a pear.
+   Çeviri: Bir armut yiyorum.
+--------------------------------------------------
+180. ecologic [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ekolojik, bir çevredeki canlı organizmaların birbirine bağımlılığıyla ifade edilen
+   Örnek: The empirical results of the study were remarkably ecologic.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece ekolojik olduğu görüldü.
+--------------------------------------------------
+181. ecological [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: çevre, çevrebilimsel, ekolojik
+   Örnek: The world's tropical rainforests are critical links in the ecological chain of life on the planet.
+   Çeviri: Dünyadaki tropikal yağmur ormanları, gezegende yaşamın ekolojik zincirine kritik bağlantılıdır.
+--------------------------------------------------
+182. economic [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ekonomik, iktisadi, hesaplı
+   Örnek: It doesn't make economic sense.
+   Çeviri: Ekonomik açıdan anlamsız.
+--------------------------------------------------
+183. educational [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: eğitsel, eğitimsel, eğitici
+   Örnek: I found the field trip very educational.
+   Çeviri: Saha gezisini çok eğitici buldum.
+--------------------------------------------------
+184. effective [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: efektif, etkileyici, etkili
+   Örnek: I wasn't very effective.
+   Çeviri: Çok etkili değildim.
+--------------------------------------------------
+185. effectively [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: etkili bir şekilde, etkileyici, etkin olarak
+   Örnek: Last year, I spent so much time by myself that I almost forgot how to communicate effectively with others.
+   Çeviri: Geçen yıl tek başıma o kadar uzun bir zaman geçirdim ki diğerleriyle etkili şekilde nasıl iletişim kuracağımı neredeyse unuttum.
+--------------------------------------------------
+186. efficient [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: etkili, liyakatli, verimli
+   Örnek: I think I was efficient.
+   Çeviri: Sanırım verimliydim.
+--------------------------------------------------
+187. efficiently [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: yeterli olarak, verimli biçimde, etkin
+   Örnek: You have to use your time efficiently.
+   Çeviri: Vaktini verimli kullanmalısın.
+--------------------------------------------------
+188. elevated [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: keyifli, yüksek, yüce
+   Örnek: The empirical results of the study were remarkably elevated.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece keyifli olduğu görüldü.
+--------------------------------------------------
+189. emotional [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: dokunaklı, duygusal, hissi
+   Örnek: I was a bit emotional.
+   Çeviri: Ben biraz duygusaldım.
+--------------------------------------------------
+190. endangered [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: tehlikeye atılmış, tehlikede, nesli tükenmekte olan
+   Örnek: It is an endangered species.
+   Çeviri: Nesli tükenmekte olan bir türdür.
+--------------------------------------------------
+191. engaged [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bağlanmış, meşgul, nişanlı
+   Örnek: I'm engaged to Tom.
+   Çeviri: Ben Tom'la nişanlıyım.
+--------------------------------------------------
+192. enough [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kafi, yeterli, yeter
+   Örnek: I hope it's enough.
+   Çeviri: Umarım o yeterlidir.
+--------------------------------------------------
+193. entertained [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: ağırlanmış, eğlendirilmiş, meşgul edilmiş
+   Örnek: They entertained us at dinner.
+   Çeviri: Bizi akşam yemeğinde ağırladılar.
+--------------------------------------------------
+194. entire [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bütün, tüm, tamam
+   Örnek: I read the entire book.
+   Çeviri: Tüm kitabı okudum.
+--------------------------------------------------
+195. entirely [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: tümüyle, külliyen, büsbütün
+   Örnek: I'm entirely to blame.
+   Çeviri: Tamamen suçlanacağım.
+--------------------------------------------------
+196. environmental [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: çevre, çevresel, muhite ait
+   Örnek: This is a major environmental disaster.
+   Çeviri: Bu büyük bir çevre felaketi.
+--------------------------------------------------
+197. equal [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: denk, eşit, muadili olmak
+   Örnek: I am not equal to it.
+   Çeviri: Ben ona uygun değilim.
+--------------------------------------------------
+198. especially [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: özellikle, hele, ille
+   Örnek: It is especially hot today.
+   Çeviri: Hava bugün özellikle çok sıcak.
+--------------------------------------------------
+199. essential [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ana, esas, esaslı
+   Örnek: Food is essential to life.
+   Çeviri: Gıda yaşam için elzemdir.
+--------------------------------------------------
+200. establish [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kanıtlamak, kurmak, tesis etmek
+   Örnek: Let's establish some ground rules.
+   Çeviri: Bazı temel kurallar belirleyelim.
+--------------------------------------------------
+201. european [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: avrupalı, frenk, avrupai
+   Örnek: Spain is a European country.
+   Çeviri: İspanya bir Avrupa ülkesidir.
+--------------------------------------------------
+202. even [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: düzgün, düz, pürüzsüz
+   Örnek: I won't even try.
+   Çeviri: Denemeyeceğim bile.
+--------------------------------------------------
+203. every [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: her, bütün, alışılmış
+   Örnek: I see it every day.
+   Çeviri: Onu her gün görüyorum.
+--------------------------------------------------
+204. evident [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: belli, vazıh, açık
+   Örnek: It is evident that he did it.
+   Çeviri: Onun onu yaptığı bellidir.
+--------------------------------------------------
+205. evolving [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: gelişmekte olan, gitgide gelişen, gitgide evrimleşen
+   Örnek: The empirical results of the study were remarkably evolving.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece gelişmekte olan olduğu görüldü.
+--------------------------------------------------
+206. exceptional [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: fevkalade, müstesna, istisnai
+   Örnek: I had an exceptional year.
+   Çeviri: Olağanüstü bir yıl geçirdim.
+--------------------------------------------------
+207. exceptionally [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: fevkalade, müstesna olarak, son derece
+   Örnek: We've done exceptionally well.
+   Çeviri: Son derece iyi yaptık.
+--------------------------------------------------
+208. excessive [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: haddinden fazla, aşırı, aşkın
+   Örnek: Excessive honesty can be disastrous.
+   Çeviri: Aşırı dürüstlük feci olabilir.
+--------------------------------------------------
+209. executed [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: asılı, yapılmış, uygulanmış
+   Örnek: He was executed as a spy.
+   Çeviri: O bir casus olarak idam edildi.
+--------------------------------------------------
+210. exhausted [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar] | Eş Anlam: tired
+   Anlam: yorgun, tükenmiş, bitik
+   Örnek: I'm exhausted right now.
+   Çeviri: Şu anda bitkinim.
+--------------------------------------------------
+211. exhibited [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sergilenmiş, sergilenen
+   Örnek: He exhibited no remorse for his crime.
+   Çeviri: Suçu için hiç pişmanlık göstermedi.
+--------------------------------------------------
+212. existed [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: mevcut, var olmuş, geçinmiş
+   Örnek: I didn't know it existed.
+   Çeviri: Bunun var olduğunu bilmiyordum.
+--------------------------------------------------
+213. existing [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: mevcut, olma, var olma
+   Örnek: They lost faith in the existing system.
+   Çeviri: Mevcut sisteme inançlarını kaybettiler.
+--------------------------------------------------
+214. expanding [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: genişleyen, tevsi, genişleme
+   Örnek: The workers are expanding the road.
+   Çeviri: İşçiler yolu genişletiyor.
+--------------------------------------------------
+215. expected [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: beklenen, umulan, beklenilen
+   Örnek: I think I'm expected.
+   Çeviri: Sanırım bekleniyorum.
+--------------------------------------------------
+216. experienced [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: tecrübeli, deneyimli, deneyim edilmiş
+   Örnek: I'm not experienced enough.
+   Çeviri: Yeterince deneyimli değilim.
+--------------------------------------------------
+217. experimental [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: deneysel, tecrübi, deneyde kullanılan
+   Örnek: The empirical results of the study were remarkably experimental.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece deneysel olduğu görüldü.
+--------------------------------------------------
+218. explored [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: keşfedilmiş
+   Örnek: He explored the Amazon jungle.
+   Çeviri: O, Amazon ormanını araştırdı.
+--------------------------------------------------
+219. exquisite [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: çok büyük, nazik, seçkin
+   Örnek: This is an exquisite little painting.
+   Çeviri: Bu enfes bir küçük tablodur.
+--------------------------------------------------
+220. extensive [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yaygın, geniş, kapsamlı
+   Örnek: The damage is too extensive.
+   Çeviri: Zarar çok geniş çaplıdır.
+--------------------------------------------------
+221. extra [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ekstra, ilave gazete, ilave
+   Örnek: This is an extra one.
+   Çeviri: Bu ilave bir tane.
+--------------------------------------------------
+222. extraordinary [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: fevkalade, olağandışı, olağanüstü
+   Örnek: It was an extraordinary year.
+   Çeviri: Bu olağanüstü bir yıldı.
+--------------------------------------------------
+223. extreme [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: aşırı, aşırı derece, aşırılık
+   Örnek: It's a bit extreme.
+   Çeviri: Bu biraz aşırıdır.
+--------------------------------------------------
+224. extremely [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: gayetle, feci, aşırı
+   Örnek: I've been extremely busy.
+   Çeviri: Son derece meşguldüm.
+--------------------------------------------------
+225. faint [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bayılmak, bayılma, bitkin düşmek
+   Örnek: I'm going to faint.
+   Çeviri: Bayılacağım.
+--------------------------------------------------
+226. fair [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: panayır, fuar, açık tenli
+   Örnek: I think it's fair.
+   Çeviri: Onun adil olduğunu düşünüyorum.
+--------------------------------------------------
+227. fairly [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: büsbütün, adil bir şekilde, uygunca
+   Örnek: It may be fairly old.
+   Çeviri: Bu oldukça eski olabilir.
+--------------------------------------------------
+228. far [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: uzak, çok fazla, uzun
+   Örnek: I won't go far.
+   Çeviri: Çok ileri gitmeyeceğim.
+--------------------------------------------------
+229. fast [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: süratli, çabuk, hızlı
+   Örnek: I'm a fast eater.
+   Çeviri: Ben hızlı bir yiyiciyim.
+--------------------------------------------------
+230. favorite [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: favori, gözde, en çok beğenilen
+   Örnek: It's Tom's favorite.
+   Çeviri: O, Tom'un favorisi.
+--------------------------------------------------
+231. female [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kadın, dişi, kız
+   Örnek: A doe is a female deer.
+   Çeviri: Dişi geyiğe maral denir.
+--------------------------------------------------
+232. fertile [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: verimli, bereketli, mümbit
+   Örnek: He has a fertile imagination.
+   Çeviri: Onun yaratıcı bir hayal gücü var.
+--------------------------------------------------
+233. final [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: final, nihai, kesin
+   Örnek: I guess that's final.
+   Çeviri: Sanırım bu son.
+--------------------------------------------------
+234. finished [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tamamlanmış, bitmiş, tamam
+   Örnek: I think I'm finished.
+   Çeviri: Sanırım bitirdim.
+--------------------------------------------------
+235. firm [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: firma, sıkı, sert
+   Örnek: It's a solvent firm.
+   Çeviri: O bir çözücü firması.
+--------------------------------------------------
+236. flowing [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: seyelan, akma, akış
+   Örnek: Tears were flowing down her cheeks.
+   Çeviri: Gözyaşları onun yanaklarından süzülüyordu.
+--------------------------------------------------
+237. focused [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: üzerine odaklanılmış, odaklanmış
+   Örnek: I tried to stay focused.
+   Çeviri: Ben odaklı kalmaya çalıştım.
+--------------------------------------------------
+238. foggy [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sisli, sersem, bulanık
+   Örnek: It's really foggy here.
+   Çeviri: Burası gerçekten sisli.
+--------------------------------------------------
+239. following [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: taraftarlar, takip etme, izleyen
+   Örnek: A dog is following us.
+   Çeviri: Bir köpek bizi takip ediyor.
+--------------------------------------------------
+240. forced [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: zoraki, mecbur, mecburi
+   Örnek: He forced me to go.
+   Çeviri: Ben gitmek zorundaydım.
+--------------------------------------------------
+241. formerly [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: vaktiyle, evvel zaman, eskiden
+   Örnek: She was formerly a bank clerk.
+   Çeviri: O eskiden bir banka memuruydu.
+--------------------------------------------------
+242. fortunately [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: şükür ki, neyse ki, bereket versin
+   Örnek: Fortunately, I was on time.
+   Çeviri: Neyse ki zamanında oradaydım.
+--------------------------------------------------
+243. fragrant [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kokulu, hoş, rayihalı
+   Örnek: These flowers are not only beautiful but also fragrant.
+   Çeviri: Bu çiçekler sadece güzel değil fakat aynı zamanda güzel kokulu da.
+--------------------------------------------------
+244. frankly [zarf] (B2) [Akademik Zarflar (-ly / Derece)] | Eş Anlam: openly, clearly, honestly
+   Anlam: açıkça, açık söylemek gerekirse, açıkçası
+   Örnek: Frankly, I don't care.
+   Çeviri: Açıkça, umurumda değil.
+--------------------------------------------------
+245. free [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bağımsız, beleş, muaf
+   Örnek: I'm a free man.
+   Çeviri: Ben özgür bir insanım.
+--------------------------------------------------
+246. fresh [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: taze, serinlik, dirilik
+   Örnek: I need a fresh start.
+   Çeviri: Yeni bir başlangıca ihtiyacım var.
+--------------------------------------------------
+247. frightened [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: ürkmüş, korkan, korkmuş
+   Örnek: Now don't be frightened.
+   Çeviri: Artık korkma.
+--------------------------------------------------
+248. frightening [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: korkutucu, korkulu, muhatara
+   Örnek: This is a frightening place.
+   Çeviri: Burası korkutucu bir mekan.
+--------------------------------------------------
+249. fruitful [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bereketli, verimli, artağan
+   Örnek: We've had very fruitful discussions.
+   Çeviri: Çok verimli görüşmeler yaptık.
+--------------------------------------------------
+250. frustrated [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: hakkı yenmiş, boşa çıkmış, boşuna didinmiş
+   Örnek: I know you're frustrated.
+   Çeviri: Sinirli olduğunu biliyorum.
+--------------------------------------------------
+251. full [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tok, tam, dolu
+   Örnek: I'm full of hope.
+   Çeviri: Ben umut doluyum.
+--------------------------------------------------
+252. fully [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: tamamıyla, iyice, iyiden iyiye
+   Örnek: I fully agree with you.
+   Çeviri: Tamamen seninle aynı fikirdeyim.
+--------------------------------------------------
+253. functional [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: pratik, görevci, fonksiyonel
+   Örnek: I think everything is functional.
+   Çeviri: Sanırım her şey işlevsel.
+--------------------------------------------------
+254. functioning [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: çalıştırma, işleyiş, faal
+   Örnek: The machine has stopped functioning.
+   Çeviri: Makine çalışmayı durdurdu.
+--------------------------------------------------
+255. fundamental [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: esas, asli, temel ilke
+   Örnek: That was a fundamental error.
+   Çeviri: O temel bir hataydı.
+--------------------------------------------------
+256. general [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: genel, avam, komutan
+   Örnek: That's the general idea.
+   Çeviri: Bu genel bir fikir.
+--------------------------------------------------
+257. generally [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: genelde, genel olarak, genellikle
+   Örnek: I generally agree with Tom.
+   Çeviri: Genel olarak Tom'a katılıyorum.
+--------------------------------------------------
+258. genetic [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: genetik yapı, soyaçekim, kalıtsal
+   Örnek: Genetic diversity is a good thing.
+   Çeviri: Genetik çeşitlilik güzel bir şey.
+--------------------------------------------------
+259. gently [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: nazikçe, kibarca, nazik bir şekilde
+   Örnek: She laid the child down gently.
+   Çeviri: O, çocuğu yumuşak bir biçimde yere yatırdı.
+--------------------------------------------------
+260. geological [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: yerbilimsel, jeolojik, yerbilimine değin
+   Örnek: The empirical results of the study were remarkably geological.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece yerbilimsel olduğu görüldü.
+--------------------------------------------------
+261. geopolitical [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: jeopolitik
+   Örnek: The empirical results of the study were remarkably geopolitical.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece jeopolitik olduğu görüldü.
+--------------------------------------------------
+262. gigantic [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: devasa, cüsseli, çam yarması gibi
+   Örnek: She owns a gigantic house.
+   Çeviri: O, kocaman bir eve sahip.
+--------------------------------------------------
+263. global [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: küresel, dünya çapında, bütün dünyayı kapsayan
+   Örnek: A global crisis is at hand.
+   Çeviri: Küresel bir kriz yakındır.
+--------------------------------------------------
+264. gloomy [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kasvetli, hüzün verici, sıkıntılı
+   Örnek: Why are you so gloomy?
+   Çeviri: Neden bu kadar sıkıntılısın?
+--------------------------------------------------
+265. golden [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: altın, altından, itidal
+   Örnek: What's the golden rule?
+   Çeviri: Altın kural nedir?
+--------------------------------------------------
+266. good [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: güzel, hayırlı, iyi
+   Örnek: I'm a good boy.
+   Çeviri: Ben iyi bir çocuğum.
+--------------------------------------------------
+267. gradual [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kademeli, yavaş, yavaş yavaş olan
+   Örnek: The changes have been gradual.
+   Çeviri: Değişiklikler kademeliydi.
+--------------------------------------------------
+268. gradually [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: yavaş yavaş, gitgide, derece derece
+   Örnek: The wind gradually died down.
+   Çeviri: Rüzgar yavaş yavaş kesildi.
+--------------------------------------------------
+269. grave [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kabir, mezar, kazımak
+   Örnek: This is Tom's grave.
+   Çeviri: Bu, Tom'un mezarı.
+--------------------------------------------------
+270. gray [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ağarmak, ağartmak, gri
+   Örnek: My hair's turned gray.
+   Çeviri: Saçım ağardı.
+--------------------------------------------------
+271. great [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: mükemmel, müthiş, harika
+   Örnek: It's a great deal.
+   Çeviri: Bu harika bir anlaşma.
+--------------------------------------------------
+272. growing [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: gelişen, büyüyen, büyüme
+   Örnek: I'm growing a beard.
+   Çeviri: Sakal bırakıyorum.
+--------------------------------------------------
+273. grown [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: büyümüş, yetişmiş, olmuş
+   Örnek: I'm a grown-up.
+   Çeviri: Ben olgunum.
+--------------------------------------------------
+274. grownup [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yetişkin
+   Örnek: The grownups were talking among themselves.
+   Çeviri: Yetişkinler kendi aralarında konuşuyordu.
+--------------------------------------------------
+275. half [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yarım, yarı, devre
+   Örnek: I'm half your age.
+   Çeviri: Ben senin yarı yaşındayım.
+--------------------------------------------------
+276. handled [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yürütülen, kulplu, işlendi
+   Örnek: That job was handled by Tom.
+   Çeviri: O iş Tom tarafından halledildi.
+--------------------------------------------------
+277. happy [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sevinçli, mutlu, çakırkeyif
+   Örnek: I'm a happy man.
+   Çeviri: Ben mutlu bir adamım.
+--------------------------------------------------
+278. hard [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: çetin, sert, zahmetli
+   Örnek: It's hard to do.
+   Çeviri: Bunu yapmak zor.
+--------------------------------------------------
+279. having [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sahip olma, sahip olan, -li
+   Örnek: I'm having a baby.
+   Çeviri: Bir çocuk sahibi olacağım.
+--------------------------------------------------
+280. hazardous [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tehlikeli, riskli, şüpheli
+   Örnek: Gusty winds are making travel hazardous for high profile vehicles.
+   Çeviri: Şiddetli rüzgarlar yüksek profilli araçlar için seyahati tehlikeli yapıyorlar.
+--------------------------------------------------
+281. healthful [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sağlığa yararlı, yararlı, sıhhatli
+   Örnek: The empirical results of the study were remarkably healthful.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece sağlığa yararlı olduğu görüldü.
+--------------------------------------------------
+282. healthy [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sıhhatli, sağlıklı, sağlığa yararlı
+   Örnek: I'm fit and healthy.
+   Çeviri: Ben formda ve sağlıklıyım.
+--------------------------------------------------
+283. helpful [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yardımsever, faydalı, yararlı
+   Örnek: How can I be helpful?
+   Çeviri: Nasıl yardımcı olabilirim?
+--------------------------------------------------
+284. helpless [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: aciz, çaresiz, miskin
+   Örnek: I feel helpless right now.
+   Çeviri: Şu anda çaresiz hissediyorum.
+--------------------------------------------------
+285. hidden [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: gizli, saklı, kapalı
+   Örnek: What's hidden in there?
+   Çeviri: Orada ne saklı?
+--------------------------------------------------
+286. high [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yüksek, direnmek, öfkelenmek
+   Örnek: He is a little high.
+   Çeviri: O, biraz sarhoştur.
+--------------------------------------------------
+287. highly [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: ziyadesiyle, yüksek derecede, pek çok
+   Örnek: He spoke highly of you.
+   Çeviri: O senden övgüyle bahsetti.
+--------------------------------------------------
+288. historic [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tarihi, evrimsel, önemli
+   Örnek: Today is a historic day.
+   Çeviri: Bugün tarihi bir gün.
+--------------------------------------------------
+289. historical [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: tarihi, tarihle ilgili, tarihsel
+   Örnek: Do you like historical novels?
+   Çeviri: Tarihsel romanlardan hoşlanıyor musun?
+--------------------------------------------------
+290. holy [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kutsal, kutsal yer, mukaddes
+   Örnek: The Holy Roman Empire came to an end in the year 1806.
+   Çeviri: Kutsal Roma İmparatorluğu 1806 yılında sona erdi.
+--------------------------------------------------
+291. homeless [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: evsiz, evi barkı olmayan, yurtsuz
+   Örnek: I'm no longer homeless.
+   Çeviri: Ben artık evsiz değilim.
+--------------------------------------------------
+292. honestly [zarf] (B2) [Akademik Zarflar (-ly / Derece)] | Eş Anlam: frankly
+   Anlam: dürüst olarak, gerçekten, dürüst olmak gerekirse
+   Örnek: I can honestly say no.
+   Çeviri: Dürüstçe hayır diyebilirim.
+--------------------------------------------------
+293. hopeless [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: umutsuz, ümitsiz, umarsız
+   Örnek: I know it's hopeless.
+   Çeviri: Bunun umutsuz olduğunu biliyorum.
+--------------------------------------------------
+294. horrible [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: berbat, müthiş, kötü
+   Örnek: I'm horrible at math.
+   Çeviri: Matematikte berbatım.
+--------------------------------------------------
+295. horrified [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: dehşete düşmüş, korkmuş, dehşete kapılmış
+   Örnek: The empirical results of the study were remarkably horrified.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece dehşete düşmüş olduğu görüldü.
+--------------------------------------------------
+296. horrifying [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: korkutma, korkunç, ürkünç
+   Örnek: That's a horrifying thought.
+   Çeviri: O korkunç bir düşünce.
+--------------------------------------------------
+297. hot [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kızgın, ateşli, acı
+   Örnek: It's a hot day.
+   Çeviri: Sıcak bir gün.
+--------------------------------------------------
+298. huge [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: iri, kocaman, devasa
+   Örnek: I had a huge dog.
+   Çeviri: Büyük bir köpeğim var.
+--------------------------------------------------
+299. humid [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: rutubetli, nemli, yaş
+   Örnek: It's been hot and humid.
+   Çeviri: Hava sıcak ve nemli.
+--------------------------------------------------
+300. ideal [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ülkü, ideal, mefkure
+   Örnek: It's ideal for us.
+   Çeviri: Bizim için idealdir.
+--------------------------------------------------
+301. ill [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: hasta, fenalık, kötülük
+   Örnek: He can't be ill.
+   Çeviri: O hasta olamaz.
+--------------------------------------------------
+302. immune [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bağışık, bağışık kimse, ayrıcalıklı
+   Örnek: I'm immune to smallpox.
+   Çeviri: Çiçek hastalığına bağışıklığım var.
+--------------------------------------------------
+303. impatient [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sabırsız, titiz, hoşgörüsüz
+   Örnek: Don't be so impatient.
+   Çeviri: Çok sabırsız olma.
+--------------------------------------------------
+304. implemented [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: uygulanmış, yerine getirilmiş, azı dişli
+   Örnek: The plan was never implemented.
+   Çeviri: Plan hiç uygulanmadı.
+--------------------------------------------------
+305. important [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: mühim, önemli, gururlu
+   Örnek: It's important to me.
+   Çeviri: Bu benim için önemli.
+--------------------------------------------------
+306. impressive [sıfat] (C1) [C1 İleri Niteleme Sıfatları] | Eş Anlam: dazzling
+   Anlam: etkileyici, duyguları etkileyen, çarpıcı
+   Örnek: Tom's resume's impressive.
+   Çeviri: Tom'un özgeçmişi etkileyici.
+--------------------------------------------------
+307. incessantly [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: aralıksız olarak, ardı arkası kesilmeden, biteviye
+   Örnek: The empirical results of the study were remarkably incessantly.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece aralıksız olarak olduğu görüldü.
+--------------------------------------------------
+308. including [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kapsama, içerme, şamil
+   Örnek: There are six people including him.
+   Çeviri: O dahil altı kişi var.
+--------------------------------------------------
+309. inclusive [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: dahil, şümulu olan, içlemci
+   Örnek: The empirical results of the study were remarkably inclusive.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece dahil olduğu görüldü.
+--------------------------------------------------
+310. inconvenient [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: zahmetli, uygunsuz, zor
+   Örnek: I'm sure it's inconvenient.
+   Çeviri: Bunun sakıncalı olduğundan eminim.
+--------------------------------------------------
+311. increasingly [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: gitgide artarak, gitgide, gittikçe artarak
+   Örnek: Modern finance is becoming increasingly complicated and sophisticated.
+   Çeviri: Modern finans giderek karmaşık ve sofistike hale geliyor.
+--------------------------------------------------
+312. incurable [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tedavi edilemez kimse, amansız, çaresiz
+   Örnek: They say it's incurable.
+   Çeviri: Bunun tedavi edilemez olduğu söyleniyor.
+--------------------------------------------------
+313. independent [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: bağımsız, müstakil, özgür
+   Örnek: He's an independent thinker.
+   Çeviri: O bağımsız bir düşünür.
+--------------------------------------------------
+314. independently [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: başlı başına, birbirini etkilemeden, müstakilen
+   Örnek: The empirical results of the study were remarkably independently.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece başlı başına olduğu görüldü.
+--------------------------------------------------
+315. indicative [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: belirten, gösteren, haber kipi
+   Örnek: The empirical results of the study were remarkably indicative.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece belirten olduğu görüldü.
+--------------------------------------------------
+316. indispensable [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: zaruri, zorunlu, vazgeçilmez
+   Örnek: None of us are indispensable.
+   Çeviri: Hiçbirimiz vazgeçilmez değiliz.
+--------------------------------------------------
+317. inefficient [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: liyakatsiz, ehliyetsiz, zaman ve enerjiyi ekonomik bir şekilde kullanmayan
+   Örnek: The empirical results of the study were remarkably inefficient.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece liyakatsiz olduğu görüldü.
+--------------------------------------------------
+318. infectious [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: bulaşıcı, başkalarına kolay geçen, intani
+   Örnek: Mumps is an infectious disease.
+   Çeviri: Kabakulak bulaşıcı bir hastalıktır.
+--------------------------------------------------
+319. inflammatory [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: iltihaplı, kışkırtıcı, yangılı
+   Örnek: The empirical results of the study were remarkably inflammatory.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece iltihaplı olduğu görüldü.
+--------------------------------------------------
+320. influential [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: etkili, etkileyici, ağababa
+   Örnek: We're not that influential.
+   Çeviri: O kadar etkili değiliz.
+--------------------------------------------------
+321. influentially [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: güçlü bir şekilde, etkili bir biçimde
+   Örnek: The empirical results of the study were remarkably influentially.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece güçlü bir şekilde olduğu görüldü.
+--------------------------------------------------
+322. ingenious [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ustalık, becerikli, maharetli
+   Örnek: The ingenious boy won a prize for his invention.
+   Çeviri: Becerikli genç buluşu için bir ödül kazandı.
+--------------------------------------------------
+323. inhabited [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: meskun, iskan edilmiş, mekün
+   Örnek: The region has never been inhabited by people.
+   Çeviri: Bölgede insanlar hiç yaşamadı.
+--------------------------------------------------
+324. initial [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ilk harf, baş harf, baştaki
+   Örnek: That was my initial thought.
+   Çeviri: O benim ilk düşüncemdi.
+--------------------------------------------------
+325. initially [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: başlangıçta, ilkin, baştan
+   Örnek: Initially I found it difficult to deal with my new environment.
+   Çeviri: Başlangıçta yeni ortamımla baş etmeyi zor buldum.
+--------------------------------------------------
+326. innovative [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: yaratıcı, yenilikçi, yeniliklere açık
+   Örnek: I try to be innovative.
+   Çeviri: Yenilikçi olmaya çalışıyorum.
+--------------------------------------------------
+327. instant [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: anlık, esna, dakika
+   Örnek: It changed in an instant.
+   Çeviri: Bir anda değişti.
+--------------------------------------------------
+328. insufficient [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: kıt, yetersiz, yeterli değil
+   Örnek: His knowledge of geography is insufficient.
+   Çeviri: Onun coğrafya bilgisi yetersizdir.
+--------------------------------------------------
+329. intellectually [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: anlayarak, akıl ile, zeka ile
+   Örnek: The discussion was intellectually stimulating.
+   Çeviri: Münazara entelektüel olarak aydınlatıcıydı.
+--------------------------------------------------
+330. intense [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yoğun, gergin, istekli
+   Örnek: The pain was very intense.
+   Çeviri: Ağrı çok yoğundu.
+--------------------------------------------------
+331. intensive [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yoğun, şiddetli, aşırı
+   Örnek: The two gunshot victims are in the intensive care unit at a nearby hospital.
+   Çeviri: İki kurşun mağduru yakındaki bir hastanede yoğun bakım ünitesinde bulunmaktadır.
+--------------------------------------------------
+332. intentionally [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: kasten, kasıtlı olarak, taammüden
+   Örnek: Did you do that intentionally?
+   Çeviri: Sen onu kasıtlı olarak mı yaptın?
+--------------------------------------------------
+333. international [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: devletlerarası, enternasyonal, milletlerarası
+   Örnek: The drug problem is international.
+   Çeviri: Uyuşturucu problemi uluslararasıdır.
+--------------------------------------------------
+334. invented [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: icat edilmiş, uydurmasyon, icat edilen
+   Örnek: It was invented by Tom.
+   Çeviri: Bu Tom tarafından icat edildi.
+--------------------------------------------------
+335. investigated [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: soruşturulmuş, incelenmiş, araştırılmış
+   Örnek: We investigated the matter from all angles.
+   Çeviri: Konuyu tüm açılardan araştırdık.
+--------------------------------------------------
+336. involved [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ilgili, karmaşık, girift
+   Örnek: I can't get involved.
+   Çeviri: Ben karışamam.
+--------------------------------------------------
+337. irritable [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: asabi, titiz, barut gibi
+   Örnek: He is always a little irritable in the morning.
+   Çeviri: O, her zaman sabahleyin biraz asabidir.
+--------------------------------------------------
+338. irritated [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sinirli, sinirlendirilmiş, öfkeli
+   Örnek: I know you're irritated.
+   Çeviri: Sinirli olduğunuzu biliyorum.
+--------------------------------------------------
+339. irritating [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: rahatsız etme, sinirlendirme, sinir
+   Örnek: Sometimes you're so irritating.
+   Çeviri: Sen bazen çok rahatsız edicisin.
+--------------------------------------------------
+340. joyful [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sevinçli, şatır, sevindirici
+   Örnek: Christmas is a joyful time.
+   Çeviri: Noel neşeli bir zamandır.
+--------------------------------------------------
+341. kind [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tür, çeşit, cins
+   Örnek: He's kind to me.
+   Çeviri: O bana karşı nazik.
+--------------------------------------------------
+342. kindly [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: merhametli, iyi, içten
+   Örnek: You will be treated kindly.
+   Çeviri: Size nazikçe davranılacak.
+--------------------------------------------------
+343. knowing [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: haberdar, haberi olan, bilen
+   Örnek: It was nice knowing you.
+   Çeviri: Seninle tanışmak güzeldi.
+--------------------------------------------------
+344. known [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bilinen, bilindik, malum
+   Örnek: I've always known it.
+   Çeviri: Onu her zaman tanıyordum.
+--------------------------------------------------
+345. large [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: iri, geniş, büyük
+   Örnek: It's a large one.
+   Çeviri: Bu büyük biri.
+--------------------------------------------------
+346. lasting [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kalıcı, sürme, sağlam ayakkabılık kumaş
+   Örnek: First impressions are the most lasting.
+   Çeviri: İlk izlenimler en kalıcı olanlardır.
+--------------------------------------------------
+347. late [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: gecikmiş, geç, her zamanki
+   Örnek: I'm a bit late.
+   Çeviri: Ben biraz geç kaldım.
+--------------------------------------------------
+348. latest [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: son, en son, yeni
+   Örnek: What is the latest news?
+   Çeviri: En son haber nedir?
+--------------------------------------------------
+349. least [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: en az, asgari, en önemsiz kimse
+   Örnek: I can at least try.
+   Çeviri: En azından deneyebilirim.
+--------------------------------------------------
+350. less [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: daha az, eksi, daha az şey
+   Örnek: I ate less than Tom.
+   Çeviri: Tom'dan daha az yedim.
+--------------------------------------------------
+351. likely [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: büyük ihtimalle, mantıklı, geleceği parlak
+   Örnek: He's likely to come.
+   Çeviri: O, muhtemelen gelecektir.
+--------------------------------------------------
+352. limited [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kısıtlı, sınırlı, belirlenmiş
+   Örnek: It's a limited-time offer.
+   Çeviri: Bu sınırlı bir süre teklifi.
+--------------------------------------------------
+353. little [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ufak, az, küçük
+   Örnek: I'm a little fat.
+   Çeviri: Ben biraz şişmanım.
+--------------------------------------------------
+354. living [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: canlı, geçinmek, geçim
+   Örnek: I'm living here now.
+   Çeviri: Şimdi burada yaşıyorum.
+--------------------------------------------------
+355. loaded [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yüklü, yüklenmiş, hileli
+   Örnek: The gun isn't loaded.
+   Çeviri: Silah yüklü değil.
+--------------------------------------------------
+356. local [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: lokal, yerel, yerli
+   Örnek: Is this a local train?
+   Çeviri: Bu yerel bir tren mi?
+--------------------------------------------------
+357. located [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tespit edilmiş, yeri tayin edilmiş, kain
+   Örnek: It's located in Boston.
+   Çeviri: O, Boston'da yer almaktadır.
+--------------------------------------------------
+358. logical [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: mantıklı, makul, mantığa uygun
+   Örnek: It seems logical to me.
+   Çeviri: Bana mantıklı görünüyor.
+--------------------------------------------------
+359. losing [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kaybediş, kaybetme, zarar gören
+   Örnek: I'm losing my hair.
+   Çeviri: Saçımı döküyorum.
+--------------------------------------------------
+360. lost [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kayıp, kaybolmuş, kaybetmek
+   Örnek: I think I'm lost.
+   Çeviri: Sanırım kayboldum.
+--------------------------------------------------
+361. loud [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yüksek, yüksek sesle, kaba
+   Örnek: Don't talk so loud.
+   Çeviri: Yüksek sesle konuşma.
+--------------------------------------------------
+362. luckily [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: çok şükür, talihine, şans eseri
+   Örnek: Luckily, we have a plan.
+   Çeviri: Şansımıza bir planımız var.
+--------------------------------------------------
+363. lunar [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ay ile ilgili, kameri, ay
+   Örnek: Lunar eclipses can be total or partial.
+   Çeviri: Ay tutulmaları tam ya da kısmi olabilir.
+--------------------------------------------------
+364. made [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yapılmış, yapmak  eyleminin ikinci hali, yapılı
+   Örnek: I made a U-turn.
+   Çeviri: U dönüşü yaptım.
+--------------------------------------------------
+365. magic [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sihirbazlık, büyü, sihir
+   Örnek: This is a magic wand.
+   Çeviri: Bu sihirli bir değnek.
+--------------------------------------------------
+366. managing [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yönetme, idare etme, idari
+   Örnek: How are you managing it?
+   Çeviri: Nasıl üstesinden geliyorsun?
+--------------------------------------------------
+367. many [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: birçok, çok, çoğu
+   Örnek: Don't eat too many.
+   Çeviri: Çok fazla yeme.
+--------------------------------------------------
+368. marvelous [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar] | Eş Anlam: stunning, dazzling, wonderful
+   Anlam: harika, müthiş, nefis
+   Örnek: I had a marvelous time.
+   Çeviri: Harika bir zaman geçirdim.
+--------------------------------------------------
+369. massive [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: cüsseli, iri, çok büyük
+   Örnek: It's a massive undertaking.
+   Çeviri: Bu çok büyük bir girişim.
+--------------------------------------------------
+370. material [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: materyal, madde, malzeme
+   Örnek: This material never wears out.
+   Çeviri: Bu malzeme asla aşınmaz.
+--------------------------------------------------
+371. meaningless [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: manasız, anlamsız, ipsiz sapsız
+   Örnek: Life is meaningless without you.
+   Çeviri: Sensiz hayat anlamsız.
+--------------------------------------------------
+372. medial [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ortada olan, medial, vasat
+   Örnek: The empirical results of the study were remarkably medial.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece ortada olan olduğu görüldü.
+--------------------------------------------------
+373. medic [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kabayonca, doktor, korunga
+   Örnek: The medic ripped open Tom's shirt and took a look at the wound.
+   Çeviri: Doktor, Tom'un gömleğini yırtarak açtı ve yaraya göz attı.
+--------------------------------------------------
+374. medical [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: medikal, tıbbi, tıp
+   Örnek: He is a medical student.
+   Çeviri: O bir tıp öğrencisidir.
+--------------------------------------------------
+375. mental [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: akli, zihinsel, ruhsal
+   Örnek: I had a mental breakdown.
+   Çeviri: Ruhsal sinir bozuntum vardı.
+--------------------------------------------------
+376. met [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: karşılaşılan
+   Örnek: I'm glad we met.
+   Çeviri: Tanıştığımıza memnun oldum.
+--------------------------------------------------
+377. meticulously [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: özenle, titizlikle, özenli biçimde
+   Örnek: The school was meticulously clean.
+   Çeviri: Okul özenle temizlendi.
+--------------------------------------------------
+378. missing [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: özlem, özleme, noksan
+   Örnek: I'm missing a sock.
+   Çeviri: Ben bir çorabı kaybediyorum.
+--------------------------------------------------
+379. modern [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: çağdaş, modern, modern kimse
+   Örnek: She's a modern girl.
+   Çeviri: O modern bir kızdır.
+--------------------------------------------------
+380. modernized [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: modernize, modernleştirilmiş
+   Örnek: The empirical results of the study were remarkably modernized.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece modernize olduğu görüldü.
+--------------------------------------------------
+381. momentary [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bir anlık, sürekli olmayan, sadece bir an devam eden
+   Örnek: The empirical results of the study were remarkably momentary.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece bir anlık olduğu görüldü.
+--------------------------------------------------
+382. monitored [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: izlenen, gözlenen
+   Örnek: The U.N. monitored the country's elections.
+   Çeviri: Birleşmiş Milletler ülkedeki seçimleri izledi.
+--------------------------------------------------
+383. monotonous [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: monoton, monotonluk, yavan
+   Örnek: She says her life is monotonous.
+   Çeviri: Yaşantısının monoton olduğunu söylüyor.
+--------------------------------------------------
+384. most [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: en, en çok, en fazlası
+   Örnek: I love you the most.
+   Çeviri: En çok seni seviyorum.
+--------------------------------------------------
+385. motionless [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: hareketsiz, duruk, devinimsiz
+   Örnek: A cat jumped onto the chair and lay motionless.
+   Çeviri: Bir kedi sandalyeye atladı ve hareketsiz yatıyor.
+--------------------------------------------------
+386. motive [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: güdü, motif, motive etmek
+   Örnek: What was Tom's motive for doing that?
+   Çeviri: Tom'un bunu yapmasının nedeni neydi?
+--------------------------------------------------
+387. multi [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: birden çok, çoklu, çok
+   Örnek: Most computers made today are equipped with multi-core processors.
+   Çeviri: Bugün yapılan çoğu bilgisayar çok çekirdekli işlemcilerle donatılmıştır.
+--------------------------------------------------
+388. multicultural [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: multikültürel, çok kültürlü
+   Örnek: The empirical results of the study were remarkably multicultural.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece multikültürel olduğu görüldü.
+--------------------------------------------------
+389. multifunctional [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: çok fonksiyonlu cihaz, çok fonksiyonlu yazıcı, multifonksiyonel peptid
+   Örnek: The empirical results of the study were remarkably multifunctional.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece çok fonksiyonlu cihaz olduğu görüldü.
+--------------------------------------------------
+390. musical [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: müzikli, müziğe ait, müzikal
+   Örnek: This play is a musical.
+   Çeviri: Bu oyun bir müzikaldir.
+--------------------------------------------------
+391. mysterious [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: esrarengiz, gizemli, anlaşılmaz
+   Örnek: Tom's death was mysterious.
+   Çeviri: Tom'un ölümü gizemliydi.
+--------------------------------------------------
+392. mystical [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: gizemli, gizemcil, esrarlı
+   Örnek: The empirical results of the study were remarkably mystical.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece gizemli olduğu görüldü.
+--------------------------------------------------
+393. natural [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tabii, doğuştan, natürel
+   Örnek: I think it's natural.
+   Çeviri: Ben bunun doğal olduğunu düşünüyorum.
+--------------------------------------------------
+394. nearly [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: hemen hemen, neredeyse, az kaldı
+   Örnek: A car nearly hit Tom.
+   Çeviri: Tom'a neredeyse bir araba çarpıyordu.
+--------------------------------------------------
+395. necessary [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: gereken, gerekli, gereken şey
+   Örnek: I think it's necessary.
+   Çeviri: Sanırım o gerekli.
+--------------------------------------------------
+396. needed [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: lazım, ihtiyaç duyulan, gerek
+   Örnek: I got what I needed.
+   Çeviri: İhtiyacım olanı aldım.
+--------------------------------------------------
+397. negative [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: negatif, olumsuz, menetmek
+   Örnek: Don't be so negative.
+   Çeviri: Bu kadar olumsuz olma.
+--------------------------------------------------
+398. new [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yeni, yeni olan şey, ilk evre
+   Örnek: I got a new job.
+   Çeviri: Yeni bir işim var.
+--------------------------------------------------
+399. newly [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: yeni, yeni olarak, yakın zamanlarda
+   Örnek: Newly printed books smell good.
+   Çeviri: Yeni basılmış kitaplar güzel kokuyor.
+--------------------------------------------------
+400. next [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sonraki, bir sonra gelen şey, önümüzdeki
+   Örnek: I'm next in line.
+   Çeviri: Ben sırada bir sonrakiyim.
+--------------------------------------------------
+401. nicely [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: hoşça, hoş, iyi
+   Örnek: It has worked out nicely.
+   Çeviri: Bu güzelce işe yaradı.
+--------------------------------------------------
+402. noisy [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: gürültücü, gürültülü, patırtılı
+   Örnek: It's noisy in here.
+   Çeviri: Burası gürültülü.
+--------------------------------------------------
+403. normal [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: olağan, normal, standart
+   Örnek: I'm a normal guy.
+   Çeviri: Ben normal bir adamım.
+--------------------------------------------------
+404. normally [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: normalde, normal bir şekilde, genelde
+   Örnek: I don't normally lie.
+   Çeviri: Normalde yalan söylemem.
+--------------------------------------------------
+405. notable [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: göze çarpan, dikkate değer, tanınmış kimse
+   Örnek: Statues of Buddha are notable works of Japanese art.
+   Çeviri: Buda heykelleri Japon sanatının önemli eserleridirler.
+--------------------------------------------------
+406. nourishing [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: besi, besleyici, besin değeri yüksek
+   Örnek: This food's not nourishing enough.
+   Çeviri: Bu yiyecek yeterince besleyici değil.
+--------------------------------------------------
+407. novel [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: roman, acayip, yeni
+   Örnek: It's just a novel.
+   Çeviri: Bu sadece bir roman.
+--------------------------------------------------
+408. numerous [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sayısız, birçok, pek çok
+   Örnek: I've done that numerous times.
+   Çeviri: Bunu defalarca yaptım.
+--------------------------------------------------
+409. nutritional [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: beslenme ile ilgili, nutrisyonel, besin
+   Örnek: Sugary drinks have no nutritional value and contribute significantly to weight gain.
+   Çeviri: Şekerli içeceklerin hiçbir besin değeri yoktur ve kilo almaya önemli ölçüde etki ederler.
+--------------------------------------------------
+410. obligatory [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: mecburi, zorunlu, vacip
+   Örnek: The empirical results of the study were remarkably obligatory.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece mecburi olduğu görüldü.
+--------------------------------------------------
+411. obscure [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: saklamak, gizlemek, karartmak
+   Örnek: The meaning is still obscure to me.
+   Çeviri: Anlam benim için hâlâ anlaşılmaz.
+--------------------------------------------------
+412. observed [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: gözlenmiş, gözlenen
+   Örnek: I noticed I was being observed.
+   Çeviri: Gözlenmekte olduğumu fark ettim.
+--------------------------------------------------
+413. obtained [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: elde edilen, elde edilmiş, elde edildi
+   Örnek: I obtained the painting at an auction.
+   Çeviri: Bir açık artırmada tablo satın aldım.
+--------------------------------------------------
+414. old [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: eskimiş, eski, yaşlı
+   Örnek: I'm an old man.
+   Çeviri: Ben yaşlı bir adamım.
+--------------------------------------------------
+415. olive [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: zeytin, zeytin yeşili, zeytin rengi
+   Örnek: Give me the olive oil.
+   Çeviri: Bana zeytinyağı ver.
+--------------------------------------------------
+416. olympic [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: olimpik
+   Örnek: He took part in the Olympic Games.
+   Çeviri: Olimpiyat oyunlarına katıldı.
+--------------------------------------------------
+417. ongoing [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: süregiden, sürmekte olan, süregitmekte olan
+   Örnek: It's an ongoing process.
+   Çeviri: Bu devam eden bir süreç.
+--------------------------------------------------
+418. openly [zarf] (B1) [Akademik Zarflar (-ly / Derece)] | Eş Anlam: clearly, frankly, candidly
+   Anlam: açıkça, resmen, açık
+   Örnek: He openly confessed his faults.
+   Çeviri: Hatalarını açıkça itiraf etti.
+--------------------------------------------------
+419. opposite [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: zıt, aksi, karşıt
+   Örnek: It'll be the opposite.
+   Çeviri: Bunun tam tersi olacak.
+--------------------------------------------------
+420. optimal [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: uygun, ideal, en uygun
+   Örnek: Finding an optimal solution will take some time.
+   Çeviri: En uygun çözümü bulmak biraz zaman alacak.
+--------------------------------------------------
+421. optimum [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: en uygun durum, ideal, optimum
+   Örnek: The empirical results of the study were remarkably optimum.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece en uygun durum olduğu görüldü.
+--------------------------------------------------
+422. ordered [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sıralı, ısmarlama, düzgün
+   Örnek: I just ordered a beer.
+   Çeviri: Sadece bir bira ısmarladım.
+--------------------------------------------------
+423. orderly [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: yazıcı, hastane hademesi, emir eri
+   Örnek: The empirical results of the study were remarkably orderly.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece yazıcı olduğu görüldü.
+--------------------------------------------------
+424. organized [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: teşkilatlı, organize olmuş, tertipli
+   Örnek: I'm not very organized.
+   Çeviri: Çok tertipli değilim.
+--------------------------------------------------
+425. outstanding [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: üstün, göze çarpan, seçkin
+   Örnek: She is an outstanding poet.
+   Çeviri: O seçkin bir şairdir.
+--------------------------------------------------
+426. overall [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bir uçtan bir uca, etraflı, tüm
+   Örnek: Where can I buy overalls?
+   Çeviri: Tulumları nereden alabilirim?
+--------------------------------------------------
+427. owing [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ödenmemiş, borçlanma, borçlu
+   Örnek: The dam burst owing to the heavy rain.
+   Çeviri: Yoğun yağış sebebiyle baraj taştı.
+--------------------------------------------------
+428. parallel [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: aynı doğrultuda olan, paralel, benzetmek
+   Örnek: This line is parallel to that.
+   Çeviri: Bu çizgi ona paraleldir.
+--------------------------------------------------
+429. particular [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: özel, belirli, nokta
+   Örnek: She's particular about food.
+   Çeviri: Yemek konusunda çok titizdir.
+--------------------------------------------------
+430. passionately [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: hararetle, tutkuyla
+   Örnek: Even if you go away, I'll still passionately love you.
+   Çeviri: Uzaklara gitsen bile, seni yine de tutkuyla seveceğim.
+--------------------------------------------------
+431. patient [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: hasta, sabırlı, mütehammil
+   Örnek: I'm a patient man.
+   Çeviri: Ben sabırlı bir adamım.
+--------------------------------------------------
+432. paying [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tediye, ücret, paralı
+   Örnek: I don't mind paying.
+   Çeviri: Ödemeye itirazım yok.
+--------------------------------------------------
+433. perfect [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kusursuz, mükemmel, mükemmelleştirmek
+   Örnek: It's a perfect day.
+   Çeviri: Mükemmel bir gün.
+--------------------------------------------------
+434. perilous [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: vahim, korku, çok tehlikeli
+   Örnek: The empirical results of the study were remarkably perilous.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece vahim olduğu görüldü.
+--------------------------------------------------
+435. peripheral [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: çevresel, periferik, çevre
+   Örnek: The empirical results of the study were remarkably peripheral.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece çevresel olduğu görüldü.
+--------------------------------------------------
+436. permanent [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: daimi, kalıcı, perma
+   Örnek: I have a permanent contract.
+   Çeviri: Kalıcı bir sözleşmem var.
+--------------------------------------------------
+437. persistent [sıfat] (C1) [C1 İleri Niteleme Sıfatları] | Eş Anlam: constant, relentless, determined, tenacious
+   Anlam: ısrar eden, ısrarlı, ısrarcı
+   Örnek: I can be very persistent.
+   Çeviri: Çok ısrarcı olabilirim.
+--------------------------------------------------
+438. personal [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kişisel, özel, şahsi
+   Örnek: I think it's personal.
+   Çeviri: Bence bu kişiye özel.
+--------------------------------------------------
+439. perspective [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: bakış açısı, perspektif, derinlemesine inceleme yeteneği
+   Örnek: Let's keep it in perspective.
+   Çeviri: Ona bir bütün olarak bakalım.
+--------------------------------------------------
+440. persuaded [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ikna edilen, ikna edilmiş
+   Örnek: I think I've persuaded Tom.
+   Çeviri: Sanırım Tom'u ikna ettim.
+--------------------------------------------------
+441. petty [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ehemmiyetsiz, cüzi, olağan
+   Örnek: Don't be so petty.
+   Çeviri: Kıllık yapma.
+--------------------------------------------------
+442. physical [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bedensel, muayene, bedeni
+   Örnek: I had a physical checkup.
+   Çeviri: Ben bir sağlık kontrolü yaptırdım.
+--------------------------------------------------
+443. physiological [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: işlevbilimsel, diriksel, fizyolojik
+   Örnek: The empirical results of the study were remarkably physiological.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece işlevbilimsel olduğu görüldü.
+--------------------------------------------------
+444. pivotal [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: eksensel, eksen, esas
+   Örnek: The empirical results of the study were remarkably pivotal.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece eksensel olduğu görüldü.
+--------------------------------------------------
+445. plausible [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: makul, olası, akla yatkın
+   Örnek: It's a plausible story.
+   Çeviri: O, inandırıcı bir hikayedir.
+--------------------------------------------------
+446. poisonous [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: zehirli, kötü niyetli, ağılı
+   Örnek: This is a poisonous mushroom.
+   Çeviri: Bu zehirli bir mantar.
+--------------------------------------------------
+447. polar [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ucay, zıt, kutup
+   Örnek: The polar bears are dying.
+   Çeviri: Kutup ayıları ölüyor.
+--------------------------------------------------
+448. politely [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: kibarca, nezaketle, nazikçe
+   Örnek: She bowed to me politely.
+   Çeviri: O kibarca bana selam verdi.
+--------------------------------------------------
+449. politic [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: politik, basiretli, kurnaz
+   Örnek: I don't like politics.
+   Çeviri: Ben siyaseti sevmiyorum.
+--------------------------------------------------
+450. political [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: politik, siyasi, siyasal
+   Örnek: He had many political enemies.
+   Çeviri: Onun çok sayıda siyasi düşmanları vardı.
+--------------------------------------------------
+451. positive [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: pozitif, artı, olumlu
+   Örnek: I can't be positive.
+   Çeviri: Olumlu olamıyorum.
+--------------------------------------------------
+452. possible [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: olabilir, olanaklı, muhtemel
+   Örnek: It won't be possible.
+   Çeviri: Mümkün olmayacak.
+--------------------------------------------------
+453. potent [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: cinsel gücü yüksek, inandırıcı, nüfuzlu
+   Örnek: The empirical results of the study were remarkably potent.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece cinsel gücü yüksek olduğu görüldü.
+--------------------------------------------------
+454. potential [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: potansiyel, olası, güç
+   Örnek: He is a potential leader.
+   Çeviri: O potansiyel bir liderdir.
+--------------------------------------------------
+455. potently [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: yoğun bir şekilde, güçlü bir şekilde
+   Örnek: The empirical results of the study were remarkably potently.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece yoğun bir şekilde olduğu görüldü.
+--------------------------------------------------
+456. powered [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: motorla tahrik edilen, tahrikli
+   Örnek: I wish I had solar-powered car.
+   Çeviri: Keşke güneş enerjili arabam olsa.
+--------------------------------------------------
+457. powerful [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: güçlü, kuvvetli, muhteşem
+   Örnek: He's rich and powerful.
+   Çeviri: O, zengin ve güçlüdür.
+--------------------------------------------------
+458. practical [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tatbiki, kullanışlı, pratik
+   Örnek: I never was very practical.
+   Çeviri: Ben asla çok pratik değildim.
+--------------------------------------------------
+459. precisely [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: açık olarak, tam, belli
+   Örnek: What precisely did you do?
+   Çeviri: Tam olarak ne yaptın?
+--------------------------------------------------
+460. prevalent [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yaygın, olagelen, etkili
+   Örnek: Colds are prevalent this winter.
+   Çeviri: Soğuk algınlığı, bu kış yaygındır.
+--------------------------------------------------
+461. preventing [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: önleyen, engelleyen
+   Örnek: Nothing's preventing you from leaving.
+   Çeviri: Hiçbir şey sizin gitmenizi engellemiyor.
+--------------------------------------------------
+462. preventive [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: önleyici, önleyici ilaç, önlem
+   Örnek: Preventive measures are much more effective than the actual treatment.
+   Çeviri: Önleyici tedbirler gerçek tedaviden çok daha etkilidir.
+--------------------------------------------------
+463. previously [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: önceden, daha önce, evvelce
+   Örnek: The empirical results of the study were remarkably previously.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece önceden olduğu görüldü.
+--------------------------------------------------
+464. probable [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: olası, muhtemel, olasılı
+   Örnek: How probable is that to happen?
+   Çeviri: Onun olması ne kadar muhtemel?
+--------------------------------------------------
+465. produced [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: üretmek, üretilen, üretilmiş
+   Örnek: My efforts produced no results.
+   Çeviri: Çabalarım hiç sonuç vermedi.
+--------------------------------------------------
+466. productive [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: üretken, verimli, kazançlı
+   Örnek: I hope you had a productive day.
+   Çeviri: Umarım üretken bir gün geçirdiniz.
+--------------------------------------------------
+467. progressive [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: ileri düşünceli kimse, müterakki, ilerleyici
+   Örnek: His policies were too progressive.
+   Çeviri: Onun politikaları çok yenilikçi idi.
+--------------------------------------------------
+468. progressively [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: devamlı olarak, ilerledikçe, artan bir şekilde
+   Örnek: The empirical results of the study were remarkably progressively.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece devamlı olarak olduğu görüldü.
+--------------------------------------------------
+469. prominent [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: öne çıkan, çıkıntılı, önde gelen
+   Örnek: He felt ill at ease among prominent scholars.
+   Çeviri: Seçkin bilim adamları arasında huzursuz hissetti.
+--------------------------------------------------
+470. properly [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: uygun bir şekilde, doğru dürüst, düzgün bir şekilde
+   Örnek: Let's do this properly.
+   Çeviri: Hadi bunu doğru düzgün yapalım.
+--------------------------------------------------
+471. protective [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: koruyucu, sahip çıkan, koruma
+   Örnek: He's very protective of him.
+   Çeviri: O kendine karşı çok koruyucu.
+--------------------------------------------------
+472. proven [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kanıtlanmış, kanıtlı, ispatlı
+   Örnek: It's a proven fact.
+   Çeviri: O kanıtlanmış bir gerçek.
+--------------------------------------------------
+473. psychological [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: ruhbilimsel, ruhi, tinbilimsel
+   Örnek: The doctor thinks Tom's problem is psychological.
+   Çeviri: Doktor Tom'un sorununun psikolojik olduğunu düşünüyor.
+--------------------------------------------------
+474. punitive [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: cezalandırıcı, ceza, cezayı gerektiren
+   Örnek: The empirical results of the study were remarkably punitive.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece cezalandırıcı olduğu görüldü.
+--------------------------------------------------
+475. purchasable [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: alınabilir, satın alınabilir, satın alınır
+   Örnek: The empirical results of the study were remarkably purchasable.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece alınabilir olduğu görüldü.
+--------------------------------------------------
+476. purposely [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: kasti olarak, inadına, kasten
+   Örnek: Did you do that purposely?
+   Çeviri: Onu kasıtlı olarak mı yaptın?
+--------------------------------------------------
+477. puzzled [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: şaşkın, şaşırmış, karışmış
+   Örnek: I'm a little puzzled.
+   Çeviri: Biraz şaşkınım.
+--------------------------------------------------
+478. puzzling [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kafa karıştırıcı, muammalı, anlaşılmaz
+   Örnek: It was puzzling to me.
+   Çeviri: Benim için şaşırtıcıydı.
+--------------------------------------------------
+479. qualified [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: nitelikli, vasıflı, kalifiye
+   Örnek: Am I qualified to do that?
+   Çeviri: Onu yapmak için nitelikli miyim?
+--------------------------------------------------
+480. quick [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: süratli, hızlı, çabuk
+   Örnek: I ate a quick lunch.
+   Çeviri: Hızlı bir öğle yemeği yedim.
+--------------------------------------------------
+481. quickly [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: hızla, aceleyle, süratle
+   Örnek: I had to act quickly.
+   Çeviri: Çabuk hareket etmek zorunda kaldım.
+--------------------------------------------------
+482. rainy [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yağmurlu, yağışlı
+   Örnek: It's a rainy day.
+   Çeviri: Yağmurlu bir gün.
+--------------------------------------------------
+483. rapid [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ani, hızlı, kuduruk
+   Örnek: He has made rapid progress in English.
+   Çeviri: O, İngilizcede hızlı bir gelişme yaptı.
+--------------------------------------------------
+484. rapidly [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: hızla, süratle, çarçabuk
+   Örnek: She tends to speak rapidly.
+   Çeviri: O, hızlı konuşmaya eğilimlidir.
+--------------------------------------------------
+485. reachable [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ulaşılabilir, erişebilir, varılabilir
+   Örnek: The empirical results of the study were remarkably reachable.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece ulaşılabilir olduğu görüldü.
+--------------------------------------------------
+486. readily [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: kolaylıkla, rahatlıkla, hemen anında
+   Örnek: He readily agreed to it.
+   Çeviri: O onu kolayca kabul etti.
+--------------------------------------------------
+487. ready [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: hazır, hazırlamak, peşin para
+   Örnek: I'm ready to go.
+   Çeviri: Gitmeye hazırım.
+--------------------------------------------------
+488. really [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: hakikaten, gerçekten, cidden
+   Örnek: It's really a must.
+   Çeviri: Bu gerçekten bir zorunluluktur.
+--------------------------------------------------
+489. receive [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: teslim almak, almak, anlamak
+   Örnek: How much will I receive?
+   Çeviri: Ne kadar alacağım?
+--------------------------------------------------
+490. recent [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: son, yeni, taze
+   Örnek: Is it a recent picture?
+   Çeviri: O yeni bir resim mi?
+--------------------------------------------------
+491. recommended [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: tavsiye edilmiş, tavsiye edilen, önerilen
+   Örnek: I'll do as you recommended.
+   Çeviri: Senin tavsiye ettiğin gibi yapacağım.
+--------------------------------------------------
+492. recurrent [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: reküren, devirli, geri dönen
+   Örnek: The empirical results of the study were remarkably recurrent.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece reküren olduğu görüldü.
+--------------------------------------------------
+493. regional [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bölgesel, bölgesel kurum, mevzii
+   Örnek: Fried spiders are a regional delicacy in Cambodia.
+   Çeviri: Kızarmış örümcek, Kamboçya'da bölgesel bir yiyecektir.
+--------------------------------------------------
+494. regular [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: müdavim, muntazam, düzenli
+   Örnek: She is a regular beauty.
+   Çeviri: O düzenli bir güzellik.
+--------------------------------------------------
+495. regularly [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: düzenli olarak, sürekli, devamlı olarak
+   Örnek: Do you work out regularly?
+   Çeviri: Düzenli çalışıyor musunuz?
+--------------------------------------------------
+496. relaxed [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: rahatlamış, gevşemiş, rahat
+   Örnek: I feel relaxed with Tom.
+   Çeviri: Ben Tom'la rahat hissediyorum.
+--------------------------------------------------
+497. relaxing [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: dinlendirici, rahatlatıcı, gevşetici
+   Örnek: He's relaxing at home.
+   Çeviri: O, evde dinleniyor.
+--------------------------------------------------
+498. reliable [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: güvenilir, itimat edilir, güven telkin eden
+   Örnek: I think it's reliable.
+   Çeviri: Sanırım bu güvenilir.
+--------------------------------------------------
+499. religious [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: dinsel, dini, dindar
+   Örnek: I'm not very religious.
+   Çeviri: Ben çok dindar değilim.
+--------------------------------------------------
+500. remarkable [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: dikkat çekici, göze çarpan, dikkate değer
+   Örnek: You're the remarkable one.
+   Çeviri: Sen dikkat çekici birisin.
+--------------------------------------------------
+501. remote [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: uzak, naklen yayın, uzakta olan şey
+   Örnek: Do you have the remote?
+   Çeviri: Uzaktan kumandan var mı?
+--------------------------------------------------
+502. renewable [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yenilenebilir, temdit edilebilir, uzatılabilir
+   Örnek: We must develop renewable energy sources.
+   Çeviri: Yenilenebilir enerji kaynaklarımızı geliştirmeliyiz.
+--------------------------------------------------
+503. repetitious [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: tekrarlayan, tekrarlayıp duran, tekrarlarla dolu
+   Örnek: The empirical results of the study were remarkably repetitious.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece tekrarlayan olduğu görüldü.
+--------------------------------------------------
+504. repetitive [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: tekrarlayıp duran, tekrarlı, tekrarlanan
+   Örnek: We must try not to be repetitive.
+   Çeviri: Tekrarcı olmamaya çalışmalıyız.
+--------------------------------------------------
+505. reply [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: yanıtlamak, cevap, yanıt
+   Örnek: Here's Tom's reply.
+   Çeviri: İşte Tom'un cevabı.
+--------------------------------------------------
+506. reported [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: rapor edilmiş, rapor edilen
+   Örnek: No damage has been reported.
+   Çeviri: Hiçbir hasar bildirilmedi.
+--------------------------------------------------
+507. required [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: gerekli, lazım, lüzumlu
+   Örnek: I do what is required.
+   Çeviri: Ben gerekeni yaparım.
+--------------------------------------------------
+508. requisite [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: zorunlu, gerekli şey, gereç
+   Örnek: The empirical results of the study were remarkably requisite.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece zorunlu olduğu görüldü.
+--------------------------------------------------
+509. responsible [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: mesul, sorumlu, yükümlü
+   Örnek: I'm responsible for Tom.
+   Çeviri: Tom'dan sorumluyum.
+--------------------------------------------------
+510. restricted [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: sınırlı, kısıtlı, gizli
+   Örnek: This is a restricted area.
+   Çeviri: Bu yasak bir alandır.
+--------------------------------------------------
+511. retired [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar] | Eş Anlam: former, emeritus
+   Anlam: emekli, kuytu, münzevi
+   Örnek: Aren't you retired, Tom?
+   Çeviri: Emekli değil misin, Tom?
+--------------------------------------------------
+512. retributive [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: intikamcı, kinci, cezalandırıcı
+   Örnek: The empirical results of the study were remarkably retributive.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece intikamcı olduğu görüldü.
+--------------------------------------------------
+513. right [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sağ, hak, haklı
+   Örnek: I know I'm right.
+   Çeviri: Haklı olduğumu biliyorum.
+--------------------------------------------------
+514. risky [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: riskli, sakat, terbiyesiz
+   Örnek: It's a risky plan.
+   Çeviri: Bu riskli bir plan.
+--------------------------------------------------
+515. rival [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: rakip, ... kadar ... olmak, çekişmek
+   Örnek: I'm Tom's rival.
+   Çeviri: Tom'un rakibiyim.
+--------------------------------------------------
+516. robust [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: güçlü, dirençli, çetin
+   Örnek: He has a robust constitution.
+   Çeviri: Onun sağlam bir yapısı var.
+--------------------------------------------------
+517. rough [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kaba saba, kaba, sert
+   Örnek: I had a rough day.
+   Çeviri: Zor bir gün geçirdim.
+--------------------------------------------------
+518. roughly [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: yaklaşık olarak, tahminen, kabaca
+   Örnek: I'm roughly the same age as Tom.
+   Çeviri: Ben aşağı yukarı Tom'la aynı yaştayım.
+--------------------------------------------------
+519. running [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: çalışma, işletme, koşma
+   Örnek: I'm sick of running.
+   Çeviri: Koşmaktan usandım.
+--------------------------------------------------
+520. rural [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kırsal, taşra, köye ait
+   Örnek: I live in a rural area.
+   Çeviri: Kırsal bir alanda yaşıyorum.
+--------------------------------------------------
+521. said [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: söz konusu, adı geçen, söylenmiş
+   Örnek: I said I'd go.
+   Çeviri: Gideceğimi söyledim.
+--------------------------------------------------
+522. scared [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: korkmuş
+   Örnek: I'm a bit scared.
+   Çeviri: Ben biraz korkuyorum.
+--------------------------------------------------
+523. scary [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ürkütücü, korkunç, korkutucu
+   Örnek: It's a little scary.
+   Çeviri: O biraz korkutucu.
+--------------------------------------------------
+524. scholarly [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: ilmi, bilgili, bilimsel
+   Örnek: The empirical results of the study were remarkably scholarly.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece ilmi olduğu görüldü.
+--------------------------------------------------
+525. scientific [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: ilmi, bilimsel, fenni
+   Örnek: Is that a scientific fact?
+   Çeviri: O bilimsel bir gerçek mi?
+--------------------------------------------------
+526. seasoned [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: lezzet verilmiş, baharatlı, deneyimli
+   Örnek: I seasoned the fish with salt and pepper.
+   Çeviri: Tuz ve biberle balığı çeşnilendirdim.
+--------------------------------------------------
+527. secret [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sır, gizli, gizem
+   Örnek: I've got a secret.
+   Çeviri: Bir sırrım var.
+--------------------------------------------------
+528. sedative [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yatıştırıcı, yatıştırıcı ilaç, teskin edici
+   Örnek: The nurse gave you a sedative.
+   Çeviri: Hemşire sana bir sakinleştirici verdi.
+--------------------------------------------------
+529. sedentary [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: oturarak yapılan, sakin, sedanter
+   Örnek: The empirical results of the study were remarkably sedentary.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece oturarak yapılan olduğu görüldü.
+--------------------------------------------------
+530. seen [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: görülen
+   Örnek: I've seen a few.
+   Çeviri: Birkaç tane gördüm.
+--------------------------------------------------
+531. select [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: seçmek, ayıklamak, elemek
+   Örnek: He selected a Christmas gift for her.
+   Çeviri: Onun için bir noel hediyesi seçti.
+--------------------------------------------------
+532. sensible [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: mantıklı, akla uygun, halden anlayan
+   Örnek: I think it's sensible.
+   Çeviri: Bence bu mantıklı.
+--------------------------------------------------
+533. sensitive [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar] | Eş Anlam: delicate
+   Anlam: içli, hassas, duyarlı
+   Örnek: Don't be so sensitive.
+   Çeviri: O kadar hassas olma.
+--------------------------------------------------
+534. sensual [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: duygusal, şehvetli, kösnül
+   Örnek: The empirical results of the study were remarkably sensual.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece duygusal olduğu görüldü.
+--------------------------------------------------
+535. sentimental [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: duygusal, içli, hassas
+   Örnek: Don't be so sentimental.
+   Çeviri: Bu kadar duygusal olmayın.
+--------------------------------------------------
+536. serious [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ciddi, ağır, ağırbaşlı
+   Örnek: I'm a serious person.
+   Çeviri: Ben ciddi bir kişiyim.
+--------------------------------------------------
+537. several [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: birçok, çeşitli, ayrı
+   Örnek: I met him several times.
+   Çeviri: Onunla birkaç kez karşılaştım.
+--------------------------------------------------
+538. severe [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: haşin, sert, şiddetli
+   Örnek: I had a severe headache.
+   Çeviri: Şiddetli bir baş ağrım vardı.
+--------------------------------------------------
+539. shallow [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sığ, sığlaşmak, düzlemek
+   Örnek: Do you think I'm shallow?
+   Çeviri: Benim sığ olduğumu mu düşünüyorsun?
+--------------------------------------------------
+540. short [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: az, alçak, kısa
+   Örnek: It's a short walk.
+   Çeviri: O kısa bir yürüyüş.
+--------------------------------------------------
+541. shown [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: gösterilen
+   Örnek: They were shown the door.
+   Çeviri: Onlar sokak anahtarını aldılar.
+--------------------------------------------------
+542. sick [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: hasta, yakalatmak, kusmak
+   Örnek: I'm sick of it.
+   Çeviri: Bundan bıktım.
+--------------------------------------------------
+543. significant [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: dikkate değer, kayda değer, belirli
+   Örnek: It was a significant moment.
+   Çeviri: O önemli bir andı.
+--------------------------------------------------
+544. significantly [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: önemli ölçüde, anlamlı, önemli
+   Örnek: My grades have improved significantly.
+   Çeviri: Benim notlarım önemli ölçüde arttı.
+--------------------------------------------------
+545. simple [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sade, yalın, basit
+   Örnek: I'm a simple girl.
+   Çeviri: Ben basit bir kızım.
+--------------------------------------------------
+546. simply [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: basit bir şekilde, basitçe, bayağı
+   Örnek: I simply don't know.
+   Çeviri: Sadece bilmiyorum.
+--------------------------------------------------
+547. single [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: bekar, tek, ayırmak
+   Örnek: I'm a single mom.
+   Çeviri: Ben tek bir anneyim.
+--------------------------------------------------
+548. smartly [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: ustalıkla, zekice, sert/sıkı bir şekilde
+   Örnek: The empirical results of the study were remarkably smartly.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece ustalıkla olduğu görüldü.
+--------------------------------------------------
+549. snowy [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: karlı, bembeyaz, yağışlı
+   Örnek: My grandfather has snowy white hair.
+   Çeviri: Büyükbabamın kar beyazı saçı var.
+--------------------------------------------------
+550. social [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sosyal, sokulgan, toplumsal
+   Örnek: I'm a social worker.
+   Çeviri: Ben bir sosyal hizmet görevlisiyim.
+--------------------------------------------------
+551. societal [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: toplumsal
+   Örnek: The empirical results of the study were remarkably societal.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece toplumsal olduğu görüldü.
+--------------------------------------------------
+552. solar [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: güneş, güneşsel, güneşle ilgili
+   Örnek: Do you use solar panels?
+   Çeviri: Güneş panelleri kullanıyor musunuz?
+--------------------------------------------------
+553. somatic [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: somatik, bedeni, tensel
+   Örnek: The empirical results of the study were remarkably somatic.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece somatik olduğu görüldü.
+--------------------------------------------------
+554. some [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: biraz, bazı, birkaç
+   Örnek: I'll go get some.
+   Çeviri: Biraz almaya gideceğim
+--------------------------------------------------
+555. sound [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ses, söylemek, derine dalmak
+   Örnek: Do I sound in love?
+   Çeviri: Âşık gibi görünüyor muyum?
+--------------------------------------------------
+556. sour [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ekşi, zehir olmak, bozulmak
+   Örnek: Is it sweet or sour?
+   Çeviri: O, tatlı mı yoksa ekşi midir?
+--------------------------------------------------
+557. spare [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kıymamak, ayırmak, boş
+   Örnek: I have a spare key.
+   Çeviri: Yedek anahtarım var.
+--------------------------------------------------
+558. special [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: özel, özel bir program, yemek
+   Örnek: I'm no one special.
+   Çeviri: Ben özel biri değilim.
+--------------------------------------------------
+559. specific [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: belirli, özgül, özel
+   Örnek: He has no specific aim.
+   Çeviri: Özel bir amacı yok.
+--------------------------------------------------
+560. specified [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: belirlenmiş, belirtilmiş, belirtilen
+   Örnek: The empirical results of the study were remarkably specified.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece belirlenmiş olduğu görüldü.
+--------------------------------------------------
+561. spiced [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: baharlı, baharatlı, baharatlanmış
+   Örnek: The empirical results of the study were remarkably spiced.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece baharlı olduğu görüldü.
+--------------------------------------------------
+562. spicy [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: baharatlı, şık, hoş
+   Örnek: It's too spicy for me.
+   Çeviri: Benim için fazla baharatlı.
+--------------------------------------------------
+563. spoiled [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: şımarık, el bebek gül bebek, acımış
+   Örnek: I guess I'm spoiled.
+   Çeviri: Şımarık olduğumu düşünüyorum.
+--------------------------------------------------
+564. sporting [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: spor, av, avcılık
+   Örnek: I took part in the sporting event.
+   Çeviri: Spor olayına katıldım.
+--------------------------------------------------
+565. stable [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ahır, istikrarlı, durağan
+   Örnek: Prices are stable these days.
+   Çeviri: Fiyatlar bu günlerde istikrarlıdır.
+--------------------------------------------------
+566. started [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: başlatılan, başlamış, başlatılmış
+   Örnek: Don't get me started.
+   Çeviri: Beni başlatmayın.
+--------------------------------------------------
+567. steadily [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: durmadan, sabit şekilde, boyuna
+   Örnek: We're steadily moving forward.
+   Çeviri: Durmadan ileriye gidiyoruz.
+--------------------------------------------------
+568. steady [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sabit durum, istikrarlı, oynamaz
+   Örnek: Drive at a steady speed.
+   Çeviri: İstikrarlı bir hızda sür.
+--------------------------------------------------
+569. stolen [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: çalınan, çalıntı, çalınmış
+   Örnek: I had my car stolen.
+   Çeviri: Arabamı çaldırdım.
+--------------------------------------------------
+570. stormy [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: fırtınalı, heyecanlı, çekişmeli
+   Örnek: It was a dark and stormy night.
+   Çeviri: Karanlık ve fırtınalı bir geceydi.
+--------------------------------------------------
+571. striking [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: çarpıcı, vurma, geçici desteklerin alınması
+   Örnek: The workers are striking for better pay.
+   Çeviri: İşçiler daha iyi bir maaş için grev yapıyor.
+--------------------------------------------------
+572. strong [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: güçlü, kuvvetli, domuz gibi
+   Örnek: I'm a strong woman.
+   Çeviri: Ben güçlü bir kadınım.
+--------------------------------------------------
+573. stunning [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar] | Eş Anlam: marvelous, dazzling, breathtaking, magnificent
+   Anlam: sersemletme, çekici, müstesna
+   Örnek: You really do look stunning.
+   Çeviri: Gerçekten çekici görünüyorsun.
+--------------------------------------------------
+574. substantial [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: varlıklı, önemli, azımsanmayacak
+   Örnek: The money involved is substantial.
+   Çeviri: İlgili para önemli.
+--------------------------------------------------
+575. successful [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: başarılı, başarıya ulaşan şey, muvaffak
+   Örnek: I want to be successful.
+   Çeviri: Ben başarılı olmak istiyorum.
+--------------------------------------------------
+576. such [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: çok, böylesine, bu gibi
+   Örnek: I'm such a klutz.
+   Çeviri: Sakar Şakir'in tekiyim.
+--------------------------------------------------
+577. sudden [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ani, ansızın olan, apansız
+   Örnek: He felt a sudden pain.
+   Çeviri: O, ani bir ağrı hissetti.
+--------------------------------------------------
+578. sufficient [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: kafi, yeterli, elverişli
+   Örnek: I had to be self-sufficient.
+   Çeviri: Kendi kendime yeterli olmak zorundaydım.
+--------------------------------------------------
+579. suitable [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: münasip, uygun, elverişli
+   Örnek: I'm not sure that's suitable.
+   Çeviri: Onun uygun olduğundan emin değilim.
+--------------------------------------------------
+580. sunny [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: güneşli, günlük güneşlik, neşeli
+   Örnek: It's a sunny day.
+   Çeviri: Bugün güneşli bir gün.
+--------------------------------------------------
+581. supply [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: tedarik etmek, sağlamak, tedarik
+   Örnek: Cows supply us with milk.
+   Çeviri: İnekler bize süt sağlar.
+--------------------------------------------------
+582. surgical [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: cerrahi, ameliyatlarda kullanılan, ameliyatla yapılan
+   Örnek: How common are surgical errors?
+   Çeviri: Cerrahi hatalar ne kadar yaygındır?
+--------------------------------------------------
+583. surprised [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: şaşırmış, hayret etmiş, şaşmış
+   Örnek: I'm surprised at you.
+   Çeviri: Sana hayret ediyorum.
+--------------------------------------------------
+584. surprising [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: şaşırtıcı, şaşılası, hayret verici
+   Örnek: It was a little surprising.
+   Çeviri: Biraz şaşırtıcıydı.
+--------------------------------------------------
+585. surrounding [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: çevre, sarma, kuşatma
+   Örnek: The surrounding area was very quiet.
+   Çeviri: Etraf çok sakindi.
+--------------------------------------------------
+586. survival [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: hayatta kalma, kalıntı, daha uzun yaşama
+   Örnek: It's a matter of survival.
+   Çeviri: Bu bir ölüm kalım meselesi.
+--------------------------------------------------
+587. survive [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: uzun yaşamak, baki kalmak, daha uzun yaşamak
+   Örnek: We'll try to survive.
+   Çeviri: Hayatta kalmaya çalışacağız.
+--------------------------------------------------
+588. susceptible [sıfat] (C1) [C1 İleri Niteleme Sıfatları] | Eş Anlam: vulnerable
+   Anlam: duyarlı, duygulu, duygularına kolaylıkla kapılan
+   Örnek: She was susceptible to colds.
+   Çeviri: O, soğuk algınlığına duyarlıydı.
+--------------------------------------------------
+589. swift [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: süratli, kara sağan, kılıç kırlangıcı
+   Örnek: The stream is not very swift.
+   Çeviri: Dere çok hızlı değil.
+--------------------------------------------------
+590. swiftly [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: süratle, hızla, fişek gibi
+   Örnek: His fingers ran swiftly over the keys.
+   Çeviri: Parmakları klavyenin üzerinde hızla hareket etti.
+--------------------------------------------------
+591. systematically [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: sistematik olarak, sistemli olarak
+   Örnek: Her sewing basket, dresser drawers and pantry shelves are all systematically arranged in apple-pie order.
+   Çeviri: Onun dikiş sepeti, şifonyer çekmeceleri ve külotlu çorap rafları hepsi sistemli olarak yerli yerinde düzenlenir.
+--------------------------------------------------
+592. systemic [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: vücuda ait, sistemik, dizgesel
+   Örnek: The empirical results of the study were remarkably systemic.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece vücuda ait olduğu görüldü.
+--------------------------------------------------
+593. tedious [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: sıkıcı, bıktırıcı, meşakkatli
+   Örnek: It was a tedious job.
+   Çeviri: Can sıkıcı bir işti.
+--------------------------------------------------
+594. teenage [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: 13 19 yaş arası, on üç ile on dokuz yaşlar arasındaki devreye ait, gençlere ait
+   Örnek: I have two teenage sons.
+   Çeviri: İki tane ergen oğlum var.
+--------------------------------------------------
+595. tentative [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: deneme ve tecrübe nevinden, geçici/belirsiz, geçici girişim
+   Örnek: I have a tentative schedule.
+   Çeviri: Geçici bir programım var.
+--------------------------------------------------
+596. terrible [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: berbat, korkunç, berbat kimse
+   Örnek: I did a terrible job.
+   Çeviri: Berbat bir iş yaptım.
+--------------------------------------------------
+597. territorial [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: gönüllü asker, kara, belirli bir bölgeye ait
+   Örnek: The empirical results of the study were remarkably territorial.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece gönüllü asker olduğu görüldü.
+--------------------------------------------------
+598. that [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: şu, o, oradaki
+   Örnek: I can't do that.
+   Çeviri: Onu yapamam.
+--------------------------------------------------
+599. these [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: böyle bir miktarda, bunlar
+   Örnek: I don't want these.
+   Çeviri: Bunları istemiyorum.
+--------------------------------------------------
+600. thrive [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar] | Eş Anlam: flourish, prosper, succeed
+   Anlam: thrived/throve - thrived/thriven, serpilmek, gelişmek
+   Örnek: The empirical results of the study were remarkably thrive.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece thrived/throve - thrived/thriven olduğu görüldü.
+--------------------------------------------------
+601. thriving [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kuvvetli, büyüyen, mamur
+   Örnek: The empirical results of the study were remarkably thriving.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece kuvvetli olduğu görüldü.
+--------------------------------------------------
+602. tidy [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: düzenli, derli toplu, temizlemek
+   Örnek: Tom's house is tidy.
+   Çeviri: Tom'un evi düzenli.
+--------------------------------------------------
+603. tiny [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: mini mini, ufacık, minicik
+   Örnek: She got me a tiny toy.
+   Çeviri: O, bana küçük bir oyuncak aldı.
+--------------------------------------------------
+604. tired [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar] | Eş Anlam: exhausted, weary, fatigued
+   Anlam: argın, yorgun, yorgun düşmüş
+   Örnek: I'm a bit tired.
+   Çeviri: Ben biraz yorgunum.
+--------------------------------------------------
+605. tirelessly [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: yorgunluk nedir bilmeden, hiç yorulmaksızın, usanmadan
+   Örnek: The empirical results of the study were remarkably tirelessly.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece yorgunluk nedir bilmeden olduğu görüldü.
+--------------------------------------------------
+606. tiring [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yorucu, eziyetli, yorulmuş
+   Örnek: It's a tiring job.
+   Çeviri: Bu yorucu bir iş.
+--------------------------------------------------
+607. topic [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: konu, başlık, bahis
+   Örnek: Don't change the topic.
+   Çeviri: Konuyu değiştirme.
+--------------------------------------------------
+608. torn [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yırtık, kopuk, ayrılmış
+   Örnek: I had my thumbnail torn off.
+   Çeviri: Baş parmak tırnağımı kırdım.
+--------------------------------------------------
+609. total [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: toplam, tutar, bulmak
+   Örnek: I'm a total wreck.
+   Çeviri: Ben tam bir enkazım.
+--------------------------------------------------
+610. totally [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: bütünüyle, tamamen, tamamıyla
+   Örnek: He's totally lost it.
+   Çeviri: O delirdi.
+--------------------------------------------------
+611. touching [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: dokunaklı, acıklı, yanık
+   Örnek: I'm not touching it.
+   Çeviri: Ben ona dokunmuyorum.
+--------------------------------------------------
+612. tough [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: zorlu, çetin, zor
+   Örnek: I had a tough day.
+   Çeviri: Zor bir gün geçirdim.
+--------------------------------------------------
+613. toxic [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: zehirli, toksik, çok zararlı
+   Örnek: Lead is a toxic metal.
+   Çeviri: Kurşun toksik bir metaldir.
+--------------------------------------------------
+614. traditional [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: geleneksel, ananevi, göreneksel
+   Örnek: Sing me a traditional song.
+   Çeviri: Bana geleneksel bir şarkı söyle.
+--------------------------------------------------
+615. transforming [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: dönüştürücü, dönüşmekte olan, dönüşen
+   Örnek: The empirical results of the study were remarkably transforming.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece dönüştürücü olduğu görüldü.
+--------------------------------------------------
+616. transnational [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: uluslaraşırı, transnasyonal, uluslararası
+   Örnek: The empirical results of the study were remarkably transnational.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece uluslaraşırı olduğu görüldü.
+--------------------------------------------------
+617. treated [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: işlem görmüş, arıtılmış, davranılmış
+   Örnek: How are you being treated?
+   Çeviri: Nasıl tedavi ediliyorsun?
+--------------------------------------------------
+618. trial [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yargılama, duruşma, deneme
+   Örnek: When was Tom's trial?
+   Çeviri: Tom'un testi ne zamandı?
+--------------------------------------------------
+619. tried [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: mücerrep, saf, sınanmış
+   Örnek: I tried to do it.
+   Çeviri: Bunu yapmaya çalıştım.
+--------------------------------------------------
+620. triggered [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tetiklenmiş, ateşlenmiş, tetikli
+   Örnek: Their small protest triggered a mass demonstration.
+   Çeviri: Onların küçük protestosu kitlesel bir gösteriyi tetikledi.
+--------------------------------------------------
+621. trustworthy [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: güvenilir, harbi, sağlam
+   Örnek: I believe that he's trustworthy.
+   Çeviri: Onun güvenilir olduğuna inanıyorum.
+--------------------------------------------------
+622. trying [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: deneme, zor, sıkıntılı
+   Örnek: I'm trying my best.
+   Çeviri: Elimden geleni yapıyorum.
+--------------------------------------------------
+623. ultra [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: aşırı, uç görüşlü kimse, son derece
+   Örnek: The empirical results of the study were remarkably ultra.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece aşırı olduğu görüldü.
+--------------------------------------------------
+624. uncertain [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: belirsiz, bilinmez, şüpheli
+   Örnek: It's uncertain if he'll come.
+   Çeviri: Onun gelip gelmeyeceği belirsiz.
+--------------------------------------------------
+625. unchanged [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: değiştirilmemiş, değişmemiş, değiştirilemez
+   Örnek: The empirical results of the study were remarkably unchanged.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece değiştirilmemiş olduğu görüldü.
+--------------------------------------------------
+626. unclear [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: belirsiz, zor anlaşılır, açık olmayan
+   Örnek: It's unclear what went wrong.
+   Çeviri: Neyin yanlış gittiği belirsiz.
+--------------------------------------------------
+627. undergoing [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: süregelen, süren
+   Örnek: The website was undergoing maintenance.
+   Çeviri: Web sitesi bakım geçiriyor.
+--------------------------------------------------
+628. undesired [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: istenmeyen, arzu edilmeyen, istenmedik
+   Örnek: The empirical results of the study were remarkably undesired.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece istenmeyen olduğu görüldü.
+--------------------------------------------------
+629. unequal [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: eşitsiz, eşit olamayan, oransız
+   Örnek: The empirical results of the study were remarkably unequal.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece eşitsiz olduğu görüldü.
+--------------------------------------------------
+630. unexpected [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: beklenmedik, beklenmeyen, ummadık
+   Örnek: It's just so unexpected.
+   Çeviri: Bu sadece çok beklenmedik.
+--------------------------------------------------
+631. unfavorable [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: elverişsiz, olumsuz, ters
+   Örnek: The empirical results of the study were remarkably unfavorable.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece elverişsiz olduğu görüldü.
+--------------------------------------------------
+632. unfinished [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: işlenmemiş, yarım kalmış, yarım
+   Örnek: We had some unfinished business.
+   Çeviri: Biraz bitmemiş işimiz vardı.
+--------------------------------------------------
+633. unfortunately [zarf] (C1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: maalesef, aksi gibi, ne yazık ki
+   Örnek: Unfortunately, it's a hoax.
+   Çeviri: Ne yazık ki bu bir aldatmaca.
+--------------------------------------------------
+634. unique [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: emsalsiz, benzersiz, kendine mahsus
+   Örnek: We have a unique bond.
+   Çeviri: Benzersiz bir bağımız var.
+--------------------------------------------------
+635. unlike [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: farklı, benzemez, birbirine benzemeyen
+   Örnek: That's so unlike you.
+   Çeviri: O sana çok benzemiyor.
+--------------------------------------------------
+636. unluckily [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: şanssızlık eseri, aksi tesadüf, maalesef
+   Örnek: The empirical results of the study were remarkably unluckily.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece şanssızlık eseri olduğu görüldü.
+--------------------------------------------------
+637. unparallel [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: eğri, paralel olmayan
+   Örnek: The empirical results of the study were remarkably unparallel.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece eğri olduğu görüldü.
+--------------------------------------------------
+638. unprecedented [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: eşi benzeri görülmemiş, eşi görülmemiş, yeni
+   Örnek: The price jump was unprecedented.
+   Çeviri: Fiyat sıçramasının eşi benzeri görülmemişti.
+--------------------------------------------------
+639. unsafe [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: güvenli olmayan, emin olmayan, güvenilmez
+   Örnek: I don't feel unsafe.
+   Çeviri: Emniyetsiz hissetmiyorum.
+--------------------------------------------------
+640. unsuitable [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: uygunsuz, olmayacak, uymaz
+   Örnek: In my opinion, it's quite unsuitable.
+   Çeviri: Bence, o oldukça uygunsuz.
+--------------------------------------------------
+641. untreatable [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: tedavisiz, tedavisi imkansız, tedavi edilemez
+   Örnek: The empirical results of the study were remarkably untreatable.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece tedavisiz olduğu görüldü.
+--------------------------------------------------
+642. unwanted [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: istenilmeyen, istenmemiş, istenmeyen
+   Örnek: I keep receiving unwanted emails.
+   Çeviri: İstemediğim e-postaları almaya devam ediyorum.
+--------------------------------------------------
+643. updated [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: günümüze en yakın tarihte hazırlanmış, yenilenmiş, güncellenen
+   Örnek: We'll keep you updated.
+   Çeviri: Sizi gelişmelerden haberdar edeceğiz.
+--------------------------------------------------
+644. upheaval [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yükselme, devrim, kabarma
+   Örnek: The empirical results of the study were remarkably upheaval.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece yükselme olduğu görüldü.
+--------------------------------------------------
+645. urban [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: şehirsel, kentsel, şehir
+   Örnek: Isn't that just an urban legend?
+   Çeviri: Bu sadece bir şehir efsanesi değil mi?
+--------------------------------------------------
+646. useful [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: faydalı, yararlı, kullanışlı
+   Örnek: I hope it's useful.
+   Çeviri: Umarım yararlıdır.
+--------------------------------------------------
+647. using [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: kullanma, kullanan, kullanılan
+   Örnek: I'm using that cup.
+   Çeviri: Ben o fincanı kullanıyorum.
+--------------------------------------------------
+648. usually [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: genellikle, çoğunlukla, çoğu zaman
+   Örnek: I don't usually cry.
+   Çeviri: Genellikle ağlamam.
+--------------------------------------------------
+649. utterly [zarf] (B2) [Akademik Zarflar (-ly / Derece)]
+   Anlam: tümüyle, tamamen, düpedüz
+   Örnek: The report is utterly false.
+   Çeviri: Rapor tamamen yanlış.
+--------------------------------------------------
+650. vague [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: şüpheli, kararsız, anlaşılmaz
+   Örnek: It's a vague story.
+   Çeviri: O belirsiz bir hikaye.
+--------------------------------------------------
+651. vanish [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ortadan kaybolmak, yitmek, kayıplara karışmak
+   Örnek: Tom's smile vanished instantly.
+   Çeviri: Tom'un gülümsemesi anında kayboldu.
+--------------------------------------------------
+652. variable [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: değişken, uyuşmazlık, değişken şey
+   Örnek: Variable names in C are case sensitive.
+   Çeviri: C'deki değişken isimler büyük küçük harfe duyarlıdır.
+--------------------------------------------------
+653. various [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: çeşitli, muhtelif, birkaç
+   Örnek: He's collecting various data.
+   Çeviri: O çeşitli veriler topluyor.
+--------------------------------------------------
+654. venomous [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: haince, düşman, ağılı
+   Örnek: This snake isn't venomous.
+   Çeviri: Bu yılan zehirli değil.
+--------------------------------------------------
+655. very [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: çok, hatta, bile
+   Örnek: I'm not very old.
+   Çeviri: Ben çok yaşlı değilim.
+--------------------------------------------------
+656. vital [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yaşamsal, çok önemli, hayati
+   Örnek: Exercise is vital for a dog.
+   Çeviri: Egzersiz, bir köpek için hayatidir.
+--------------------------------------------------
+657. wanted [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: lazım, gerekli, aranılan
+   Örnek: I wanted to do it.
+   Çeviri: Onu yapmak istedim.
+--------------------------------------------------
+658. wealthy [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: varlıklı, zengin, servet sahibi
+   Örnek: I'm a wealthy man.
+   Çeviri: Ben zengin bir adamım.
+--------------------------------------------------
+659. wet [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: ıslatmak, ıslak, yaş
+   Örnek: I'm cold and wet.
+   Çeviri: Ben üşüdüm ve ıslağım.
+--------------------------------------------------
+660. whole [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: tam, bütün, tüm
+   Örnek: I saw the whole thing.
+   Çeviri: Bütün şeyi gördüm.
+--------------------------------------------------
+661. wide [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: geniş, bol, engin
+   Örnek: Now I'm wide awake.
+   Çeviri: Şimdi tamamen uyanığım.
+--------------------------------------------------
+662. widespread [sıfat] (C1) [C1 İleri Niteleme Sıfatları]
+   Anlam: yaygın, alabildiğine açılmış, geniş alana yayılmış
+   Örnek: The decision caused widespread anger.
+   Çeviri: Karar yaygın öfkeye neden oldu.
+--------------------------------------------------
+663. wild [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yaban, vahşi, yabani
+   Örnek: I'm not that wild.
+   Çeviri: O kadar vahşi değilim.
+--------------------------------------------------
+664. windy [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: rüzgarlı, hızlı, lafı uzatan
+   Örnek: It's a windy day.
+   Çeviri: Rüzgarlı bir gün.
+--------------------------------------------------
+665. wisely [zarf] (B1) [Akademik Zarflar (-ly / Derece)]
+   Anlam: akıllıca, bilgece
+   Örnek: You must act more wisely.
+   Çeviri: Daha akıllıca hareket etmelisin.
+--------------------------------------------------
+666. witnessed [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: meşhut, şahit olunmuş
+   Örnek: She witnessed him being killed.
+   Çeviri: O, onun öldürülüşüne tanıklık etti.
+--------------------------------------------------
+667. worldwide [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: dünya çapındaki, dünyadaki her ulusu kapsayan, yaygın
+   Örnek: It's a worldwide problem.
+   Çeviri: Dünya çapında bir sorun.
+--------------------------------------------------
+668. worried [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: endişeli, kaygılı, endişelenmiş
+   Örnek: I'm a bit worried.
+   Çeviri: Biraz endişeliyim.
+--------------------------------------------------
+669. worrying [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: endişe verici, üzücü, rahatsız edici
+   Örnek: I do a lot of worrying.
+   Çeviri: Bir sürü üzücü şey yaptım.
+--------------------------------------------------
+670. worthy [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: önemli kimse, ileri gelenlerden biri, saygın kişi
+   Örnek: He's not worthy of you.
+   Çeviri: O sana layık değil.
+--------------------------------------------------
+671. wounded [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yaralı, yaralanmış, mecruh
+   Örnek: He was wounded in the war.
+   Çeviri: O, savaşta yaralandı.
+--------------------------------------------------
+672. xx [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: yirminci
+   Örnek: The empirical results of the study were remarkably xx.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece yirminci olduğu görüldü.
+--------------------------------------------------
+673. young [sıfat] (B1) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: genç, hayvan yavrusu, döl
+   Örnek: He can't be young.
+   Çeviri: O, genç olamaz.
+--------------------------------------------------
+674. youthful [sıfat] (B2) [B1-B2 Sık Çıkan Akademik Sıfatlar]
+   Anlam: dinç, genç bir havaya sahip, genç
+   Örnek: The empirical results of the study were remarkably youthful.
+   Çeviri: Çalışmanın ampirik sonuçlarının son derece dinç olduğu görüldü.
+--------------------------------------------------

@@ -1,0 +1,662 @@
+=== KÜTÜPHANE: AKADEMIK İSIMLER > ALAN ODAKLI İSIMLER (SAĞLIK, FEN & SOSYAL) (132 KELİME) ===
+
+1. administration [isim] (C1)
+   Anlam: yönetim, idare, yerine getirme
+   Örnek: Give the administration a chance.
+   Çeviri: Yönetime bir şans ver.
+--------------------------------------------------
+2. an [isim] (B1)
+   Anlam: bir, hollanda antilleri, anabatik rüzgar
+   Örnek: I'm an ex-con.
+   Çeviri: Ben eski bir mahkumum.
+--------------------------------------------------
+3. astrophysics [isim] (C1)
+   Anlam: gökfiziği, astrofizik, gök fiziği
+   Örnek: The investigation highlighted the critical role of astrophysics.
+   Çeviri: Soruşturma gökfiziği kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+4. atmosphere [isim] (C1)
+   Anlam: atmosfer, havayuvarı, gazyuvarı
+   Örnek: The moon has no atmosphere.
+   Çeviri: Ay'ın atmosferi yoktur.
+--------------------------------------------------
+5. author [isim] (B1)
+   Anlam: yazar, yazmak, yazarı olmak
+   Örnek: I want to be an author.
+   Çeviri: Ben bir yazar olmak istiyorum.
+--------------------------------------------------
+6. authorities [isim] (C1)
+   Anlam: yetkililer, makam ve merci, resmi merciler
+   Örnek: I'm going to report you to the authorities.
+   Çeviri: Seni yetkili makamlara ihbar edeceğim.
+--------------------------------------------------
+7. authority [isim] (B2)
+   Anlam: yetki, otorite, bilirkişi
+   Örnek: I don't have the authority.
+   Çeviri: Benim yetkim yok.
+--------------------------------------------------
+8. authors [isim] (B2)
+   Anlam: yazarlar
+   Örnek: He is one of Spain's most famous authors.
+   Çeviri: O, İspanya'nın en ünlü yazarlarından biridir.
+--------------------------------------------------
+9. awareness [isim] (B2) | Eş Anlam: knowledge
+   Anlam: farkındalık, bilinçlenme, farkında olma
+   Örnek: Developing political awareness takes time.
+   Çeviri: Siyasi farkındalık edinmek zaman alır.
+--------------------------------------------------
+10. banks [isim] (B1)
+   Anlam: bankalar, alabama eyaletinde şehir
+   Örnek: I don't trust banks.
+   Çeviri: Bankalara güvenmiyorum.
+--------------------------------------------------
+11. billion [isim] (B2)
+   Anlam: milyar, bilyon
+   Örnek: A billion adults are illiterate.
+   Çeviri: Bir milyar yetişkin okuma yazma bilmemektedir.
+--------------------------------------------------
+12. biologists [isim] (C1)
+   Anlam: dirimbilimci, yaşambilimci, biyolog
+   Örnek: Biologists released some turtles into the sea.
+   Çeviri: Biyologlar bazı kaplumbağaları denize bıraktılar.
+--------------------------------------------------
+13. blood [isim] (B1)
+   Anlam: kan, akrabalık, asalet
+   Örnek: I didn't donate blood.
+   Çeviri: Kan bağışında bulunmadım.
+--------------------------------------------------
+14. brain [isim] (B1)
+   Anlam: beyin, kafasına ağır bir darbe indirmek, kafa yarmak
+   Örnek: He has a good brain.
+   Çeviri: O akıllıdır.
+--------------------------------------------------
+15. cancer [isim] (B1)
+   Anlam: kanser, yengeç burcu, kötü şey
+   Örnek: I don't have cancer.
+   Çeviri: Kanserim yok.
+--------------------------------------------------
+16. capillaries [isim] (C1)
+   Anlam: kılcal damarlar
+   Örnek: The investigation highlighted the critical role of capillaries.
+   Çeviri: Soruşturma kılcal damarlar kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+17. capillary [isim] (B2)
+   Anlam: ince boru, kılcal damar, kılla ilgili
+   Örnek: The investigation highlighted the critical role of capillary.
+   Çeviri: Soruşturma ince boru kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+18. communities [isim] (C1)
+   Anlam: topluluklar, toplumlar
+   Örnek: Asian communities tend to be quite closed.
+   Çeviri: Asya toplulukları oldukça kapalı olma eğilimindedir.
+--------------------------------------------------
+19. community [isim] (B2)
+   Anlam: halk, camia, topluluk
+   Örnek: He's a community leader.
+   Çeviri: O bir toplum lideri.
+--------------------------------------------------
+20. computing [isim] (B2)
+   Anlam: hesaplama, hesaplayan, programlama
+   Örnek: Boys are more interested in engineering and computing than girls.
+   Çeviri: Mühendislik ve bilgisayar alanında erkekler kızlara göre daha ilgili.
+--------------------------------------------------
+21. contamination [isim] (C1)
+   Anlam: pislik, kirletilme, bulaşım
+   Örnek: The investigation highlighted the critical role of contamination.
+   Çeviri: Soruşturma pislik kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+22. court [isim] (B1)
+   Anlam: mahkeme, aranmak, yaltaklanmak
+   Örnek: I'll see you in court.
+   Çeviri: Mahkemede görüşürüz.
+--------------------------------------------------
+23. courtroom [isim] (B2)
+   Anlam: mahkeme salonu
+   Örnek: Justice is found in a courtroom.
+   Çeviri: Adalet mahkeme salonunda bulunur.
+--------------------------------------------------
+24. courtrooms [isim] (C1)
+   Anlam: mahkeme salonu
+   Örnek: The investigation highlighted the critical role of courtrooms.
+   Çeviri: Soruşturma mahkeme salonu kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+25. cultures [isim] (B2)
+   Anlam: yeni kültürlerle tanışmak, eski kültürler, kültür başkenti
+   Örnek: There are many cultures on Earth.
+   Çeviri: Dünyada birçok kültür vardır.
+--------------------------------------------------
+26. deforestation [isim] (C1)
+   Anlam: orman açma, ormanları tahrip etme, ormansızlaşma
+   Örnek: Their habitat is threatened by deforestation.
+   Çeviri: Onların yetişme ortamı ormansızlaşma tarafından tehdit ediliyor.
+--------------------------------------------------
+27. diagnosis [isim] (B2)
+   Anlam: teşhis, tanı, belirtme
+   Örnek: It's a plausible diagnosis.
+   Çeviri: Bu makul bir tanı.
+--------------------------------------------------
+28. diet [isim] (B1)
+   Anlam: diyet, perhiz, perhiz vermek
+   Örnek: I'm on a diet.
+   Çeviri: Ben diyetteyim.
+--------------------------------------------------
+29. dietician [isim] (B2)
+   Anlam: diyetisyen, beslenme uzmanı, beslenme eğitimcisi
+   Örnek: The investigation highlighted the critical role of dietician.
+   Çeviri: Soruşturma diyetisyen kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+30. dietitian [isim] (B2)
+   Anlam: diyetisyen, diyet uzmanı, beslenme uzmanı
+   Örnek: The investigation highlighted the critical role of dietitian.
+   Çeviri: Soruşturma diyetisyen kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+31. dietitians [isim] (C1)
+   Anlam: diyetisyen, diyet uzmanı, beslenme uzmanı
+   Örnek: The investigation highlighted the critical role of dietitians.
+   Çeviri: Soruşturma diyetisyen kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+32. discover [isim] (B2)
+   Anlam: keşfetmek, çıkarmak, anlamak
+   Örnek: How did you discover that?
+   Çeviri: Sen onu nasıl keşfettin?
+--------------------------------------------------
+33. discoveries [isim] (C1)
+   Anlam: coğrafyada keşifler, bilimde keşifler, altın aramaları
+   Örnek: She made a series of medical discoveries.
+   Çeviri: O bir dizi tıbbi keşifler yaptı
+--------------------------------------------------
+34. discovering [isim] (C1)
+   Anlam: buluculuk
+   Örnek: Learning another language means discovering a new world.
+   Çeviri: Başka bir dil öğrenmek, yeni bir dünya keşfetmek demektir.
+--------------------------------------------------
+35. discovery [isim] (B2)
+   Anlam: buluş, bulgu, keşif
+   Örnek: I've made a discovery.
+   Çeviri: Bir keşif yaptım.
+--------------------------------------------------
+36. disease [isim] (B2)
+   Anlam: hastalık, sayrılık, maraz
+   Örnek: It's a bad disease.
+   Çeviri: Bu kötü bir hastalık.
+--------------------------------------------------
+37. diseases [isim] (B2)
+   Anlam: hastalıklar
+   Örnek: Many diseases result from poverty.
+   Çeviri: Birçok hastalık yoksulluktan kaynaklanır.
+--------------------------------------------------
+38. doctors [isim] (B2)
+   Anlam: doktorların ihmalinden öldüğü iddia edilmek, doktorlara yönelik düşüncesini/tavrını vs değiştirmek, doktorların dağılımı
+   Örnek: I don't like doctors.
+   Çeviri: Doktorları sevmem.
+--------------------------------------------------
+39. drug [isim] (B1) | Eş Anlam: medication
+   Anlam: ilaç, uyuşturmak, ilaç vermek
+   Örnek: It's like a drug.
+   Çeviri: O bir ilaç gibi.
+--------------------------------------------------
+40. emissions [isim] (B2)
+   Anlam: emisyonlar
+   Örnek: It is said that global warming is directly related to carbon dioxide emissions.
+   Çeviri: Küresel ısınmanın karbondioksit emisyonu ile doğrudan ilgili olduğu söyleniyor.
+--------------------------------------------------
+41. energies [isim] (B2)
+   Anlam: avrupa yenilenebilir enerji birliği, özgül sinir enerjisi doktrini, özgül sinir enerjileri
+   Örnek: I concentrated all my energies on the problem.
+   Çeviri: Tüm enerjimi sorun üzerinde yoğunlaştırdım.
+--------------------------------------------------
+42. energy [isim] (B1)
+   Anlam: enerji, kuvvet, derman
+   Örnek: He is full of energy.
+   Çeviri: O kişi çok enerjik.
+--------------------------------------------------
+43. environment [isim] (C1)
+   Anlam: çevre, ortam, etraf
+   Örnek: It's a hostile environment.
+   Çeviri: Bu düşmanca bir ortam.
+--------------------------------------------------
+44. environments [isim] (C1)
+   Anlam: endüstriyel ortamlar, daha zorlu ortamlarda, finansal çevreler
+   Örnek: Rural environments are too quiet for me.
+   Çeviri: Kırsal ortamlar benim için çok sessiz.
+--------------------------------------------------
+45. examination [isim] (C1)
+   Anlam: inceleme, muayene, sınav
+   Örnek: He took an oral examination.
+   Çeviri: O, bir sözlü sınava girdi.
+--------------------------------------------------
+46. excavation [isim] (C1) | Eş Anlam: digging, mining, unearthing
+   Anlam: kazı, kazma, hafriyat
+   Örnek: Human remains were found during the excavation.
+   Çeviri: Kazı sırasında insan kalıntıları bulundu.
+--------------------------------------------------
+47. experiment [isim] (C1)
+   Anlam: deney, deney yapmak, deney uygulamak
+   Örnek: I know it's an experiment.
+   Çeviri: Bunun bir deney olduğunu biliyorum.
+--------------------------------------------------
+48. experiments [isim] (C1)
+   Anlam: deneyler
+   Örnek: The experiments led to great discoveries.
+   Çeviri: Deneyler büyük buluşlara yol açtı.
+--------------------------------------------------
+49. explanation [isim] (C1)
+   Anlam: açıklama, izah, anlam
+   Örnek: I'd like an explanation.
+   Çeviri: Bir açıklama istiyorum.
+--------------------------------------------------
+50. failures [isim] (B2)
+   Anlam: arızalar arası ortalama zaman, banka iflasları, işletme başarısızlıkları
+   Örnek: We're going to have failures.
+   Çeviri: Hatalarımız olacak.
+--------------------------------------------------
+51. forest [isim] (B1)
+   Anlam: orman, ağaçlandırmak, ormanlaştırmak
+   Örnek: We're in the forest.
+   Çeviri: Biz ormandayız.
+--------------------------------------------------
+52. forestation [isim] (C1)
+   Anlam: ağaçlandırma, ormancılık
+   Örnek: The investigation highlighted the critical role of forestation.
+   Çeviri: Soruşturma ağaçlandırma kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+53. form [isim] (B1)
+   Anlam: biçimlendirmek, şekillendirmek, oluşturmak
+   Örnek: Heat is a form of energy.
+   Çeviri: Isı bir enerji şeklidir.
+--------------------------------------------------
+54. fossil [isim] (B1)
+   Anlam: taşlaşmak, köhneleşmek, fosilleşmek
+   Örnek: He is a living fossil!
+   Çeviri: O yaşayan bir fosil!
+--------------------------------------------------
+55. fund [isim] (B1)
+   Anlam: kaynak, sermaye, fon
+   Örnek: He's good at fund raising.
+   Çeviri: O, fon sağlamada iyidir.
+--------------------------------------------------
+56. government [isim] (C1)
+   Anlam: hükümet, devlet yönetimi, siyasal bilgiler
+   Örnek: I'm a government worker.
+   Çeviri: Ben bir devlet işçisiyim.
+--------------------------------------------------
+57. governments [isim] (C1)
+   Anlam: hükümetlerin meşruluğu, adlarına bu sözleşmenin imzalandığı hükümetler bundan sonra "katılımcı devletler" olarak anılacaktır, devletin kolu uzundur
+   Örnek: They were members of the local governments.
+   Çeviri: Onlar yerel yönetimin üyeleriydi.
+--------------------------------------------------
+58. governor [isim] (B2)
+   Anlam: vali, banka müdürü, amir
+   Örnek: Will you run for governor?
+   Çeviri: Valilik için yarışacak mısın?
+--------------------------------------------------
+59. healing [isim] (B2)
+   Anlam: şifa, şifalı, sağlığına kavuşma
+   Örnek: Tom's leg is healing.
+   Çeviri: Tom'un bacağı iyileşiyor.
+--------------------------------------------------
+60. health [isim] (B1)
+   Anlam: sıhhat, sağlık, afiyet
+   Örnek: How's Tom's health?
+   Çeviri: Tom'un sağlığı nasıl?
+--------------------------------------------------
+61. healthcare [isim] (C1)
+   Anlam: sağlık hizmeti
+   Örnek: Some healthcare workers spend more time doing paperwork than taking care of patients.
+   Çeviri: Bazı sağlık çalışanları hastalara bakmak yerine evrak işleri yaparak daha çok zaman geçirmektedirler.
+--------------------------------------------------
+62. hill [isim] (B1)
+   Anlam: tepe, toprak yığmak, tepelemek
+   Örnek: I ran up the hill.
+   Çeviri: Tepeye koştum.
+--------------------------------------------------
+63. history [isim] (B2)
+   Anlam: geçmiş, tarih, kayıtlar
+   Örnek: I am good at history.
+   Çeviri: Ben tarihte iyiyim.
+--------------------------------------------------
+64. identification [isim] (C1)
+   Anlam: kimlik saptama, aynileştirme, özdeşleştirme
+   Örnek: Can I see some identification?
+   Çeviri: Bir kimliğinizi görebilir miyim?
+--------------------------------------------------
+65. illness [isim] (B2)
+   Anlam: hastalık, maraz, illet
+   Örnek: It's a serious illness.
+   Çeviri: Bu ciddi bir hastalık.
+--------------------------------------------------
+66. immunity [isim] (B2)
+   Anlam: bağışıklık, ayrıcalık, masuniyet
+   Örnek: The investigation highlighted the critical role of immunity.
+   Çeviri: Soruşturma bağışıklık kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+67. importance [isim] (C1)
+   Anlam: önem, saygınlık, etki
+   Örnek: It's of no importance.
+   Çeviri: Bu önemli değil.
+--------------------------------------------------
+68. incident [isim] (B2)
+   Anlam: hadise, olay, yük
+   Örnek: It was a small incident.
+   Çeviri: O küçük bir kazaydı.
+--------------------------------------------------
+69. inequality [isim] (C1)
+   Anlam: eşitsizlik, sapma, değişebilirlik
+   Örnek: No inequality should be allowed to exist between men and women.
+   Çeviri: Kadınlar ve erkekler arasında hiçbir eşitsizliğin var olmasına izin verilmemesi gerekir.
+--------------------------------------------------
+70. infection [isim] (B2)
+   Anlam: enfeksiyon, bulaşma, iltihap
+   Örnek: I have an ear infection.
+   Çeviri: Bir kulak enfeksiyonum var.
+--------------------------------------------------
+71. injury [isim] (B1)
+   Anlam: zarar, halel, incinme
+   Örnek: Tom's injury isn't serious.
+   Çeviri: Tom'un sakatlığı ciddi değil.
+--------------------------------------------------
+72. investigation [isim] (C1)
+   Anlam: soruşturma, araştırma, teftiş
+   Örnek: Am I under investigation now?
+   Çeviri: Şimdi soruşturma altında mıyım?
+--------------------------------------------------
+73. investigations [isim] (C1)
+   Anlam: soruşturmalar, tahkikat, taharriyat
+   Örnek: The investigation highlighted the critical role of investigations.
+   Çeviri: Soruşturma soruşturmalar kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+74. investigator [isim] (C1) | Eş Anlam: researcher
+   Anlam: müfettiş, dedektif, araştırmacı
+   Örnek: I'm a private investigator.
+   Çeviri: Ben özel bir müfettişim.
+--------------------------------------------------
+75. killer [isim] (B1)
+   Anlam: öldürücü, katil, öldürücü darbe
+   Örnek: I'm not a killer.
+   Çeviri: Ben bir katil değilim.
+--------------------------------------------------
+76. law [isim] (B1)
+   Anlam: yasa, hukuk, kanun
+   Örnek: I'm a law student.
+   Çeviri: Hukuk öğrencisiyim.
+--------------------------------------------------
+77. lawyer [isim] (B1)
+   Anlam: avukat, hukukçu, dava vekili
+   Örnek: I'm Tom's lawyer.
+   Çeviri: Tom'un avukatıyım.
+--------------------------------------------------
+78. lawyers [isim] (B2)
+   Anlam: hukukçular
+   Örnek: Tom's parents were lawyers.
+   Çeviri: Tom'un anne-babası avukattı.
+--------------------------------------------------
+79. lung [isim] (B1)
+   Anlam: akciğer, ciğer
+   Örnek: He's got lung cancer.
+   Çeviri: Onun akciğer kanseri var.
+--------------------------------------------------
+80. lungs [isim] (B1)
+   Anlam: akciğer, ciğer, akciğerler
+   Örnek: Smoking does damage your lungs.
+   Çeviri: Sigara içmek akciğerlerinize zarar verir.
+--------------------------------------------------
+81. marketing [isim] (B2)
+   Anlam: pazarlama, alışveriş, alışveriş yapma
+   Örnek: He is the head of marketing.
+   Çeviri: O pazarlama müdürüdür.
+--------------------------------------------------
+82. medication [isim] (C1) | Eş Anlam: treatment, medicine, drug, cure
+   Anlam: ilaç, ilaç tedavisi, iyileştirme
+   Örnek: I don't need medication.
+   Çeviri: Benim ilaca ihtiyacım yok.
+--------------------------------------------------
+83. medicine [isim] (B2) | Eş Anlam: medication
+   Anlam: tıp, ilaç, katlanmak
+   Örnek: I have to take medicine.
+   Çeviri: İlaç almak zorundayım.
+--------------------------------------------------
+84. medics [isim] (B1)
+   Anlam: kabayonca, doktor, korunga
+   Örnek: The investigation highlighted the critical role of medics.
+   Çeviri: Soruşturma kabayonca kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+85. member [isim] (B1)
+   Anlam: üye, organ, mensup
+   Örnek: I'm not a member.
+   Çeviri: Ben üye değilim.
+--------------------------------------------------
+86. million [isim] (B2)
+   Anlam: milyon
+   Örnek: I know a million jokes.
+   Çeviri: Bir milyon fıkra biliyorum.
+--------------------------------------------------
+87. nature [isim] (B1)
+   Anlam: mahiyet, doğa, tabiat
+   Örnek: He has a mild nature.
+   Çeviri: Onun ılımlı bir doğası var.
+--------------------------------------------------
+88. ocean [isim] (B1)
+   Anlam: okyanus, umman, derya
+   Örnek: I can smell the ocean.
+   Çeviri: Okyanusun kokusunu alabiliyorum.
+--------------------------------------------------
+89. organs [isim] (B1)
+   Anlam: aza
+   Örnek: No vital organs were damaged.
+   Çeviri: Hiçbir hayati organ hasar görmedi.
+--------------------------------------------------
+90. painting [isim] (B2)
+   Anlam: tablo, resim, ressamlık
+   Örnek: It's only a painting.
+   Çeviri: Bu sadece bir tablo.
+--------------------------------------------------
+91. paintings [isim] (B2)
+   Anlam: tablo, resim, ressamlık
+   Örnek: Did you see the paintings?
+   Çeviri: Tabloları gördünüz mü?
+--------------------------------------------------
+92. patients [isim] (B2)
+   Anlam: hastalar, hasta ve yaralılar
+   Örnek: I have a lot of patients.
+   Çeviri: Benim bir sürü hatam var.
+--------------------------------------------------
+93. physician [isim] (B2)
+   Anlam: tıp adamı, hekim, tabip
+   Örnek: He is not a physician.
+   Çeviri: O bir doktor değil.
+--------------------------------------------------
+94. physics [isim] (B2)
+   Anlam: fizik
+   Örnek: I got a B in physics.
+   Çeviri: Fizikten B aldım.
+--------------------------------------------------
+95. plant [isim] (B1)
+   Anlam: bitki, tesis, fabrika
+   Örnek: Did you plant this tree?
+   Çeviri: Bu ağacı sen mi diktin?
+--------------------------------------------------
+96. price [isim] (B1)
+   Anlam: bedel, fiyat, ücret
+   Örnek: I'll pay any price.
+   Çeviri: Ben herhangi bir fiyatı öderim.
+--------------------------------------------------
+97. regulation [isim] (C1)
+   Anlam: düzenleme, nizam, regülasyon
+   Örnek: The regulation was abolished, but then it was reenacted.
+   Çeviri: Düzenleme kaldırıldı ama sonra yeniden yürürlüğe kondu.
+--------------------------------------------------
+98. research [isim] (B2)
+   Anlam: incelemek, araştırmak, araştırma yapmak
+   Örnek: I did a little research.
+   Çeviri: Birazcık araştırma yaptım.
+--------------------------------------------------
+99. researcher [isim] (C1) | Eş Anlam: scientist, analyst, investigator
+   Anlam: araştırmacı, araştırıcı, araştırma görevlisi
+   Örnek: He said, "I plan to become a researcher."
+   Çeviri: O, "bir araştırmacı olmayı planlıyorum" dedi.
+--------------------------------------------------
+100. researchers [isim] (C1)
+   Anlam: araştırmacılar
+   Örnek: Researchers say that it's easier to lose weight if you eat three square meals a day.
+   Çeviri: Araştırmacılar günde üç doyurucu yemek yersen kilo vermenin daha kolay olduğunu söylüyor.
+--------------------------------------------------
+101. rivers [isim] (B1)
+   Anlam: her yol roma'ya çıkar, su akar yolunu bulur, tilkinin dönüp dolaşıp geleceği yer yine kürkçü dükkanıdır
+   Örnek: There are many rivers in India.
+   Çeviri: Hindistan'da birçok nehir var.
+--------------------------------------------------
+102. rule [isim] (B1)
+   Anlam: hüküm sürmek, hükmetmek, kural
+   Örnek: It's a good rule.
+   Çeviri: Bu iyi bir kural.
+--------------------------------------------------
+103. science [isim] (B2)
+   Anlam: ilim, bilim, beceri
+   Örnek: I'm good at science.
+   Çeviri: Ben bilimde iyiyim.
+--------------------------------------------------
+104. shape [isim] (B1)
+   Anlam: şekillendirmek, biçim vermek, şekil vermek
+   Örnek: I'm in bad shape.
+   Çeviri: Ben kötü durumdayım.
+--------------------------------------------------
+105. skill [isim] (B1)
+   Anlam: maharet, beceri, hüner
+   Örnek: He showed a lot of skill.
+   Çeviri: O bir sürü yetenek gösterdi.
+--------------------------------------------------
+106. skills [isim] (B1)
+   Anlam: vasıflar, beceriler
+   Örnek: Don't you have any skills?
+   Çeviri: Herhangi bir becerin yok mu?
+--------------------------------------------------
+107. society [isim] (B2)
+   Anlam: toplum, dernek, cemiyet
+   Örnek: He is a danger to society.
+   Çeviri: O, toplum için bir tehlikedir.
+--------------------------------------------------
+108. species [isim] (B2)
+   Anlam: tür, ortak özellikleri olan grup, hayal
+   Örnek: It is an endangered species.
+   Çeviri: Nesli tükenmekte olan bir türdür.
+--------------------------------------------------
+109. statement [isim] (B2)
+   Anlam: ifade, söz, beyan
+   Örnek: I have a brief statement.
+   Çeviri: Benim kısa bir açıklamam var.
+--------------------------------------------------
+110. students [isim] (B2)
+   Anlam: öğrenciler
+   Örnek: I think they're students.
+   Çeviri: Sanırım onlar öğrenci.
+--------------------------------------------------
+111. surgery [isim] (B2)
+   Anlam: ameliyat, ameliyathane, cerrahlık
+   Örnek: It's not brain surgery.
+   Çeviri: O, beyin ameliyatı değil.
+--------------------------------------------------
+112. symptom [isim] (B2)
+   Anlam: belirti, alamet, emare
+   Örnek: Do you have this symptom often?
+   Çeviri: Sık sık bu belirtilerin olur mu?
+--------------------------------------------------
+113. technologies [isim] (C1)
+   Anlam: teknolojiler
+   Örnek: The investigation highlighted the critical role of technologies.
+   Çeviri: Soruşturma teknolojiler kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+114. technology [isim] (C1)
+   Anlam: teknoloji, uygulayımbilim, mühendislik bilgisi
+   Örnek: I am thankful for technology.
+   Çeviri: Ben teknoloji için minettarım.
+--------------------------------------------------
+115. teeth [isim] (B1)
+   Anlam: diş çıkarmak, dişler, en şiddetli noktası
+   Örnek: I have two bad teeth.
+   Çeviri: İki kötü dişim var.
+--------------------------------------------------
+116. therapies [isim] (B2)
+   Anlam: tedaviler, terapiler
+   Örnek: The investigation highlighted the critical role of therapies.
+   Çeviri: Soruşturma tedaviler kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+117. therapist [isim] (B2)
+   Anlam: terapist, sağaltımcı, doktor
+   Örnek: I'm seeing a therapist.
+   Çeviri: Bir terapistle görüşüyorum.
+--------------------------------------------------
+118. therapy [isim] (B2) | Eş Anlam: treatment
+   Anlam: iyileştirme, tedavi, sağaltım
+   Örnek: I think I need therapy.
+   Çeviri: Ben terapiye ihtiyacım olduğunu düşünüyorum.
+--------------------------------------------------
+119. thrill [isim] (B1)
+   Anlam: heyecan, heyecanlandırmak, etkilemek
+   Örnek: They do it just for the thrill of it.
+   Çeviri: Onlar onu sadece onun büyük heyecanı için yapıyor.
+--------------------------------------------------
+120. tooth [isim] (B1)
+   Anlam: diş, dişle kaplamak, pütürlü yapmak
+   Örnek: I had a tooth pulled.
+   Çeviri: Ben bir diş çektirdim.
+--------------------------------------------------
+121. treatment [isim] (B2) | Eş Anlam: medication, cure, therapy, remedy
+   Anlam: tedavi, sağlık bakımı, muamele
+   Örnek: I expect no special treatment.
+   Çeviri: Özel muamele görmeyi beklemiyorum.
+--------------------------------------------------
+122. treatments [isim] (C1)
+   Anlam: yeni tedaviler, iklimsel özel vasıtalar ve tıbbi tedavi konularında karşılıklı yardıma dair avrupa sözleşmesi, alüminyum alaşımlarının anodik işlemleri
+   Örnek: How much will all the treatments cost?
+   Çeviri: Tüm tedaviler ne kadara mal olacak?
+--------------------------------------------------
+123. vaccination [isim] (C1)
+   Anlam: aşılama, aşı yapma, aşı
+   Örnek: The vaccination left a funny little mark on my arm.
+   Çeviri: Aşı kolumda komik küçük bir iz bıraktı.
+--------------------------------------------------
+124. vaccine [isim] (B2)
+   Anlam: aşı, aşı maddesi, aşıya ait
+   Örnek: Do you have the vaccine?
+   Çeviri: Aşınız var mı?
+--------------------------------------------------
+125. war [isim] (B1)
+   Anlam: harp, savaş, savaş halinde olmak
+   Örnek: He is a war orphan.
+   Çeviri: O, bir savaş yetimidir?
+--------------------------------------------------
+126. warming [isim] (B2)
+   Anlam: dayak atma, ısınma, ısıtma
+   Örnek: I'm just warming up.
+   Çeviri: Daha yeni ısınıyorum.
+--------------------------------------------------
+127. warmth [isim] (B1)
+   Anlam: sıcaklık, ısı, ateşlilik
+   Örnek: I remember the warmth of his arms.
+   Çeviri: Onun kollarının sıcaklığını hatırlıyorum.
+--------------------------------------------------
+128. warrior [isim] (B2)
+   Anlam: savaşçı, cenkçi, silahşor
+   Örnek: The warrior is conscious of both his strength and his weakness.
+   Çeviri: Savaşçı hem gücünün hem de zayıflığının bilincindedir.
+--------------------------------------------------
+129. weather [isim] (B2)
+   Anlam: hava, hava durumu, yalpalamak
+   Örnek: Nice weather, isn't it?
+   Çeviri: Güzel hava, değil mi?
+--------------------------------------------------
+130. will [isim] (B1)
+   Anlam: vasiyet, irade, dilemek
+   Örnek: I will buy a car.
+   Çeviri: Bir araba alacağım.
+--------------------------------------------------
+131. workshop [isim] (B2)
+   Anlam: çalıştay, seminer, zanaatçıya ait atölye
+   Örnek: I am working at the workshop.
+   Çeviri: Ben atölyede çalışıyorum.
+--------------------------------------------------
+132. wr [isim] (B1)
+   Anlam: kırmızı renkli, monoazo bir organik pigment
+   Örnek: I'd like to wring Tom's neck.
+   Çeviri: Tom'un boynunu sıkmak istiyorum.
+--------------------------------------------------

@@ -1,0 +1,62 @@
+=== KÜTÜPHANE: BAĞLAÇLAR & EDATLAR > ZAMAN VE SÜREÇ EDATLARI (12 KELİME) ===
+
+1. across [edat] (B1)
+   Anlam: karşıya, aşırı, karşı karşıya
+   Örnek: I cut across the park.
+   Çeviri: Parka kestirmeden gittim.
+--------------------------------------------------
+2. after [edat] (B1)
+   Anlam: sonra, öğleden sonra, sonra gelen
+   Örnek: He is after a job.
+   Çeviri: O, iş arıyor.
+--------------------------------------------------
+3. along [edat] (B1)
+   Anlam: boyunca, yanında, yanına
+   Örnek: I'll be along soon.
+   Çeviri: Yakında birlikte olacağız.
+--------------------------------------------------
+4. before [edat] (B1)
+   Anlam: evvel, önce, daha önce
+   Örnek: He's done it before.
+   Çeviri: Onu daha önce yaptı.
+--------------------------------------------------
+5. beyond [edat] (B1)
+   Anlam: öte, ötede, ötesi
+   Örnek: It is beyond my power.
+   Çeviri: Bu benim gücümü aşar.
+--------------------------------------------------
+6. during [edat] (B1)
+   Anlam: zarfında, süresince, sırasında
+   Örnek: Don't talk during class.
+   Çeviri: Ders esnasında konuşma.
+--------------------------------------------------
+7. past [edat] (B1)
+   Anlam: geçmiş, geçmiş zaman, bir kimsenin geçmişi
+   Örnek: It's past my curfew.
+   Çeviri: O saatte dışarı çıkmam yasak.
+--------------------------------------------------
+8. through [edat] (B2)
+   Anlam: başından sonuna kadar, yoluyla, üzerinden
+   Örnek: I'll get through it.
+   Çeviri: Ben bunu atlatacağım.
+--------------------------------------------------
+9. throughout [edat] (B2)
+   Anlam: boyunca, baştanbaşa, baştan başa
+   Örnek: It rained throughout the night.
+   Çeviri: Tüm gece boyunca yağmur yağdı.
+--------------------------------------------------
+10. towards [edat] (B2)
+   Anlam: doğru, karşı, -e doğru
+   Örnek: The dog ran towards me.
+   Çeviri: Köpek bana doğru koştu.
+--------------------------------------------------
+11. upon [edat] (B1)
+   Anlam: üzerine, üzerinde, üstünde
+   Örnek: You can rely upon him.
+   Çeviri: Ona güvenebilirsiniz.
+--------------------------------------------------
+12. within [edat] (B1)
+   Anlam: dahilinde, içinde, içerisinde
+   Örnek: Come back within a month.
+   Çeviri: Bir ay içinde geri gel.
+--------------------------------------------------

@@ -1,0 +1,41 @@
+{
+  "parent_key": "05_phrasal_verbs_ve_kaliplar",
+  "parent_name": "Kütüphane: Phrasal Verbs",
+  "subfolder_key": "02_akademik_kolokasyonlar",
+  "subfolder_name": "Akademik Kolokasyonlar",
+  "word_count": 2,
+  "words": [
+    {
+      "word": "intensive care",
+      "meaning": "yoğun bakım",
+      "part_of_speech": "kalıp ifade",
+      "level": "B1",
+      "parent_key": "05_phrasal_verbs_ve_kaliplar",
+      "parent_name": "Kütüphane: Phrasal Verbs",
+      "subfolder_key": "02_akademik_kolokasyonlar",
+      "subfolder_name": "Akademik Kolokasyonlar",
+      "synonyms": [
+        "ICU",
+        "critical care"
+      ],
+      "example_sentence": "The clinical team monitored the patient continuously in the intensive care unit.",
+      "example_translation": "Klinik ekip hastayı yoğun bakım ünitesinde sürekli olarak izledi."
+    },
+    {
+      "word": "cultural heritage",
+      "meaning": "kültürel miras",
+      "part_of_speech": "kalıp ifade",
+      "level": "B2",
+      "parent_key": "05_phrasal_verbs_ve_kaliplar",
+      "parent_name": "Kütüphane: Phrasal Verbs",
+      "subfolder_key": "02_akademik_kolokasyonlar",
+      "subfolder_name": "Akademik Kolokasyonlar",
+      "synonyms": [
+        "historical legacy",
+        "patrimony"
+      ],
+      "example_sentence": "International conventions protect ancient cultural heritage during armed conflicts.",
+      "example_translation": "Uluslararası sözleşmeler silahlı çatışmalar sırasında antik kültürel mirası korur."
+    }
+  ]
+}

@@ -593,24 +593,6 @@ export class DictionaryApiService {
             ? getValidExampleSentence(localWord.example_translation) || undefined
             : getBuiltinAcademicSentence(clean)?.sampleSentenceTr;
 
-        // If example sentence is missing from local SQLite, enrich it asynchronously
-        if (!exampleEn) {
-          const authentic = await this.fetchAuthenticSentence(
-            clean,
-            options?.signal,
-            options?.skipSentenceTranslation
-          );
-          if (authentic?.en) {
-            exampleEn = authentic.en;
-            exampleTr = authentic.tr || undefined;
-            if (localWord.id) {
-              dbService.updateWordExample(localWord.id, exampleEn, exampleTr).catch(() => {});
-            } else {
-              dbService.updateWordExampleByText(clean, exampleEn, exampleTr).catch(() => {});
-            }
-          }
-        }
-
         const localResult: RichDictionaryResult = {
           word: clean,
           phonetic: localWord.etymology_note || undefined,
@@ -630,6 +612,29 @@ export class DictionaryApiService {
         };
 
         this.cache.set(clean, localResult);
+
+        // Enrich example sentence in the background (non-blocking, never delays UI)
+        if (!exampleEn) {
+          this.fetchAuthenticSentence(
+            clean,
+            options?.signal,
+            options?.skipSentenceTranslation
+          )
+            .then((authentic) => {
+              if (authentic?.en) {
+                localResult.exampleEn = authentic.en;
+                localResult.exampleTr = authentic.tr || undefined;
+                this.cache.set(clean, localResult);
+                if (localWord.id) {
+                  dbService.updateWordExample(localWord.id, authentic.en, authentic.tr).catch(() => {});
+                } else {
+                  dbService.updateWordExampleByText(clean, authentic.en, authentic.tr).catch(() => {});
+                }
+              }
+            })
+            .catch(() => {});
+        }
+
         return localResult;
       }
 

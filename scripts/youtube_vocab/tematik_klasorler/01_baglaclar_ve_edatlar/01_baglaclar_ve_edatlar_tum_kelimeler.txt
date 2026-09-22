@@ -1,0 +1,372 @@
+=== KÜTÜPHANE: BAĞLAÇLAR & EDATLAR (TÜMÜ - 74 KELİME) ===
+
+1. about [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: hemen hemen, aşağı yukarı, yaklaşık
+   Örnek: He's about to go.
+   Çeviri: Gitmek üzere.
+--------------------------------------------------
+2. above [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: üzerine, yukarısında, yukarıda
+   Örnek: It's right above you.
+   Çeviri: O tam senin üzerinde.
+--------------------------------------------------
+3. across [edat] (B1) [Zaman ve Süreç Edatları]
+   Anlam: karşıya, aşırı, karşı karşıya
+   Örnek: I cut across the park.
+   Çeviri: Parka kestirmeden gittim.
+--------------------------------------------------
+4. after [edat] (B1) [Zaman ve Süreç Edatları]
+   Anlam: sonra, öğleden sonra, sonra gelen
+   Örnek: He is after a job.
+   Çeviri: O, iş arıyor.
+--------------------------------------------------
+5. against [edat] (B2) [Koşul ve Eklemeler]
+   Anlam: aykırı, karşı, ters olarak
+   Örnek: I'm against the war.
+   Çeviri: Savaşa karşıyım.
+--------------------------------------------------
+6. along [edat] (B1) [Zaman ve Süreç Edatları]
+   Anlam: boyunca, yanında, yanına
+   Örnek: I'll be along soon.
+   Çeviri: Yakında birlikte olacağız.
+--------------------------------------------------
+7. although [bağlaç] (B2) [Zıtlık ve Karşılaştırma]
+   Anlam: her ne kadar, rağmen, gerçi
+   Örnek: Although it is snowing, I must go.
+   Çeviri: Kar yağmasına rağmen gitmek zorundayım.
+--------------------------------------------------
+8. among [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: arasına, arasında, içinde
+   Örnek: He is popular among us.
+   Çeviri: O, aramızda popülerdir.
+--------------------------------------------------
+9. and [bağlaç] (A1) [Koşul ve Eklemeler]
+   Anlam: ile, ve, ek şart
+   Örnek: I'll go and see.
+   Çeviri: Gideceğim ve göreceğim.
+--------------------------------------------------
+10. around [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: sularında, çevrede, etrafında
+   Örnek: I move around a lot.
+   Çeviri: Ben çok gezinirim.
+--------------------------------------------------
+11. as [bağlaç] (B1) [Sebep ve Sonuç]
+   Anlam: olarak, gibi, dahi
+   Örnek: Do as I tell you.
+   Çeviri: Sana söylediğim gibi yap.
+--------------------------------------------------
+12. at [edat] (A1) [Koşul ve Eklemeler]
+   Anlam: üzere, nezdinde, üzerinde
+   Örnek: I'm at Tom's.
+   Çeviri: Tom'lardayım.
+--------------------------------------------------
+13. because [bağlaç] (B2) [Sebep ve Sonuç]
+   Anlam: çünkü, -dığı için, zira
+   Örnek: I came because of Tom.
+   Çeviri: Tom'dan dolayı geldim.
+--------------------------------------------------
+14. before [edat] (B1) [Zaman ve Süreç Edatları]
+   Anlam: evvel, önce, daha önce
+   Örnek: He's done it before.
+   Çeviri: Onu daha önce yaptı.
+--------------------------------------------------
+15. behind [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: ardındaki, arkaya, geriye
+   Örnek: I hid behind a rock.
+   Çeviri: Bir kayanın arkasına saklandım.
+--------------------------------------------------
+16. below [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: alttaki, aşağıdaki, altta
+   Örnek: My room is just below.
+   Çeviri: Odam tam aşağıda.
+--------------------------------------------------
+17. beneath [edat] (B2) [Koşul ve Eklemeler]
+   Anlam: altında, aşağıda, aşağıdan
+   Örnek: The money was hidden beneath the floorboards.
+   Çeviri: Para döşeme tahtalarının altında gizlenmişti.
+--------------------------------------------------
+18. beside [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: yanında, üstelik, diğer taraftan
+   Örnek: Can I sit beside Tom?
+   Çeviri: Tom'un yanına oturabilir miyim?
+--------------------------------------------------
+19. besides [bağlaç] (B2) [Koşul ve Eklemeler]
+   Anlam: ayrıca, hem, üstelik
+   Örnek: Ask someone else besides me.
+   Çeviri: Benden başka birine sorun.
+--------------------------------------------------
+20. between [edat] (B2) [Koşul ve Eklemeler]
+   Anlam: arasında, arasına, ortada
+   Örnek: I was the go-between.
+   Çeviri: Ben arabulucuydum.
+--------------------------------------------------
+21. beyond [edat] (B1) [Zaman ve Süreç Edatları]
+   Anlam: öte, ötede, ötesi
+   Örnek: It is beyond my power.
+   Çeviri: Bu benim gücümü aşar.
+--------------------------------------------------
+22. but [bağlaç] (B1) [Zıtlık ve Karşılaştırma]
+   Anlam: ancak, fakat, itiraz
+   Örnek: He is but a child.
+   Çeviri: O, ancak bir çocuk.
+--------------------------------------------------
+23. by [edat] (A1) [Koşul ve Eklemeler]
+   Anlam: geçecek biçimde, yakın, evde
+   Örnek: I'll go by bus.
+   Çeviri: Otobüsle gideceğim.
+--------------------------------------------------
+24. considering [edat] (B2) [Koşul ve Eklemeler]
+   Anlam: hesaba katma, sıçrama, dikkate alma
+   Örnek: I'm considering suing Tom.
+   Çeviri: Tom'a dava açmayı düşünüyorum.
+--------------------------------------------------
+25. despite [edat] (B2) [Zıtlık ve Karşılaştırma]
+   Anlam: rağmen, kin, garez
+   Örnek: I love him despite his faults.
+   Çeviri: Ben onun hatalarına rağmen onu seviyorum.
+--------------------------------------------------
+26. down [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: aşağıya doğru, aşağı, alaşağı etmek
+   Örnek: Don't let me down.
+   Çeviri: Benim yüzümü kara çıkarma.
+--------------------------------------------------
+27. during [edat] (B1) [Zaman ve Süreç Edatları]
+   Anlam: zarfında, süresince, sırasında
+   Örnek: Don't talk during class.
+   Çeviri: Ders esnasında konuşma.
+--------------------------------------------------
+28. except [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: haricinde, hariç, dışında
+   Örnek: No one came except Tom.
+   Çeviri: Tom hariç hiç kimse gelmedi.
+--------------------------------------------------
+29. excluding [edat] (B2) [Koşul ve Eklemeler]
+   Anlam: hariç, dışlama, müstesna
+   Örnek: We're not excluding anybody.
+   Çeviri: Biz kimseyi dışarıda bırakmıyoruz.
+--------------------------------------------------
+30. for [edat] (A1) [Koşul ve Eklemeler]
+   Anlam: için, yönünden, zarfında
+   Örnek: I'm OK for now.
+   Çeviri: Şimdilik iyiyim.
+--------------------------------------------------
+31. from [edat] (A1) [Koşul ve Eklemeler]
+   Anlam: itibaren, -den beri, -den
+   Örnek: I'm from the FBI.
+   Çeviri: Ben FBI'danım.
+--------------------------------------------------
+32. hence [bağlaç] (B1) [Sebep ve Sonuç]
+   Anlam: buradan, bunun sonucu olarak, bundan
+   Örnek: Hence rigorous clinical testing, some uncertainty remained.
+   Çeviri: Kapsamlı klinik testlere rağmen / esnasında (buradan) bazı belirsizlikler devam etti.
+--------------------------------------------------
+33. however [bağlaç] (B2) [Zıtlık ve Karşılaştırma]
+   Anlam: bununla birlikte, yine de, her nasılsa
+   Örnek: However, that didn't happen.
+   Çeviri: Ancak, o olmadı.
+--------------------------------------------------
+34. in [edat] (A1) [Koşul ve Eklemeler]
+   Anlam: içeri, içinde, iç
+   Örnek: I'm in a fix.
+   Çeviri: Zor durumdayım.
+--------------------------------------------------
+35. inside [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: iç taraf, içeri, içte
+   Örnek: I'll see you inside.
+   Çeviri: Seni içeride göreceğim.
+--------------------------------------------------
+36. into [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: içine, şekline, biçimine
+   Örnek: I got into my car.
+   Çeviri: Arabama bindim.
+--------------------------------------------------
+37. like [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: beğenmek, hoşlanmak, sevmek
+   Örnek: I'd like a hug.
+   Çeviri: Ben sarılmak istiyorum.
+--------------------------------------------------
+38. near [edat] (A1) [Koşul ve Eklemeler]
+   Anlam: yakın, yakınlaşmak, yaklaşmak
+   Örnek: Don't go near Tom.
+   Çeviri: Tom'a yaklaşma.
+--------------------------------------------------
+39. nor [bağlaç] (B1) [Koşul ve Eklemeler]
+   Anlam: ne de, ne, nor operatörü
+   Örnek: He can't see nor hear.
+   Çeviri: O ne görebilir ne de duyabilir.
+--------------------------------------------------
+40. notwithstanding [bağlaç] (B2) [Zıtlık ve Karşılaştırma]
+   Anlam: buna rağmen, bağlı olmaksızın, gerçi
+   Örnek: Notwithstanding rigorous clinical testing, some uncertainty remained.
+   Çeviri: Kapsamlı klinik testlere rağmen / esnasında (buna rağmen) bazı belirsizlikler devam etti.
+--------------------------------------------------
+41. of [edat] (A1) [Koşul ve Eklemeler]
+   Anlam: karşı, olan, hakkında
+   Örnek: I'm one of you.
+   Çeviri: Ben sizden biriyim.
+--------------------------------------------------
+42. off [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: kapalı, dışında, kalkmak
+   Örnek: I'm off to bed.
+   Çeviri: Yatmaya gidiyorum.
+--------------------------------------------------
+43. on [edat] (A1) [Koşul ve Eklemeler]
+   Anlam: üstünde, üzerinde, yanmak
+   Örnek: I can't go on.
+   Çeviri: Ben devam edemem.
+--------------------------------------------------
+44. onto [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: üstüne, üzerine, onto
+   Örnek: He jumped onto the table.
+   Çeviri: O masanın üstüne atladı.
+--------------------------------------------------
+45. or [bağlaç] (B1) [Koşul ve Eklemeler]
+   Anlam: ya da, veya, altın sarısı
+   Örnek: It's now or never.
+   Çeviri: Ya şimdi ya da asla.
+--------------------------------------------------
+46. out [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: çıkış, dışarıda, dışarı
+   Örnek: I can't go out.
+   Çeviri: Ben dışarı çıkamam.
+--------------------------------------------------
+47. outside [edat] (B2) [Koşul ve Eklemeler]
+   Anlam: dıştan, dışarı, dışarısı
+   Örnek: I didn't go outside.
+   Çeviri: Ben dışarıya gitmedim.
+--------------------------------------------------
+48. over [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: bitmiş, üzerine, üstüne
+   Örnek: I'm not over it.
+   Çeviri: Bunu atlatmış değilim.
+--------------------------------------------------
+49. past [edat] (B1) [Zaman ve Süreç Edatları]
+   Anlam: geçmiş, geçmiş zaman, bir kimsenin geçmişi
+   Örnek: It's past my curfew.
+   Çeviri: O saatte dışarı çıkmam yasak.
+--------------------------------------------------
+50. per [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: her, beher, rücuen
+   Örnek: What is the rate per day?
+   Çeviri: Günlük oran nedir?
+--------------------------------------------------
+51. providing [bağlaç] (B2) [Koşul ve Eklemeler]
+   Anlam: temin etme, sağlama, eğer
+   Örnek: We're providing an affordable service.
+   Çeviri: Uygun fiyatlı bir hizmet sağlıyoruz.
+--------------------------------------------------
+52. since [bağlaç] (B1) [Sebep ve Sonuç]
+   Anlam: ondan sonra, o zamandan beri, sonradan
+   Örnek: I've been up since 2:30.
+   Çeviri: 2:30'dan beri ayaktayım.
+--------------------------------------------------
+53. so [bağlaç] (B1) [Koşul ve Eklemeler]
+   Anlam: bu yüzden, öyle, böyle
+   Örnek: I'm not so old.
+   Çeviri: O kadar da yaşlı değilim.
+--------------------------------------------------
+54. than [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: hariç, -den, -mektense
+   Örnek: I'm older than Tom.
+   Çeviri: Ben Tom'dan daha yaşlıyım.
+--------------------------------------------------
+55. therefore [bağlaç] (B2) [Sebep ve Sonuç]
+   Anlam: bu sebeple, bu yüzden, bu nedenle
+   Örnek: Therefore, it is necessary to reduce the cost.
+   Çeviri: Bu nedenle, maliyetin düşürülmesi gereklidir.
+--------------------------------------------------
+56. though [bağlaç] (B1) [Zıtlık ve Karşılaştırma]
+   Anlam: gerçi, -diği halde, fakat
+   Örnek: It looks as though it may rain.
+   Çeviri: Sanki yağmur yağabilir gibi görünüyor.
+--------------------------------------------------
+57. through [edat] (B2) [Zaman ve Süreç Edatları]
+   Anlam: başından sonuna kadar, yoluyla, üzerinden
+   Örnek: I'll get through it.
+   Çeviri: Ben bunu atlatacağım.
+--------------------------------------------------
+58. throughout [edat] (B2) [Zaman ve Süreç Edatları]
+   Anlam: boyunca, baştanbaşa, baştan başa
+   Örnek: It rained throughout the night.
+   Çeviri: Tüm gece boyunca yağmur yağdı.
+--------------------------------------------------
+59. times [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: kere, defa, kez
+   Örnek: I did it many times.
+   Çeviri: Onu defalarca yaptım.
+--------------------------------------------------
+60. to [edat] (A1) [Koşul ve Eklemeler]
+   Anlam: karşı, -mek/-mak, kadar
+   Örnek: It's up to me.
+   Çeviri: Bu bana bağlı.
+--------------------------------------------------
+61. towards [edat] (B2) [Zaman ve Süreç Edatları]
+   Anlam: doğru, karşı, -e doğru
+   Örnek: The dog ran towards me.
+   Çeviri: Köpek bana doğru koştu.
+--------------------------------------------------
+62. under [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: altında, alt, az
+   Örnek: It's under the bed.
+   Çeviri: Yatağın altında.
+--------------------------------------------------
+63. underneath [edat] (B2) [Koşul ve Eklemeler]
+   Anlam: altında, bir şeyin alt bölümü, bir şeyin alt kısmı
+   Örnek: The mouse ran underneath the bed.
+   Çeviri: Fare yatağın altına kaçtı.
+--------------------------------------------------
+64. up [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: yukarı, yükseltmek, artırmak
+   Örnek: It's up to me.
+   Çeviri: Bu bana bağlı.
+--------------------------------------------------
+65. upon [edat] (B1) [Zaman ve Süreç Edatları]
+   Anlam: üzerine, üzerinde, üstünde
+   Örnek: You can rely upon him.
+   Çeviri: Ona güvenebilirsiniz.
+--------------------------------------------------
+66. via [edat] (B1) [Koşul ve Eklemeler]
+   Anlam: vasıtasıyla, aracılığıyla, kanalıyla
+   Örnek: She went to Europe via America.
+   Çeviri: O Amerika üzerinden Avrupa'ya gitti.
+--------------------------------------------------
+67. when [bağlaç] (B1) [Koşul ve Eklemeler]
+   Anlam: ne zaman, zaman, ne vakit
+   Örnek: I come when I can.
+   Çeviri: Gelebildiğim zaman gelirim.
+--------------------------------------------------
+68. which [bağlaç] (B1) [Koşul ve Eklemeler]
+   Anlam: hangi, kaçıncı, hangisini
+   Örnek: Which way do I go?
+   Çeviri: Hangi yoldan giderim?
+--------------------------------------------------
+69. while [bağlaç] (B1) [Zıtlık ve Karşılaştırma]
+   Anlam: sırasında, iken, olduğu halde
+   Örnek: It's been a while.
+   Çeviri: Bir süre oldu.
+--------------------------------------------------
+70. who [bağlaç] (B1) [Koşul ve Eklemeler]
+   Anlam: kim, kimi, kime
+   Örnek: I am who I am.
+   Çeviri: Ben neysem oyum.
+--------------------------------------------------
+71. with [edat] (A1) [Koşul ve Eklemeler]
+   Anlam: ile, -lı, beraberinde
+   Örnek: I'm OK with it.
+   Çeviri: Benim için sorun değil.
+--------------------------------------------------
+72. within [edat] (B1) [Zaman ve Süreç Edatları]
+   Anlam: dahilinde, içinde, içerisinde
+   Örnek: Come back within a month.
+   Çeviri: Bir ay içinde geri gel.
+--------------------------------------------------
+73. without [edat] (B2) [Koşul ve Eklemeler]
+   Anlam: dış, dıştan, dışarıda
+   Örnek: Don't go without me.
+   Çeviri: Bensiz gitme.
+--------------------------------------------------
+74. yet [bağlaç] (B1) [Zıtlık ve Karşılaştırma]
+   Anlam: henüz, gerçi, yine de
+   Örnek: I can't go yet.
+   Çeviri: Henüz gidemiyorum.
+--------------------------------------------------

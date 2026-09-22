@@ -1,0 +1,602 @@
+=== KÜTÜPHANE: TEMEL KELIMELER (A1-A2) > GÜNLÜK İSIMLER VE MEKANLAR (120 KELİME) ===
+
+1. anybody [zamir] (B2)
+   Anlam: kimse, hiç kimse, herhangi biri
+   Örnek: I can't see anybody.
+   Çeviri: Ben kimseyi göremiyorum.
+--------------------------------------------------
+2. anyone [zamir] (B1)
+   Anlam: hiç kimse, kimse, herhangi bir kimse
+   Örnek: I can't see anyone.
+   Çeviri: Ben kimseyi göremiyorum.
+--------------------------------------------------
+3. apartment [isim] (A1)
+   Anlam: daire, apartman katı, apartman dairesi
+   Örnek: I'm in my apartment.
+   Çeviri: Ben dairemdeyim.
+--------------------------------------------------
+4. area [isim] (A1)
+   Anlam: alan, saha, bölge
+   Örnek: I was in the area.
+   Çeviri: Ben alandaydım.
+--------------------------------------------------
+5. art [isim] (A1)
+   Anlam: sanat, beceri, maharet
+   Örnek: I'm an art student.
+   Çeviri: Ben bir sanat öğrencisiyim.
+--------------------------------------------------
+6. baby [isim] (A1)
+   Anlam: yavru, bebek, şımartmak
+   Örnek: I'm not a baby.
+   Çeviri: Ben bir bebek değilim.
+--------------------------------------------------
+7. beach [isim] (A1)
+   Anlam: sahil, kumsal, plaj
+   Örnek: I went to the beach.
+   Çeviri: Sahile gittim.
+--------------------------------------------------
+8. bed [isim] (A1)
+   Anlam: yatak, gömmek, oturtmak
+   Örnek: I'm off to bed.
+   Çeviri: Yatmaya gidiyorum.
+--------------------------------------------------
+9. beer [isim] (A1)
+   Anlam: bira, arpasuyu, ingiltere'de yerleşim yeri
+   Örnek: I'd like a beer.
+   Çeviri: Bir bira istiyorum.
+--------------------------------------------------
+10. beginning [isim] (A1)
+   Anlam: başlangıç, baş, ilk adım
+   Örnek: He's beginning to cry.
+   Çeviri: O ağlamaya başlıyor.
+--------------------------------------------------
+11. bird [isim] (A1)
+   Anlam: kuş, manita, kus
+   Örnek: It's just a bird.
+   Çeviri: O sadece bir kuş.
+--------------------------------------------------
+12. body [isim] (A1)
+   Anlam: ceset, gövde, vücut
+   Örnek: He has a strong body.
+   Çeviri: O güçlü bir gövdeye sahip.
+--------------------------------------------------
+13. book [isim] (A1)
+   Anlam: ayırtmak, kitap, deftere işlemek
+   Örnek: I'd like a book.
+   Çeviri: Bir kitap istiyorum.
+--------------------------------------------------
+14. bus [isim] (A1)
+   Anlam: otobüs, otobüsle taşımak, otobüsle gitmek
+   Örnek: I'll go by bus.
+   Çeviri: Otobüsle gideceğim.
+--------------------------------------------------
+15. car [isim] (A1)
+   Anlam: otomobil, araba, kabin
+   Örnek: I'm in my car.
+   Çeviri: Arabamın içindeyim.
+--------------------------------------------------
+16. cat [isim] (A1)
+   Anlam: kedi, istifra etmek, kusmak
+   Örnek: It's just a cat.
+   Çeviri: Bu sadece bir kedi.
+--------------------------------------------------
+17. chef [isim] (A1)
+   Anlam: aşçı, aşçıbaşı, şef
+   Örnek: Aren't you a chef?
+   Çeviri: Sen bir aşçıbaşı değil misin?
+--------------------------------------------------
+18. child [isim] (A1)
+   Anlam: evlat, çocuk, ürün
+   Örnek: I'm not a child.
+   Çeviri: Bir çocuk değilim.
+--------------------------------------------------
+19. children [isim] (A1)
+   Anlam: çocuklar, çocuk, döl döş
+   Örnek: I don't hate children!
+   Çeviri: Ben çocuklardan nefret etmiyorum!
+--------------------------------------------------
+20. city [isim] (A1)
+   Anlam: kent, şehir, metropol
+   Örnek: I'm a city girl.
+   Çeviri: Ben bir şehir kızıyım.
+--------------------------------------------------
+21. clock [isim] (A1)
+   Anlam: saat, saat tutmak, ölçmek
+   Örnek: It was six o'clock.
+   Çeviri: Saat altıydı.
+--------------------------------------------------
+22. country [isim] (A1)
+   Anlam: yurt, memleket, ülke
+   Örnek: I'm a country boy.
+   Çeviri: Ben bir taşra çocuğuyum.
+--------------------------------------------------
+23. day [isim] (A1)
+   Anlam: gün, dönem, gündüz
+   Örnek: It's a hot day.
+   Çeviri: Sıcak bir gün.
+--------------------------------------------------
+24. dish [isim] (A1)
+   Anlam: tabak, mahvetmek, oymak
+   Örnek: This is Tom's dish.
+   Çeviri: Bu Tom'un yemeği.
+--------------------------------------------------
+25. dishes [isim] (A1)
+   Anlam: tabak çanak, bulaşık, yemekler
+   Örnek: I'll do the dishes.
+   Çeviri: Ben bulaşıkları yıkayacağım.
+--------------------------------------------------
+26. dishwasher [isim] (A1)
+   Anlam: bulaşıkçı, bulaşık makinesi
+   Örnek: I don't have a dishwasher.
+   Çeviri: Benim bir bulaşık makinem yok.
+--------------------------------------------------
+27. doctor [isim] (A1)
+   Anlam: doktor, tahrif etmek, tedavi etmek
+   Örnek: I'm Tom's doctor.
+   Çeviri: Tom'un doktoruyum.
+--------------------------------------------------
+28. door [isim] (A1)
+   Anlam: kapı, eşik, giriş
+   Örnek: I'll get the door.
+   Çeviri: Kapıya bakacağım.
+--------------------------------------------------
+29. ear [isim] (A1)
+   Anlam: kulak, başaklanmak, başak
+   Örnek: I'm deaf in one ear.
+   Çeviri: Bir kulağım sağır.
+--------------------------------------------------
+30. earth [isim] (A1)
+   Anlam: kara, yeryüzü, zemin
+   Örnek: He's down to earth.
+   Çeviri: O gerçekçidir.
+--------------------------------------------------
+31. eight [isim] (A1)
+   Anlam: sekiz, ambar, sekiz rakamı
+   Örnek: Get me up at eight.
+   Çeviri: Beni sekizde uyandırın.
+--------------------------------------------------
+32. everybody [zamir] (B2)
+   Anlam: cümle alem, dost düşman, herkes
+   Örnek: He's nice to everybody.
+   Çeviri: O herkese karşı naziktir.
+--------------------------------------------------
+33. everyone [zamir] (B2)
+   Anlam: herkes, elalem, el alem
+   Örnek: He's mad at everyone.
+   Çeviri: O herkese kızgın.
+--------------------------------------------------
+34. face [isim] (A1)
+   Anlam: yüzleşmek, yüz yüze gelmek, yönelmek
+   Örnek: I saw Tom's face.
+   Çeviri: Tom'un yüzünü gördüm.
+--------------------------------------------------
+35. father [isim] (A1)
+   Anlam: papaz, peder, baba
+   Örnek: I'm Tom's father.
+   Çeviri: Tom'un babasıyım.
+--------------------------------------------------
+36. film [isim] (A1)
+   Anlam: film, zar vb kaplamak, filme almak
+   Örnek: How does the film end?
+   Çeviri: Film nasıl sona erer?
+--------------------------------------------------
+37. floor [isim] (A1)
+   Anlam: yeri kaplamak, kat, yer
+   Örnek: It's up one floor.
+   Çeviri: O bir kat yukarıda.
+--------------------------------------------------
+38. food [isim] (A1)
+   Anlam: besin, yiyecek, gıda
+   Örnek: I ran out of food.
+   Çeviri: Yiyeceğim bitti.
+--------------------------------------------------
+39. foot [isim] (A1)
+   Anlam: ayak, gitmek, hesaplamak
+   Örnek: I will go on foot.
+   Çeviri: Ben yaya gideceğim.
+--------------------------------------------------
+40. friend [isim] (A1)
+   Anlam: ahbap, arkadaş, dost
+   Örnek: I'm an old friend.
+   Çeviri: Ben eski bir dostum.
+--------------------------------------------------
+41. garden [isim] (A1)
+   Anlam: bahçe, çiçeklerle uğraşmak, bahçede çalışmak
+   Örnek: I am in the garden.
+   Çeviri: Bahçedeyim.
+--------------------------------------------------
+42. gardener [isim] (A1)
+   Anlam: bahçıvan, bahçeci, bağban
+   Örnek: I used to be a gardener.
+   Çeviri: Ben eskiden bir bahçıvandım.
+--------------------------------------------------
+43. hand [isim] (A1)
+   Anlam: el, yakalamak, uzatmak
+   Örnek: I held Tom's hand.
+   Çeviri: Ben Tom'un elini tuttum.
+--------------------------------------------------
+44. he [zamir] (B1)
+   Anlam: eril o, o, kendileri
+   Örnek: He can't do it.
+   Çeviri: O, onu yapamaz.
+--------------------------------------------------
+45. help [isim] (A1)
+   Anlam: yardım etmek, yardım, muavenet etmek
+   Örnek: I can't help it.
+   Çeviri: Elimde değil.
+--------------------------------------------------
+46. her [zamir] (B1)
+   Anlam: ona, dişil onu, ondan
+   Örnek: He ran up to her.
+   Çeviri: O, ona erişti.
+--------------------------------------------------
+47. him [zamir] (B1)
+   Anlam: ona, onu
+   Örnek: I don't see him.
+   Çeviri: Onu görmüyorum.
+--------------------------------------------------
+48. holiday [isim] (A1)
+   Anlam: bayram, tatil, tatil yapmak
+   Örnek: It's not a holiday.
+   Çeviri: Bu bir tatil değil.
+--------------------------------------------------
+49. home [isim] (A1)
+   Anlam: ev, yerleştirmek, yuvasına dönmek
+   Örnek: I can't go home.
+   Çeviri: Eve gidemem.
+--------------------------------------------------
+50. house [isim] (A1)
+   Anlam: ev, konut, kendi evine almak
+   Örnek: I'm at the house.
+   Çeviri: Ben evdeyim.
+--------------------------------------------------
+51. i [zamir] (B1)
+   Anlam: ben, ingiliz alfabesinin dokuzuncu harfi, romen rakamları dizisinde 1 sayısı
+   Örnek: I'm Tom's ex.
+   Çeviri: Ben Tom'un eski eşiyim.
+--------------------------------------------------
+52. it [zamir] (B1)
+   Anlam: ona, ilişki, ebe
+   Örnek: I can't do it.
+   Çeviri: Onu yapamam.
+--------------------------------------------------
+53. jacket [isim] (A1)
+   Anlam: ceket, kaplamak, kap
+   Örnek: I need a new jacket.
+   Çeviri: Yeni bir cekete ihtiyacım var.
+--------------------------------------------------
+54. job [isim] (A1)
+   Anlam: görev, iş, ufak tefek işler yapmak
+   Örnek: I'm on the job.
+   Çeviri: İş üzerindeyim.
+--------------------------------------------------
+55. kitchen [isim] (A1)
+   Anlam: mutfak, kuzine, nevale
+   Örnek: I'm in the kitchen.
+   Çeviri: Mutfaktayım.
+--------------------------------------------------
+56. knife [isim] (A1)
+   Anlam: bıçak, kesmek, arkadan vurmak
+   Örnek: I've got a knife.
+   Çeviri: Bir bıçağım var.
+--------------------------------------------------
+57. lamp [isim] (A1)
+   Anlam: ampul, lamba, aydınlatmak
+   Örnek: I turned on a lamp.
+   Çeviri: Bir lamba yaktım.
+--------------------------------------------------
+58. letter [isim] (A1)
+   Anlam: mektup, harf, basmak
+   Örnek: I sent you a letter.
+   Çeviri: Sana bir mektup gönderdim.
+--------------------------------------------------
+59. man [isim] (A1)
+   Anlam: insan, adam, erkek
+   Örnek: I'm a man now.
+   Çeviri: Ben artık bir erkeğim.
+--------------------------------------------------
+60. market [isim] (A1)
+   Anlam: çarşı, pazar, piyasa
+   Örnek: It's a funny market.
+   Çeviri: Çok komik bir market.
+--------------------------------------------------
+61. me [zamir] (B1)
+   Anlam: ben, mi, beni
+   Örnek: It's up to me.
+   Çeviri: Bu bana bağlı.
+--------------------------------------------------
+62. meal [isim] (A1)
+   Anlam: öğün, yemek, sofra
+   Örnek: I had a nice meal.
+   Çeviri: Güzel bir yemek yedim.
+--------------------------------------------------
+63. month [isim] (A1)
+   Anlam: ay, yılın on iki bölümünden her biri
+   Örnek: I'll go next month.
+   Çeviri: Gelecek ay gideceğim.
+--------------------------------------------------
+64. moon [isim] (A1)
+   Anlam: ay, dalıp kendi hayalleriyle başbaşa kalmak, dalgın dalgın dolaşmak
+   Örnek: It's a full moon.
+   Çeviri: Bu bir dolunay.
+--------------------------------------------------
+65. mouse [isim] (A1)
+   Anlam: fare, fare avlamak, fare tutmak
+   Örnek: I need a mouse pad.
+   Çeviri: Bir fare altlığına ihtiyacım var.
+--------------------------------------------------
+66. musician [isim] (A1)
+   Anlam: müzisyen, şarkıcı, çalgıcı
+   Örnek: Aren't you a musician?
+   Çeviri: Sen bir müzisyen değil misin?
+--------------------------------------------------
+67. night [isim] (A1)
+   Anlam: gece, gecelemek, gece geçirmek
+   Örnek: I'm a night owl.
+   Çeviri: Ben bir gece kuşuyum.
+--------------------------------------------------
+68. nine [isim] (A1)
+   Anlam: dokuz, dokuzu, 9
+   Örnek: I'm on cloud nine.
+   Çeviri: İçim içime sığmıyor.
+--------------------------------------------------
+69. nobody [zamir] (B1)
+   Anlam: hiç kimse, bir hiç, hiç
+   Örnek: I am just a nobody.
+   Çeviri: Ben bir hiçim.
+--------------------------------------------------
+70. paint [isim] (A1)
+   Anlam: boyamak, boya, portresini yapmak
+   Örnek: I have to paint it.
+   Çeviri: Onu boyamak zorundayım.
+--------------------------------------------------
+71. park [isim] (A1)
+   Anlam: park etmek, park, park yapmak
+   Örnek: I'm in the park.
+   Çeviri: Ben parktayım.
+--------------------------------------------------
+72. party [isim] (A1)
+   Anlam: taraf, parti, kutlamak
+   Örnek: It wasn't a party.
+   Çeviri: O bir parti değildi.
+--------------------------------------------------
+73. person [isim] (A1)
+   Anlam: kişi, şahıs, kimse
+   Örnek: I'm a cat person.
+   Çeviri: Kediciyimdir.
+--------------------------------------------------
+74. picture [isim] (A1)
+   Anlam: resim, resmetmek, yansıtmak
+   Örnek: Can I get a picture?
+   Çeviri: Bir fotoğraf çekebilir miyim?
+--------------------------------------------------
+75. place [isim] (A1)
+   Anlam: koymak, oturtmak, yerleştirmek
+   Örnek: I can't place him.
+   Çeviri: Kim olduğunu hatırlamıyorum.
+--------------------------------------------------
+76. plane [isim] (A1)
+   Anlam: düzlemek, düz, düzlem
+   Örnek: I'll go by plane.
+   Çeviri: Uçakla gideceğim.
+--------------------------------------------------
+77. play [isim] (A1)
+   Anlam: oynamak, çalmak, piyes
+   Örnek: I play in a band.
+   Çeviri: Ben bir grupta çalıyorum.
+--------------------------------------------------
+78. rain [isim] (A1)
+   Anlam: yağmur yağmak, yağmur, yağmur gibi yağdırmak
+   Örnek: I don't like rain.
+   Çeviri: Yağmuru sevmem
+--------------------------------------------------
+79. river [isim] (A1)
+   Anlam: nehir, akış, akarsu
+   Örnek: I swam in the river.
+   Çeviri: Ben nehirde yüzdüm.
+--------------------------------------------------
+80. road [isim] (A1)
+   Anlam: yol, uyulan ilke, bir amaca ulaşmak için başvurulması gereken yöntem
+   Örnek: I'm on the road.
+   Çeviri: Ben yoldayım.
+--------------------------------------------------
+81. room [isim] (A1)
+   Anlam: oda, oturmak, kalmak
+   Örnek: I'm in my room.
+   Çeviri: Odamdayım.
+--------------------------------------------------
+82. school [isim] (A1)
+   Anlam: mektep, okul, yetiştirmek
+   Örnek: I'll go to school.
+   Çeviri: Okula gideceğim.
+--------------------------------------------------
+83. she [zamir] (B1)
+   Anlam: dişi hayvan, dişi, kadın
+   Örnek: She's on a diet.
+   Çeviri: O diyet yapıyor.
+--------------------------------------------------
+84. six [isim] (A1)
+   Anlam: şeş, altı rakamı, altı
+   Örnek: I get up at six.
+   Çeviri: Ben altıda kalkarım.
+--------------------------------------------------
+85. sky [isim] (A1)
+   Anlam: gök, gökyüzü, yükseğe atmak
+   Örnek: Look up at the sky.
+   Çeviri: Gökyüzüne bak.
+--------------------------------------------------
+86. sleep [isim] (A1)
+   Anlam: uyumak, uyku, slept - slept
+   Örnek: I sleep on a cot.
+   Çeviri: Ben bir karyolada uyurum.
+--------------------------------------------------
+87. snow [isim] (A1)
+   Anlam: kar, yağmak, karla kaplamak
+   Örnek: I don't like snow.
+   Çeviri: Karı sevmiyorum.
+--------------------------------------------------
+88. somebody [zamir] (B2)
+   Anlam: biri, birisi, şahsiyet
+   Örnek: Somebody had to do it.
+   Çeviri: Birisinin yapması gerekiyordu.
+--------------------------------------------------
+89. someone [zamir] (B2)
+   Anlam: birisi, kimse, bir kimse
+   Örnek: Someone has to do it.
+   Çeviri: Birisi onu yapmalı.
+--------------------------------------------------
+90. soup [isim] (A1)
+   Anlam: çorba, nitrogliserin, yoğun sis
+   Örnek: Don't you want soup?
+   Çeviri: Çorba istemiyor musun?
+--------------------------------------------------
+91. station [isim] (A1)
+   Anlam: terminal, istasyon, görevlendirmek
+   Örnek: I am near the station.
+   Çeviri: Ben istasyona yakınım.
+--------------------------------------------------
+92. street [isim] (A1)
+   Anlam: cadde, sokak, mahalle
+   Örnek: I live on Park Street.
+   Çeviri: Park Street'te yaşıyorum.
+--------------------------------------------------
+93. student [isim] (A1)
+   Anlam: öğrenci, talebe, mektepli
+   Örnek: I'm a bad student.
+   Çeviri: Ben kötü bir öğrenciyim.
+--------------------------------------------------
+94. study [isim] (A1)
+   Anlam: incelemek, çalışmak, çalışma
+   Örnek: I do study a lot.
+   Çeviri: Ben çok çalışırım.
+--------------------------------------------------
+95. sugar [isim] (A1)
+   Anlam: şeker, kompliman yapmak, şeker katmak
+   Örnek: I'm out of sugar.
+   Çeviri: Şekerim bitti.
+--------------------------------------------------
+96. sun [isim] (A1)
+   Anlam: güneş, güneşte bırakmak, güneşlenmek
+   Örnek: Is the sun up yet?
+   Çeviri: Güneş doğdu mu?
+--------------------------------------------------
+97. tea [isim] (A1)
+   Anlam: çay, çeşitli bitkilerin demlenmesinden elde edilen içeceklerin tümü, çay servis edilen parti ve eğlence
+   Örnek: I don't like tea.
+   Çeviri: Çay sevmem.
+--------------------------------------------------
+98. teacher [isim] (A1)
+   Anlam: öğretmen, hoca, muallim
+   Örnek: I'm Tom's teacher.
+   Çeviri: Ben Tom’un öğretmeniyim.
+--------------------------------------------------
+99. them [zamir] (B1)
+   Anlam: onlara, onları
+   Örnek: I can't pay them.
+   Çeviri: Onları ödeyemem.
+--------------------------------------------------
+100. they [zamir] (B1)
+   Anlam: bunlar, onlar, kendileri
+   Örnek: They won't do it.
+   Çeviri: Onlar onu yapmayacaklar.
+--------------------------------------------------
+101. three [isim] (A1)
+   Anlam: iskambilde üçlü, üç rakamı, se
+   Örnek: I'm on page three.
+   Çeviri: Ben sayfa üçteyim.
+--------------------------------------------------
+102. time [isim] (A1)
+   Anlam: kez, kere, müddet
+   Örnek: I'll be on time.
+   Çeviri: Zamanında geleceğim.
+--------------------------------------------------
+103. town [isim] (A1)
+   Anlam: şehir, kasaba, şehir merkezi
+   Örnek: I'll be in town.
+   Çeviri: Şehirde olacağım.
+--------------------------------------------------
+104. tree [isim] (A1)
+   Anlam: ağaç, ağaca çıkarmak, ağaçlarla örtmek
+   Örnek: It's a dead tree.
+   Çeviri: O ölü bir ağaç.
+--------------------------------------------------
+105. two [isim] (A1)
+   Anlam: iki, iskambilde ikili, iki rakamı
+   Örnek: We won six to two.
+   Çeviri: Biz altı iki kazandık.
+--------------------------------------------------
+106. us [zamir] (B1)
+   Anlam: biz, abd, bizi
+   Örnek: It's up to us.
+   Çeviri: Bu bize kalmış.
+--------------------------------------------------
+107. village [isim] (A1)
+   Anlam: köy, köy halkı, şehir ve kasabalardan küçük ama kalıcı yerleşim birimi
+   Örnek: He lives in a village.
+   Çeviri: O, bir köyde yaşıyor.
+--------------------------------------------------
+108. wash [isim] (A1)
+   Anlam: yıkanmak, aşındırmak, yıkamak
+   Örnek: I will wash my car.
+   Çeviri: Arabamı yıkayacağım.
+--------------------------------------------------
+109. watch [isim] (A1)
+   Anlam: seyretmek, gözlemek, izlemek
+   Örnek: I don't watch TV.
+   Çeviri: TV izlemem.
+--------------------------------------------------
+110. water [isim] (A1)
+   Anlam: sulamak, su, hafifletmek
+   Örnek: He's in hot water.
+   Çeviri: O hapı yuttu.
+--------------------------------------------------
+111. we [zamir] (B1)
+   Anlam: biz
+   Örnek: We can't do it.
+   Çeviri: Onu yapamayız.
+--------------------------------------------------
+112. week [isim] (A1)
+   Anlam: hafta, ardışık yedi günlük süre
+   Örnek: I'll wait a week.
+   Çeviri: Bir hafta bekleyeceğim.
+--------------------------------------------------
+113. wife [isim] (A1)
+   Anlam: kocanın eşi, hanım, karı
+   Örnek: I'm Tom's wife.
+   Çeviri: Ben Tom'un eşiyim.
+--------------------------------------------------
+114. window [isim] (A1)
+   Anlam: pencere, camekan, vitrin
+   Örnek: I sat by the window.
+   Çeviri: Pencerenin yanında oturdum.
+--------------------------------------------------
+115. woman [isim] (A1)
+   Anlam: kadın, hanım, karı
+   Örnek: I'm not a woman.
+   Çeviri: Ben kadın değilim.
+--------------------------------------------------
+116. women [isim] (A1)
+   Anlam: kadınlar, kadın milleti
+   Örnek: I don't trust women.
+   Çeviri: Kadınlara güvenmem.
+--------------------------------------------------
+117. world [isim] (A1)
+   Anlam: alem, dünya, evren
+   Örnek: It's a big world.
+   Çeviri: Bu büyük bir dünya.
+--------------------------------------------------
+118. writer [isim] (A1)
+   Anlam: yazar, müellif, muharrir
+   Örnek: He is a good writer.
+   Çeviri: O iyi bir yazar.
+--------------------------------------------------
+119. year [isim] (A1)
+   Anlam: yıl, sene, ihtiyarlık
+   Örnek: I did it last year.
+   Çeviri: Ben onu geçen yıl yaptım.
+--------------------------------------------------
+120. you [zamir] (B1)
+   Anlam: siz, sen, seni
+   Örnek: I'm mad at you.
+   Çeviri: Sana kızgınım.
+--------------------------------------------------

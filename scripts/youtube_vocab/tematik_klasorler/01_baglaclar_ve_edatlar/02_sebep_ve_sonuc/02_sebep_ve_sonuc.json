@@ -1,0 +1,74 @@
+{
+  "parent_key": "01_baglaclar_ve_edatlar",
+  "parent_name": "Kütüphane: Bağlaçlar & Edatlar",
+  "subfolder_key": "02_sebep_ve_sonuc",
+  "subfolder_name": "Sebep ve Sonuç",
+  "word_count": 5,
+  "words": [
+    {
+      "word": "as",
+      "meaning": "olarak, gibi, dahi",
+      "part_of_speech": "bağlaç",
+      "level": "B1",
+      "parent_key": "01_baglaclar_ve_edatlar",
+      "parent_name": "Kütüphane: Bağlaçlar & Edatlar",
+      "subfolder_key": "02_sebep_ve_sonuc",
+      "subfolder_name": "Sebep ve Sonuç",
+      "synonyms": [],
+      "example_sentence": "Do as I tell you.",
+      "example_translation": "Sana söylediğim gibi yap."
+    },
+    {
+      "word": "because",
+      "meaning": "çünkü, -dığı için, zira",
+      "part_of_speech": "bağlaç",
+      "level": "B2",
+      "parent_key": "01_baglaclar_ve_edatlar",
+      "parent_name": "Kütüphane: Bağlaçlar & Edatlar",
+      "subfolder_key": "02_sebep_ve_sonuc",
+      "subfolder_name": "Sebep ve Sonuç",
+      "synonyms": [],
+      "example_sentence": "I came because of Tom.",
+      "example_translation": "Tom'dan dolayı geldim."
+    },
+    {
+      "word": "hence",
+      "meaning": "buradan, bunun sonucu olarak, bundan",
+      "part_of_speech": "bağlaç",
+      "level": "B1",
+      "parent_key": "01_baglaclar_ve_edatlar",
+      "parent_name": "Kütüphane: Bağlaçlar & Edatlar",
+      "subfolder_key": "02_sebep_ve_sonuc",
+      "subfolder_name": "Sebep ve Sonuç",
+      "synonyms": [],
+      "example_sentence": "Hence rigorous clinical testing, some uncertainty remained.",
+      "example_translation": "Kapsamlı klinik testlere rağmen / esnasında (buradan) bazı belirsizlikler devam etti."
+    },
+    {
+      "word": "since",
+      "meaning": "ondan sonra, o zamandan beri, sonradan",
+      "part_of_speech": "bağlaç",
+      "level": "B1",
+      "parent_key": "01_baglaclar_ve_edatlar",
+      "parent_name": "Kütüphane: Bağlaçlar & Edatlar",
+      "subfolder_key": "02_sebep_ve_sonuc",
+      "subfolder_name": "Sebep ve Sonuç",
+      "synonyms": [],
+      "example_sentence": "I've been up since 2:30.",
+      "example_translation": "2:30'dan beri ayaktayım."
+    },
+    {
+      "word": "therefore",
+      "meaning": "bu sebeple, bu yüzden, bu nedenle",
+      "part_of_speech": "bağlaç",
+      "level": "B2",
+      "parent_key": "01_baglaclar_ve_edatlar",
+      "parent_name": "Kütüphane: Bağlaçlar & Edatlar",
+      "subfolder_key": "02_sebep_ve_sonuc",
+      "subfolder_name": "Sebep ve Sonuç",
+      "synonyms": [],
+      "example_sentence": "Therefore, it is necessary to reduce the cost.",
+      "example_translation": "Bu nedenle, maliyetin düşürülmesi gereklidir."
+    }
+  ]
+}

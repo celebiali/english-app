@@ -1,0 +1,197 @@
+{
+  "parent_key": "05_phrasal_verbs_ve_kaliplar",
+  "parent_name": "Kütüphane: Phrasal Verbs",
+  "subfolder_key": "01_sinav_phrasal_verbs",
+  "subfolder_name": "Sık Çıkan Phrasal Verbs",
+  "word_count": 11,
+  "words": [
+    {
+      "word": "stand for",
+      "meaning": "temsil etmek, anlamına gelmek",
+      "part_of_speech": "phrasal verb",
+      "level": "B2",
+      "parent_key": "05_phrasal_verbs_ve_kaliplar",
+      "parent_name": "Kütüphane: Phrasal Verbs",
+      "subfolder_key": "01_sinav_phrasal_verbs",
+      "subfolder_name": "Sık Çıkan Phrasal Verbs",
+      "synonyms": [
+        "represent",
+        "symbolize",
+        "signify"
+      ],
+      "example_sentence": "What does the acronym UNESCO stand for in international law?",
+      "example_translation": "Uluslararası hukukta UNESCO kısaltması ne anlama gelmektedir?"
+    },
+    {
+      "word": "take after",
+      "meaning": "benzemek (aile büyüğüne huy veya tip olarak)",
+      "part_of_speech": "phrasal verb",
+      "level": "B2",
+      "parent_key": "05_phrasal_verbs_ve_kaliplar",
+      "parent_name": "Kütüphane: Phrasal Verbs",
+      "subfolder_key": "01_sinav_phrasal_verbs",
+      "subfolder_name": "Sık Çıkan Phrasal Verbs",
+      "synonyms": [
+        "resemble",
+        "look like"
+      ],
+      "example_sentence": "She takes after her mother in both academic discipline and character.",
+      "example_translation": "Hem akademik disiplin hem de karakter olarak annesine benziyor."
+    },
+    {
+      "word": "make up",
+      "meaning": "oluşturmak, uydurmak, telafi etmek",
+      "part_of_speech": "phrasal verb",
+      "level": "B1",
+      "parent_key": "05_phrasal_verbs_ve_kaliplar",
+      "parent_name": "Kütüphane: Phrasal Verbs",
+      "subfolder_key": "01_sinav_phrasal_verbs",
+      "subfolder_name": "Sık Çıkan Phrasal Verbs",
+      "synonyms": [
+        "constitute",
+        "compose",
+        "invent"
+      ],
+      "example_sentence": "Women make up more than half of the university student population.",
+      "example_translation": "Kadınlar, üniversite öğrenci nüfusunun yarısından fazlasını oluşturmaktadır."
+    },
+    {
+      "word": "use up",
+      "meaning": "tüketmek, bitirmek",
+      "part_of_speech": "phrasal verb",
+      "level": "B2",
+      "parent_key": "05_phrasal_verbs_ve_kaliplar",
+      "parent_name": "Kütüphane: Phrasal Verbs",
+      "subfolder_key": "01_sinav_phrasal_verbs",
+      "subfolder_name": "Sık Çıkan Phrasal Verbs",
+      "synonyms": [
+        "consume",
+        "deplete",
+        "exhaust"
+      ],
+      "example_sentence": "Industrial activities continue to use up non-renewable resources rapidly.",
+      "example_translation": "Sanayi faaliyetleri yenilenemeyen kaynakları hızla tüketmeye devam ediyor."
+    },
+    {
+      "word": "blow up",
+      "meaning": "patlamak, havaya uçurmak, infilak etmek",
+      "part_of_speech": "phrasal verb",
+      "level": "B1",
+      "parent_key": "05_phrasal_verbs_ve_kaliplar",
+      "parent_name": "Kütüphane: Phrasal Verbs",
+      "subfolder_key": "01_sinav_phrasal_verbs",
+      "subfolder_name": "Sık Çıkan Phrasal Verbs",
+      "synonyms": [
+        "explode",
+        "detonate",
+        "erupt"
+      ],
+      "example_sentence": "The controlled demolition blew up the unsafe building safely.",
+      "example_translation": "Kontrollü yıkım, güvensiz binayı güvenli bir şekilde patlattı/yıktı."
+    },
+    {
+      "word": "look forward to",
+      "meaning": "dört gözle beklemek, umutla beklemek",
+      "part_of_speech": "phrasal verb",
+      "level": "B1",
+      "parent_key": "05_phrasal_verbs_ve_kaliplar",
+      "parent_name": "Kütüphane: Phrasal Verbs",
+      "subfolder_key": "01_sinav_phrasal_verbs",
+      "subfolder_name": "Sık Çıkan Phrasal Verbs",
+      "synonyms": [
+        "anticipate",
+        "await eagerly"
+      ],
+      "example_sentence": "Scientists look forward to analyzing the new satellite imagery.",
+      "example_translation": "Bilim insanları yeni uydu görüntülerini analiz etmeyi dört gözle bekliyor."
+    },
+    {
+      "word": "carry out",
+      "meaning": "yürütmek, uygulamak, icra etmek",
+      "part_of_speech": "phrasal verb",
+      "level": "B2",
+      "parent_key": "05_phrasal_verbs_ve_kaliplar",
+      "parent_name": "Kütüphane: Phrasal Verbs",
+      "subfolder_key": "01_sinav_phrasal_verbs",
+      "subfolder_name": "Sık Çıkan Phrasal Verbs",
+      "synonyms": [
+        "conduct",
+        "implement",
+        "execute",
+        "perform"
+      ],
+      "example_sentence": "The research team carried out a comprehensive demographic survey.",
+      "example_translation": "Araştırma ekibi kapsamlı bir demografik anket yürüttü."
+    },
+    {
+      "word": "rely on",
+      "meaning": "güvenmek, bel bağlamak, bağımlı olmak",
+      "part_of_speech": "phrasal verb",
+      "level": "B1",
+      "parent_key": "05_phrasal_verbs_ve_kaliplar",
+      "parent_name": "Kütüphane: Phrasal Verbs",
+      "subfolder_key": "01_sinav_phrasal_verbs",
+      "subfolder_name": "Sık Çıkan Phrasal Verbs",
+      "synonyms": [
+        "depend on",
+        "count on",
+        "trust"
+      ],
+      "example_sentence": "Developing economies often rely on agricultural revenue for sustainability.",
+      "example_translation": "Gelişmekte olan ekonomiler sürdürülebilirlik için sıklıkla tarım gelirine bel bağlar."
+    },
+    {
+      "word": "turn down",
+      "meaning": "reddetmek, geri çevirmek",
+      "part_of_speech": "phrasal verb",
+      "level": "B2",
+      "parent_key": "05_phrasal_verbs_ve_kaliplar",
+      "parent_name": "Kütüphane: Phrasal Verbs",
+      "subfolder_key": "01_sinav_phrasal_verbs",
+      "subfolder_name": "Sık Çıkan Phrasal Verbs",
+      "synonyms": [
+        "reject",
+        "refuse",
+        "decline"
+      ],
+      "example_sentence": "The editorial board turned down the manuscript due to inadequate citations.",
+      "example_translation": "Yayın kurulu yetersiz atıflar nedeniyle makaleyi geri çevirdi/reddetti."
+    },
+    {
+      "word": "bring about",
+      "meaning": "sebep olmak, yol açmak",
+      "part_of_speech": "phrasal verb",
+      "level": "B2",
+      "parent_key": "05_phrasal_verbs_ve_kaliplar",
+      "parent_name": "Kütüphane: Phrasal Verbs",
+      "subfolder_key": "01_sinav_phrasal_verbs",
+      "subfolder_name": "Sık Çıkan Phrasal Verbs",
+      "synonyms": [
+        "cause",
+        "lead to",
+        "trigger",
+        "generate"
+      ],
+      "example_sentence": "Technological breakthroughs brought about profound changes in education.",
+      "example_translation": "Teknolojik atılımlar eğitimde derin değişimlere yol açtı."
+    },
+    {
+      "word": "cope with",
+      "meaning": "başa çıkmak, üstesinden gelmek",
+      "part_of_speech": "phrasal verb",
+      "level": "B2",
+      "parent_key": "05_phrasal_verbs_ve_kaliplar",
+      "parent_name": "Kütüphane: Phrasal Verbs",
+      "subfolder_key": "01_sinav_phrasal_verbs",
+      "subfolder_name": "Sık Çıkan Phrasal Verbs",
+      "synonyms": [
+        "deal with",
+        "handle",
+        "overcome",
+        "manage"
+      ],
+      "example_sentence": "Medical personnel worked tirelessly to cope with the surge of patients.",
+      "example_translation": "Sağlık personeli hasta akınıyla başa çıkmak için yorulmadan çalıştı."
+    }
+  ]
+}

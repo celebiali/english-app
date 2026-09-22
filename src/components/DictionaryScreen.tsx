@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  FlatList,
   Image,
   ActivityIndicator,
   Animated,
@@ -68,7 +69,7 @@ export const DictionaryScreen: React.FC = () => {
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
 
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [showImage, setShowImage] = useState(true);
+  const [showImage, setShowImage] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
   const [imageError, setImageError] = useState(false);
 
@@ -78,7 +79,7 @@ export const DictionaryScreen: React.FC = () => {
 
   const toastFadeAnim = useRef(new Animated.Value(0)).current;
 
-  // Search logic: Instant local SQLite search + non-blocking ultra-fast online API lookup
+  // Search logic: Debounced instant local SQLite search + non-blocking online API lookup
   useEffect(() => {
     const trimmed = searchQuery.trim();
     if (!trimmed) {
@@ -91,26 +92,27 @@ export const DictionaryScreen: React.FC = () => {
     let isMounted = true;
     const abortController = new AbortController();
 
-    // 1. Local SQLite search (instant 0-10ms response)
-    dbService
-      .searchDictionary(trimmed, 25)
-      .then((localMatches) => {
-        if (isMounted) {
-          setSearchResults(localMatches);
-          // If local matches are found, user can interact immediately!
-          if (localMatches.length > 0) {
-            setIsSearching(false);
+    // 1. Debounced local SQLite search (150ms)
+    const localTimer = setTimeout(() => {
+      dbService
+        .searchDictionary(trimmed, 35)
+        .then((localMatches) => {
+          if (isMounted) {
+            setSearchResults(localMatches);
+            if (localMatches.length > 0) {
+              setIsSearching(false);
+            }
           }
-        }
-      })
-      .catch((err) => {
-        console.warn('Local search error:', err);
-      });
+        })
+        .catch((err) => {
+          console.warn('Local search error:', err);
+        });
+    }, 150);
 
-    // 2. Query Live Dictionary API with short debounce & abortable controller
-    if (/^[a-zA-Z\s'-]+$/.test(trimmed) && trimmed.length >= 2) {
-      setIsSearching(true);
-      const timer = setTimeout(async () => {
+    // 2. Query Live Dictionary API with 450ms debounce & abortable controller
+    let apiTimer: NodeJS.Timeout | null = null;
+    if (/^[a-zA-Z\s'-]+$/.test(trimmed) && trimmed.length >= 3) {
+      apiTimer = setTimeout(async () => {
         try {
           const apiData = await DictionaryApiService.lookupWord(trimmed, {
             signal: abortController.signal,
@@ -127,20 +129,17 @@ export const DictionaryScreen: React.FC = () => {
             setIsSearching(false);
           }
         }
-      }, 280);
-
-      return () => {
-        isMounted = false;
-        abortController.abort();
-        clearTimeout(timer);
-      };
+      }, 450);
     } else {
       setApiResult(null);
-      return () => {
-        isMounted = false;
-        abortController.abort();
-      };
     }
+
+    return () => {
+      isMounted = false;
+      abortController.abort();
+      clearTimeout(localTimer);
+      if (apiTimer) clearTimeout(apiTimer);
+    };
   }, [searchQuery]);
 
   // When a word is selected, fetch deep dictionary detail (definitions, phonetics, examples)
@@ -623,17 +622,8 @@ export const DictionaryScreen: React.FC = () => {
 
       {/* Main Content: Search Results OR Default Dictionary Dashboard */}
       {searchQuery.trim().length > 0 ? (
-        <ScrollView
-          style={styles.resultsScroll}
-          contentContainerStyle={[
-            styles.resultsScrollContent,
-            isSearching && searchResults.length === 0 && !apiResult && styles.resultsScrollCentered,
-          ]}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-        >
-          {/* SÖZLÜKTE ARANIYOR - TAM ORTADA! (Madde 2) */}
-          {isSearching && searchResults.length === 0 && !apiResult ? (
+        isSearching && searchResults.length === 0 && !apiResult ? (
+          <View style={[styles.resultsScroll, styles.resultsScrollCentered]}>
             <View style={styles.loadingCenter}>
               <View style={[styles.loadingIconBox, { backgroundColor: colors.brandLight }]}>
                 <ActivityIndicator size="small" color={colors.brand} />
@@ -645,7 +635,9 @@ export const DictionaryScreen: React.FC = () => {
                 Yerel veritabanı ve canlı sözlük taranıyor
               </Text>
             </View>
-          ) : searchResults.length === 0 && !apiResult ? (
+          </View>
+        ) : searchResults.length === 0 && !apiResult ? (
+          <View style={styles.resultsScroll}>
             <View style={styles.emptyResultsBox}>
               <Text style={[styles.emptyTitle, { color: colors.text }]}>
                 Kelime bulunamadı
@@ -654,10 +646,21 @@ export const DictionaryScreen: React.FC = () => {
                 "{searchQuery}" için sonuç yok. Özel kelime ekleyebilir veya başka bir kelime deneyebilirsiniz.
               </Text>
             </View>
-          ) : (
-            <View style={styles.resultsList}>
-              {/* Canlı API sonucu */}
-              {apiResult && !searchResults.some((r) => r.word.toLowerCase() === apiResult.word.toLowerCase()) && (
+          </View>
+        ) : (
+          <FlatList
+            style={styles.resultsScroll}
+            contentContainerStyle={styles.resultsScrollContent}
+            data={searchResults}
+            keyExtractor={(item, idx) => (item.id ? `local-${item.id}` : `${item.word}-${idx}`)}
+            initialNumToRender={12}
+            maxToRenderPerBatch={10}
+            windowSize={5}
+            removeClippedSubviews={Platform.OS === 'android'}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            ListHeaderComponent={
+              apiResult && !searchResults.some((r) => r.word.toLowerCase() === apiResult.word.toLowerCase()) ? (
                 <TouchableOpacity
                   style={[
                     styles.resultCard,
@@ -665,13 +668,13 @@ export const DictionaryScreen: React.FC = () => {
                       backgroundColor: colors.cardBackground,
                       borderColor: colors.brand,
                       borderWidth: 1.5,
+                      marginBottom: 10,
                     },
                   ]}
                   onPress={() => {
                     const item = DictionaryApiService.convertToWordItem(apiResult) as WordItem;
                     setSelectedWord(item);
                     setImageError(false);
-                    setImageLoading(true);
                   }}
                   activeOpacity={0.72}
                 >
@@ -716,63 +719,59 @@ export const DictionaryScreen: React.FC = () => {
                   </View>
                   <ChevronRight size={18} color={colors.brand} />
                 </TouchableOpacity>
-              )}
-
-              {/* Yerel SQLite Sonuçları */}
-              {searchResults.map((item, idx) => (
-                <TouchableOpacity
-                  key={item.id ? `${item.id}-${idx}` : `${item.word}-${idx}`}
-                  style={[
-                    styles.resultCard,
-                    {
-                      backgroundColor: colors.cardBackground,
-                      borderColor: colors.border,
-                    },
-                  ]}
-                  onPress={() => {
-                    setSelectedWord(item);
-                    setImageError(false);
-                    setImageLoading(true);
-                  }}
-                  activeOpacity={0.72}
-                >
-                  <View style={{ flex: 1 }}>
-                    <View style={styles.resultTopRow}>
-                      <Text style={styles.smallFlag}>🇺🇸</Text>
-                      <Text style={[styles.resultWordText, { color: colors.text }]}>
-                        {item.word}
-                      </Text>
-                      <Text style={[styles.resultPosText, { color: colors.textSecondary }]}>
-                        {item.part_of_speech || item.category?.toLowerCase() || 'noun'}
-                      </Text>
-                    </View>
-
-                    <View style={styles.resultMeaningRow}>
-                      <Text style={styles.smallTrFlag}>🇹🇷</Text>
-                      <Text
-                        style={[styles.resultMeaningText, { color: colors.textSecondary }]}
-                        numberOfLines={1}
-                      >
-                        {item.meaning}
-                      </Text>
-                    </View>
-
-                    {getValidExampleSentence(item.example_sentence) ? (
-                      <Text
-                        style={[styles.resultExampleText, { color: colors.textSecondary }]}
-                        numberOfLines={1}
-                      >
-                        {getValidExampleSentence(item.example_sentence)}
-                      </Text>
-                    ) : null}
+              ) : null
+            }
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={[
+                  styles.resultCard,
+                  {
+                    backgroundColor: colors.cardBackground,
+                    borderColor: colors.border,
+                  },
+                ]}
+                onPress={() => {
+                  setSelectedWord(item);
+                  setImageError(false);
+                }}
+                activeOpacity={0.72}
+              >
+                <View style={{ flex: 1 }}>
+                  <View style={styles.resultTopRow}>
+                    <Text style={styles.smallFlag}>🇺🇸</Text>
+                    <Text style={[styles.resultWordText, { color: colors.text }]}>
+                      {item.word}
+                    </Text>
+                    <Text style={[styles.resultPosText, { color: colors.textSecondary }]}>
+                      {item.part_of_speech || item.category?.toLowerCase() || 'noun'}
+                    </Text>
                   </View>
 
-                  <ChevronRight size={18} color={colors.textSecondary} />
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-        </ScrollView>
+                  <View style={styles.resultMeaningRow}>
+                    <Text style={styles.smallTrFlag}>🇹🇷</Text>
+                    <Text
+                      style={[styles.resultMeaningText, { color: colors.textSecondary }]}
+                      numberOfLines={1}
+                    >
+                      {item.meaning}
+                    </Text>
+                  </View>
+
+                  {getValidExampleSentence(item.example_sentence) ? (
+                    <Text
+                      style={[styles.resultExampleText, { color: colors.textSecondary }]}
+                      numberOfLines={1}
+                    >
+                      {getValidExampleSentence(item.example_sentence)}
+                    </Text>
+                  ) : null}
+                </View>
+
+                <ChevronRight size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
+            )}
+          />
+        )
       ) : (
         // SÖZLÜK ANA EKRANI (Görsel 2)
         <ScrollView

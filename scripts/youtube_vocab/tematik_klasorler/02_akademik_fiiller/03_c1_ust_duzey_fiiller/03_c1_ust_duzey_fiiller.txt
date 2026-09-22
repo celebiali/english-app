@@ -1,0 +1,97 @@
+=== KÜTÜPHANE: AKADEMIK FIILLER > C1 ÜST DÜZEY PARAGRAF FIILLERI (19 KELİME) ===
+
+1. anticipate [fiil] (C1)
+   Anlam: beklemek, ummak, sezmek
+   Örnek: I didn't anticipate this.
+   Çeviri: Bunu beklemiyordum.
+--------------------------------------------------
+2. characterize [fiil] (C1)
+   Anlam: nitelendirmek, simgesi olmak, farklı olmasını sağlamak
+   Örnek: The Japanese distribution system, characterized by layers of wholesale, is complex and costly.
+   Çeviri: Toptan satış tabakaları ile karakterize edilen Japon dağıtım sistemi karmaşık ve masraflıdır.
+--------------------------------------------------
+3. considerate [fiil] (C1)
+   Anlam: düşünceli, hürmetkar, anlayışlı
+   Örnek: He is a considerate father.
+   Çeviri: O, düşünceli bir babadır.
+--------------------------------------------------
+4. constitute [fiil] (C1)
+   Anlam: oluşturmak, teşkil etmek, kurmak
+   Örnek: The research committee agreed to constitute the proposed methodology.
+   Çeviri: Araştırma komitesi önerilen metodolojiyi oluşturmak konusunda mutabık kaldı.
+--------------------------------------------------
+5. constitutes [fiil] (C1)
+   Anlam: oluşturmak, teşkil etmek, kurmak
+   Örnek: The research committee agreed to constitutes the proposed methodology.
+   Çeviri: Araştırma komitesi önerilen metodolojiyi oluşturmak konusunda mutabık kaldı.
+--------------------------------------------------
+6. contribute [fiil] (C1)
+   Anlam: katkı yapmak, katkıda bulunmak, vermek
+   Örnek: I want to contribute more.
+   Çeviri: Daha fazla katkıda bulunmak istiyorum.
+--------------------------------------------------
+7. demonstrate [fiil] (C1)
+   Anlam: ispat etmek, göstermek, kanıtlamak
+   Örnek: I'll demonstrate it for you.
+   Çeviri: Bunu senin için kanıtlayacağım.
+--------------------------------------------------
+8. disappoint [fiil] (C1)
+   Anlam: hayal kırıklığına uğratmak, altüst etmek, ümidini boşa çıkarmak
+   Örnek: I won't disappoint you.
+   Çeviri: Ben seni hayal kırıklığına uğratmayacağım.
+--------------------------------------------------
+9. discovered [fiil] (C1)
+   Anlam: keşfedilmek, açığa çıkarılmak, bulunmak
+   Örnek: He discovered a new star.
+   Çeviri: Yeni bir yıldız keşfetti.
+--------------------------------------------------
+10. everywhere [fiil] (C1)
+   Anlam: her yer, her yere, her taraf
+   Örnek: Cops can't be everywhere.
+   Çeviri: Polisler her yerde olamazlar.
+--------------------------------------------------
+11. exterminate [fiil] (C1)
+   Anlam: kırmak, kökünü kurutmak, mahvetmek
+   Örnek: The research committee agreed to exterminate the proposed methodology.
+   Çeviri: Araştırma komitesi önerilen metodolojiyi kırmak konusunda mutabık kaldı.
+--------------------------------------------------
+12. facilitate [fiil] (C1)
+   Anlam: hafifletmek, rahatlatmak, olanak tanımak
+   Örnek: I think I can facilitate that.
+   Çeviri: Bunu kolaylaştırabileceğimi düşünüyorum
+--------------------------------------------------
+13. inadequate [fiil] (C1)
+   Anlam: yetersiz, liyakatsiz, elverişsiz
+   Örnek: I just feel a little inadequate.
+   Çeviri: Sadece biraz yetersiz hissediyorum.
+--------------------------------------------------
+14. inappropriate [fiil] (C1)
+   Anlam: uygun olmayan, yakışıksız, isabetsiz
+   Örnek: I think it's inappropriate.
+   Çeviri: O bence uygun değil.
+--------------------------------------------------
+15. investigate [fiil] (C1)
+   Anlam: araştırmak, soruşturmak, incelemek
+   Örnek: Let's go and investigate.
+   Çeviri: Gidelim ve araştıralım.
+--------------------------------------------------
+16. necessitate [fiil] (C1)
+   Anlam: gerektirmek, gerekli kılmak, zorunlu kılmak
+   Örnek: The research committee agreed to necessitate the proposed methodology.
+   Çeviri: Araştırma komitesi önerilen metodolojiyi gerektirmek konusunda mutabık kaldı.
+--------------------------------------------------
+17. progressed [fiil] (C1)
+   Anlam: zaman ilerledikçe, zaman geçtikçe, ilerletilmiş harita
+   Örnek: The research committee agreed to progressed the proposed methodology.
+   Çeviri: Araştırma komitesi önerilen metodolojiyi zaman ilerledikçe konusunda mutabık kaldı.
+--------------------------------------------------
+18. strengthen [fiil] (C1) | Eş Anlam: enhance
+   Anlam: sağlamlaştırmak, kuvvetlenmek, güçlendirmek
+   Örnek: Time, which strengthens friendship, weakens love.
+   Çeviri: Zaman, dostluğu güçlendirir, sevgiyi zayıflatır.
+--------------------------------------------------
+19. whereabouts [fiil] (C1)
+   Anlam: bulunduğu veya olduğu yer, yer, semt
+   Örnek: I don't know his whereabouts.
+   Çeviri: Onun bulunduğu yeri bilmiyorum.
+--------------------------------------------------

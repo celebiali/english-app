@@ -4,6 +4,7 @@ import {
   RAW_ETYMOLOGY_ROOTS,
 } from './FullDataset';
 import { BUILTIN_ACADEMIC_DICT } from './BuiltinAcademicDictionary';
+import { KUTUPHANE_THEMATIC_WORDS } from './KutuphaneThematicDataset';
 
 /**
  * Base Core Vocabulary Words Stems
@@ -284,7 +285,23 @@ export class DataParserService {
       });
     });
 
-    // 4. DYNAMIC SYNTHETIC EXPANSION UP TO 9,000 ITEMS
+    // 4. KÜTÜPHANE SERİSİ TEMATİK KELİMELER (2,498 gerçek sınav kelimesi)
+    KUTUPHANE_THEMATIC_WORDS.forEach((kw) => {
+      list.push({
+        word: kw.word,
+        meaning: kw.meaning,
+        category: kw.category,
+        subcategory: kw.subcategory,
+        folder_name: kw.folder_name,
+        level: kw.level || 'B1',
+        synonyms: kw.synonyms,
+        example_sentence: kw.example_sentence,
+        example_translation: kw.example_translation,
+        part_of_speech: kw.part_of_speech,
+      });
+    });
+
+    // 5. DYNAMIC SYNTHETIC EXPANSION UP TO 9,000 ITEMS
     const targetTotal = 9000;
     let index = 1;
     while (list.length < targetTotal) {

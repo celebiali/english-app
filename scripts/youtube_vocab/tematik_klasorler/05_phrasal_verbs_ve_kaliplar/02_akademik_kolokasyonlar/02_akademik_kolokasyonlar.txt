@@ -1,0 +1,12 @@
+=== KÜTÜPHANE: PHRASAL VERBS > AKADEMIK KOLOKASYONLAR (2 KELİME) ===
+
+1. cultural heritage [kalıp ifade] (B2) | Eş Anlam: historical legacy, patrimony
+   Anlam: kültürel miras
+   Örnek: International conventions protect ancient cultural heritage during armed conflicts.
+   Çeviri: Uluslararası sözleşmeler silahlı çatışmalar sırasında antik kültürel mirası korur.
+--------------------------------------------------
+2. intensive care [kalıp ifade] (B1) | Eş Anlam: ICU, critical care
+   Anlam: yoğun bakım
+   Örnek: The clinical team monitored the patient continuously in the intensive care unit.
+   Çeviri: Klinik ekip hastayı yoğun bakım ünitesinde sürekli olarak izledi.
+--------------------------------------------------

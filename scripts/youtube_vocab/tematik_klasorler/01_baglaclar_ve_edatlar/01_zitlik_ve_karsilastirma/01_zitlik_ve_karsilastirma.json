@@ -1,0 +1,113 @@
+{
+  "parent_key": "01_baglaclar_ve_edatlar",
+  "parent_name": "Kütüphane: Bağlaçlar & Edatlar",
+  "subfolder_key": "01_zitlik_ve_karsilastirma",
+  "subfolder_name": "Zıtlık ve Karşılaştırma",
+  "word_count": 8,
+  "words": [
+    {
+      "word": "although",
+      "meaning": "her ne kadar, rağmen, gerçi",
+      "part_of_speech": "bağlaç",
+      "level": "B2",
+      "parent_key": "01_baglaclar_ve_edatlar",
+      "parent_name": "Kütüphane: Bağlaçlar & Edatlar",
+      "subfolder_key": "01_zitlik_ve_karsilastirma",
+      "subfolder_name": "Zıtlık ve Karşılaştırma",
+      "synonyms": [],
+      "example_sentence": "Although it is snowing, I must go.",
+      "example_translation": "Kar yağmasına rağmen gitmek zorundayım."
+    },
+    {
+      "word": "but",
+      "meaning": "ancak, fakat, itiraz",
+      "part_of_speech": "bağlaç",
+      "level": "B1",
+      "parent_key": "01_baglaclar_ve_edatlar",
+      "parent_name": "Kütüphane: Bağlaçlar & Edatlar",
+      "subfolder_key": "01_zitlik_ve_karsilastirma",
+      "subfolder_name": "Zıtlık ve Karşılaştırma",
+      "synonyms": [],
+      "example_sentence": "He is but a child.",
+      "example_translation": "O, ancak bir çocuk."
+    },
+    {
+      "word": "despite",
+      "meaning": "rağmen, kin, garez",
+      "part_of_speech": "edat",
+      "level": "B2",
+      "parent_key": "01_baglaclar_ve_edatlar",
+      "parent_name": "Kütüphane: Bağlaçlar & Edatlar",
+      "subfolder_key": "01_zitlik_ve_karsilastirma",
+      "subfolder_name": "Zıtlık ve Karşılaştırma",
+      "synonyms": [],
+      "example_sentence": "I love him despite his faults.",
+      "example_translation": "Ben onun hatalarına rağmen onu seviyorum."
+    },
+    {
+      "word": "however",
+      "meaning": "bununla birlikte, yine de, her nasılsa",
+      "part_of_speech": "bağlaç",
+      "level": "B2",
+      "parent_key": "01_baglaclar_ve_edatlar",
+      "parent_name": "Kütüphane: Bağlaçlar & Edatlar",
+      "subfolder_key": "01_zitlik_ve_karsilastirma",
+      "subfolder_name": "Zıtlık ve Karşılaştırma",
+      "synonyms": [],
+      "example_sentence": "However, that didn't happen.",
+      "example_translation": "Ancak, o olmadı."
+    },
+    {
+      "word": "notwithstanding",
+      "meaning": "buna rağmen, bağlı olmaksızın, gerçi",
+      "part_of_speech": "bağlaç",
+      "level": "B2",
+      "parent_key": "01_baglaclar_ve_edatlar",
+      "parent_name": "Kütüphane: Bağlaçlar & Edatlar",
+      "subfolder_key": "01_zitlik_ve_karsilastirma",
+      "subfolder_name": "Zıtlık ve Karşılaştırma",
+      "synonyms": [],
+      "example_sentence": "Notwithstanding rigorous clinical testing, some uncertainty remained.",
+      "example_translation": "Kapsamlı klinik testlere rağmen / esnasında (buna rağmen) bazı belirsizlikler devam etti."
+    },
+    {
+      "word": "though",
+      "meaning": "gerçi, -diği halde, fakat",
+      "part_of_speech": "bağlaç",
+      "level": "B1",
+      "parent_key": "01_baglaclar_ve_edatlar",
+      "parent_name": "Kütüphane: Bağlaçlar & Edatlar",
+      "subfolder_key": "01_zitlik_ve_karsilastirma",
+      "subfolder_name": "Zıtlık ve Karşılaştırma",
+      "synonyms": [],
+      "example_sentence": "It looks as though it may rain.",
+      "example_translation": "Sanki yağmur yağabilir gibi görünüyor."
+    },
+    {
+      "word": "while",
+      "meaning": "sırasında, iken, olduğu halde",
+      "part_of_speech": "bağlaç",
+      "level": "B1",
+      "parent_key": "01_baglaclar_ve_edatlar",
+      "parent_name": "Kütüphane: Bağlaçlar & Edatlar",
+      "subfolder_key": "01_zitlik_ve_karsilastirma",
+      "subfolder_name": "Zıtlık ve Karşılaştırma",
+      "synonyms": [],
+      "example_sentence": "It's been a while.",
+      "example_translation": "Bir süre oldu."
+    },
+    {
+      "word": "yet",
+      "meaning": "henüz, gerçi, yine de",
+      "part_of_speech": "bağlaç",
+      "level": "B1",
+      "parent_key": "01_baglaclar_ve_edatlar",
+      "parent_name": "Kütüphane: Bağlaçlar & Edatlar",
+      "subfolder_key": "01_zitlik_ve_karsilastirma",
+      "subfolder_name": "Zıtlık ve Karşılaştırma",
+      "synonyms": [],
+      "example_sentence": "I can't go yet.",
+      "example_translation": "Henüz gidemiyorum."
+    }
+  ]
+}

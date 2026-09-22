@@ -1,0 +1,2422 @@
+=== KÜTÜPHANE: AKADEMIK İSIMLER > B1 TEMEL AKADEMIK İSIMLER (484 KELİME) ===
+
+1. a [isim] (B1)
+   Anlam: belirli bir tür veya nitelikteki, en yüksek not, ingiliz alfabesinin birinci harfi
+   Örnek: I'm in a fix.
+   Çeviri: Zor durumdayım.
+--------------------------------------------------
+2. abuse [isim] (B1)
+   Anlam: suistimal etmek, kötüye kullanmak, suistimal
+   Örnek: Child abuse is a crime.
+   Çeviri: Çocuk istismarı suçtur.
+--------------------------------------------------
+3. access [isim] (B1)
+   Anlam: erişim, erişme, giriş
+   Örnek: He had access to the papers.
+   Çeviri: Onun belgelere erişim hakkı vardı.
+--------------------------------------------------
+4. act [isim] (B1)
+   Anlam: davranmak, hareket etmek, eylem
+   Örnek: It's all an act.
+   Çeviri: Hepsi numara.
+--------------------------------------------------
+5. action [isim] (B1)
+   Anlam: çalışma, davranış, aksiyon
+   Örnek: It's time for action.
+   Çeviri: Eylem zamanı.
+--------------------------------------------------
+6. adding [isim] (B1)
+   Anlam: ekleme, cemi, izafe
+   Örnek: I'm adding the last touch.
+   Çeviri: Son rötuşları yapıyorum.
+--------------------------------------------------
+7. admin [isim] (B1)
+   Anlam: yönetici, idare, yönetim
+   Örnek: The investigation highlighted the critical role of admin.
+   Çeviri: Soruşturma yönetici kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+8. advice [isim] (B1)
+   Anlam: nasihat, tavsiye, öğüt
+   Örnek: I took Tom's advice.
+   Çeviri: Tom'un tavsiyesini aldım.
+--------------------------------------------------
+9. africa [isim] (B1)
+   Anlam: afrika
+   Örnek: He was born in Africa.
+   Çeviri: O Afrika'da doğdu.
+--------------------------------------------------
+10. age [isim] (B1)
+   Anlam: yaş, çağ, devir
+   Örnek: He is just my age.
+   Çeviri: O tam benim yaşımda.
+--------------------------------------------------
+11. ages [isim] (B1)
+   Anlam: uzun süre, uzun zaman, asırlar
+   Örnek: I did that ages ago.
+   Çeviri: Onu uzun süre önce yaptım.
+--------------------------------------------------
+12. aid [isim] (B1)
+   Anlam: yardım etmek, yardım, yardımcı olmak
+   Örnek: She came to my aid.
+   Çeviri: Benim yardımıma geldi.
+--------------------------------------------------
+13. aim [isim] (B1)
+   Anlam: amaçlamak, hedeflemek, nişan almak
+   Örnek: I aim to be a writer.
+   Çeviri: Ben bir yazar olmayı hedefliyorum.
+--------------------------------------------------
+14. air [isim] (B1)
+   Anlam: havalandırmak, yayına girmek, hava
+   Örnek: We're on the air.
+   Çeviri: Canlı yayındayız.
+--------------------------------------------------
+15. airbus [isim] (B1)
+   Anlam: uçak, kısa mesafelerde çok sayıda yolcu taşımak üzere tasarlanmış uçak, jet yolcu uçağı
+   Örnek: The investigation highlighted the critical role of airbus.
+   Çeviri: Soruşturma uçak kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+16. alter [isim] (B1)
+   Anlam: değiştirmek, değişiklik yapmak, hadım etmek
+   Örnek: We must alter our plan.
+   Çeviri: Planımızı değiştirmeliyiz.
+--------------------------------------------------
+17. amb [isim] (B1)
+   Anlam: amb, büyükelçi, ambulans
+   Örnek: The investigation highlighted the critical role of amb.
+   Çeviri: Soruşturma amb kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+18. amount [isim] (B1)
+   Anlam: miktar, tutar, meblağ
+   Örnek: It's a large amount.
+   Çeviri: O büyük bir miktar.
+--------------------------------------------------
+19. answer [isim] (B1)
+   Anlam: yanıt vermek, cevaplamak, cevap vermek
+   Örnek: I can't answer that.
+   Çeviri: Ona cevap veremem.
+--------------------------------------------------
+20. apps [isim] (B1)
+   Anlam: apps denetimi, istemci uygulamaları
+   Örnek: I have dozens of apps on my phone that I seldom use.
+   Çeviri: Telefonumda, nadiren kullandığım düzinelerce uygulamam var.
+--------------------------------------------------
+21. are [isim] (B1)
+   Anlam: ar, 100 metrekare'ye eşit alan ölçüsü birimi, yüz metrekare, ar
+   Örnek: Are you at Tom's?
+   Çeviri: Tom'larda mısın?
+--------------------------------------------------
+22. areas [isim] (B1)
+   Anlam: alanları doldurmak, koruma alanları, sağlık hizmetleri alanı
+   Örnek: Most people live in urban areas.
+   Çeviri: Çoğu kişi kentsel alanlarda yaşar.
+--------------------------------------------------
+23. aries [isim] (B1)
+   Anlam: koç, koç burcu, balık ve boğa takımyıldızları arasında yer alan koç takımyıldızı
+   Örnek: The investigation highlighted the critical role of aries.
+   Çeviri: Soruşturma koç kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+24. arms [isim] (B1)
+   Anlam: koyun, kucak, silahlar
+   Örnek: Let go of my arms.
+   Çeviri: Kollarımı bırak.
+--------------------------------------------------
+25. artist [isim] (B1)
+   Anlam: artist, sanatkar, sanatçı
+   Örnek: He's a con artist.
+   Çeviri: O bir düzenbaz.
+--------------------------------------------------
+26. aside [isim] (B1)
+   Anlam: bertaraf, ayrı, bir kenara
+   Örnek: Lay this aside for me.
+   Çeviri: Bunu benim için bir yana koy.
+--------------------------------------------------
+27. aspect [isim] (B1)
+   Anlam: hal, taraf, yön
+   Örnek: I love every aspect of the game.
+   Çeviri: Oyunun her yönünü seviyorum.
+--------------------------------------------------
+28. assist [isim] (B1)
+   Anlam: yardım etmek, asistanlık yapmak, asiste etmek
+   Örnek: I'm here to assist you.
+   Çeviri: Size yardımcı olmak için buradayım.
+--------------------------------------------------
+29. ax [isim] (B1)
+   Anlam: balta, kovmak, azaltmak
+   Örnek: He has an ax to grind.
+   Çeviri: Onun şikayeti var.
+--------------------------------------------------
+30. axe [isim] (B1)
+   Anlam: balta, kısmak, azaltmak
+   Örnek: She always has some axe to grind.
+   Çeviri: Onun her zaman bir şikâyeti vardır.
+--------------------------------------------------
+31. barter [isim] (B1)
+   Anlam: takas, takas yapmak, değiş tokuş etmek
+   Örnek: The investigation highlighted the critical role of barter.
+   Çeviri: Soruşturma takas kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+32. base [isim] (B1)
+   Anlam: dayandırmak, üs, baz
+   Örnek: Our company's base is in Tokyo.
+   Çeviri: Şirketimizin merkezi Tokyo'dadır.
+--------------------------------------------------
+33. battle [isim] (B1)
+   Anlam: savaş, muharebe, dövüşmek
+   Örnek: We'll win the battle.
+   Çeviri: Biz savaşı kazanacağız.
+--------------------------------------------------
+34. bears [isim] (B1)
+   Anlam: bu söylediğimi doğruluyor, tekrar söylemeye değer, tekrar söylemekte fayda var
+   Örnek: I am afraid of bears.
+   Çeviri: Ayılardan korkarım.
+--------------------------------------------------
+35. being [isim] (B1)
+   Anlam: yapı, vücut, tanrı
+   Örnek: I'm a human being.
+   Çeviri: Ben bir insanım.
+--------------------------------------------------
+36. better [isim] (B1)
+   Anlam: daha iyi, iyileştirmek, ıslah etmek
+   Örnek: I'm a lot better.
+   Çeviri: Ben çok daha iyiyim.
+--------------------------------------------------
+37. bias [isim] (B1)
+   Anlam: önyargı, aklını çelmek, bir tarafa etki etmek
+   Örnek: Cut the cloth on the bias.
+   Çeviri: Kumaşı diyagonal kesin.
+--------------------------------------------------
+38. bigger [isim] (B1)
+   Anlam: daha büyük, büyük
+   Örnek: I need a bigger box.
+   Çeviri: Daha büyük bir kutuya ihtiyacım var.
+--------------------------------------------------
+39. bike [isim] (B1)
+   Anlam: bisiklete binmek, bisiklet, bisiklet sürmek
+   Örnek: I was on a bike.
+   Çeviri: Bir bisikletteydim.
+--------------------------------------------------
+40. boats [isim] (B1)
+   Anlam: köprüleri atmak, kayıklar ve kayıkçılık, bir ulusun refahı herkese yarar sağlar
+   Örnek: I don't care about boats.
+   Çeviri: Ben teknelerle ilgilenmiyorum.
+--------------------------------------------------
+41. books [isim] (B1)
+   Anlam: kitaplar, kayıtlar
+   Örnek: I don't read books.
+   Çeviri: Ben kitap okumuyorum.
+--------------------------------------------------
+42. border [isim] (B1)
+   Anlam: hudut, kenarlık, kenar
+   Örnek: We live near the border.
+   Çeviri: Biz sınıra yakın yaşıyoruz.
+--------------------------------------------------
+43. bore [isim] (B1)
+   Anlam: bunaltmak, delmek, sıkmak
+   Örnek: Don't be a bore.
+   Çeviri: Sıkma insanı.
+--------------------------------------------------
+44. boring [isim] (B1)
+   Anlam: bıktırıcı, bıktıran, sıkıcı
+   Örnek: It's kind of boring.
+   Çeviri: Bu biraz sıkıcı.
+--------------------------------------------------
+45. bounce [isim] (B1)
+   Anlam: sektirmek, zıplamak, sekmek
+   Örnek: A rubber ball bounces because it is elastic.
+   Çeviri: Elastik olduğu için lastik bir top seker.
+--------------------------------------------------
+46. bowl [isim] (B1)
+   Anlam: tas, çanak, kase
+   Örnek: I had a bowl of soup.
+   Çeviri: Bir kase çorba içtim.
+--------------------------------------------------
+47. branch [isim] (B1)
+   Anlam: dallanmak, şube, dal
+   Örnek: I cut a branch from the tree.
+   Çeviri: Ben ağaçtan bir dal kestim.
+--------------------------------------------------
+48. breast [isim] (B1)
+   Anlam: meme, göğüs, göğüs germek
+   Örnek: Breast cancer is a disease.
+   Çeviri: Meme kanseri bir hastalıktır.
+--------------------------------------------------
+49. bridge [isim] (B1)
+   Anlam: köprü, köprü kurmak, köprü yapmak
+   Örnek: How long is the bridge?
+   Çeviri: Köprü ne kadar uzunluktadır?
+--------------------------------------------------
+50. buddy [isim] (B1)
+   Anlam: ahbap, kanka, kafadar
+   Örnek: I'll help you, buddy.
+   Çeviri: Sana yardım edeceğim, dostum.
+--------------------------------------------------
+51. cabin [isim] (B1)
+   Anlam: kabin, tahdit etmek, küçük bir yere kapamak
+   Örnek: We rented a cabin by a lake.
+   Çeviri: Gölün yanında bir kabin kiraladık.
+--------------------------------------------------
+52. cake [isim] (B1)
+   Anlam: kek, pasta, katılaşmak
+   Örnek: He made me a cake.
+   Çeviri: Bana bir kek yaptı
+--------------------------------------------------
+53. cal [isim] (B1)
+   Anlam: kilokalori, kalsiyum hidroksit, cal
+   Örnek: The investigation highlighted the critical role of cal.
+   Çeviri: Soruşturma kilokalori kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+54. can [isim] (B1)
+   Anlam: olabilmek, kovmak, konservelemek
+   Örnek: I can't do it.
+   Çeviri: Onu yapamam.
+--------------------------------------------------
+55. cap [isim] (B1)
+   Anlam: başlık, kapak, kep
+   Örnek: I have lost my cap.
+   Çeviri: Benim kepimi kaybettim.
+--------------------------------------------------
+56. carbs [isim] (B1)
+   Anlam: karbonhidrat
+   Örnek: The investigation highlighted the critical role of carbs.
+   Çeviri: Soruşturma karbonhidrat kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+57. care [isim] (B1)
+   Anlam: önem vermek, aldırmak, umursamak
+   Örnek: Ask me if I care.
+   Çeviri: Çok da umurumda!
+--------------------------------------------------
+58. cars [isim] (B1)
+   Anlam: arabalar
+   Örnek: I am fond of cars.
+   Çeviri: Ben arabaları çok severim.
+--------------------------------------------------
+59. case [isim] (B1)
+   Anlam: dava, kasa, kılıf
+   Örnek: That isn't the case.
+   Çeviri: Olay bu değil.
+--------------------------------------------------
+60. cases [isim] (B1)
+   Anlam: davalar, vakalar, vukuat
+   Örnek: What's in those cases?
+   Çeviri: Şu kutularda ne var?
+--------------------------------------------------
+61. cat's [isim] (B1)
+   Anlam: kedi, tehlikeli işi üzerine almak, sırıtmak
+   Örnek: The investigation highlighted the critical role of cat's.
+   Çeviri: Soruşturma kedi kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+62. cause [isim] (B1)
+   Anlam: sebebiyet vermek, sebep olmak, yol açmak
+   Örnek: I don't cause trouble.
+   Çeviri: Ben soruna neden olmam.
+--------------------------------------------------
+63. cavity [isim] (B1)
+   Anlam: çukur, delik, kavite
+   Örnek: I think I have a cavity.
+   Çeviri: Sanırım dişimde bir delik var.
+--------------------------------------------------
+64. center [isim] (B1)
+   Anlam: ortalamak, merkez, ortaya yerleştirmek
+   Örnek: He works in a call center.
+   Çeviri: O bir çağrı merkezinde çalışır.
+--------------------------------------------------
+65. ch [isim] (B1)
+   Anlam: isviçre:ch, ch-4 yağ sınıfı, reform kilisesi
+   Örnek: The investigation highlighted the critical role of ch.
+   Çeviri: Soruşturma isviçre:ch kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+66. chance [isim] (B1)
+   Anlam: olanak, ihtimal, şans
+   Örnek: I'll take a chance.
+   Çeviri: Şansımı deneyeceğim.
+--------------------------------------------------
+67. change [isim] (B1)
+   Anlam: değişmek, değiştirmek, değişiklik
+   Örnek: I'll try to change.
+   Çeviri: Ben değiştirmeye çalışacağım.
+--------------------------------------------------
+68. charge [isim] (B1)
+   Anlam: yüklemek, suçlamak, şarj etmek
+   Örnek: I'm in charge now.
+   Çeviri: Artık ben sorumluyum.
+--------------------------------------------------
+69. charm [isim] (B1)
+   Anlam: albeni, cazibe, çekicilik
+   Örnek: It worked like a charm.
+   Çeviri: Çok işe yaradı.
+--------------------------------------------------
+70. cheer [isim] (B1)
+   Anlam: neşelendirmek, neşe, şenlendirmek
+   Örnek: It'll cheer you up.
+   Çeviri: Seni neşelendirecek.
+--------------------------------------------------
+71. chefs [isim] (B1)
+   Anlam: herkes patron, herkes patron kesilmiş, bir işe elli kişi karışırsa …
+   Örnek: The investigation highlighted the critical role of chefs.
+   Çeviri: Soruşturma herkes patron kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+72. chip [isim] (B1)
+   Anlam: havalandırmak, takılmak, kırılmak
+   Örnek: How did you chip your tooth?
+   Çeviri: Dişinizi nasıl çektiniz?
+--------------------------------------------------
+73. circle [isim] (B1)
+   Anlam: halka, daire, çember
+   Örnek: They sat in a circle.
+   Çeviri: Onlar bir daire içinde oturdu.
+--------------------------------------------------
+74. cities [isim] (B1)
+   Anlam: şehirler
+   Örnek: We live in different cities.
+   Çeviri: Farklı şehirlerde yaşıyoruz.
+--------------------------------------------------
+75. cl [isim] (B1)
+   Anlam: uluslararası sınıflama, şili:cl, cl yükü
+   Örnek: You can't cling to the past.
+   Çeviri: Geçmişe sadık kalamazsın.
+--------------------------------------------------
+76. class [isim] (B1)
+   Anlam: ders, sınıf, saymak
+   Örnek: He's in my class.
+   Çeviri: O, benim sınıfımda.
+--------------------------------------------------
+77. client [isim] (B1)
+   Anlam: müvekkil, müşteri, hasta
+   Örnek: I'm with a client.
+   Çeviri: Bir müşteri ile birlikteyim.
+--------------------------------------------------
+78. clouds [isim] (B1)
+   Anlam: bulutlar
+   Örnek: The clouds hid the sun.
+   Çeviri: Bulutlar güneşi sakladı.
+--------------------------------------------------
+79. clue [isim] (B1)
+   Anlam: ipucu, aydınlatmak, bilgi vermek
+   Örnek: I don't have a clue.
+   Çeviri: Bir fikrim yok.
+--------------------------------------------------
+80. clues [isim] (B1)
+   Anlam: ipuçları
+   Örnek: Did you find any clues?
+   Çeviri: Herhangi bir ipucu buldun mu?
+--------------------------------------------------
+81. co [isim] (B1)
+   Anlam: birlikte, ko, vietnam’da yaşayan etnik bir grup
+   Örnek: Both the pilot and the co-pilot are dead.
+   Çeviri: Hem pilot ve hem de co-pilot öldüler.
+--------------------------------------------------
+82. coast [isim] (B1)
+   Anlam: sahil, kıyı, deniz kıyısı
+   Örnek: I'm from the East Coast.
+   Çeviri: Ben doğu yakasındanım.
+--------------------------------------------------
+83. color [isim] (B1)
+   Anlam: boya, renk, renk katmak
+   Örnek: The color won't fade.
+   Çeviri: Rengi solmaz.
+--------------------------------------------------
+84. comm [isim] (B1)
+   Anlam: açıklama
+   Örnek: The investigation highlighted the critical role of comm.
+   Çeviri: Soruşturma açıklama kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+85. conf [isim] (B1)
+   Anlam: conf
+   Örnek: The investigation highlighted the critical role of conf.
+   Çeviri: Soruşturma conf kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+86. copper [isim] (B1)
+   Anlam: bakır, bakır kaplamak, bakırlamak
+   Örnek: Copper and silver are both metals.
+   Çeviri: Bakır ve gümüş her ikisi de metaldir.
+--------------------------------------------------
+87. core [isim] (B1)
+   Anlam: göbek, öz, çekirdek
+   Örnek: I don't eat the apple core.
+   Çeviri: Ben elma çekirdeği yemem.
+--------------------------------------------------
+88. corner [isim] (B1)
+   Anlam: köşe, yakalamak, viraj almak
+   Örnek: It's at the corner.
+   Çeviri: O köşededir.
+--------------------------------------------------
+89. cover [isim] (B1)
+   Anlam: örtmek, kaplamak, kılıf
+   Örnek: I'll cover for you.
+   Çeviri: Ben seni koruyacağım.
+--------------------------------------------------
+90. crew [isim] (B1)
+   Anlam: tayfa, mürettebat, kitle
+   Örnek: I have a good crew.
+   Çeviri: İyi bir ekibim var.
+--------------------------------------------------
+91. crisis [isim] (B1)
+   Anlam: bunalım, buhran, kriz
+   Örnek: I'm having a crisis.
+   Çeviri: Krizdeyim.
+--------------------------------------------------
+92. cycle [isim] (B1)
+   Anlam: devir, çevrim, pedal çevirmek
+   Örnek: Wow, what a vicious cycle.
+   Çeviri: Vay, ne kısır bir döngü.
+--------------------------------------------------
+93. dam [isim] (B1)
+   Anlam: baraj, büğemek, zapt etmek
+   Örnek: I live near a dam.
+   Çeviri: Ben bir baraj yakınında yaşıyorum.
+--------------------------------------------------
+94. damage [isim] (B1)
+   Anlam: zarar vermek, zarar, hasar
+   Örnek: How bad is the damage?
+   Çeviri: Hasar ne kadar kötü?
+--------------------------------------------------
+95. dams [isim] (B1)
+   Anlam: barajlar, yavaşlatıcılar
+   Örnek: The investigation highlighted the critical role of dams.
+   Çeviri: Soruşturma barajlar kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+96. danger [isim] (B1)
+   Anlam: tehlike, risk, varta
+   Örnek: I'm in danger, too.
+   Çeviri: Ben de tehlikedeyim.
+--------------------------------------------------
+97. dat [isim] (B1)
+   Anlam: -e hali
+   Örnek: I don't go on blind dates.
+   Çeviri: Tanışma randevularına gitmem.
+--------------------------------------------------
+98. data [isim] (B1) | Eş Anlam: information
+   Anlam: veri, bilgi, girdi
+   Örnek: I've analyzed the data.
+   Çeviri: Veriyi analiz ettik.
+--------------------------------------------------
+99. dating [isim] (B1)
+   Anlam: yaşlandırma, buluşma, tanışma
+   Örnek: I'm not dating Tom.
+   Çeviri: Ben Tom'la flört etmiyorum.
+--------------------------------------------------
+100. days [isim] (B1)
+   Anlam: eyyam, yaşam, günler
+   Örnek: It went on for days.
+   Çeviri: O günlerce devam etti.
+--------------------------------------------------
+101. death [isim] (B1)
+   Anlam: ölüm, vefat, katil
+   Örnek: I'm on death row.
+   Çeviri: Ben ölüm hücresindeyim.
+--------------------------------------------------
+102. decade [isim] (B1)
+   Anlam: 10 yıl, on yıl, onlu grup
+   Örnek: I lost my son about a decade ago.
+   Çeviri: Yaklaşık on yıl önce oğlumu kaybettim.
+--------------------------------------------------
+103. defect [isim] (B1)
+   Anlam: bozukluk, arıza, kusur
+   Örnek: A quick temper is the only defect in her character.
+   Çeviri: Karakterindeki tek kusur hızlı bir öfke.
+--------------------------------------------------
+104. depth [isim] (B1)
+   Anlam: derinlik, dip, bilinçaltı
+   Örnek: We measured the depth of the river.
+   Çeviri: Nehrin derinliğini ölçtük.
+--------------------------------------------------
+105. design [isim] (B1)
+   Anlam: dizayn etmek, tasarlamak, tasarım
+   Örnek: It's a design flaw.
+   Çeviri: Bu bir tasarım kusuru.
+--------------------------------------------------
+106. desire [isim] (B1)
+   Anlam: istek duymak, arzulamak, arzu etmek
+   Örnek: I have no desire to try.
+   Çeviri: Denemek için hiç arzum yok.
+--------------------------------------------------
+107. device [isim] (B1)
+   Anlam: cihaz, alet, nişan
+   Örnek: How is this device used?
+   Çeviri: Bu cihaz nasıl kullanılır?
+--------------------------------------------------
+108. di [isim] (B1)
+   Anlam: iki, çift, di
+   Örnek: Everyone dies sooner or later.
+   Çeviri: Herkes er ya da geç ölür.
+--------------------------------------------------
+109. dive [isim] (B1)
+   Anlam: dalmak, dove/dived - dived, dived/dove - dived
+   Örnek: I know how to dive.
+   Çeviri: Nasıl dalacağımı biliyorum.
+--------------------------------------------------
+110. diver [isim] (B1)
+   Anlam: dalgıç, dalış yapan kimse, dalgıçkuşu
+   Örnek: The divers didn't make it back.
+   Çeviri: Dalgıçlar geri dönmedi.
+--------------------------------------------------
+111. diving [isim] (B1)
+   Anlam: dalış, pike, dalma
+   Örnek: He is good at diving.
+   Çeviri: O, dalmada iyidir.
+--------------------------------------------------
+112. doc [isim] (B1)
+   Anlam: doktor, belge, bel
+   Örnek: "Doc" is an abbreviation of "doctor".
+   Çeviri: "Doktor" kelimesinin kısaltması "Dr." dir.
+--------------------------------------------------
+113. doing [isim] (B1)
+   Anlam: faaliyet, yapma, meydana getirme
+   Örnek: I'm doing it now.
+   Çeviri: Onu şimdi yapıyorum.
+--------------------------------------------------
+114. don't [isim] (B1)
+   Anlam: yapılmaması gereken şey
+   Örnek: The investigation highlighted the critical role of don't.
+   Çeviri: Soruşturma yapılmaması gereken şey kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+115. duty [isim] (B1)
+   Anlam: görev, vazife, saygı
+   Örnek: I'm not on duty.
+   Çeviri: Ben görevde değilim.
+--------------------------------------------------
+116. each [isim] (B1)
+   Anlam: her biri, herbir, beher
+   Örnek: I like each of them.
+   Çeviri: Onların ikisini de severim.
+--------------------------------------------------
+117. ease [isim] (B1)
+   Anlam: rahatlatmak, kolaylaştırmak, rahatlamak
+   Örnek: I felt ill at ease.
+   Çeviri: Ben huzursuz oldum.
+--------------------------------------------------
+118. effect [isim] (B1)
+   Anlam: tesir, etki, etkisi olmak
+   Örnek: How did this effect you?
+   Çeviri: Bu seni nasıl etkiledi?
+--------------------------------------------------
+119. effort [isim] (B1)
+   Anlam: efor, çaba, gayret
+   Örnek: It's a group effort.
+   Çeviri: Bu bir grup çabasıdır.
+--------------------------------------------------
+120. either [isim] (B1)
+   Anlam: iki, her, her iki
+   Örnek: I don't know either.
+   Çeviri: Ben de bilmiyorum.
+--------------------------------------------------
+121. engine [isim] (B1)
+   Anlam: motor, makine takmak, itfaiye arabası
+   Örnek: I got the engine going.
+   Çeviri: Motoru çalıştırdım.
+--------------------------------------------------
+122. enigma [isim] (B1)
+   Anlam: bilmece, gizem, anlaşılmaz kimse
+   Örnek: The investigation highlighted the critical role of enigma.
+   Çeviri: Soruşturma bilmece kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+123. enters [isim] (B1)
+   Anlam: depresyona girmiş, karamsarlığa düşmüş, çaresizliğe/umutsuzluğa düşmüş
+   Örnek: Make sure that nobody enters.
+   Çeviri: Kimsenin girmediğinden emin ol.
+--------------------------------------------------
+124. es [isim] (B1)
+   Anlam: es, aynştayniyum'un kimyasal simgesi, aynştanyumun simgesi
+   Örnek: The investigation highlighted the critical role of es.
+   Çeviri: Soruşturma es kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+125. event [isim] (B1)
+   Anlam: olay, aksiyon, yarışma
+   Örnek: The event is on Monday.
+   Çeviri: Olay pazartesi günü.
+--------------------------------------------------
+126. evil [isim] (B1)
+   Anlam: fenalık, kötülük, kötü
+   Örnek: He is an evil man.
+   Çeviri: O kötü bir adam.
+--------------------------------------------------
+127. excess [isim] (B1)
+   Anlam: aşırılık, fazlalık, aşırıya kaçma
+   Örnek: You shouldn't eat to excess.
+   Çeviri: Çok fazla yememelisin.
+--------------------------------------------------
+128. exist [isim] (B1)
+   Anlam: var olmak, geçinmek, bulunmak
+   Örnek: Do you think aliens exist?
+   Çeviri: Sence uzaylılar var mı?
+--------------------------------------------------
+129. faa [isim] (B1)
+   Anlam: federal havacılık idaresi
+   Örnek: The investigation highlighted the critical role of faa.
+   Çeviri: Soruşturma federal havacılık idaresi kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+130. fact [isim] (B1)
+   Anlam: vaka, gerçek durum, vak’a
+   Örnek: Here's a fun fact.
+   Çeviri: İşte eğlenceli bir vaka.
+--------------------------------------------------
+131. factor [isim] (B1)
+   Anlam: etken, faktör, etmen
+   Örnek: Cost is also a factor.
+   Çeviri: Maliyet de bir faktördür.
+--------------------------------------------------
+132. fauna [isim] (B1)
+   Anlam: bölge hayvanlarının tümü, hayvanat, fauna
+   Örnek: The investigation highlighted the critical role of fauna.
+   Çeviri: Soruşturma bölge hayvanlarının tümü kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+133. fear [isim] (B1)
+   Anlam: korkmak, korku, kuşkulanmak
+   Örnek: I don't fear them.
+   Çeviri: Onlardan korkmuyorum.
+--------------------------------------------------
+134. feels [isim] (B1)
+   Anlam: ağlarsa anam ağlar, gerisi yalan ağlar, duygular, duygularını/hislerini kabartmak
+   Örnek: I know how it feels.
+   Çeviri: Nasıldır bilirim.
+--------------------------------------------------
+135. felt [isim] (B1)
+   Anlam: keçe, keçe ile kaplamak, keçe yapmak
+   Örnek: I felt a bit tired.
+   Çeviri: Biraz yorgun hissettim.
+--------------------------------------------------
+136. fever [isim] (B1)
+   Anlam: ateş, ateşlenmek, telaş
+   Örnek: I've got a fever.
+   Çeviri: Ateşim var.
+--------------------------------------------------
+137. field [isim] (B1)
+   Anlam: tarla, alan, saha
+   Örnek: I ran across the field.
+   Çeviri: Sahayı koşarak geçtim.
+--------------------------------------------------
+138. figure [isim] (B1)
+   Anlam: rakam, şekil, yer almak
+   Örnek: I'll figure it out.
+   Çeviri: Ben bunu halledeceğim.
+--------------------------------------------------
+139. flavor [isim] (B1)
+   Anlam: tat duyusu, tat, lezzet
+   Örnek: What flavor do you want?
+   Çeviri: Ne çeşit istiyorsun?
+--------------------------------------------------
+140. flow [isim] (B1)
+   Anlam: akmak, debi, akım
+   Örnek: We have a cash flow problem.
+   Çeviri: Nakit akışı sorunumuz var.
+--------------------------------------------------
+141. flu [isim] (B1)
+   Anlam: grip, enflüanza, influenza
+   Örnek: He's got the flu.
+   Çeviri: O grip oldu.
+--------------------------------------------------
+142. focus [isim] (B1)
+   Anlam: odaklanmak, odaklamak, odak noktası
+   Örnek: I need you to focus.
+   Çeviri: Odaklanmanı istiyorum.
+--------------------------------------------------
+143. force [isim] (B1)
+   Anlam: zorlamak, baskı yapmak, mecbur etmek
+   Örnek: I'm in the air force.
+   Çeviri: Hava kuvvetlerindeyim.
+--------------------------------------------------
+144. forces [isim] (B1)
+   Anlam: el ele vermek, kuvvetini toplamak, güç birliği yapmak
+   Örnek: Our forces occupied the city.
+   Çeviri: Birliklerimiz şehri ele geçirdi.
+--------------------------------------------------
+145. forel [isim] (B1)
+   Anlam: rf -sismik siddet skalası
+   Örnek: The investigation highlighted the critical role of forel.
+   Çeviri: Soruşturma rf -sismik siddet skalası kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+146. former [isim] (B1) | Eş Anlam: retired
+   Anlam: önceki, evvelki, biçimlendirici
+   Örnek: She was a former first lady.
+   Çeviri: O, eski bir başkan karısıydı.
+--------------------------------------------------
+147. forms [isim] (B1)
+   Anlam: formlar
+   Örnek: Please fill out these forms.
+   Çeviri: Lütfen bu formları doldurun.
+--------------------------------------------------
+148. foster [isim] (B1) | Eş Anlam: stimulate, encourage, promote, nurture
+   Anlam: teşvik etmek, geliştirmek, büyütmek
+   Örnek: This song was written by Foster.
+   Çeviri: Bu şarkı Foster tarafından yazıldı.
+--------------------------------------------------
+149. front [isim] (B1)
+   Anlam: yönelmek, ön, cephe
+   Örnek: I sat in the front.
+   Çeviri: Ben önde oturdum.
+--------------------------------------------------
+150. fruits [isim] (B1)
+   Anlam: meyveler, ürünler
+   Örnek: Fruits have seeds in them.
+   Çeviri: Meyvelerin içinde tohumları vardır.
+--------------------------------------------------
+151. fur [isim] (B1)
+   Anlam: kürk, kürk ile süslemek, kürk ile kaplamak
+   Örnek: Fur coats are on sale.
+   Çeviri: Kürk mantolar satışa sunulmuştur.
+--------------------------------------------------
+152. future [isim] (B1)
+   Anlam: istikbal, gelecek, gelecek zaman
+   Örnek: I'm from the future.
+   Çeviri: Ben gelecekten geliyorum.
+--------------------------------------------------
+153. galaxy [isim] (B1)
+   Anlam: galaksi, gökada, yıldızlar geçidi
+   Örnek: I wonder how many planets in our galaxy have life.
+   Çeviri: Galaksimizdeki kaç gezegende yaşam olduğunu merak ediyorum.
+--------------------------------------------------
+154. games [isim] (B1)
+   Anlam: spor, oyunlar
+   Örnek: I'm good at games.
+   Çeviri: Ben oyunlarda iyiyim.
+--------------------------------------------------
+155. gas [isim] (B1)
+   Anlam: benzin, gaz, övünmek
+   Örnek: I'm out of gas.
+   Çeviri: Benzinim bitti.
+--------------------------------------------------
+156. gate [isim] (B1)
+   Anlam: kapı, geçit, vana
+   Örnek: That's the main gate.
+   Çeviri: O, ana kapıdır.
+--------------------------------------------------
+157. gather [isim] (B1)
+   Anlam: toplanmak, devşirmek, bir araya getirmek
+   Örnek: We gather here once a week.
+   Çeviri: Haftada bir kez burada toplanırız.
+--------------------------------------------------
+158. gen [isim] (B1)
+   Anlam: bilgi vermek, bilgi, tam bilgi
+   Örnek: Genes consist of a specific sequence of DNA.
+   Çeviri: Genler DNA'nın belirli bir sıralanmasından oluşur.
+--------------------------------------------------
+159. genius [isim] (B1)
+   Anlam: dahi, koruyucu melek, öke
+   Örnek: I'm not a genius.
+   Çeviri: Ben deha değilim.
+--------------------------------------------------
+160. genre [isim] (B1)
+   Anlam: tür, üslup, çeşit
+   Örnek: The investigation highlighted the critical role of genre.
+   Çeviri: Soruşturma tür kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+161. giving [isim] (B1)
+   Anlam: verme, bağışlama, hibe
+   Örnek: I'm not giving up.
+   Çeviri: Ben vazgeçmiyorum.
+--------------------------------------------------
+162. globe [isim] (B1)
+   Anlam: küre, küre biçimine getirmek, yeryuvarlağı
+   Örnek: She has traveled all over the globe.
+   Çeviri: O, dünyanın her yerinde seyahat etti.
+--------------------------------------------------
+163. goal [isim] (B1)
+   Anlam: gaye, erek, gol
+   Örnek: That isn't our goal.
+   Çeviri: Bizim amacımız o değil.
+--------------------------------------------------
+164. goat [isim] (B1)
+   Anlam: teke, keçi, pis
+   Örnek: I want to be a goat.
+   Çeviri: Ben bir oğlak olmak istiyorum.
+--------------------------------------------------
+165. going [isim] (B1)
+   Anlam: gidiş, ayrılış, tempo
+   Örnek: I'm going to go.
+   Çeviri: Gideceğim.
+--------------------------------------------------
+166. gold [isim] (B1)
+   Anlam: altın, servet, altın para
+   Örnek: Here's a gold coin.
+   Çeviri: İşte altın bir sikke.
+--------------------------------------------------
+167. goods [isim] (B1)
+   Anlam: mal, yük, ayniyat
+   Örnek: The goods arrive by sea.
+   Çeviri: Mallar deniz yoluyla gelir.
+--------------------------------------------------
+168. grade [isim] (B1)
+   Anlam: puanlamak, sınıf, rütbe
+   Örnek: I got a bad grade.
+   Çeviri: Kötü bir not aldım.
+--------------------------------------------------
+169. ground [isim] (B1)
+   Anlam: yer, zemin, toprak
+   Örnek: I sat on the ground.
+   Çeviri: Yere oturdum.
+--------------------------------------------------
+170. group [isim] (B1)
+   Anlam: grup, gruplandırmak, toplanmak
+   Örnek: It's Tom's group.
+   Çeviri: O, Tom'un grubu.
+--------------------------------------------------
+171. growth [isim] (B1)
+   Anlam: büyüme, nema, geliştirme
+   Örnek: High taxes stifle economic growth.
+   Çeviri: Yüksek vergiler ekonomik büyümeyi engelliyor.
+--------------------------------------------------
+172. guard [isim] (B1)
+   Anlam: korumak, nöbetçi, muhafız
+   Örnek: I'm on guard here.
+   Çeviri: Burada nöbet tutuyorum.
+--------------------------------------------------
+173. guest [isim] (B1)
+   Anlam: davetli, konuk, misafir
+   Örnek: I'm Tom's guest.
+   Çeviri: Ben Tom'un misafiriyim.
+--------------------------------------------------
+174. guests [isim] (B1)
+   Anlam: konuklar, misafirler, davetliler
+   Örnek: You'll be my guests.
+   Çeviri: Benim misafirlerim olacaksınız.
+--------------------------------------------------
+175. habit [isim] (B1)
+   Anlam: alışkanlık, huy, yaradılış
+   Örnek: It's a bad habit.
+   Çeviri: Kötü bir alışkanlık.
+--------------------------------------------------
+176. habits [isim] (B1)
+   Anlam: adetler, alışkanlıklar
+   Örnek: Man is a slave to habits.
+   Çeviri: İnsan, alışkanlıklarının kölesidir.
+--------------------------------------------------
+177. handle [isim] (B1)
+   Anlam: idare etmek, işlemek, ele almak
+   Örnek: I can't handle it.
+   Çeviri: Ben bunun üstesinden gelemem.
+--------------------------------------------------
+178. harbor [isim] (B1)
+   Anlam: barındırmak, liman, beslemek
+   Örnek: The island has a fine harbor.
+   Çeviri: Adanın güzel bir limanı var.
+--------------------------------------------------
+179. harms [isim] (B1)
+   Anlam: sigara içmenin zararları, sigaranın zararları, sigara sağlığa zararlıdır
+   Örnek: Carbon dioxide sometimes harms people.
+   Çeviri: Karbon dioksit bazen insanlara zarar verir.
+--------------------------------------------------
+180. hazard [isim] (B1)
+   Anlam: risk, tehlike, tehlikeye atmak
+   Örnek: That's a safety hazard.
+   Çeviri: Bu bir güvenlik tehlikesi.
+--------------------------------------------------
+181. heat [isim] (B1)
+   Anlam: ısıtmak, sıcaklık, hararet
+   Örnek: I turned on the heat.
+   Çeviri: Isıyı açtım.
+--------------------------------------------------
+182. heel [isim] (B1)
+   Anlam: topuk, topuk pası vermek, topuğunu yere vurarak dansetmek
+   Örnek: She's wearing high heels.
+   Çeviri: O yüksek topuklu giyiyor.
+--------------------------------------------------
+183. height [isim] (B1)
+   Anlam: yükseklik, boy, yükselti
+   Örnek: Line up by height, please.
+   Çeviri: Boy sırasına geçin lütfen.
+--------------------------------------------------
+184. hiding [isim] (B1)
+   Anlam: dayak, saklama, sopa
+   Örnek: I'm hiding from Tom.
+   Çeviri: Tom'dan saklanıyorum.
+--------------------------------------------------
+185. higher [isim] (B1)
+   Anlam: ileri, daha yüksek, daha yukarı
+   Örnek: I wish I had a higher salary.
+   Çeviri: Keşke daha yüksek bir maaşım olsaydı.
+--------------------------------------------------
+186. hiking [isim] (B1)
+   Anlam: doğa yürüyüşü, günübirlik doğa yürüyüşü, fiyatları yükseltme
+   Örnek: I don't like hiking.
+   Çeviri: Yürüyüş sevmiyorum.
+--------------------------------------------------
+187. hinder [isim] (B1)
+   Anlam: engellemek, engel olmak, aksatmak
+   Örnek: He hindered me in my work.
+   Çeviri: O, işimde beni engelledi.
+--------------------------------------------------
+188. hint [isim] (B1)
+   Anlam: çıtlatmak, ima etmek, ima
+   Örnek: He gave me a hint.
+   Çeviri: O bana bir ipucu verdi.
+--------------------------------------------------
+189. his [isim] (B1)
+   Anlam: eril onunki, onun, onunki
+   Örnek: He's on his way.
+   Çeviri: O yolda.
+--------------------------------------------------
+190. hit [isim] (B1)
+   Anlam: çarpmak, vurmak, isabet etmek
+   Örnek: I won't hit you.
+   Çeviri: Sana vurmayacağım.
+--------------------------------------------------
+191. hole [isim] (B1)
+   Anlam: çukur, delik, kapanmak
+   Örnek: I fell into a hole.
+   Çeviri: Bir çukura düştüm.
+--------------------------------------------------
+192. homes [isim] (B1)
+   Anlam: moruk, ahbap, evler
+   Örnek: People are losing their homes.
+   Çeviri: İnsanlar evlerini kaybediyor.
+--------------------------------------------------
+193. hope [isim] (B1)
+   Anlam: ummak, umut etmek, ümit etmek
+   Örnek: I hope it's OK.
+   Çeviri: Umarım tamamdır.
+--------------------------------------------------
+194. horror [isim] (B1)
+   Anlam: korku, istikrah, yılgı
+   Örnek: Do you like horror movies?
+   Çeviri: Korku filmlerini sever misin?
+--------------------------------------------------
+195. host [isim] (B1)
+   Anlam: ağırlamak, ev sahibi, sunuculuk yapmak
+   Örnek: Who will host the party?
+   Çeviri: Partiye kim ev sahipliği yapacak?
+--------------------------------------------------
+196. hour [isim] (B1)
+   Anlam: saat, vakit, zaman
+   Örnek: I'm an hour late.
+   Çeviri: Bir saat geciktim.
+--------------------------------------------------
+197. hours [isim] (B1)
+   Anlam: saatler, saat, saatte bir doğrula
+   Örnek: Give me a few hours.
+   Çeviri: Bana birkaç saat ver.
+--------------------------------------------------
+198. human [isim] (B1)
+   Anlam: insan, insani, insanlık
+   Örnek: I'm a human being.
+   Çeviri: Ben bir insanım.
+--------------------------------------------------
+199. humor [isim] (B1)
+   Anlam: mizah, ayak uydurmak, suyuna gitmek
+   Örnek: We'd better humor Tom.
+   Çeviri: Tom'u neşelendirsek iyi olur.
+--------------------------------------------------
+200. imp [isim] (B1)
+   Anlam: bir kuşun uçuş gücünü artırmak için kanat veya kuyruğuna tüy eklemek, kuvvetlendirmek, parça takarak bir tüyü onarmak
+   Örnek: The investigation highlighted the critical role of imp.
+   Çeviri: Soruşturma bir kuşun uçuş gücünü artırmak için kanat veya kuyruğuna tüy eklemek kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+201. impact [isim] (B1)
+   Anlam: darbe, etki, çarpma
+   Örnek: The storm had a bad impact on the crops.
+   Çeviri: Fırtınanın ürünlerin üzerinde kötü bir etkisi vardı.
+--------------------------------------------------
+202. infant [isim] (B1)
+   Anlam: bebek, çocuk, küçük çocuk
+   Örnek: The young woman was carrying an infant in her arms.
+   Çeviri: Genç kadın kollarında bir bebek taşıyordu.
+--------------------------------------------------
+203. iq [isim] (B1)
+   Anlam: zeka düzeyi, zeka katsayısı, ıq
+   Örnek: I don't know my IQ.
+   Çeviri: Ben zeka düzeyimi bilmiyorum.
+--------------------------------------------------
+204. iron [isim] (B1)
+   Anlam: ütülemek, demir, ütü
+   Örnek: Is it made of iron?
+   Çeviri: Bu demirden mi yapıldı?
+--------------------------------------------------
+205. issue [isim] (B1)
+   Anlam: mesele, sorun, yayınlamak
+   Örnek: It's not an issue.
+   Çeviri: Sorun değil.
+--------------------------------------------------
+206. issues [isim] (B1)
+   Anlam: sorunlar
+   Örnek: I had issues I had to deal with.
+   Çeviri: Uğraşmam gereken sorunlarım vardı.
+--------------------------------------------------
+207. item [isim] (B1)
+   Anlam: kalem, madde, adet
+   Örnek: What is this item called?
+   Çeviri: Bu maddeye ne denir?
+--------------------------------------------------
+208. its [isim] (B1)
+   Anlam: onun, -in
+   Örnek: It's on its way.
+   Çeviri: Yolda.
+--------------------------------------------------
+209. jail [isim] (B1)
+   Anlam: hapishane, hapis, cezaevi
+   Örnek: I'm now in jail.
+   Çeviri: Şimdi hapisteyim.
+--------------------------------------------------
+210. jailer [isim] (B1)
+   Anlam: gardiyan, zindancı
+   Örnek: The investigation highlighted the critical role of jailer.
+   Çeviri: Soruşturma gardiyan kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+211. joke [isim] (B1)
+   Anlam: komiklik, şaka, espri yapmak
+   Örnek: It's not a joke.
+   Çeviri: O bir şaka değil.
+--------------------------------------------------
+212. jungle [isim] (B1)
+   Anlam: orman, karışıklık, cangıl
+   Örnek: We're not in the jungle.
+   Çeviri: Biz cangılda değiliz.
+--------------------------------------------------
+213. keys [isim] (B1)
+   Anlam: anahtarlar, ana resimler
+   Örnek: I'll get my keys.
+   Çeviri: Anahtarlarımı alacağım.
+--------------------------------------------------
+214. kid [isim] (B1)
+   Anlam: velet, çocuk, küçük çocuk
+   Örnek: I'm a big kid.
+   Çeviri: Ben büyük bir çocuğum.
+--------------------------------------------------
+215. kidney [isim] (B1)
+   Anlam: böbrek, huy, tip
+   Örnek: I need a new kidney.
+   Çeviri: Yeni bir böbreğe ihtiyacım var.
+--------------------------------------------------
+216. kids [isim] (B1)
+   Anlam: çocuklar
+   Örnek: I don't have kids.
+   Çeviri: Çocuklarım yok.
+--------------------------------------------------
+217. km [isim] (B1)
+   Anlam: kilometre, km
+   Örnek: They fly about 35,000 km in eight months.
+   Çeviri: Onlar sekiz ayda yaklaşık 35,000 km uçarlar.
+--------------------------------------------------
+218. knives [isim] (B1)
+   Anlam: bıçaklar
+   Örnek: They're armed with knives.
+   Çeviri: Onlar bıçaklarla silahlanmıştı.
+--------------------------------------------------
+219. lamb [isim] (B1)
+   Anlam: kuzu, kuzulamak, kuzu gibi masum ve zayıf kimse
+   Örnek: The wolf killed the lamb.
+   Çeviri: Kurt, kuzuyu öldürdü.
+--------------------------------------------------
+220. ldl [isim] (B1)
+   Anlam: düşük dansiteli lipoprotein, düşük dansiteli okside lipoprotein, düşük dansiteli lipoprotein kolesterol
+   Örnek: The investigation highlighted the critical role of ldl.
+   Çeviri: Soruşturma düşük dansiteli lipoprotein kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+221. lea [isim] (B1)
+   Anlam: otlak, mera, çayır
+   Örnek: We've got a lead.
+   Çeviri: Bizim bir kurşunumuz var.
+--------------------------------------------------
+222. lead [isim] (B1)
+   Anlam: yol göstermek, rehberlik etmek, sürmek
+   Örnek: We've got a lead.
+   Çeviri: Bizim bir kurşunumuz var.
+--------------------------------------------------
+223. leads [isim] (B1)
+   Anlam: yol açar, sabreden derviş muradına ermiş, aksilikler/sorunlar hep üst üste gelir
+   Örnek: He leads a hectic life.
+   Çeviri: O telaşlı bir hayat sürüyor.
+--------------------------------------------------
+224. leaf [isim] (B1)
+   Anlam: yaprak vermek, yaprak, yapraklanmak
+   Örnek: What's on the leaf?
+   Çeviri: Yaprağın üzerindeki nedir?
+--------------------------------------------------
+225. leaves [isim] (B1)
+   Anlam: kitap yaprağı, yapraklar
+   Örnek: The train leaves at six.
+   Çeviri: Tren altıda ayrılır.
+--------------------------------------------------
+226. led [isim] (B1)
+   Anlam: neden olmuş, çok küçük ampul, ışık yayan diyot
+   Örnek: He led a sober life.
+   Çeviri: O, gösterişsiz bir hayat sürdü.
+--------------------------------------------------
+227. legacy [isim] (B1)
+   Anlam: miras, kalıt, vasiyetname ile bırakılan mal veya varlık
+   Örnek: The investigation highlighted the critical role of legacy.
+   Çeviri: Soruşturma miras kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+228. lesson [isim] (B1)
+   Anlam: ders, azar, hisse
+   Örnek: Is it the last lesson?
+   Çeviri: Bu son ders mi?
+--------------------------------------------------
+229. level [isim] (B1)
+   Anlam: seviye, düzey, kademe
+   Örnek: The river level is high.
+   Çeviri: Nehir seviyesi yüksektir.
+--------------------------------------------------
+230. levels [isim] (B1)
+   Anlam: sel sınıflama derecesi, çehrenin, yüzün üç basamağı
+   Örnek: My cholesterol levels are high.
+   Çeviri: Benim kolesterol seviyelerim yüksektir.
+--------------------------------------------------
+231. life [isim] (B1)
+   Anlam: yaşam, hayat, can
+   Örnek: I owe him my life.
+   Çeviri: Ona hayatımı borçluyum.
+--------------------------------------------------
+232. limit [isim] (B1)
+   Anlam: sınırlandırmak, kısıtlamak, sınırlamak
+   Örnek: I'm over my limit.
+   Çeviri: Ben sınırımı aştım.
+--------------------------------------------------
+233. limits [isim] (B1)
+   Anlam: çerçeve, hudut hatları, sınırlar
+   Örnek: This area's off limits.
+   Çeviri: Bu alan yasak bölge.
+--------------------------------------------------
+234. line [isim] (B1)
+   Anlam: astarlamak, satır, hat
+   Örnek: I'm next in line.
+   Çeviri: Ben sırada bir sonrakiyim.
+--------------------------------------------------
+235. liver [isim] (B1)
+   Anlam: karaciğer, ciğer, emaye dalgası
+   Örnek: I need a liver transplant.
+   Çeviri: Karaciğer nakline ihtiyacım var.
+--------------------------------------------------
+236. longer [isim] (B1)
+   Anlam: can atan kimse, özlemiş kimse, daha uzun
+   Örnek: I no longer need it.
+   Çeviri: Artık buna ihtiyacım yok.
+--------------------------------------------------
+237. looks [isim] (B1)
+   Anlam: görünüş
+   Örnek: It looks OK to me.
+   Çeviri: Bu bana iyi görünüyor.
+--------------------------------------------------
+238. lorry [isim] (B1)
+   Anlam: kamyon, alçak, açık
+   Örnek: The investigation highlighted the critical role of lorry.
+   Çeviri: Soruşturma kamyon kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+239. loss [isim] (B1)
+   Anlam: zarar, kayıp, hasar
+   Örnek: It's a huge loss.
+   Çeviri: Bu büyük bir kayıp.
+--------------------------------------------------
+240. lot [isim] (B1)
+   Anlam: pay, bölüştürmek, taksim etmek
+   Örnek: I do talk a lot.
+   Çeviri: Ben çok konuşurum.
+--------------------------------------------------
+241. lower [isim] (B1)
+   Anlam: düşürmek, alçaltmak, indirmek
+   Örnek: Can you lower the price?
+   Çeviri: Fiyatı düşürebilir misiniz?
+--------------------------------------------------
+242. luck [isim] (B1)
+   Anlam: şans, talih, akyazı
+   Örnek: I'll try my luck.
+   Çeviri: Ben şansımı deneyeceğim.
+--------------------------------------------------
+243. lumber [isim] (B1)
+   Anlam: kereste, ormanda ağaç kesmek, ağaç kesmek
+   Örnek: We need lumber to build a barn.
+   Çeviri: Ahır inşa etmek için keresteye ihtiyacımız var.
+--------------------------------------------------
+244. major [isim] (B1)
+   Anlam: asıl, büyük, başlıca
+   Örnek: This is a major issue.
+   Çeviri: Bu büyük bir sorun.
+--------------------------------------------------
+245. makes [isim] (B1)
+   Anlam: bahaneci, beni öldürmeyen şey beni güçlendirir, başarı aptal insanları bilge gibi gösterir
+   Örnek: It makes me feel old.
+   Çeviri: Bu beni yaşlı hissettiriyor.
+--------------------------------------------------
+246. making [isim] (B1)
+   Anlam: yapma, etme, yapım
+   Örnek: I'm making a list.
+   Çeviri: Ben bir liste yapıyorum.
+--------------------------------------------------
+247. male [isim] (B1)
+   Anlam: erkek, bay, erkek fiş
+   Örnek: Is that dog male or female?
+   Çeviri: O köpek erkek mi yoksa dişi mi?
+--------------------------------------------------
+248. mantle [isim] (B1)
+   Anlam: harmaniye, lamba gömleği, örten şey
+   Örnek: The investigation highlighted the critical role of mantle.
+   Çeviri: Soruşturma harmaniye kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+249. mark [isim] (B1)
+   Anlam: işaretlemek, iz, işaret
+   Örnek: I want to leave a mark.
+   Çeviri: Bir iz bırakmak istiyorum.
+--------------------------------------------------
+250. mate [isim] (B1)
+   Anlam: mat, ahbap, eş olmak
+   Örnek: Where is the mate to this sock?
+   Çeviri: Bu çorabın eşi nerede?
+--------------------------------------------------
+251. matrix [isim] (B1)
+   Anlam: kalıp, rahim, matris
+   Örnek: The investigation highlighted the critical role of matrix.
+   Çeviri: Soruşturma kalıp kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+252. matter [isim] (B1)
+   Anlam: mesele, konu, önem taşımak
+   Örnek: Does it matter to you?
+   Çeviri: Senin için önemli mi?
+--------------------------------------------------
+253. may [isim] (B1)
+   Anlam: mayıs ayı, mayıs, mümkün olmak
+   Örnek: I may do it yet.
+   Çeviri: Onu henüz yapabilirim.
+--------------------------------------------------
+254. mayor [isim] (B1)
+   Anlam: belediye başkanı, belediye reisi
+   Örnek: Aren't you the mayor?
+   Çeviri: Belediye başkanı sen değil misin?
+--------------------------------------------------
+255. means [isim] (B1)
+   Anlam: araç, vasıta, vesile
+   Örnek: Do it by all means.
+   Çeviri: Her ne şekilde olursa olsun onu yap.
+--------------------------------------------------
+256. media [isim] (B1)
+   Anlam: medya, basın, radyo
+   Örnek: Don't believe the media.
+   Çeviri: Medyaya inanma.
+--------------------------------------------------
+257. medium [isim] (B1)
+   Anlam: orta, çevre, çare
+   Örnek: I like my steak medium.
+   Çeviri: Bifteğimi orta büyüklükte severim.
+--------------------------------------------------
+258. melody [isim] (B1)
+   Anlam: melodi, terane, nağme
+   Örnek: That's an eerie melody.
+   Çeviri: Bu ürkütücü bir melodi.
+--------------------------------------------------
+259. men [isim] (B1)
+   Anlam: erkekler, işçiler, adamlar
+   Örnek: You and I are men.
+   Çeviri: Sen ve ben erkeğiz.
+--------------------------------------------------
+260. meter [isim] (B1)
+   Anlam: sayaç, metre, saat ile ölçmek
+   Örnek: We ran a hundred-meter dash.
+   Çeviri: Biz yüz metre koştuk.
+--------------------------------------------------
+261. method [isim] (B1)
+   Anlam: metot, usul, yöntem
+   Örnek: That method didn't work.
+   Çeviri: O yöntem işe yaramadı.
+--------------------------------------------------
+262. mice [isim] (B1)
+   Anlam: fareler
+   Örnek: I'm afraid of mice.
+   Çeviri: Farelerden korkarım.
+--------------------------------------------------
+263. mind [isim] (B1)
+   Anlam: önemsemek, aldırmak, akıl
+   Örnek: I don't mind it.
+   Çeviri: Ben onu umursamıyorum.
+--------------------------------------------------
+264. minor [isim] (B1)
+   Anlam: rüştünü ispat etmemiş kimse, reşit olmayan kimse, ergin olmayan kimse
+   Örnek: I'm still a minor.
+   Çeviri: Ben hala küçüğüm.
+--------------------------------------------------
+265. model [isim] (B1)
+   Anlam: model, manken, modellik etmek
+   Örnek: It's an older model.
+   Çeviri: Bu daha eski bir model.
+--------------------------------------------------
+266. moist [isim] (B1)
+   Anlam: rutubetli, nemli, ıslak
+   Örnek: It's moist and warm.
+   Çeviri: Nemli ve sıcak.
+--------------------------------------------------
+267. moment [isim] (B1)
+   Anlam: an, önem, cevher
+   Örnek: Can I have a moment?
+   Çeviri: Bir dakika alabilir miyim?
+--------------------------------------------------
+268. months [isim] (B1)
+   Anlam: aylar
+   Örnek: See you in three months.
+   Çeviri: Üç ay içinde görüşürüz.
+--------------------------------------------------
+269. mosque [isim] (B1)
+   Anlam: mescit, cami
+   Örnek: I have to go to the mosque.
+   Çeviri: Camiye gitmek zorundayım.
+--------------------------------------------------
+270. movie [isim] (B1)
+   Anlam: film, sinema, sinema filmi
+   Örnek: I'm a movie buff.
+   Çeviri: Ben bir filmkoliğim.
+--------------------------------------------------
+271. murder [isim] (B1)
+   Anlam: cinayet işlemek, öldürmek, öldürme
+   Örnek: He is guilty of murder.
+   Çeviri: O cinayetten suçludur.
+--------------------------------------------------
+272. must [isim] (B1)
+   Anlam: gerekmek, -malı, -meli
+   Örnek: I must do it now.
+   Çeviri: Onu şimdi yapmalıyım.
+--------------------------------------------------
+273. my [isim] (B1)
+   Anlam: benim, bana ait
+   Örnek: I'm in my car.
+   Çeviri: Arabamın içindeyim.
+--------------------------------------------------
+274. need [isim] (B1)
+   Anlam: ihtiyaç duymak, gerek, gereksinim
+   Örnek: Do I need a tie?
+   Çeviri: Bir kravata ihtiyacım var mı?
+--------------------------------------------------
+275. nights [isim] (B1)
+   Anlam: geceler, geceleri
+   Örnek: We stayed for three nights.
+   Çeviri: Biz üç gece boyunca kaldık.
+--------------------------------------------------
+276. nile [isim] (B1)
+   Anlam: nil nehri
+   Örnek: How long is the Nile River?
+   Çeviri: Nil Nehrinin uzunluğu ne kadar?
+--------------------------------------------------
+277. no [isim] (B1)
+   Anlam: hayır, aleyhte oy, red
+   Örnek: I can't say no.
+   Çeviri: Ben hayır diyemem.
+--------------------------------------------------
+278. norm [isim] (B1)
+   Anlam: kaide, standart, düstur
+   Örnek: The investigation highlighted the critical role of norm.
+   Çeviri: Soruşturma kaide kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+279. norms [isim] (B1)
+   Anlam: normlar, sosyal grup için ortak olan davranış veya fikir standartları
+   Örnek: The investigation highlighted the critical role of norms.
+   Çeviri: Soruşturma normlar kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+280. number [isim] (B1)
+   Anlam: numaralamak, saymak, sayı
+   Örnek: Here's Tom's number.
+   Çeviri: İşte Tom'un numarası.
+--------------------------------------------------
+281. ob [isim] (B1)
+   Anlam: obi nehri, ob, doğum ve gebelik bilimi
+   Örnek: The investigation highlighted the critical role of ob.
+   Çeviri: Soruşturma obi nehri kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+282. object [isim] (B1)
+   Anlam: itiraz etmek, razı olmamak, karşı çıkmak
+   Örnek: That wasn't my object.
+   Çeviri: Benim amacım o değildi.
+--------------------------------------------------
+283. offer [isim] (B1)
+   Anlam: teklif vermek, önermek, teklif etmek
+   Örnek: I got a job offer.
+   Çeviri: Bir iş teklifi aldım.
+--------------------------------------------------
+284. oil [isim] (B1)
+   Anlam: yağ, yağ çekmek, yağcılık yapmak
+   Örnek: Give me the olive oil.
+   Çeviri: Bana zeytinyağı ver.
+--------------------------------------------------
+285. oils [isim] (B1)
+   Anlam: yağlar
+   Örnek: The investigation highlighted the critical role of oils.
+   Çeviri: Soruşturma yağlar kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+286. one [isim] (B1)
+   Anlam: bir, tek, biri
+   Örnek: I'm one of you.
+   Çeviri: Ben sizden biriyim.
+--------------------------------------------------
+287. option [isim] (B1)
+   Anlam: seçenek, oy, şık
+   Örnek: It's our only option.
+   Çeviri: Tek seçeneğimiz.
+--------------------------------------------------
+288. order [isim] (B1)
+   Anlam: sipariş vermek, emretmek, buyurmak
+   Örnek: I didn't order it.
+   Çeviri: Onu sipariş etmedim.
+--------------------------------------------------
+289. our [isim] (B1)
+   Anlam: bizim
+   Örnek: We're on our own.
+   Çeviri: Kendi başımızayız.
+--------------------------------------------------
+290. output [isim] (B1)
+   Anlam: output/outputted - output/outputted, faaliyet, ürün
+   Örnek: The output at this factory has increased by 20%.
+   Çeviri: Bu fabrikada üretim %20 oranında arttı.
+--------------------------------------------------
+291. palm [isim] (B1)
+   Anlam: palmiye, avuç içi, avuç
+   Örnek: Let me see your palm.
+   Çeviri: Avucunu görmeme izin ver.
+--------------------------------------------------
+292. panel [isim] (B1)
+   Anlam: pano, panellerle süslemek, lambri ile kaplamak
+   Örnek: A panel of experts discussed the plan.
+   Çeviri: Uzmanlardan oluşan bir kurul planı tartıştı.
+--------------------------------------------------
+293. panels [isim] (B1)
+   Anlam: çelik levhalara uygulanan emaye kaplamalar, cam paneller, damı katlanabilen vagon
+   Örnek: Do you use solar panels?
+   Çeviri: Güneş panelleri kullanıyor musunuz?
+--------------------------------------------------
+294. path [isim] (B1)
+   Anlam: yol, pist, çığır
+   Örnek: I'll take this path.
+   Çeviri: Ben bu yoldan gideceğim.
+--------------------------------------------------
+295. paul [isim] (B1)
+   Anlam: idaho eyaletinde şehir
+   Örnek: One of Jesus' disciples was named Paul.
+   Çeviri: İsa'nın havarilerinden birinin adı Paulus'tu.
+--------------------------------------------------
+296. paving [isim] (B1)
+   Anlam: yol yüzeyi, taş döşeme, yol döşeme
+   Örnek: The investigation highlighted the critical role of paving.
+   Çeviri: Soruşturma yol yüzeyi kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+297. pear [isim] (B1)
+   Anlam: armut, çong, kamboçya ve tayland’da yaşayan etnik bir grup
+   Örnek: I'm eating a pear.
+   Çeviri: Bir armut yiyorum.
+--------------------------------------------------
+298. people [isim] (B1)
+   Anlam: insanlar, ulus, halk
+   Örnek: How do people do it?
+   Çeviri: İnsanlar bunu nasıl yapar?
+--------------------------------------------------
+299. period [isim] (B1)
+   Anlam: devir, dönem, çağ
+   Örnek: We have French third period.
+   Çeviri: 3. dönemde Fransızca dersimiz var.
+--------------------------------------------------
+300. permit [isim] (B1)
+   Anlam: izin vermek, ruhsat, izin
+   Örnek: I won't permit it.
+   Çeviri: Ona izin vermeyeceğim.
+--------------------------------------------------
+301. pet [isim] (B1)
+   Anlam: evde beslenen hayvan, ev hayvanı, evcil hayvan
+   Örnek: Do you have a pet?
+   Çeviri: Bir evcil hayvanın var mı?
+--------------------------------------------------
+302. petrol [isim] (B1)
+   Anlam: petrol, benzin
+   Örnek: The investigation highlighted the critical role of petrol.
+   Çeviri: Soruşturma petrol kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+303. photo [isim] (B1)
+   Anlam: foto, fotoğraflamak, resim vermek
+   Örnek: I sent you a photo.
+   Çeviri: Sana bir fotoğraf gönderdim.
+--------------------------------------------------
+304. piano [isim] (B1)
+   Anlam: piyano çalgı, piyano, hafif
+   Örnek: It's an old piano.
+   Çeviri: O eski bir piyano.
+--------------------------------------------------
+305. pile [isim] (B1)
+   Anlam: yığın, istif etmek, tepeleme doldurmak
+   Örnek: There's a big pile of mail on your desk.
+   Çeviri: Masanızda büyük bir yığın posta var.
+--------------------------------------------------
+306. pilots [isim] (B1)
+   Anlam: türk jet pilotları, hava yolu nakil pilot lisansı, ticari pilot lisansı
+   Örnek: I know lots of pilots.
+   Çeviri: Bir sürü pilot tanıyorum.
+--------------------------------------------------
+307. pizza [isim] (B1)
+   Anlam: pizza
+   Örnek: I don't like pizza.
+   Çeviri: Pizza sevmiyorum.
+--------------------------------------------------
+308. plan [isim] (B1)
+   Anlam: planlamak, tasarlamak, plan
+   Örnek: I've got a plan.
+   Çeviri: Bir planım var.
+--------------------------------------------------
+309. plays [isim] (B1)
+   Anlam: oyunlar
+   Örnek: He plays chess very well.
+   Çeviri: Çok iyi satranç oynar.
+--------------------------------------------------
+310. point [isim] (B1)
+   Anlam: nokta, puan, uç
+   Örnek: He's got a point.
+   Çeviri: O haklı.
+--------------------------------------------------
+311. poison [isim] (B1)
+   Anlam: zehirlemek, zehir, otalamak
+   Örnek: I didn't poison Tom.
+   Çeviri: Tom'u zehirlemedim.
+--------------------------------------------------
+312. porch [isim] (B1)
+   Anlam: portik, sundurma veranda, giriş
+   Örnek: I'm on the porch.
+   Çeviri: Sundurmadayım.
+--------------------------------------------------
+313. power [isim] (B1)
+   Anlam: yetki, güç, kuvvet
+   Örnek: I have no will power.
+   Çeviri: Benim irade gücüm yok.
+--------------------------------------------------
+314. press [isim] (B1)
+   Anlam: basmak, bastırmak, baskı yapmak
+   Örnek: Don't press your luck.
+   Çeviri: Şansını zorlama.
+--------------------------------------------------
+315. prior [isim] (B1)
+   Anlam: önceden, daha önce olan, daha erken olan
+   Örnek: I have a prior engagement.
+   Çeviri: Bir randevum var.
+--------------------------------------------------
+316. prison [isim] (B1)
+   Anlam: hapishane, cezaevi, hapis
+   Örnek: I'm at the prison.
+   Çeviri: Hapishanedeyim.
+--------------------------------------------------
+317. proof [isim] (B1)
+   Anlam: kanıt, ispat, dayanıklı hale getirmek
+   Örnek: Don't you want proof?
+   Çeviri: Kanıt istemiyor musun?
+--------------------------------------------------
+318. proper [isim] (B1)
+   Anlam: uygun, münasip, rabıtalı
+   Örnek: I'll go get the proper forms.
+   Çeviri: Uygun formları almaya gideceğim.
+--------------------------------------------------
+319. pull [isim] (B1)
+   Anlam: çekmek, kalkmak, hareket etmek
+   Örnek: Don't pull my leg!
+   Çeviri: Benimle dalga geçme!
+--------------------------------------------------
+320. pupil [isim] (B1)
+   Anlam: öğrenci, öğrenci öğretmen, stajyer
+   Örnek: Tom's pupils are dilated.
+   Çeviri: Tom'un göz bebekleri büyümüş.
+--------------------------------------------------
+321. puzzle [isim] (B1)
+   Anlam: bulmaca, bilmece, şaşırmak
+   Örnek: I'm solving a puzzle.
+   Çeviri: Bir bulmaca çözüyorum.
+--------------------------------------------------
+322. quiz [isim] (B1)
+   Anlam: sınav yapmak, çok soru sormak, sorgulamak
+   Örnek: We had a quiz today.
+   Çeviri: Biz bugün bir sınav olduk.
+--------------------------------------------------
+323. range [isim] (B1)
+   Anlam: silsile, sıra, çeşitlilik
+   Örnek: It's hard to tell at this range.
+   Çeviri: Bu mesafeden söylemek zor.
+--------------------------------------------------
+324. rate [isim] (B1)
+   Anlam: kur, oran, addetmek
+   Örnek: That's the going rate.
+   Çeviri: O, gidiş oranıdır.
+--------------------------------------------------
+325. rates [isim] (B1)
+   Anlam: bedeller, fiyat listesi, yerel yönetim tarafından toplanan vergi/vergiler
+   Örnek: Interest rates are going up.
+   Çeviri: Faiz oranları artıyor.
+--------------------------------------------------
+326. ratio [isim] (B1)
+   Anlam: oran, orantı, nispet
+   Örnek: The investigation highlighted the critical role of ratio.
+   Çeviri: Soruşturma oran kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+327. ray [isim] (B1)
+   Anlam: ışın, ışın tedavisi yapmak, ışımak
+   Örnek: Let's take an X-ray just in case.
+   Çeviri: Her ihtimale karşı bir film çekelim.
+--------------------------------------------------
+328. realm [isim] (B1)
+   Anlam: krallık, alem, memleket
+   Örnek: The investigation highlighted the critical role of realm.
+   Çeviri: Soruşturma krallık kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+329. reason [isim] (B1)
+   Anlam: sebep, akıl, gerekçe
+   Örnek: Do I need a reason?
+   Çeviri: Bir nedene ihtiyacım var mı?
+--------------------------------------------------
+330. region [isim] (B1)
+   Anlam: bölge, yöre, ülke
+   Örnek: We found gold in that region.
+   Çeviri: Bu bölgede altın bulduk.
+--------------------------------------------------
+331. remedy [isim] (B1) | Eş Anlam: cure, treatment
+   Anlam: deva, çare, çare bulmak
+   Örnek: I have a remedy for that.
+   Çeviri: Bunun için bir çarem var.
+--------------------------------------------------
+332. rest [isim] (B1)
+   Anlam: dinlendirmek, dinlenmek, dinlenme
+   Örnek: Can I rest a bit?
+   Çeviri: Biraz dinlenebilir miyim?
+--------------------------------------------------
+333. result [isim] (B1)
+   Anlam: netice, sonuç, sonucu olmak
+   Örnek: This is a good result.
+   Çeviri: Bu iyi bir sonuç.
+--------------------------------------------------
+334. ring [isim] (B1)
+   Anlam: çalmak, yüzük, halka
+   Örnek: We sat in a ring.
+   Çeviri: Biz daire şeklinde oturduk.
+--------------------------------------------------
+335. risk [isim] (B1)
+   Anlam: risk, göze almak, riske etmek
+   Örnek: I can't risk it.
+   Çeviri: Onu riske edemem.
+--------------------------------------------------
+336. risks [isim] (B1)
+   Anlam: riskler
+   Örnek: Aren't there any risks?
+   Çeviri: Herhangi bir risk yok mu?
+--------------------------------------------------
+337. robber [isim] (B1)
+   Anlam: soyguncu, hırsız, haydut
+   Örnek: The robber bashed her head in.
+   Çeviri: Soyguncu onun kafasına vurdu.
+--------------------------------------------------
+338. role [isim] (B1)
+   Anlam: rol, rol yapmak, sıfat
+   Örnek: What's Tom's role?
+   Çeviri: Tom'un rolü nedir?
+--------------------------------------------------
+339. roller [isim] (B1)
+   Anlam: silindir, büyük dalga, bobin
+   Örnek: Do you like roller coasters?
+   Çeviri: Lunapark hızlı trenini sever misin?
+--------------------------------------------------
+340. root [isim] (B1)
+   Anlam: köken, kök, deşmek
+   Örnek: Do you like root beer?
+   Çeviri: Alkolsüz bira sever misin?
+--------------------------------------------------
+341. rope [isim] (B1)
+   Anlam: halat, ip, kementle yakalamak
+   Örnek: I need a long rope.
+   Çeviri: Bana uzun bir ip gerek.
+--------------------------------------------------
+342. route [isim] (B1)
+   Anlam: güzergah, rota, sevk etmek
+   Örnek: Can I change the route?
+   Çeviri: Rotayı değiştirebilir miyim?
+--------------------------------------------------
+343. row [isim] (B1)
+   Anlam: sıra, dizi, gürültülü bir şekilde kavga etmek
+   Örnek: I'm on death row.
+   Çeviri: Ben ölüm hücresindeyim.
+--------------------------------------------------
+344. sample [isim] (B1)
+   Anlam: örnek, numune, denemek
+   Örnek: This is a free sample.
+   Çeviri: Bu ücretsiz bir örnektir.
+--------------------------------------------------
+345. scene [isim] (B1)
+   Anlam: sahne, manzara, olay yeri
+   Örnek: Don't make a scene.
+   Çeviri: Olay çıkartmayın.
+--------------------------------------------------
+346. scores [isim] (B1)
+   Anlam: çok sayı, çok sayıda, skorlar
+   Örnek: Scores of people visited Japan.
+   Çeviri: Çok sayıda insan Japonyayı ziyaret etti.
+--------------------------------------------------
+347. seam [isim] (B1)
+   Anlam: dikiş, dikiş yeri, ters ilmikle örmek
+   Örnek: The investigation highlighted the critical role of seam.
+   Çeviri: Soruşturma dikiş kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+348. seas [isim] (B1)
+   Anlam: gözlem anında rüzgar etkisiyle oluşan dalgalar
+   Örnek: The investigation highlighted the critical role of seas.
+   Çeviri: Soruşturma gözlem anında rüzgar etkisiyle oluşan dalgalar kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+349. second [isim] (B1)
+   Anlam: saniye, ikinci, destek vermek
+   Örnek: Can I have a second?
+   Çeviri: Bir saniyenizi alabilir miyim?
+--------------------------------------------------
+350. seed [isim] (B1)
+   Anlam: tohum, çekirdeği çıkarmak, çekirdeğini çıkarmak
+   Örnek: When did you seed the lawn?
+   Çeviri: Çimi ne zaman tohumladın?
+--------------------------------------------------
+351. seemed [isim] (B1)
+   Anlam: göründü
+   Örnek: He seemed to be ill.
+   Çeviri: O hasta görünüyordu.
+--------------------------------------------------
+352. self [isim] (B1)
+   Anlam: öz, kendi, özellik
+   Örnek: He is a self-made man.
+   Çeviri: O kendi kendini yetiştirmiş bir adam.
+--------------------------------------------------
+353. sense [isim] (B1)
+   Anlam: algılamak, hissetmek, algı
+   Örnek: Can't you sense it?
+   Çeviri: Bunu hissedemiyor musun?
+--------------------------------------------------
+354. setup [isim] (B1)
+   Anlam: kurma, kurulum, vaziyet
+   Örnek: The investigation highlighted the critical role of setup.
+   Çeviri: Soruşturma kurma kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+355. sheep [isim] (B1)
+   Anlam: koyun, koyun gibi tip, ezik kimse
+   Örnek: I have a lot of sheep.
+   Çeviri: Bir sürü koyunum var.
+--------------------------------------------------
+356. shield [isim] (B1)
+   Anlam: zırh, siper, kalkan
+   Örnek: I tried to shield you from this.
+   Çeviri: Seni bundan korumaya çalıştım.
+--------------------------------------------------
+357. shift [isim] (B1)
+   Anlam: değiştirmek, vardiya, kaçamak cevap vermek
+   Örnek: Tom's shift is over.
+   Çeviri: Tom'un vardiyası bitti.
+--------------------------------------------------
+358. shore [isim] (B1)
+   Anlam: sahil, kıyı, payanda vurmak
+   Örnek: I swam toward the shore.
+   Çeviri: Ben kıyıya doğru yüzdüm.
+--------------------------------------------------
+359. show [isim] (B1)
+   Anlam: göstermek, gösteri, showed - shown/showed
+   Örnek: I can't show you.
+   Çeviri: Sana gösteremem.
+--------------------------------------------------
+360. sight [isim] (B1)
+   Anlam: görünüş, görme yeteneği, görme
+   Örnek: No one's in sight.
+   Çeviri: Hiç kimse görünürde değil.
+--------------------------------------------------
+361. sign [isim] (B1)
+   Anlam: imzalamak, imza atmak, alamet
+   Örnek: How do I sign up?
+   Çeviri: Nasıl kaydolurum?
+--------------------------------------------------
+362. silver [isim] (B1)
+   Anlam: gümüş, ağarmak, sırlamak
+   Örnek: He won a silver medal.
+   Çeviri: O gümüş bir madalya kazandı.
+--------------------------------------------------
+363. sings [isim] (B1)
+   Anlam: dereyi görmeden paçaları sıvama, son kozu oynamadan her şey bitmiş sayılmaz, henüz her şey bitmedi
+   Örnek: She sings out of tune.
+   Çeviri: O uyumsuz şarkı söylüyor.
+--------------------------------------------------
+364. site [isim] (B1)
+   Anlam: yerleştirmek, oturtmak, açmak
+   Örnek: We're updating the site.
+   Çeviri: Siteyi güncelliyoruz.
+--------------------------------------------------
+365. skin [isim] (B1)
+   Anlam: soymak, ten, deri
+   Örnek: Your skin is so soft.
+   Çeviri: Cildiniz çok yumuşak.
+--------------------------------------------------
+366. slope [isim] (B1)
+   Anlam: meyil, bayır, eğim
+   Örnek: It's a slippery slope.
+   Çeviri: O kaygan bir eğim.
+--------------------------------------------------
+367. smells [isim] (B1)
+   Anlam: biri ölmüş gibi kokuyor!, leş gibi kokuyor!, gerçekten çok kötü kokuyor!
+   Örnek: He smells like a goat.
+   Çeviri: O, keçi gibi kokuyor.
+--------------------------------------------------
+368. soil [isim] (B1)
+   Anlam: toprak, pisletmek, leke sürmek
+   Örnek: This is very good soil.
+   Çeviri: Bu çok iyi toprak.
+--------------------------------------------------
+369. sort [isim] (B1)
+   Anlam: sıralamak, sınıflandırmak, cins
+   Örnek: I'm sort of busy.
+   Çeviri: Hayli meşgulüm.
+--------------------------------------------------
+370. soul [isim] (B1)
+   Anlam: ruh, kimse, kök
+   Örnek: Don't tell a soul.
+   Çeviri: Bunu kimseye söyleme.
+--------------------------------------------------
+371. sounds [isim] (B1)
+   Anlam: sesler, ses efekti
+   Örnek: I know how it sounds.
+   Çeviri: Kulağa nasıl geldiğini biliyorum.
+--------------------------------------------------
+372. source [isim] (B1)
+   Anlam: kaynak, köken, edinmek
+   Örnek: I can't reveal my source.
+   Çeviri: Kaynağımı söyleyemem.
+--------------------------------------------------
+373. space [isim] (B1)
+   Anlam: aralık, açıklık, mekan
+   Örnek: I need a little space.
+   Çeviri: Biraz yere ihtiyacım var.
+--------------------------------------------------
+374. spe [isim] (B1)
+   Anlam: özel-amaçlı şirket
+   Örnek: Can we speed it up?
+   Çeviri: Onu hızlandırabilir miyiz?
+--------------------------------------------------
+375. speed [isim] (B1)
+   Anlam: sürat, hız, sped/speeded - sped/speeded
+   Örnek: Can we speed it up?
+   Çeviri: Onu hızlandırabilir miyiz?
+--------------------------------------------------
+376. spider [isim] (B1)
+   Anlam: örümcek, istavroz dişlisi, ayaklı tava
+   Örnek: The spider spun a web.
+   Çeviri: Örümcek bir ağ ördü.
+--------------------------------------------------
+377. spot [isim] (B1)
+   Anlam: leke, benek, nokta
+   Örnek: I am in a spot.
+   Çeviri: Başım dertte.
+--------------------------------------------------
+378. spread [isim] (B1)
+   Anlam: yaymak, yayılmak, spread - spread
+   Örnek: I'll spread the word.
+   Çeviri: Haberi yayacağım.
+--------------------------------------------------
+379. staff [isim] (B1)
+   Anlam: kadro, personel, görevli olarak çalışmak
+   Örnek: I speak French to my staff.
+   Çeviri: Personelimle Fransızca konuşurum.
+--------------------------------------------------
+380. stage [isim] (B1)
+   Anlam: sahneye koymak, sahnelemek, evre
+   Örnek: I fell off the stage.
+   Çeviri: Sahneden düştüm.
+--------------------------------------------------
+381. status [isim] (B1)
+   Anlam: hal, statü, durum
+   Örnek: What's Tom's status?
+   Çeviri: Tom'un statüsü nedir?
+--------------------------------------------------
+382. stay [isim] (B1)
+   Anlam: kalmak, kalma süresi, kalma
+   Örnek: I'd love to stay.
+   Çeviri: Kalmak istiyorum.
+--------------------------------------------------
+383. steel [isim] (B1)
+   Anlam: çelik, sertleştirmek, çakmak
+   Örnek: He has a grip of steel.
+   Çeviri: O, çelikten yapılmış bir bağaja sahiptir.
+--------------------------------------------------
+384. step [isim] (B1)
+   Anlam: üvey, adım, basamak
+   Örnek: It's a big step.
+   Çeviri: Bu büyük bir adım.
+--------------------------------------------------
+385. storm [isim] (B1)
+   Anlam: fırtına, bağırıp çağırmak, fırtına gibi esmek
+   Örnek: It's a monster storm.
+   Çeviri: Dev gibi bir fırtına.
+--------------------------------------------------
+386. stream [isim] (B1)
+   Anlam: dere, akarsu, akıp gitmek
+   Örnek: He sat next to the stream.
+   Çeviri: O, dereye yakın oturdu.
+--------------------------------------------------
+387. stress [isim] (B1)
+   Anlam: stres, tonlamak, baskı yapmak
+   Örnek: I'm always under stress.
+   Çeviri: Her zaman stres altındayım.
+--------------------------------------------------
+388. string [isim] (B1)
+   Anlam: sicim, dizi, strung - strung
+   Örnek: The string is very weak.
+   Çeviri: Halat çok zayıf.
+--------------------------------------------------
+389. stud [isim] (B1)
+   Anlam: azgın erkek, damızlık at, iri başlı çivi
+   Örnek: The investigation highlighted the critical role of stud.
+   Çeviri: Soruşturma azgın erkek kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+390. stuff [isim] (B1)
+   Anlam: şey, tıkınmak, tıkmak
+   Örnek: I had stuff to do.
+   Çeviri: Yapacak şeylerim vardı.
+--------------------------------------------------
+391. style [isim] (B1)
+   Anlam: biçim, tarz, biçem
+   Örnek: It's not my style.
+   Çeviri: O benim tarzım değil.
+--------------------------------------------------
+392. sum [isim] (B1)
+   Anlam: toplam, tutar, toplamak
+   Örnek: Please sum up your idea.
+   Çeviri: Lütfen fikrini toparla.
+--------------------------------------------------
+393. summer [isim] (B1)
+   Anlam: yaz, yazı geçirmek, hayatın baharı
+   Örnek: I had a bad summer.
+   Çeviri: Kötü bir yaz mevsimi geçirdim.
+--------------------------------------------------
+394. swap [isim] (B1)
+   Anlam: değiş tokuş, takas, değiş tokuş yapmak
+   Örnek: Do you want to swap jobs?
+   Çeviri: İşleri değiştirmek ister misiniz?
+--------------------------------------------------
+395. switch [isim] (B1)
+   Anlam: değiştirmek, değişme, anahtar
+   Örnek: Let me fix the switch.
+   Çeviri: Anahtarı onarayım.
+--------------------------------------------------
+396. system [isim] (B1)
+   Anlam: sistem, şebeke, kaide
+   Örnek: It's a good system.
+   Çeviri: Bu iyi bir sistem.
+--------------------------------------------------
+397. tail [isim] (B1)
+   Anlam: kuyruk, kuyruk yapmak, peşine takılmak
+   Örnek: A cow has a long tail.
+   Çeviri: Bir ineğin uzun bir kuyruğu vardır.
+--------------------------------------------------
+398. tain [isim] (B1)
+   Anlam: kalay yaldızı, staniyol, ayna sırı
+   Örnek: The investigation highlighted the critical role of tain.
+   Çeviri: Soruşturma kalay yaldızı kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+399. talent [isim] (B1)
+   Anlam: kabiliyet, hüner, yetenek
+   Örnek: I've got a lot of talent.
+   Çeviri: Birçok yeteneğim var.
+--------------------------------------------------
+400. tank [isim] (B1)
+   Anlam: tank, depoya koymak, tank gibi  hareket etmek
+   Örnek: I have a fish tank.
+   Çeviri: Benim bir akvaryumum var.
+--------------------------------------------------
+401. target [isim] (B1)
+   Anlam: hedef, amaç, gaye
+   Örnek: I can see the target.
+   Çeviri: Ben hedefi görebiliyorum.
+--------------------------------------------------
+402. task [isim] (B1)
+   Anlam: görev, vazife, ödev
+   Örnek: It's a huge task.
+   Çeviri: Bu büyük bir görev.
+--------------------------------------------------
+403. tasks [isim] (B1)
+   Anlam: görevler, ödev
+   Örnek: Leave the hard tasks to me.
+   Çeviri: Zor işleri bana bırak.
+--------------------------------------------------
+404. taste [isim] (B1)
+   Anlam: tatmak, tat, lezzet
+   Örnek: Let me have a taste.
+   Çeviri: Denememe izin ver.
+--------------------------------------------------
+405. tastes [isim] (B1)
+   Anlam: lezzetler, zevkler
+   Örnek: I think it tastes good.
+   Çeviri: Güzel tat verdiğini düşünüyorum.
+--------------------------------------------------
+406. team [isim] (B1)
+   Anlam: takım, ekip, takım halinde yapmak
+   Örnek: He is on the team.
+   Çeviri: O takımdadır.
+--------------------------------------------------
+407. teen [isim] (B1)
+   Anlam: genç, incinme, delikanlı
+   Örnek: She got married in her teens.
+   Çeviri: O, onlu yaşlarında evlendi.
+--------------------------------------------------
+408. term [isim] (B1)
+   Anlam: isimlendirmek, terim, dönem
+   Örnek: The term ends next week.
+   Çeviri: Sömestr gelecek hafta sona eriyor.
+--------------------------------------------------
+409. terms [isim] (B1)
+   Anlam: ara, ücret, fiyat
+   Örnek: I agree to your terms.
+   Çeviri: Şartlarınızı kabul ediyorum.
+--------------------------------------------------
+410. tests [isim] (B1)
+   Anlam: sınav
+   Örnek: I just ran some tests.
+   Çeviri: Ben sadece bazı testler yaptım.
+--------------------------------------------------
+411. the [isim] (B1)
+   Anlam: belirli durumlarda isimden önce kullanılır, belli bir objeyi/kişiyi/yeri nitelemek için kullanılır
+   Örnek: I'm at the gym.
+   Çeviri: Spor salonundayım.
+--------------------------------------------------
+412. theft [isim] (B1)
+   Anlam: hırsızlık, aşırma, arakçılık
+   Örnek: He is guilty of theft.
+   Çeviri: O, hırsızlıktan suçludur.
+--------------------------------------------------
+413. their [isim] (B1)
+   Anlam: onların
+   Örnek: It wasn't their idea.
+   Çeviri: Bu onların fikri değildi.
+--------------------------------------------------
+414. theory [isim] (B1)
+   Anlam: teori, kuram, nazariye
+   Örnek: I do have a theory.
+   Çeviri: Bir teorim var.
+--------------------------------------------------
+415. thief [isim] (B1)
+   Anlam: hırsız, çalınma, hırsızlık
+   Örnek: I'm not a thief.
+   Çeviri: Ben bir hırsız değilim.
+--------------------------------------------------
+416. thing [isim] (B1)
+   Anlam: şey, nesne, olay
+   Örnek: I did a bad thing.
+   Çeviri: Kötü bir şey yaptım.
+--------------------------------------------------
+417. things [isim] (B1)
+   Anlam: eşya, gidişat, giysiler
+   Örnek: I had things to do.
+   Çeviri: Yapacak işlerim vardı.
+--------------------------------------------------
+418. this [isim] (B1)
+   Anlam: bu, bir serinin veya çiftin genellikle ilk üyesi, yakın geçmişe/geleceğe ait
+   Örnek: I can't do this.
+   Çeviri: Bunu yapamam.
+--------------------------------------------------
+419. those [isim] (B1)
+   Anlam: onlar, şunlar
+   Örnek: It's one of those.
+   Çeviri: Bu onlardan biri.
+--------------------------------------------------
+420. thrust [isim] (B1)
+   Anlam: thrust - thrust, saldırmak, dayamak
+   Örnek: I thrust my hand into my pocket.
+   Çeviri: Elimi cebime soktum.
+--------------------------------------------------
+421. timber [isim] (B1)
+   Anlam: kalas, kereste, payanda vurmak
+   Örnek: The investigation highlighted the critical role of timber.
+   Çeviri: Soruşturma kalas kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+422. tire [isim] (B1) | Eş Anlam: exhaust, fatigue, wear out
+   Anlam: yorulmak, yormak, tekerlek
+   Örnek: I got a flat tire.
+   Çeviri: Patlak bir lastiğim var.
+--------------------------------------------------
+423. tomb [isim] (B1)
+   Anlam: mezar, türbe, gömmek
+   Örnek: I wonder who's buried in that tomb.
+   Çeviri: O mezarda kimin gömülü olduğunu merak ediyorum.
+--------------------------------------------------
+424. tone [isim] (B1)
+   Anlam: ton, yumuşatmak, uyuşmak
+   Örnek: I don't like your tone.
+   Çeviri: Ben senin ses tonunu sevmiyorum.
+--------------------------------------------------
+425. tool [isim] (B1)
+   Anlam: araç, alet, arabada gitmek
+   Örnek: This is the best tool to use.
+   Çeviri: Bu kullanmak için en iyi alet.
+--------------------------------------------------
+426. top [isim] (B1)
+   Anlam: tepe, baş, üst
+   Örnek: He came out on top.
+   Çeviri: O zirveye yaklaştı.
+--------------------------------------------------
+427. touch [isim] (B1)
+   Anlam: ellemek, dokunmak, değmek
+   Örnek: I'll be in touch.
+   Çeviri: Ben irtibat halinde olacağım.
+--------------------------------------------------
+428. towns [isim] (B1)
+   Anlam: kasabalar, ilçeler
+   Örnek: You hate small towns, right?
+   Çeviri: Küçük kasabalardan nefret ediyorsun, değil mi?
+--------------------------------------------------
+429. trace [isim] (B1)
+   Anlam: iz sürmek, izini sürmek, izlemek
+   Örnek: There was no trace of him.
+   Çeviri: Ondan hiçbir iz yoktu.
+--------------------------------------------------
+430. track [isim] (B1)
+   Anlam: izlemek, iz, yol
+   Örnek: We're on track now.
+   Çeviri: Biz şimdi yoldayız.
+--------------------------------------------------
+431. trend [isim] (B1)
+   Anlam: eğilim göstermek, meyletmek, eğimli olmak
+   Örnek: This is a new trend.
+   Çeviri: Bu yeni bir moda.
+--------------------------------------------------
+432. trends [isim] (B1)
+   Anlam: eğilimler, trendler
+   Örnek: I gave up keeping up with trends.
+   Çeviri: Tendlere yetişmekten vazgeçtim.
+--------------------------------------------------
+433. trick [isim] (B1)
+   Anlam: oyuna getirmek, oyun etmek, kandırmak
+   Örnek: It's not a trick.
+   Çeviri: Bu bir hile değil.
+--------------------------------------------------
+434. tricks [isim] (B1)
+   Anlam: çeşitli ufak tefek eşyalar, şahsi eşyalar, pılı pırtı
+   Örnek: Don't try any tricks.
+   Çeviri: Herhangi bir hile yapma.
+--------------------------------------------------
+435. truck [isim] (B1)
+   Anlam: kamyon, takas etmek, trampa etmek
+   Örnek: I'll get my truck.
+   Çeviri: Kamyonumu alacağım.
+--------------------------------------------------
+436. trucks [isim] (B1)
+   Anlam: kamyonet, canavar kamyonlar, beton karıştırıcı
+   Örnek: A lot of people around here drive trucks.
+   Çeviri: Buralarda birçok insan kamyon sürer.
+--------------------------------------------------
+437. trunk [isim] (B1)
+   Anlam: gövde, kutuya koymak, bagaja koymak
+   Örnek: Has my trunk come yet?
+   Çeviri: Bavulum geldi mi?
+--------------------------------------------------
+438. trust [isim] (B1)
+   Anlam: güvenmek, güven, inancı olmak
+   Örnek: I can't trust Tom.
+   Çeviri: Tom'a güvenemem.
+--------------------------------------------------
+439. tube [isim] (B1)
+   Anlam: tüp, boru, tüp içine koymak
+   Örnek: Please buy a tube of toothpaste.
+   Çeviri: Lütfen bir tüp diş macunu al.
+--------------------------------------------------
+440. tumor [isim] (B1)
+   Anlam: ur, tümör, şiş
+   Örnek: I have a brain tumor.
+   Çeviri: Bir beyin tümörüm var.
+--------------------------------------------------
+441. tumors [isim] (B1)
+   Anlam: tümörler
+   Örnek: The investigation highlighted the critical role of tumors.
+   Çeviri: Soruşturma tümörler kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+442. tunnel [isim] (B1)
+   Anlam: tünel, tünel açmak, tünelden geçmek
+   Örnek: Don't go through this tunnel.
+   Çeviri: Bu tünelden gitme.
+--------------------------------------------------
+443. turkey [isim] (B1)
+   Anlam: türkiye, hindi, işleri yüzüne gözüne bulaştıran kimse
+   Örnek: I eat a lot of turkey.
+   Çeviri: Çok hindi yerim.
+--------------------------------------------------
+444. tutor [isim] (B1)
+   Anlam: özel öğretmen, ders vermek, özel ders vermek
+   Örnek: We hired a chemistry tutor for Tom.
+   Çeviri: Tom için özel kimya dersi tuttuk.
+--------------------------------------------------
+445. type [isim] (B1)
+   Anlam: yazmak, tür, tip
+   Örnek: I'm not her type.
+   Çeviri: Onun tipi değilim.
+--------------------------------------------------
+446. un [isim] (B1)
+   Anlam: un
+   Örnek: What does UN stand for?
+   Çeviri: BM ne anlama geliyor?
+--------------------------------------------------
+447. une [isim] (B1)
+   Anlam: doğru, kesir çizgisi, yanal doğru
+   Örnek: The investigation highlighted the critical role of une.
+   Çeviri: Soruşturma doğru kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+448. unrest [isim] (B1)
+   Anlam: huzursuzluk, bozgun, kargaşa
+   Örnek: The unrest lasted three days.
+   Çeviri: Huzursuzluk üç gün sürdü.
+--------------------------------------------------
+449. upper [isim] (B1)
+   Anlam: üst, yukarı, saya
+   Örnek: He belongs to the upper class.
+   Çeviri: O, üst sınıfa aittir.
+--------------------------------------------------
+450. ure [isim] (B1)
+   Anlam: üre, yaban öküzü
+   Örnek: The investigation highlighted the critical role of ure.
+   Çeviri: Soruşturma üre kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+451. use [isim] (B1)
+   Anlam: kullanmak, kullanım, kullanma
+   Örnek: I can't use it.
+   Çeviri: Onu kullanamam.
+--------------------------------------------------
+452. users [isim] (B1)
+   Anlam: bir malı tüketenler veya onu ara malı olarak talep edenler, kullanıcılar, kişiler
+   Örnek: Refer to the Users' Guide if you have any problems.
+   Çeviri: Herhangi bir sorununuz varsa Kullanıcı Kılavuzu'na bakın.
+--------------------------------------------------
+453. utter [isim] (B1)
+   Anlam: dile getirmek, basmak, buyurmak
+   Örnek: He was an utter stranger.
+   Çeviri: Tam bir yabancıydı.
+--------------------------------------------------
+454. value [isim] (B1)
+   Anlam: değer vermek, paha biçmek, değer biçmek
+   Örnek: Is that a fair value?
+   Çeviri: O adil bir değer mi?
+--------------------------------------------------
+455. vein [isim] (B1)
+   Anlam: damar, damarlarla kaplamak, huy
+   Örnek: A dye was injected into a vein of the patient's arm.
+   Çeviri: Bir boya hastanın kol damarına enjekte edilebilir.
+--------------------------------------------------
+456. view [isim] (B1)
+   Anlam: incelemek, görüş, bakış
+   Örnek: Did you enjoy the view?
+   Çeviri: Manzara hoşuna gitti mi?
+--------------------------------------------------
+457. viewer [isim] (B1)
+   Anlam: izleyici, seyirci, vizyonöz
+   Örnek: Television enlightens the viewers as well as entertains them.
+   Çeviri: Televizyon izleyicileri eğlendirmesinin yanı sıra onları aydınlatır.
+--------------------------------------------------
+458. vision [isim] (B1)
+   Anlam: görme, hayal gibi görmek, görme kuvveti
+   Örnek: I just had a vision.
+   Çeviri: Sadece bir görüşüm vardı.
+--------------------------------------------------
+459. voice [isim] (B1)
+   Anlam: ses, ses tellerini titreştirerek oluşturmak, dile getirmek
+   Örnek: It's Tom's voice.
+   Çeviri: O, Tom'un sesi.
+--------------------------------------------------
+460. wander [isim] (B1)
+   Anlam: başıboş dolaşmak, dolaşmak, amaçsızca dolaşmak
+   Örnek: Don't wander too far.
+   Çeviri: Çok uzağa gitme.
+--------------------------------------------------
+461. way [isim] (B1)
+   Anlam: yol, taraf, tarz
+   Örnek: I'm on my way.
+   Çeviri: Ben yoldayım.
+--------------------------------------------------
+462. ways [isim] (B1)
+   Anlam: yollar, kızak
+   Örnek: We have a ways to go.
+   Çeviri: Gidecek bir yolumuz var.
+--------------------------------------------------
+463. wealth [isim] (B1)
+   Anlam: varlık, zenginlik, servet
+   Örnek: Health is better than wealth.
+   Çeviri: Sağlık servetten daha iyidir.
+--------------------------------------------------
+464. weaver [isim] (B1)
+   Anlam: dokumacı, dokuyucu, çulha
+   Örnek: The investigation highlighted the critical role of weaver.
+   Çeviri: Soruşturma dokumacı kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+465. weight [isim] (B1)
+   Anlam: ağırlık yapmak, sıklet, ağırlık
+   Örnek: I've put on weight.
+   Çeviri: Ben kilo aldım.
+--------------------------------------------------
+466. well [isim] (B1)
+   Anlam: kuyu, iyi, peki
+   Örnek: He's in the well.
+   Çeviri: O kuyudadır.
+--------------------------------------------------
+467. what [isim] (B1)
+   Anlam: ne, neyi, hangi
+   Örnek: It's what I am.
+   Çeviri: Ben buyum.
+--------------------------------------------------
+468. whose [isim] (B1)
+   Anlam: isim olarak kullanılan yancümlenin başında bulunur, sıfat olarak kullanılan yancümlenin başında bulunur, kimin
+   Örnek: Whose turn is it now?
+   Çeviri: Şimdi kimin sırası?
+--------------------------------------------------
+469. wire [isim] (B1)
+   Anlam: telle bağlamak, tel takmak, telle çevirmek
+   Örnek: It's a wire cage.
+   Çeviri: Bu bir kafes.
+--------------------------------------------------
+470. wisdom [isim] (B1) | Eş Anlam: knowledge
+   Anlam: akıl, bilgelik, hikmet
+   Örnek: He is a man of wisdom.
+   Çeviri: O, bilge bir adam.
+--------------------------------------------------
+471. wives [isim] (B1)
+   Anlam: eşler
+   Örnek: I have three ex-wives.
+   Çeviri: Üç eski karım var.
+--------------------------------------------------
+472. wood [isim] (B1)
+   Anlam: odun, tahta, ahşap
+   Örnek: I like to chop wood.
+   Çeviri: Tahta doğramayı severim.
+--------------------------------------------------
+473. worker [isim] (B1)
+   Anlam: işçi, adam, amele
+   Örnek: I'm a hard worker.
+   Çeviri: Ben çok çalışkanım.
+--------------------------------------------------
+474. works [isim] (B1)
+   Anlam: yapıtlar, fabrika, tesis
+   Örnek: He works at a bank.
+   Çeviri: O bir bankada çalışıyor.
+--------------------------------------------------
+475. worth [isim] (B1)
+   Anlam: değer, eder, çap
+   Örnek: It's worth a try.
+   Çeviri: Denemeye değer.
+--------------------------------------------------
+476. yard [isim] (B1)
+   Anlam: bahçe, avlu, açıklık
+   Örnek: We have a big yard.
+   Çeviri: Büyük bir bahçemiz var.
+--------------------------------------------------
+477. yeah [isim] (B1)
+   Anlam: tamam, he, evet
+   Örnek: Yeah. I think so, too.
+   Çeviri: Evet. Ben de öyle düşünüyorum.
+--------------------------------------------------
+478. years [isim] (B1)
+   Anlam: yıllar, yıl
+   Örnek: Give it a few years.
+   Çeviri: Ona birkaç yıl ver.
+--------------------------------------------------
+479. yes [isim] (B1)
+   Anlam: evet, olumlu cevap, olumlu oy
+   Örnek: I won't say yes.
+   Çeviri: Evet demeyeceğim.
+--------------------------------------------------
+480. yogurt [isim] (B1)
+   Anlam: yoğurt
+   Örnek: I'd like some yogurt.
+   Çeviri: Biraz yoğurt isterim.
+--------------------------------------------------
+481. you're [isim] (B1)
+   Anlam: tehlikedesin, yaşlısın diye haklı olman gerekmiyor, umarım ne yaptığını biliyorsundur
+   Örnek: The investigation highlighted the critical role of you're.
+   Çeviri: Soruşturma tehlikedesin kavramının kritik rolünü vurguladı.
+--------------------------------------------------
+482. your [isim] (B1)
+   Anlam: senin, sizin
+   Örnek: Am I in your way?
+   Çeviri: Ben senin yolunda mıyım?
+--------------------------------------------------
+483. youth [isim] (B1)
+   Anlam: gençlik, genç, genç kişi
+   Örnek: I spent my youth there.
+   Çeviri: Gençliğimi orada geçirdim.
+--------------------------------------------------
+484. zone [isim] (B1)
+   Anlam: kuşak, bölge, bir yerde ancak belirli bir faaliyete izin vermek
+   Örnek: It's like a war zone there.
+   Çeviri: Bu orada bir savaş bölgesi gibi.
+--------------------------------------------------

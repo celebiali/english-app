@@ -1,0 +1,3372 @@
+=== YDS & YÖKDİL AKADEMIK SIFATLAR VE ZARFLAR (674 KELİME) ===
+
+1. able [sıfat] (B1)
+   Anlam: hünerli, kadir, gücü yeten
+   Örnek: I'm able to run.
+   Çeviri: Koşabilirim.
+--------------------------------------------------
+2. abrupt [sıfat] (B1)
+   Anlam: birdenbire oluveren, ani, sert
+   Örnek: Don't make abrupt moves.
+   Çeviri: Ani hareket yapmayın.
+--------------------------------------------------
+3. absolute [sıfat] (B2)
+   Anlam: tam, mutlak, salt
+   Örnek: He has absolute power.
+   Çeviri: Onun mutlak gücü var.
+--------------------------------------------------
+4. academic [sıfat] (B2)
+   Anlam: akademik, üniversite öğretim görevlisi, öğretim görevlisi
+   Örnek: They're academic champions.
+   Çeviri: Onlar akademik şampiyonlardır.
+--------------------------------------------------
+5. accessible [sıfat] (C1)
+   Anlam: ulaşılabilir, erişilebilir, kolaylıkla görüşülebilen
+   Örnek: The town is accessible by rail.
+   Çeviri: Şehre demir yolu ile erişilebilir.
+--------------------------------------------------
+6. accomplished [sıfat] (C1)
+   Anlam: başarıyla sonlandırılmış, başarılmış, yetenekli
+   Örnek: We accomplished a lot.
+   Çeviri: Biz çok şey başardık.
+--------------------------------------------------
+7. accused [sıfat] (B2)
+   Anlam: zanlı, sanık, suçlu
+   Örnek: I was falsely accused.
+   Çeviri: Ben yanlışlıkla suçlandım.
+--------------------------------------------------
+8. actively [zarf] (B2)
+   Anlam: bilfiil, aktif olarak, etkin bir şekilde
+   Örnek: The initial results proved to be remarkably actively.
+   Çeviri: İlk sonuçların son derece bilfiil olduğu kanıtlandı.
+--------------------------------------------------
+9. adaptable [sıfat] (B2)
+   Anlam: uyabilen, uyumlu, yeni koşullara uyarlanabilen
+   Örnek: I think Tom is adaptable.
+   Çeviri: Tom'un uygun olduğunu düşünüyorum.
+--------------------------------------------------
+10. adaptive [sıfat] (B2)
+   Anlam: uyarlanır, uyabilen, uyar
+   Örnek: The initial results proved to be remarkably adaptive.
+   Çeviri: İlk sonuçların son derece uyarlanır olduğu kanıtlandı.
+--------------------------------------------------
+11. added [sıfat] (B1)
+   Anlam: munzam, katma, ekli
+   Örnek: I added Tom to my list.
+   Çeviri: Tom'u listeme ekledim.
+--------------------------------------------------
+12. additional [sıfat] (C1)
+   Anlam: fazladan, ek, ilave
+   Örnek: Additional fees may apply.
+   Çeviri: Ek ücretler uygulanabilir.
+--------------------------------------------------
+13. adjustable [sıfat] (C1)
+   Anlam: ayarlı, ayarlanır, ayarlanabilir
+   Örnek: These seatbelts are adjustable.
+   Çeviri: Bu emniyet kemerleri ayarlanabilir.
+--------------------------------------------------
+14. admitted [sıfat] (B2)
+   Anlam: kabul edilen, kabul edilmiş, herkesçe bilinen
+   Örnek: I admitted I did it.
+   Çeviri: Bunu yaptığımı itiraf ettim.
+--------------------------------------------------
+15. adolescent [sıfat] (C1)
+   Anlam: ergen, gençlik, genç
+   Örnek: The audience were mostly adolescents.
+   Çeviri: Seyirciler genellikle gençti.
+--------------------------------------------------
+16. adult [sıfat] (B1)
+   Anlam: yetişkin, er kişi, yetişkin kişi
+   Örnek: I'm an adult.
+   Çeviri: Ben bir yetişkinim.
+--------------------------------------------------
+17. adverse [sıfat] (B2)
+   Anlam: olumsuz, aksi, ters
+   Örnek: Is there any adverse reaction?
+   Çeviri: Herhangi bir olumsuz reaksiyon var mı?
+--------------------------------------------------
+18. affluent [sıfat] (B2)
+   Anlam: ırmak ayağı, bir nehrin ayağı, gürül gürül akan
+   Örnek: The initial results proved to be remarkably affluent.
+   Çeviri: İlk sonuçların son derece ırmak ayağı olduğu kanıtlandı.
+--------------------------------------------------
+19. affordable [sıfat] (C1)
+   Anlam: bütçeye uygun, ekonomik, düşük maliyetli
+   Örnek: We want to make it affordable.
+   Çeviri: Bunu satın alınabilir yapmak istiyoruz.
+--------------------------------------------------
+20. airless [sıfat] (B2)
+   Anlam: havasız, boğucu, sakin
+   Örnek: The initial results proved to be remarkably airless.
+   Çeviri: İlk sonuçların son derece havasız olduğu kanıtlandı.
+--------------------------------------------------
+21. all [sıfat] (B1)
+   Anlam: tüm, bütün, hepsi
+   Örnek: I'm all set.
+   Çeviri: Tamamen hazırım.
+--------------------------------------------------
+22. allied [sıfat] (B1)
+   Anlam: bağlaşık, müttefik, birbirine bağlı
+   Örnek: Germany was once allied with Italy.
+   Çeviri: Almanya bir zamanlar İtalya ile müttefikti.
+--------------------------------------------------
+23. allowing [sıfat] (B2)
+   Anlam: izin verilen
+   Örnek: I'm allowing you to go.
+   Çeviri: Gitmene izin veriyorum.
+--------------------------------------------------
+24. alone [sıfat] (B1)
+   Anlam: yalnız, bir, kimsesiz
+   Örnek: I'm so alone.
+   Çeviri: Öyle yalnızım ki.
+--------------------------------------------------
+25. alternative [sıfat] (C1)
+   Anlam: alternatif, çare, şık
+   Örnek: I had no alternative.
+   Çeviri: Hiçbir alternatifim yoktu.
+--------------------------------------------------
+26. amused [sıfat] (B1)
+   Anlam: memnuniyet içinde, mutlu, eğlenen
+   Örnek: I'm not amused.
+   Çeviri: Eğlenmiş değilim.
+--------------------------------------------------
+27. amusing [sıfat] (B2)
+   Anlam: eğlenceli, zevkli, komik
+   Örnek: What's so amusing?
+   Çeviri: Ne çok eğlenceli?
+--------------------------------------------------
+28. ancient [sıfat] (B2)
+   Anlam: antik, çok yaşlı kimse, uzun zaman önce yaşamış kimse
+   Örnek: This is an ancient law.
+   Çeviri: Bu eski bir yasadır.
+--------------------------------------------------
+29. animal [sıfat] (B1)
+   Anlam: hayvan, yetenekli kimse, izbandut gibi adam
+   Örnek: He's an animal.
+   Çeviri: O bir hayvan.
+--------------------------------------------------
+30. anxious [sıfat] (B2)
+   Anlam: endişeli, kaygılı, huzursuz
+   Örnek: I'm a bit anxious.
+   Çeviri: Biraz endişeliyim.
+--------------------------------------------------
+31. any [sıfat] (B1)
+   Anlam: her, hiçbir, herhangi
+   Örnek: Do you want any?
+   Çeviri: Biraz ister misin?
+--------------------------------------------------
+32. appalling [sıfat] (B2)
+   Anlam: müthiş, dehşete düşüren, korkunç
+   Örnek: I think that's appalling.
+   Çeviri: Onun korkunç olduğunu düşünüyorum.
+--------------------------------------------------
+33. apparent [sıfat] (B2)
+   Anlam: aşikar, ortada, belirgin
+   Örnek: Tom is in no apparent pain.
+   Çeviri: Tom bariz acı içinde değil.
+--------------------------------------------------
+34. apply [zarf] (B1) | Eş Anlam: implement, conduct, practice, execute
+   Anlam: uygulamak, başvurmak, müracaat etmek
+   Örnek: When did you apply?
+   Çeviri: Ne zaman başvurdunuz?
+--------------------------------------------------
+35. approximately [zarf] (C1)
+   Anlam: takriben, yaklaşık olarak, aşağı yukarı
+   Örnek: Tom is approximately Mary's age.
+   Çeviri: Tom yaklaşık Mary'nin yaşındadır.
+--------------------------------------------------
+36. arrival [sıfat] (B2)
+   Anlam: varış, varma, geliş
+   Örnek: I await your arrival.
+   Çeviri: Ben varışını bekliyorum.
+--------------------------------------------------
+37. arrive [sıfat] (B1)
+   Anlam: varmak, ulaşmak, başarmak
+   Örnek: I'll arrive soon.
+   Çeviri: Yakında geleceğim.
+--------------------------------------------------
+38. asleep [sıfat] (B1)
+   Anlam: uyuyan, tembel, uyuşuk
+   Örnek: I'm not asleep.
+   Çeviri: Uykuda değilim.
+--------------------------------------------------
+39. ative [sıfat] (B1)
+   Anlam: -den, ilgili anlamı veren son ek, ilişkili anlamı veren son ek
+   Örnek: The initial results proved to be remarkably ative.
+   Çeviri: İlk sonuçların son derece -den olduğu kanıtlandı.
+--------------------------------------------------
+40. attentively [zarf] (C1)
+   Anlam: dikkatlice, dikkatle
+   Örnek: The boys listened attentively.
+   Çeviri: Erkek çocukları dikkatle dinledi.
+--------------------------------------------------
+41. attractive [sıfat] (C1)
+   Anlam: cazibeli, cazip, çekici
+   Örnek: It's not attractive.
+   Çeviri: Çekici değil.
+--------------------------------------------------
+42. available [sıfat] (B2)
+   Anlam: elde hazır bulunan, boş, mevcut
+   Örnek: I'm available now.
+   Çeviri: Ben şimdi müsaitim.
+--------------------------------------------------
+43. aware [sıfat] (B1)
+   Anlam: haberdar, farkında, vakıf
+   Örnek: I'm aware of it.
+   Çeviri: Ben bunun farkındayım.
+--------------------------------------------------
+44. awful [sıfat] (B1)
+   Anlam: berbat, çok kötü, fena
+   Örnek: It's just awful.
+   Çeviri: Bu sadece berbat.
+--------------------------------------------------
+45. balanced [sıfat] (B2)
+   Anlam: dengeli, dengelenmiş, muvazeneli
+   Örnek: The budget must be balanced.
+   Çeviri: Bütçe dengeli olmalıdır.
+--------------------------------------------------
+46. based [sıfat] (B1)
+   Anlam: esaslı, yerleşik, temeli
+   Örnek: This is based on fact.
+   Çeviri: Bu gerçeğe dayalıdır.
+--------------------------------------------------
+47. behavioral [sıfat] (C1)
+   Anlam: davranışla ilgili, davranış, davranışsal
+   Örnek: The initial results proved to be remarkably behavioral.
+   Çeviri: İlk sonuçların son derece davranışla ilgili olduğu kanıtlandı.
+--------------------------------------------------
+48. beneficial [sıfat] (C1)
+   Anlam: yararlı, faydalı, kazançlı
+   Örnek: It could be beneficial.
+   Çeviri: Bu yararlı olabilir.
+--------------------------------------------------
+49. best [sıfat] (B1)
+   Anlam: en iyi, geçmek, baskın çıkmak
+   Örnek: I'm the best.
+   Çeviri: Ben en iyisiyim.
+--------------------------------------------------
+50. bewildered [sıfat] (C1)
+   Anlam: şaşkın, afallamış, sersemlemiş
+   Örnek: Tom seemed to be bewildered.
+   Çeviri: Tom şaşırmış görünüyordu.
+--------------------------------------------------
+51. biologic [sıfat] (B2)
+   Anlam: biyoloji ile ilgili, biyolojik
+   Örnek: The initial results proved to be remarkably biologic.
+   Çeviri: İlk sonuçların son derece biyoloji ile ilgili olduğu kanıtlandı.
+--------------------------------------------------
+52. biological [sıfat] (C1)
+   Anlam: yaşambilimsel, dirimbilimsel, biyolojik
+   Örnek: He's my biological father.
+   Çeviri: O benim biyolojik babam.
+--------------------------------------------------
+53. biting [sıfat] (B1)
+   Anlam: ısırma, sokma, iğneli
+   Örnek: What's biting you?
+   Çeviri: Sizi ne ısırıyor?
+--------------------------------------------------
+54. blind [sıfat] (B1)
+   Anlam: kör, kör etmek, körletmek
+   Örnek: I'm not blind.
+   Çeviri: Ben kör değilim.
+--------------------------------------------------
+55. boiling [sıfat] (B2)
+   Anlam: kaynama, haşlama, kaynatma
+   Örnek: I'm boiling water.
+   Çeviri: Su kaynatıyorum.
+--------------------------------------------------
+56. bored [sıfat] (B1)
+   Anlam: sıkılmış, delinmiş, bıkkın
+   Örnek: I'm so bored.
+   Çeviri: Çok sıkıldım.
+--------------------------------------------------
+57. botanical [sıfat] (B2)
+   Anlam: bitkibilimsel, bitkisel, botanik
+   Örnek: We found many strange plants in a botanical garden.
+   Çeviri: Biz bir botanik bahçesinde çok tuhaf bitkiler bulduk.
+--------------------------------------------------
+58. both [sıfat] (B1)
+   Anlam: her ikisi de, her iki, her ikisi
+   Örnek: I can do both.
+   Çeviri: Her ikisini de yapabilirim.
+--------------------------------------------------
+59. british [sıfat] (B2)
+   Anlam: ingiliz, ingiliz halkı, ingilizler
+   Örnek: Tom has a British accent.
+   Çeviri: Tom'un bir İngiliz aksanı var.
+--------------------------------------------------
+60. broke [sıfat] (B1)
+   Anlam: parasız, züğürt, meteliksiz
+   Örnek: I broke a nail.
+   Çeviri: Bir tırnak kırdım.
+--------------------------------------------------
+61. calibrated [sıfat] (C1)
+   Anlam: taksimatlı, ayarlanmış, ayarlı
+   Örnek: This instrument needs to be calibrated.
+   Çeviri: Bu alet ayarlanmalı.
+--------------------------------------------------
+62. calm [sıfat] (B1)
+   Anlam: sakinleştirmek, sakinlik, soğukkanlı
+   Örnek: I'm calm now.
+   Çeviri: Ben şimdi sakinim.
+--------------------------------------------------
+63. calming [sıfat] (B2)
+   Anlam: yatıştırıcı, teskin, huzur veren
+   Örnek: Tom is calming down.
+   Çeviri: Tom sakinleşiyor.
+--------------------------------------------------
+64. captured [sıfat] (B2)
+   Anlam: mazbut, yakalanmış, esir edilmiş
+   Örnek: I've been captured.
+   Çeviri: Ben yakalandım.
+--------------------------------------------------
+65. cardiovascular [sıfat] (C1)
+   Anlam: kardiyovasküler, kalp ve damarlara ilişkin
+   Örnek: Kickboxing is great cardiovascular exercise.
+   Çeviri: Kick boks yapmak harika bir kardiyo egzersizidir.
+--------------------------------------------------
+66. carefully [zarf] (B2)
+   Anlam: özenle, idareli biçimde, itinayla
+   Örnek: I did it carefully.
+   Çeviri: Ben bunu dikkatlice yaptım.
+--------------------------------------------------
+67. carried [sıfat] (B2)
+   Anlam: taşınan, taşınmış, kabul edildi/edilmiştir!
+   Örnek: He carried a cane.
+   Çeviri: O bir baston taşıyordu.
+--------------------------------------------------
+68. cautiously [zarf] (C1)
+   Anlam: ihtiyatla, dikkatlice, temkinli bir şekilde
+   Örnek: We're cautiously optimistic.
+   Çeviri: Biz temkinli iyimseriz.
+--------------------------------------------------
+69. celestial [sıfat] (B2)
+   Anlam: gökyüzü ile ilgili, gök, göksel
+   Örnek: The initial results proved to be remarkably celestial.
+   Çeviri: İlk sonuçların son derece gökyüzü ile ilgili olduğu kanıtlandı.
+--------------------------------------------------
+70. cellular [sıfat] (B2)
+   Anlam: hücresel, cep telefonu, gözeli
+   Örnek: The initial results proved to be remarkably cellular.
+   Çeviri: İlk sonuçların son derece hücresel olduğu kanıtlandı.
+--------------------------------------------------
+71. certain [sıfat] (B2) | Eş Anlam: inevitable
+   Anlam: kesin, belirli, belli
+   Örnek: I was so certain.
+   Çeviri: Çok emindim.
+--------------------------------------------------
+72. challenging [sıfat] (C1)
+   Anlam: dürtücü, zorlu, meydan okuma
+   Örnek: It's really challenging.
+   Çeviri: O gerçekten büyüleyici.
+--------------------------------------------------
+73. changed [sıfat] (B2)
+   Anlam: değiştirilmiş, değişmiş, değişime uğramış
+   Örnek: I've changed it.
+   Çeviri: Onu değiştirdim.
+--------------------------------------------------
+74. charged [sıfat] (B2)
+   Anlam: yüklenmiş, şarj edilmiş, dolu
+   Örnek: Has Tom been charged?
+   Çeviri: Tom suçlandı mı?
+--------------------------------------------------
+75. charming [sıfat] (B2)
+   Anlam: cazibeli, alımlı, çekici
+   Örnek: Tom was so charming.
+   Çeviri: Tom çok çekiciydi.
+--------------------------------------------------
+76. cheerful [sıfat] (B2)
+   Anlam: neşeli, mutluluk veren, şen
+   Örnek: He is a cheerful boy.
+   Çeviri: O, neşeli bir çocuktur.
+--------------------------------------------------
+77. cheery [sıfat] (B1)
+   Anlam: neşeyle, neşeli, keyifli
+   Örnek: The initial results proved to be remarkably cheery.
+   Çeviri: İlk sonuçların son derece neşeyle olduğu kanıtlandı.
+--------------------------------------------------
+78. chemical [sıfat] (B2)
+   Anlam: kimyasal madde, kimyasal, kimyevi
+   Örnek: Tom is a chemical engineer.
+   Çeviri: Tom bir kimya mühendisi.
+--------------------------------------------------
+79. choice [sıfat] (B1)
+   Anlam: tercih, seçenek, ayırma
+   Örnek: I had a choice.
+   Çeviri: Bir seçeneğim vardı.
+--------------------------------------------------
+80. chronic [sıfat] (B2)
+   Anlam: kronik, müzmin, devamlı
+   Örnek: Tom suffers from chronic pain.
+   Çeviri: Tom kronik ağrıdan muzdarip.
+--------------------------------------------------
+81. classic [sıfat] (B2)
+   Anlam: klasik, klas, değerini kanıtlamış yapıt
+   Örnek: It's a classic.
+   Çeviri: Bu bir klasik.
+--------------------------------------------------
+82. classical [sıfat] (B2)
+   Anlam: klasik, klas, eski dile ait
+   Örnek: I like classical music.
+   Çeviri: Ben klasik müziği severim.
+--------------------------------------------------
+83. clear [sıfat] (B1)
+   Anlam: belirgin, açık, net
+   Örnek: It'll clear up.
+   Çeviri: Aydınlanacak.
+--------------------------------------------------
+84. clearly [zarf] (B2) | Eş Anlam: openly, frankly, plainly
+   Anlam: açık bir biçimde, açıkça, ayan beyan
+   Örnek: It's clearly a fake.
+   Çeviri: Bunun sahte olduğu çok belli.
+--------------------------------------------------
+85. cleverly [zarf] (B2)
+   Anlam: zekice, akıllıca
+   Örnek: The initial results proved to be remarkably cleverly.
+   Çeviri: İlk sonuçların son derece zekice olduğu kanıtlandı.
+--------------------------------------------------
+86. cloudy [sıfat] (B1)
+   Anlam: bulutlu, gölgeli, töhmet altında
+   Örnek: It's a cloudy day.
+   Çeviri: Bulutlu bir gün.
+--------------------------------------------------
+87. collaborative [sıfat] (C1)
+   Anlam: işbirlikçi, ortak çalışmaya dayalı
+   Örnek: It was a collaborative effort.
+   Çeviri: Ortak çalışmaya dayalı bir çabaydı.
+--------------------------------------------------
+88. collected [sıfat] (B2)
+   Anlam: toplu, aklı başında, sakinleşmiş
+   Örnek: Tom collected old coins.
+   Çeviri: Tom eski bozuk paraları topladı.
+--------------------------------------------------
+89. collective [sıfat] (C1)
+   Anlam: toplu, müşterek, kolektif
+   Örnek: Collective interests must be protected.
+   Çeviri: Toplu çıkarlar korunmalıdır.
+--------------------------------------------------
+90. colorless [sıfat] (B2)
+   Anlam: renksiz, sıkıcı, soluk
+   Örnek: The initial results proved to be remarkably colorless.
+   Çeviri: İlk sonuçların son derece renksiz olduğu kanıtlandı.
+--------------------------------------------------
+91. colossal [sıfat] (B2)
+   Anlam: şaşırtıcı, iri yarı, ızbandut gibi
+   Örnek: What a colossal waste of time!
+   Çeviri: Ne devasa bir zaman kaybı!
+--------------------------------------------------
+92. combined [sıfat] (B2)
+   Anlam: karma, birleşik, bileşik
+   Örnek: He combined two ideas into one.
+   Çeviri: O, iki fikri teke dönüştürdü.
+--------------------------------------------------
+93. comfortable [sıfat] (C1)
+   Anlam: rahat, rahatlatıcı, teselli edici
+   Örnek: I'm not comfortable.
+   Çeviri: Rahat değilim.
+--------------------------------------------------
+94. coming [sıfat] (B1)
+   Anlam: geliş, gelme, varış
+   Örnek: I'm coming in.
+   Çeviri: Ben içeri geliyorum.
+--------------------------------------------------
+95. common [sıfat] (B1)
+   Anlam: alışılmış, alelade, yaygın
+   Örnek: It's very common.
+   Çeviri: Bu çok yaygın.
+--------------------------------------------------
+96. compared [sıfat] (B2)
+   Anlam: karşılaştırılmış, karşılaştırılan
+   Örnek: I compared notes with Tom.
+   Çeviri: Tom'la görüş alışverişinde bulundum.
+--------------------------------------------------
+97. competing [sıfat] (B2)
+   Anlam: yarışma, rekabet, rakip
+   Örnek: I want to keep competing.
+   Çeviri: Ben yarışmaya devam etmek istiyorum.
+--------------------------------------------------
+98. complete [sıfat] (B2)
+   Anlam: tamamlamak, tam, bütün
+   Örnek: My life is complete.
+   Çeviri: Artık ölsem de gam yemem.
+--------------------------------------------------
+99. completely [zarf] (C1)
+   Anlam: büsbütün, tamamen, komple
+   Örnek: I'm completely deaf.
+   Çeviri: Ben tamamen sağırım.
+--------------------------------------------------
+100. complicated [sıfat] (C1)
+   Anlam: çetrefil, komplike, çetrefilli
+   Örnek: It's so complicated.
+   Çeviri: Çok karmaşık.
+--------------------------------------------------
+101. comprehensive [sıfat] (C1)
+   Anlam: etraflı, kapsamlı, tam veya her şey dahil
+   Örnek: This is a comprehensive approach.
+   Çeviri: Bu kapsamlı bir yaklaşımdır.
+--------------------------------------------------
+102. computational [sıfat] (C1)
+   Anlam: sayısal, hesaba dayalı, bilgisayımsal
+   Örnek: He studies computational linguistics.
+   Çeviri: Bilişimsel dil bilim öğrenimi yapmaktadır.
+--------------------------------------------------
+103. conceal [sıfat] (B2)
+   Anlam: gizlemek, gizli tutmak, örtbas etmek
+   Örnek: I can't conceal it from you.
+   Çeviri: Onu senden gizleyemem.
+--------------------------------------------------
+104. concealed [sıfat] (B2)
+   Anlam: gizlenen, gizlenmiş, saklı
+   Örnek: He concealed the fact from me.
+   Çeviri: O, gerçeği benden gizledi.
+--------------------------------------------------
+105. concerned [sıfat] (B2)
+   Anlam: ilgili, endişeli, alakadar
+   Örnek: I'm not concerned.
+   Çeviri: Ben endişeli değilim.
+--------------------------------------------------
+106. conducted [sıfat] (B2)
+   Anlam: bir rehber ya da lider tarafından idare edilen, yürütülen
+   Örnek: An autopsy will be conducted.
+   Çeviri: Bir otopsi yapılacak.
+--------------------------------------------------
+107. confined [sıfat] (B2)
+   Anlam: sınırlı, sınırlanmış, sınırlandırılmış
+   Örnek: He is confined to bed now.
+   Çeviri: O, şimdi yatağa mahkûm.
+--------------------------------------------------
+108. confused [sıfat] (B2)
+   Anlam: şaşkın, zihni bulanık, karmakarışık
+   Örnek: I'm so confused.
+   Çeviri: Kafam çok karışık.
+--------------------------------------------------
+109. confusing [sıfat] (B2)
+   Anlam: şaşırtma, çetrefil, kafa karıştırıcı
+   Örnek: Am I confusing you?
+   Çeviri: Kafanı karıştırıyor muyum?
+--------------------------------------------------
+110. consciously [zarf] (C1)
+   Anlam: bile bile, kasten, bilinçli olarak
+   Örnek: The initial results proved to be remarkably consciously.
+   Çeviri: İlk sonuçların son derece bile bile olduğu kanıtlandı.
+--------------------------------------------------
+111. considerable [sıfat] (C1)
+   Anlam: hatırı sayılır derecede, kaydadeğer, hatırı sayılır
+   Örnek: He has a considerable income.
+   Çeviri: O önemli bir gelire sahiptir.
+--------------------------------------------------
+112. considered [sıfat] (C1)
+   Anlam: dikkate alınan, saygıdeğer, dikkate alınmış
+   Örnek: I considered not going.
+   Çeviri: Ben gitmemeyi düşündüm.
+--------------------------------------------------
+113. consistent [sıfat] (C1)
+   Anlam: istikrarlı, tutarlı, bağıntılı
+   Örnek: You're not consistent.
+   Çeviri: Sen tutarlı değilsin.
+--------------------------------------------------
+114. constant [sıfat] (B2) | Eş Anlam: persistent
+   Anlam: sabit, durağan, değişmez
+   Örnek: I'm in constant danger.
+   Çeviri: Sürekli tehlikedeyim.
+--------------------------------------------------
+115. consumed [sıfat] (B2)
+   Anlam: tamamen harcanmış
+   Örnek: The fire consumed the whole house.
+   Çeviri: Yangın bütün evi yuttu.
+--------------------------------------------------
+116. consuming [sıfat] (B2)
+   Anlam: yakan, tüketici, bitiren
+   Örnek: It's time-consuming.
+   Çeviri: Bu zaman alıcı.
+--------------------------------------------------
+117. contagious [sıfat] (C1)
+   Anlam: bulaşıcı, geçici, salgın
+   Örnek: Tom's smile was contagious.
+   Çeviri: Tom'un gülümsemesi bulaşıcıydı.
+--------------------------------------------------
+118. contemporary [sıfat] (C1)
+   Anlam: modern, çağdaş, günümüze ait
+   Örnek: Scott was a contemporary of Byron.
+   Çeviri: Scott, çağdaş bir Byron'du.
+--------------------------------------------------
+119. continual [sıfat] (B2)
+   Anlam: ardı arkası kesilmeyen, durmadan, ardı arkası gelmeyen
+   Örnek: Today is the fifth day of continual stock price decline.
+   Çeviri: Bugün süregelen hisse senedi fiyat düşüşünün beşinci günüdür.
+--------------------------------------------------
+120. continued [sıfat] (B2)
+   Anlam: devamlı, aralıksız, devam eden
+   Örnek: He continued to work.
+   Çeviri: O çalışmaya devam etti.
+--------------------------------------------------
+121. continuously [zarf] (C1)
+   Anlam: aralıksız, sürekli, harıl harıl
+   Örnek: It rained continuously all day.
+   Çeviri: Tüm gün sürekli yağmur yağdı.
+--------------------------------------------------
+122. convenient [sıfat] (C1)
+   Anlam: müsait, münasip, uygun
+   Örnek: It's very convenient.
+   Çeviri: Bu çok uygun.
+--------------------------------------------------
+123. conventional [sıfat] (C1)
+   Anlam: geleneksel, itibari, basmakalıp
+   Örnek: Tom isn't conventional.
+   Çeviri: Tom konvansiyonel değil.
+--------------------------------------------------
+124. convincing [sıfat] (C1)
+   Anlam: inandırıcı, ikna edici, ikna
+   Örnek: It's pretty convincing.
+   Çeviri: O oldukça inandırıcı.
+--------------------------------------------------
+125. cool [sıfat] (B1)
+   Anlam: soğutmak, serinlik, serin
+   Örnek: It's so cool.
+   Çeviri: Çok serin.
+--------------------------------------------------
+126. cooperative [sıfat] (C1)
+   Anlam: kooperatif, işbirliği, yardımcı
+   Örnek: Tom isn't cooperative.
+   Çeviri: Tom işbirlikçi değil.
+--------------------------------------------------
+127. countless [sıfat] (B2)
+   Anlam: sayısız, çok, hadsiz hesapsız
+   Örnek: Countless lives have been lost.
+   Çeviri: Pek çok hayat kayboldu.
+--------------------------------------------------
+128. crazy [sıfat] (B1)
+   Anlam: deli, çıldırmış, çılgın
+   Örnek: I'm not crazy.
+   Çeviri: Ben deli değilim!
+--------------------------------------------------
+129. creamy [sıfat] (B1)
+   Anlam: kremalı, kaymaklı, kremsi
+   Örnek: I love thick, creamy mushroom soup.
+   Çeviri: Koyu, kremalı mantar çorbası severim.
+--------------------------------------------------
+130. credible [sıfat] (B2)
+   Anlam: inandırıcı, güvenilir, inanılır
+   Örnek: Tom isn't credible.
+   Çeviri: Tom inandırıcı değil.
+--------------------------------------------------
+131. critical [sıfat] (B2)
+   Anlam: kritik, ciddi, hassas
+   Örnek: Don't be so critical.
+   Çeviri: Bu kadar eleştirici olmayın.
+--------------------------------------------------
+132. crucial [sıfat] (B2)
+   Anlam: çok önemli, kritik, önemli
+   Örnek: The context is crucial.
+   Çeviri: Bağlam önemlidir.
+--------------------------------------------------
+133. cultural [sıfat] (B2)
+   Anlam: kültürel, ekinsel
+   Örnek: It's a cultural thing.
+   Çeviri: Bu kültürel bir şey.
+--------------------------------------------------
+134. culturally [zarf] (C1)
+   Anlam: kültürel olarak
+   Örnek: The initial results proved to be remarkably culturally.
+   Çeviri: İlk sonuçların son derece kültürel olarak olduğu kanıtlandı.
+--------------------------------------------------
+135. customary [sıfat] (B2)
+   Anlam: göreneksel, alışılmış, adet olan
+   Örnek: It's customary for waiters and waitresses to introduce themselves using only their first names.
+   Çeviri: Bay ve bayan garsonların ilk isimlerini kullanarak kendilerini tanıtması gelenekseldir.
+--------------------------------------------------
+136. dangerous [sıfat] (B2)
+   Anlam: tehlikeli, çekinceli, riskli
+   Örnek: I'm not dangerous.
+   Çeviri: Ben tehlikeli değilim.
+--------------------------------------------------
+137. dark [sıfat] (B1)
+   Anlam: karanlık, koyu, belirsizlik
+   Örnek: It's so dark.
+   Çeviri: Çok karanlık.
+--------------------------------------------------
+138. dated [sıfat] (B1)
+   Anlam: tarihli, eski, tarih verilmiş
+   Örnek: It's a little dated.
+   Çeviri: O biraz demode.
+--------------------------------------------------
+139. dazzling [sıfat] (B2) | Eş Anlam: stunning, marvelous, impressive
+   Anlam: göz kamaştırıcı, baş döndürücü, baş döndüren
+   Örnek: The initial results proved to be remarkably dazzling.
+   Çeviri: İlk sonuçların son derece göz kamaştırıcı olduğu kanıtlandı.
+--------------------------------------------------
+140. decided [sıfat] (B2)
+   Anlam: kararlı, karar verilmiş, tartışmasız
+   Örnek: I decided to go.
+   Çeviri: Gitmeye karar verdim.
+--------------------------------------------------
+141. deep [sıfat] (B1)
+   Anlam: derin, deniz, derince
+   Örnek: How deep is it?
+   Çeviri: O ne kadar derindir?
+--------------------------------------------------
+142. defined [sıfat] (B2)
+   Anlam: tanımlanmış, belirtili, tamlanan
+   Örnek: Tom's muscles are well-defined.
+   Çeviri: Tom'un kasları iyi tanımlanmıştır.
+--------------------------------------------------
+143. definite [sıfat] (B2)
+   Anlam: belirli, belli, mahdut
+   Örnek: I have no definite plans.
+   Çeviri: Kesin planlarım yok.
+--------------------------------------------------
+144. definitely [zarf] (C1)
+   Anlam: kesinlikle, tamamen, elbette
+   Örnek: It's definitely Tom.
+   Çeviri: O kesinlikle Tom.
+--------------------------------------------------
+145. delayed [sıfat] (B2)
+   Anlam: rötarlı, geciktirilmiş, tehirli
+   Örnek: Our train is delayed.
+   Çeviri: Bizim tren gecikti.
+--------------------------------------------------
+146. deliberately [zarf] (C1)
+   Anlam: kasten, bilerek, kasti olarak
+   Örnek: I deliberately did that.
+   Çeviri: Onu kasıtlı olarak yaptım.
+--------------------------------------------------
+147. delicious [sıfat] (B2)
+   Anlam: nefis, leziz, lezzetli
+   Örnek: Isn't it delicious?
+   Çeviri: Bu lezzetli değil mi?
+--------------------------------------------------
+148. demonstrated [sıfat] (C1)
+   Anlam: ispat edilmiş, ispat edilen
+   Örnek: Tom demonstrated how to core an apple.
+   Çeviri: Tom elmanın göbeğini nasıl çıkaracağını gösterdi.
+--------------------------------------------------
+149. dependable [sıfat] (C1)
+   Anlam: güvenilir, güvenli, güvenilebilir
+   Örnek: Tom isn't dependable.
+   Çeviri: Tom güvenilir değil.
+--------------------------------------------------
+150. dependent [sıfat] (B2)
+   Anlam: bağımlı, bağımlı kimse, başkasına muhtaç kimse
+   Örnek: Tom is dependent on his wife.
+   Çeviri: Tom eşine bağlı.
+--------------------------------------------------
+151. desired [sıfat] (B2)
+   Anlam: geçer, arzu edilen, gerekli
+   Örnek: We all want to be desired.
+   Çeviri: Hepimiz arzulanmak istiyoruz.
+--------------------------------------------------
+152. detailed [sıfat] (B2)
+   Anlam: ayrıntılı, detaylı, ayrıntılandırılmış
+   Örnek: It's very detailed.
+   Çeviri: Bu çok ayrıntılı.
+--------------------------------------------------
+153. determined [sıfat] (C1) | Eş Anlam: persistent
+   Anlam: azimli, belirlenmiş, kararlı
+   Örnek: What a determined man!
+   Çeviri: Ne kararlı bir adam!
+--------------------------------------------------
+154. detrimental [sıfat] (C1)
+   Anlam: zararlı, muzır, zarar veren
+   Örnek: Tom's stressful job is having a detrimental effect on his health.
+   Çeviri: Tom'un stresli işi sağlığı üzerinde zararlı bir etkiye sahiptir.
+--------------------------------------------------
+155. developed [sıfat] (B2)
+   Anlam: gelişmiş, bayındırlaşmak, bayındır
+   Örnek: He developed his own theory.
+   Çeviri: O, kendi teorisini geliştirdi.
+--------------------------------------------------
+156. diagnosed [sıfat] (B2)
+   Anlam: teşhis edilmiş
+   Örnek: What was Tom diagnosed with?
+   Çeviri: Tom'a ne tanısı kondu?
+--------------------------------------------------
+157. diagnostic [sıfat] (C1)
+   Anlam: teşhis, tanısal, kontrol
+   Örnek: The initial results proved to be remarkably diagnostic.
+   Çeviri: İlk sonuçların son derece teşhis olduğu kanıtlandı.
+--------------------------------------------------
+158. dietary [sıfat] (B2)
+   Anlam: rejim kuralları, rejim yemeği, perhiz yemeği
+   Örnek: The initial results proved to be remarkably dietary.
+   Çeviri: İlk sonuçların son derece rejim kuralları olduğu kanıtlandı.
+--------------------------------------------------
+159. different [sıfat] (B2)
+   Anlam: farklı, değişik, başka
+   Örnek: I'm no different.
+   Çeviri: Farklı değilim.
+--------------------------------------------------
+160. difficult [sıfat] (B2)
+   Anlam: çetin, zor, zorlu
+   Örnek: It's so difficult.
+   Çeviri: Bu çok zor.
+--------------------------------------------------
+161. digital [sıfat] (B2)
+   Anlam: dijital, tuş, parmağa ait
+   Örnek: Can I borrow your digital camera tonight?
+   Çeviri: Bu gece senin dijital kameranı ödünç alabilir miyim?
+--------------------------------------------------
+162. diminish [sıfat] (B2) | Eş Anlam: decrease, reduce, lessen, decline
+   Anlam: azalmak, eksiltmek, hafifletmek
+   Örnek: The rights of every man are diminished when the rights of one man are threatened.
+   Çeviri: Bir insanın haklarının tehdit edildiğinde, her insanın hakları azaltılır.
+--------------------------------------------------
+163. direct [sıfat] (B1)
+   Anlam: yönlendirmek, yöneltmek, yönetmek
+   Örnek: I'll be direct.
+   Çeviri: Direkt olacağım.
+--------------------------------------------------
+164. disabled [sıfat] (B2)
+   Anlam: engelli, özürlü, etkisiz kılınmış
+   Örnek: My husband is disabled.
+   Çeviri: Kocam özürlüdür.
+--------------------------------------------------
+165. disappointed [sıfat] (C1)
+   Anlam: hayal kırıklığına uğramış, hüsrana uğramış, hayal kırıklığı uğramış
+   Örnek: I'm so disappointed.
+   Çeviri: Çok hayal kırıklığına uğradım.
+--------------------------------------------------
+166. discussed [sıfat] (B2)
+   Anlam: görüşülmüş, tartışılmış
+   Örnek: We've discussed this.
+   Çeviri: Bunu tartıştık.
+--------------------------------------------------
+167. disgusting [sıfat] (C1)
+   Anlam: tiksindirici, iğrenç, çirkef
+   Örnek: Don't be disgusting.
+   Çeviri: İğrenç olma.
+--------------------------------------------------
+168. distant [sıfat] (B2)
+   Anlam: uzakta, uzak, mesafeli
+   Örnek: That's very distant.
+   Çeviri: O çok uzak.
+--------------------------------------------------
+169. distinct [sıfat] (B2)
+   Anlam: belirgin, seçik, şüphesiz
+   Örnek: That's a distinct possibility.
+   Çeviri: Bu ayrı bir olasılık.
+--------------------------------------------------
+170. diverse [sıfat] (B2)
+   Anlam: çeşit çeşit, türlü, değişik
+   Örnek: It is an ethnically diverse school.
+   Çeviri: Bu, etnik açıdan farklı bir okul.
+--------------------------------------------------
+171. domestic [sıfat] (B2)
+   Anlam: iç, evcil, hizmetçi
+   Örnek: The horse is a domestic animal.
+   Çeviri: At evcil bir hayvandır.
+--------------------------------------------------
+172. done [sıfat] (B1)
+   Anlam: yapılmış, iyi pişmiş, olmuş
+   Örnek: I'm all done.
+   Çeviri: Tamamen bitirdim.
+--------------------------------------------------
+173. driving [sıfat] (B2)
+   Anlam: sürme, sevk, sürücü
+   Örnek: He is bad at driving.
+   Çeviri: O araba sürmede kötüdür.
+--------------------------------------------------
+174. due [sıfat] (B1)
+   Anlam: vadesi dolmuş, hak vergi, alacak
+   Örnek: Give Tom his due.
+   Çeviri: Tom'a hakkını ver.
+--------------------------------------------------
+175. dull [sıfat] (B1)
+   Anlam: donuk, sıkıcı, mat
+   Örnek: The knife is dull.
+   Çeviri: Bıçak kör.
+--------------------------------------------------
+176. early [zarf] (B1)
+   Anlam: erken, erken olan şey, erken olgunlaşan meyve ya da çiçek
+   Örnek: It's so early.
+   Çeviri: Çok erken.
+--------------------------------------------------
+177. easily [zarf] (B1)
+   Anlam: rahatlıkla, rahatça, kolayca
+   Örnek: I'm easily bored.
+   Çeviri: Kolayca sıkılırım.
+--------------------------------------------------
+178. eaten [sıfat] (B1)
+   Anlam: yenmiş, yenilmiş
+   Örnek: I haven't eaten.
+   Çeviri: Yemedim.
+--------------------------------------------------
+179. eating [sıfat] (B1)
+   Anlam: yeme, yiyim, yemek
+   Örnek: I'm eating now.
+   Çeviri: Şimdi yemek yiyorum.
+--------------------------------------------------
+180. ecologic [sıfat] (B2)
+   Anlam: ekolojik, bir çevredeki canlı organizmaların birbirine bağımlılığıyla ifade edilen
+   Örnek: The initial results proved to be remarkably ecologic.
+   Çeviri: İlk sonuçların son derece ekolojik olduğu kanıtlandı.
+--------------------------------------------------
+181. ecological [sıfat] (C1)
+   Anlam: çevre, çevrebilimsel, ekolojik
+   Örnek: The world's tropical rainforests are critical links in the ecological chain of life on the planet.
+   Çeviri: Dünyadaki tropikal yağmur ormanları, gezegende yaşamın ekolojik zincirine kritik bağlantılıdır.
+--------------------------------------------------
+182. economic [sıfat] (B2)
+   Anlam: ekonomik, iktisadi, hesaplı
+   Örnek: It doesn't make economic sense.
+   Çeviri: Ekonomik açıdan anlamsız.
+--------------------------------------------------
+183. educational [sıfat] (C1)
+   Anlam: eğitsel, eğitimsel, eğitici
+   Örnek: Tom majored in educational psychology.
+   Çeviri: Tom eğitim psikolojisi alanında eğitim aldı.
+--------------------------------------------------
+184. effective [sıfat] (B2)
+   Anlam: efektif, etkileyici, etkili
+   Örnek: It's not effective.
+   Çeviri: Bu etkili değil.
+--------------------------------------------------
+185. effectively [zarf] (C1)
+   Anlam: etkili bir şekilde, etkileyici, etkin olarak
+   Örnek: Last year, I spent so much time by myself that I almost forgot how to communicate effectively with others.
+   Çeviri: Geçen yıl tek başıma o kadar uzun bir zaman geçirdim ki diğerleriyle etkili şekilde nasıl iletişim kuracağımı neredeyse unuttum.
+--------------------------------------------------
+186. efficient [sıfat] (B2)
+   Anlam: etkili, liyakatli, verimli
+   Örnek: He's very efficient.
+   Çeviri: O çok verimlidir.
+--------------------------------------------------
+187. efficiently [zarf] (C1)
+   Anlam: yeterli olarak, verimli biçimde, etkin
+   Örnek: You have to use your time efficiently.
+   Çeviri: Vaktini verimli kullanmalısın.
+--------------------------------------------------
+188. elevated [sıfat] (B2)
+   Anlam: keyifli, yüksek, yüce
+   Örnek: The initial results proved to be remarkably elevated.
+   Çeviri: İlk sonuçların son derece keyifli olduğu kanıtlandı.
+--------------------------------------------------
+189. emotional [sıfat] (B2)
+   Anlam: dokunaklı, duygusal, hissi
+   Örnek: Don't get emotional.
+   Çeviri: Duygusallaşma.
+--------------------------------------------------
+190. endangered [sıfat] (C1)
+   Anlam: tehlikeye atılmış, tehlikede, nesli tükenmekte olan
+   Örnek: It is an endangered species.
+   Çeviri: Nesli tükenmekte olan bir türdür.
+--------------------------------------------------
+191. engaged [sıfat] (B2)
+   Anlam: bağlanmış, meşgul, nişanlı
+   Örnek: Tom isn't engaged.
+   Çeviri: Tom nişanlı değil.
+--------------------------------------------------
+192. enough [sıfat] (B1)
+   Anlam: kafi, yeterli, yeter
+   Örnek: I'm old enough.
+   Çeviri: Yeterince yaşlıyım.
+--------------------------------------------------
+193. entertained [sıfat] (C1)
+   Anlam: ağırlanmış, eğlendirilmiş, meşgul edilmiş
+   Örnek: Tom kept us entertained.
+   Çeviri: Tom bizi ağırlamaya devam etti.
+--------------------------------------------------
+194. entire [sıfat] (B1)
+   Anlam: bütün, tüm, tamam
+   Örnek: I read the entire book.
+   Çeviri: Tüm kitabı okudum.
+--------------------------------------------------
+195. entirely [zarf] (B2)
+   Anlam: tümüyle, külliyen, büsbütün
+   Örnek: Is it entirely over?
+   Çeviri: O tamamen bitti mi?
+--------------------------------------------------
+196. environmental [sıfat] (C1)
+   Anlam: çevre, çevresel, muhite ait
+   Örnek: Tom is an environmental activist.
+   Çeviri: Tom çevrecidir.
+--------------------------------------------------
+197. equal [sıfat] (B1)
+   Anlam: denk, eşit, muadili olmak
+   Örnek: All men are equal.
+   Çeviri: Bütün insanlar eşittir.
+--------------------------------------------------
+198. especially [zarf] (C1)
+   Anlam: özellikle, hele, ille
+   Örnek: It is especially hot today.
+   Çeviri: Hava bugün özellikle çok sıcak.
+--------------------------------------------------
+199. essential [sıfat] (B2)
+   Anlam: ana, esas, esaslı
+   Örnek: Food is essential to life.
+   Çeviri: Gıda yaşam için elzemdir.
+--------------------------------------------------
+200. establish [sıfat] (B2)
+   Anlam: kanıtlamak, kurmak, tesis etmek
+   Örnek: Let's establish some ground rules.
+   Çeviri: Bazı temel kurallar belirleyelim.
+--------------------------------------------------
+201. european [sıfat] (B2)
+   Anlam: avrupalı, frenk, avrupai
+   Örnek: Spain is a European country.
+   Çeviri: İspanya bir Avrupa ülkesidir.
+--------------------------------------------------
+202. even [sıfat] (B1)
+   Anlam: düzgün, düz, pürüzsüz
+   Örnek: Now we're even.
+   Çeviri: Biz şimdi çiftiz.
+--------------------------------------------------
+203. every [sıfat] (B1)
+   Anlam: her, bütün, alışılmış
+   Örnek: I cry every day.
+   Çeviri: Her gün ağlarım.
+--------------------------------------------------
+204. evident [sıfat] (B2)
+   Anlam: belli, vazıh, açık
+   Örnek: It's self-evident.
+   Çeviri: O, apaçık ortadadır.
+--------------------------------------------------
+205. evolving [sıfat] (B2)
+   Anlam: gelişmekte olan, gitgide gelişen, gitgide evrimleşen
+   Örnek: Software is constantly evolving.
+   Çeviri: Yazılım sürekli gelişiyor.
+--------------------------------------------------
+206. exceptional [sıfat] (C1)
+   Anlam: fevkalade, müstesna, istisnai
+   Örnek: I had an exceptional year.
+   Çeviri: Olağanüstü bir yıl geçirdim.
+--------------------------------------------------
+207. exceptionally [zarf] (C1)
+   Anlam: fevkalade, müstesna olarak, son derece
+   Örnek: Tom did exceptionally well.
+   Çeviri: Tom son derece iyi yaptı.
+--------------------------------------------------
+208. excessive [sıfat] (B2)
+   Anlam: haddinden fazla, aşırı, aşkın
+   Örnek: Isn't that excessive?
+   Çeviri: Aşırı değil mi?
+--------------------------------------------------
+209. executed [sıfat] (B2)
+   Anlam: asılı, yapılmış, uygulanmış
+   Örnek: Tom will be executed.
+   Çeviri: Tom asılacak.
+--------------------------------------------------
+210. exhausted [sıfat] (B2) | Eş Anlam: tired
+   Anlam: yorgun, tükenmiş, bitik
+   Örnek: I am so exhausted!
+   Çeviri: Çok yorgunum!
+--------------------------------------------------
+211. exhibited [sıfat] (B2)
+   Anlam: sergilenmiş, sergilenen
+   Örnek: He exhibited no remorse for his crime.
+   Çeviri: Suçu için hiç pişmanlık göstermedi.
+--------------------------------------------------
+212. existed [sıfat] (B2)
+   Anlam: mevcut, var olmuş, geçinmiş
+   Örnek: I didn't know it existed.
+   Çeviri: Bunun var olduğunu bilmiyordum.
+--------------------------------------------------
+213. existing [sıfat] (B2)
+   Anlam: mevcut, olma, var olma
+   Örnek: They lost faith in the existing system.
+   Çeviri: Mevcut sisteme inançlarını kaybettiler.
+--------------------------------------------------
+214. expanding [sıfat] (B2)
+   Anlam: genişleyen, tevsi, genişleme
+   Örnek: Our business is expanding.
+   Çeviri: İşimiz genişliyor.
+--------------------------------------------------
+215. expected [sıfat] (B2)
+   Anlam: beklenen, umulan, beklenilen
+   Örnek: We expected to win.
+   Çeviri: Biz kazanmayı bekliyorduk.
+--------------------------------------------------
+216. experienced [sıfat] (C1)
+   Anlam: tecrübeli, deneyimli, deneyim edilmiş
+   Örnek: He's very experienced.
+   Çeviri: O çok deneyimlidir.
+--------------------------------------------------
+217. experimental [sıfat] (C1)
+   Anlam: deneysel, tecrübi, deneyde kullanılan
+   Örnek: The initial results proved to be remarkably experimental.
+   Çeviri: İlk sonuçların son derece deneysel olduğu kanıtlandı.
+--------------------------------------------------
+218. explored [sıfat] (B2)
+   Anlam: keşfedilmiş
+   Örnek: They explored the Antarctic.
+   Çeviri: Onlar Antartika'yı araştırdı.
+--------------------------------------------------
+219. exquisite [sıfat] (B2)
+   Anlam: çok büyük, nazik, seçkin
+   Örnek: This is an exquisite little painting.
+   Çeviri: Bu enfes bir küçük tablodur.
+--------------------------------------------------
+220. extensive [sıfat] (B2)
+   Anlam: yaygın, geniş, kapsamlı
+   Örnek: The list is extensive.
+   Çeviri: Liste kapsamlıdır.
+--------------------------------------------------
+221. extra [sıfat] (B1)
+   Anlam: ekstra, ilave gazete, ilave
+   Örnek: I'll pay extra.
+   Çeviri: Fazladan ödeyeceğim.
+--------------------------------------------------
+222. extraordinary [sıfat] (C1)
+   Anlam: fevkalade, olağandışı, olağanüstü
+   Örnek: That would be extraordinary.
+   Çeviri: Bu olağanüstü olurdu.
+--------------------------------------------------
+223. extreme [sıfat] (B2)
+   Anlam: aşırı, aşırı derece, aşırılık
+   Örnek: It was too extreme.
+   Çeviri: O çok aşırıydı.
+--------------------------------------------------
+224. extremely [zarf] (B2)
+   Anlam: gayetle, feci, aşırı
+   Örnek: I'm extremely fat.
+   Çeviri: Ben son derece şişmanım.
+--------------------------------------------------
+225. faint [sıfat] (B1)
+   Anlam: bayılmak, bayılma, bitkin düşmek
+   Örnek: I'm going to faint.
+   Çeviri: Bayılacağım.
+--------------------------------------------------
+226. fair [sıfat] (B1)
+   Anlam: panayır, fuar, açık tenli
+   Örnek: I can be fair.
+   Çeviri: Adil olabilirim.
+--------------------------------------------------
+227. fairly [zarf] (B1)
+   Anlam: büsbütün, adil bir şekilde, uygunca
+   Örnek: I'm fairly busy.
+   Çeviri: Oldukça meşgulüm.
+--------------------------------------------------
+228. far [sıfat] (B1)
+   Anlam: uzak, çok fazla, uzun
+   Örnek: It's too far.
+   Çeviri: Bu çok uzak.
+--------------------------------------------------
+229. fast [sıfat] (B1)
+   Anlam: süratli, çabuk, hızlı
+   Örnek: I'm very fast.
+   Çeviri: Ben çok hızlıyım.
+--------------------------------------------------
+230. favorite [sıfat] (B2)
+   Anlam: favori, gözde, en çok beğenilen
+   Örnek: That's my favorite.
+   Çeviri: Bu benim favorim.
+--------------------------------------------------
+231. female [sıfat] (B1)
+   Anlam: kadın, dişi, kız
+   Örnek: A doe is a female deer.
+   Çeviri: Dişi geyiğe maral denir.
+--------------------------------------------------
+232. fertile [sıfat] (B2)
+   Anlam: verimli, bereketli, mümbit
+   Örnek: He has a fertile imagination.
+   Çeviri: Onun yaratıcı bir hayal gücü var.
+--------------------------------------------------
+233. final [sıfat] (B1)
+   Anlam: final, nihai, kesin
+   Örnek: My answer is final.
+   Çeviri: Cevabım nihai.
+--------------------------------------------------
+234. finished [sıfat] (B2)
+   Anlam: tamamlanmış, bitmiş, tamam
+   Örnek: I'm finished now.
+   Çeviri: Şimdi hazırım.
+--------------------------------------------------
+235. firm [sıfat] (B1)
+   Anlam: firma, sıkı, sert
+   Örnek: We must be firm.
+   Çeviri: Katı olmalıyız.
+--------------------------------------------------
+236. flowing [sıfat] (B2)
+   Anlam: seyelan, akma, akış
+   Örnek: Tears were flowing down her cheeks.
+   Çeviri: Gözyaşları onun yanaklarından süzülüyordu.
+--------------------------------------------------
+237. focused [sıfat] (B2)
+   Anlam: üzerine odaklanılmış, odaklanmış
+   Örnek: Tom isn't focused.
+   Çeviri: Tom odaklanmış değil.
+--------------------------------------------------
+238. foggy [sıfat] (B1)
+   Anlam: sisli, sersem, bulanık
+   Örnek: It's foggy today.
+   Çeviri: Bugün hava sisli.
+--------------------------------------------------
+239. following [sıfat] (B2)
+   Anlam: taraftarlar, takip etme, izleyen
+   Örnek: I'm following Tom.
+   Çeviri: Tom'u takip ediyorum.
+--------------------------------------------------
+240. forced [sıfat] (B1)
+   Anlam: zoraki, mecbur, mecburi
+   Örnek: He forced me to go.
+   Çeviri: Ben gitmek zorundaydım.
+--------------------------------------------------
+241. formerly [zarf] (B2)
+   Anlam: vaktiyle, evvel zaman, eskiden
+   Örnek: She was formerly a bank clerk.
+   Çeviri: O eskiden bir banka memuruydu.
+--------------------------------------------------
+242. fortunately [zarf] (C1)
+   Anlam: şükür ki, neyse ki, bereket versin
+   Örnek: Fortunately, I was on time.
+   Çeviri: Neyse ki zamanında oradaydım.
+--------------------------------------------------
+243. fragrant [sıfat] (B2)
+   Anlam: kokulu, hoş, rayihalı
+   Örnek: These flowers are not only beautiful but also fragrant.
+   Çeviri: Bu çiçekler sadece güzel değil fakat aynı zamanda güzel kokulu da.
+--------------------------------------------------
+244. frankly [zarf] (B2) | Eş Anlam: openly, clearly, honestly
+   Anlam: açıkça, açık söylemek gerekirse, açıkçası
+   Örnek: May I speak frankly?
+   Çeviri: Dürüstçe konuşabilir miyim?
+--------------------------------------------------
+245. free [sıfat] (B1)
+   Anlam: bağımsız, beleş, muaf
+   Örnek: I'll be free.
+   Çeviri: Özgür olacağım.
+--------------------------------------------------
+246. fresh [sıfat] (B1)
+   Anlam: taze, serinlik, dirilik
+   Örnek: I like fresh air.
+   Çeviri: Ben temiz havayı severim.
+--------------------------------------------------
+247. frightened [sıfat] (C1)
+   Anlam: ürkmüş, korkan, korkmuş
+   Örnek: I'm so frightened.
+   Çeviri: Çok korktum.
+--------------------------------------------------
+248. frightening [sıfat] (C1)
+   Anlam: korkutucu, korkulu, muhatara
+   Örnek: You're frightening me.
+   Çeviri: Sen beni korkutuyorsun.
+--------------------------------------------------
+249. fruitful [sıfat] (B2)
+   Anlam: bereketli, verimli, artağan
+   Örnek: We've had very fruitful discussions.
+   Çeviri: Çok verimli görüşmeler yaptık.
+--------------------------------------------------
+250. frustrated [sıfat] (C1)
+   Anlam: hakkı yenmiş, boşa çıkmış, boşuna didinmiş
+   Örnek: I'm not frustrated.
+   Çeviri: Hayal kırıklığına uğramış değilim.
+--------------------------------------------------
+251. full [sıfat] (B1)
+   Anlam: tok, tam, dolu
+   Örnek: I'm so full.
+   Çeviri: Ben çok tokum.
+--------------------------------------------------
+252. fully [zarf] (B1)
+   Anlam: tamamıyla, iyice, iyiden iyiye
+   Örnek: I fully support Tom.
+   Çeviri: Tom'u tamamen destekliyorum.
+--------------------------------------------------
+253. functional [sıfat] (C1)
+   Anlam: pratik, görevci, fonksiyonel
+   Örnek: These are fully functional.
+   Çeviri: Bunlar tamamen işlevseldir.
+--------------------------------------------------
+254. functioning [sıfat] (C1)
+   Anlam: çalıştırma, işleyiş, faal
+   Örnek: It's still functioning.
+   Çeviri: Hâlâ çalışıyor.
+--------------------------------------------------
+255. fundamental [sıfat] (C1)
+   Anlam: esas, asli, temel ilke
+   Örnek: That was a fundamental error.
+   Çeviri: O temel bir hataydı.
+--------------------------------------------------
+256. general [sıfat] (B2)
+   Anlam: genel, avam, komutan
+   Örnek: That's the general idea.
+   Çeviri: Bu genel bir fikir.
+--------------------------------------------------
+257. generally [zarf] (B2)
+   Anlam: genelde, genel olarak, genellikle
+   Örnek: I generally agree with Tom.
+   Çeviri: Genel olarak Tom'a katılıyorum.
+--------------------------------------------------
+258. genetic [sıfat] (B2)
+   Anlam: genetik yapı, soyaçekim, kalıtsal
+   Örnek: Genetic diversity is a good thing.
+   Çeviri: Genetik çeşitlilik güzel bir şey.
+--------------------------------------------------
+259. gently [zarf] (B1)
+   Anlam: nazikçe, kibarca, nazik bir şekilde
+   Örnek: He pushed me gently.
+   Çeviri: Nazikçe beni itti.
+--------------------------------------------------
+260. geological [sıfat] (C1)
+   Anlam: yerbilimsel, jeolojik, yerbilimine değin
+   Örnek: The initial results proved to be remarkably geological.
+   Çeviri: İlk sonuçların son derece yerbilimsel olduğu kanıtlandı.
+--------------------------------------------------
+261. geopolitical [sıfat] (C1)
+   Anlam: jeopolitik
+   Örnek: The initial results proved to be remarkably geopolitical.
+   Çeviri: İlk sonuçların son derece jeopolitik olduğu kanıtlandı.
+--------------------------------------------------
+262. gigantic [sıfat] (B2)
+   Anlam: devasa, cüsseli, çam yarması gibi
+   Örnek: She owns a gigantic house.
+   Çeviri: O, kocaman bir eve sahip.
+--------------------------------------------------
+263. global [sıfat] (B1)
+   Anlam: küresel, dünya çapında, bütün dünyayı kapsayan
+   Örnek: A global crisis is at hand.
+   Çeviri: Küresel bir kriz yakındır.
+--------------------------------------------------
+264. gloomy [sıfat] (B1)
+   Anlam: kasvetli, hüzün verici, sıkıntılı
+   Örnek: Why is Tom so gloomy?
+   Çeviri: Neden Tom çok kasvetli?
+--------------------------------------------------
+265. golden [sıfat] (B1)
+   Anlam: altın, altından, itidal
+   Örnek: What's the golden rule?
+   Çeviri: Altın kural nedir?
+--------------------------------------------------
+266. good [sıfat] (B1)
+   Anlam: güzel, hayırlı, iyi
+   Örnek: I'll be good.
+   Çeviri: İyi olacağım.
+--------------------------------------------------
+267. gradual [sıfat] (B2)
+   Anlam: kademeli, yavaş, yavaş yavaş olan
+   Örnek: The changes have been gradual.
+   Çeviri: Değişiklikler kademeliydi.
+--------------------------------------------------
+268. gradually [zarf] (B2)
+   Anlam: yavaş yavaş, gitgide, derece derece
+   Örnek: That is gradually changing.
+   Çeviri: O kademeli olarak değişiyor.
+--------------------------------------------------
+269. grave [sıfat] (B1)
+   Anlam: kabir, mezar, kazımak
+   Örnek: They dug a grave.
+   Çeviri: Onlar bir mezar kazdı.
+--------------------------------------------------
+270. gray [sıfat] (B1)
+   Anlam: ağarmak, ağartmak, gri
+   Örnek: My suit is gray.
+   Çeviri: Benim takım gri.
+--------------------------------------------------
+271. great [sıfat] (B1)
+   Anlam: mükemmel, müthiş, harika
+   Örnek: Isn't it great?
+   Çeviri: Harika değil mi?
+--------------------------------------------------
+272. growing [sıfat] (B2)
+   Anlam: gelişen, büyüyen, büyüme
+   Örnek: I'm growing up.
+   Çeviri: Ben büyüyorum.
+--------------------------------------------------
+273. grown [sıfat] (B1)
+   Anlam: büyümüş, yetişmiş, olmuş
+   Örnek: I'm a grown-up.
+   Çeviri: Ben olgunum.
+--------------------------------------------------
+274. grownup [sıfat] (B2)
+   Anlam: yetişkin
+   Örnek: Grownups are funny sometimes.
+   Çeviri: Yetişkinler bazen komiktirler.
+--------------------------------------------------
+275. half [sıfat] (B1)
+   Anlam: yarım, yarı, devre
+   Örnek: Cut it in half.
+   Çeviri: Onu ikiye kes.
+--------------------------------------------------
+276. handled [sıfat] (B2)
+   Anlam: yürütülen, kulplu, işlendi
+   Örnek: It'll be handled.
+   Çeviri: Ele alınacak.
+--------------------------------------------------
+277. happy [sıfat] (B1)
+   Anlam: sevinçli, mutlu, çakırkeyif
+   Örnek: I'm so happy.
+   Çeviri: Ben çok mutluyum.
+--------------------------------------------------
+278. hard [sıfat] (B1)
+   Anlam: çetin, sert, zahmetli
+   Örnek: It's so hard.
+   Çeviri: Çok zor.
+--------------------------------------------------
+279. having [sıfat] (B1)
+   Anlam: sahip olma, sahip olan, -li
+   Örnek: I'm having fun.
+   Çeviri: Ben eğleniyorum.
+--------------------------------------------------
+280. hazardous [sıfat] (B2)
+   Anlam: tehlikeli, riskli, şüpheli
+   Örnek: Gusty winds are making travel hazardous for high profile vehicles.
+   Çeviri: Şiddetli rüzgarlar yüksek profilli araçlar için seyahati tehlikeli yapıyorlar.
+--------------------------------------------------
+281. healthful [sıfat] (B2)
+   Anlam: sağlığa yararlı, yararlı, sıhhatli
+   Örnek: The initial results proved to be remarkably healthful.
+   Çeviri: İlk sonuçların son derece sağlığa yararlı olduğu kanıtlandı.
+--------------------------------------------------
+282. healthy [sıfat] (B2)
+   Anlam: sıhhatli, sağlıklı, sağlığa yararlı
+   Örnek: I'm not healthy.
+   Çeviri: Sağlıklı değilim.
+--------------------------------------------------
+283. helpful [sıfat] (B2)
+   Anlam: yardımsever, faydalı, yararlı
+   Örnek: I wasn't helpful.
+   Çeviri: Yararlı değildim.
+--------------------------------------------------
+284. helpless [sıfat] (B2)
+   Anlam: aciz, çaresiz, miskin
+   Örnek: I'm not helpless.
+   Çeviri: Çaresiz değilim.
+--------------------------------------------------
+285. hidden [sıfat] (B1)
+   Anlam: gizli, saklı, kapalı
+   Örnek: Where is it hidden?
+   Çeviri: Nerede gizli?
+--------------------------------------------------
+286. high [sıfat] (B1)
+   Anlam: yüksek, direnmek, öfkelenmek
+   Örnek: It's too high.
+   Çeviri: Bu çok yüksek.
+--------------------------------------------------
+287. highly [zarf] (B1)
+   Anlam: ziyadesiyle, yüksek derecede, pek çok
+   Örnek: I highly doubt it.
+   Çeviri: Bundan oldukça şüphe ediyorum.
+--------------------------------------------------
+288. historic [sıfat] (B2)
+   Anlam: tarihi, evrimsel, önemli
+   Örnek: Today is a historic day.
+   Çeviri: Bugün tarihi bir gün.
+--------------------------------------------------
+289. historical [sıfat] (C1)
+   Anlam: tarihi, tarihle ilgili, tarihsel
+   Örnek: Do you like historical novels?
+   Çeviri: Tarihsel romanlardan hoşlanıyor musun?
+--------------------------------------------------
+290. holy [sıfat] (B1)
+   Anlam: kutsal, kutsal yer, mukaddes
+   Örnek: This is holy ground.
+   Çeviri: Bu, kutsal topraktır.
+--------------------------------------------------
+291. homeless [sıfat] (B2)
+   Anlam: evsiz, evi barkı olmayan, yurtsuz
+   Örnek: I'm not homeless.
+   Çeviri: Ben evsiz değilim.
+--------------------------------------------------
+292. honestly [zarf] (B2) | Eş Anlam: frankly
+   Anlam: dürüst olarak, gerçekten, dürüst olmak gerekirse
+   Örnek: I can honestly say no.
+   Çeviri: Dürüstçe hayır diyebilirim.
+--------------------------------------------------
+293. hopeless [sıfat] (B2)
+   Anlam: umutsuz, ümitsiz, umarsız
+   Örnek: It's so hopeless.
+   Çeviri: Çok umutsuz.
+--------------------------------------------------
+294. horrible [sıfat] (B2)
+   Anlam: berbat, müthiş, kötü
+   Örnek: It was so horrible.
+   Çeviri: O çok korkunçtu.
+--------------------------------------------------
+295. horrified [sıfat] (B2)
+   Anlam: dehşete düşmüş, korkmuş, dehşete kapılmış
+   Örnek: I'm truly horrified.
+   Çeviri: Ben gerçekten dehşete kapıldım.
+--------------------------------------------------
+296. horrifying [sıfat] (C1)
+   Anlam: korkutma, korkunç, ürkünç
+   Örnek: Their news was horrifying.
+   Çeviri: Haberleri korkunçtu.
+--------------------------------------------------
+297. hot [sıfat] (B1)
+   Anlam: kızgın, ateşli, acı
+   Örnek: I'm very hot.
+   Çeviri: Çok sıcakladım.
+--------------------------------------------------
+298. huge [sıfat] (B1)
+   Anlam: iri, kocaman, devasa
+   Örnek: It'll be huge.
+   Çeviri: Büyük olacak.
+--------------------------------------------------
+299. humid [sıfat] (B1)
+   Anlam: rutubetli, nemli, yaş
+   Örnek: It's very humid.
+   Çeviri: Çok nemli.
+--------------------------------------------------
+300. ideal [sıfat] (B1)
+   Anlam: ülkü, ideal, mefkure
+   Örnek: It's not ideal.
+   Çeviri: Bu ideal değil.
+--------------------------------------------------
+301. ill [sıfat] (B1)
+   Anlam: hasta, fenalık, kötülük
+   Örnek: He's very ill.
+   Çeviri: O, çok hastadır.
+--------------------------------------------------
+302. immune [sıfat] (B1)
+   Anlam: bağışık, bağışık kimse, ayrıcalıklı
+   Örnek: I'm immune to smallpox.
+   Çeviri: Çiçek hastalığına bağışıklığım var.
+--------------------------------------------------
+303. impatient [sıfat] (B2)
+   Anlam: sabırsız, titiz, hoşgörüsüz
+   Örnek: I'm very impatient.
+   Çeviri: Ben çok sabırsızım.
+--------------------------------------------------
+304. implemented [sıfat] (C1)
+   Anlam: uygulanmış, yerine getirilmiş, azı dişli
+   Örnek: The plan was never implemented.
+   Çeviri: Plan hiç uygulanmadı.
+--------------------------------------------------
+305. important [sıfat] (B2)
+   Anlam: mühim, önemli, gururlu
+   Örnek: It isn't important.
+   Çeviri: Bu önemli değil.
+--------------------------------------------------
+306. impressive [sıfat] (C1) | Eş Anlam: dazzling
+   Anlam: etkileyici, duyguları etkileyen, çarpıcı
+   Örnek: Impressive, isn't it?
+   Çeviri: Etkileyici, değil mi?
+--------------------------------------------------
+307. incessantly [zarf] (C1)
+   Anlam: aralıksız olarak, ardı arkası kesilmeden, biteviye
+   Örnek: The initial results proved to be remarkably incessantly.
+   Çeviri: İlk sonuçların son derece aralıksız olarak olduğu kanıtlandı.
+--------------------------------------------------
+308. including [sıfat] (B2)
+   Anlam: kapsama, içerme, şamil
+   Örnek: Thanks for including me.
+   Çeviri: Beni dahil ettiğin için teşekkürler.
+--------------------------------------------------
+309. inclusive [sıfat] (B2)
+   Anlam: dahil, şümulu olan, içlemci
+   Örnek: The initial results proved to be remarkably inclusive.
+   Çeviri: İlk sonuçların son derece dahil olduğu kanıtlandı.
+--------------------------------------------------
+310. inconvenient [sıfat] (C1)
+   Anlam: zahmetli, uygunsuz, zor
+   Örnek: That'll be inconvenient.
+   Çeviri: O uygunsuz olacak.
+--------------------------------------------------
+311. increasingly [zarf] (C1)
+   Anlam: gitgide artarak, gitgide, gittikçe artarak
+   Örnek: Tom became increasingly agitated.
+   Çeviri: Tom giderek ajite oldu.
+--------------------------------------------------
+312. incurable [sıfat] (B2)
+   Anlam: tedavi edilemez kimse, amansız, çaresiz
+   Örnek: They say it's incurable.
+   Çeviri: Bunun tedavi edilemez olduğu söyleniyor.
+--------------------------------------------------
+313. independent [sıfat] (C1)
+   Anlam: bağımsız, müstakil, özgür
+   Örnek: I'm very independent.
+   Çeviri: Ben çok bağımsızım.
+--------------------------------------------------
+314. independently [zarf] (C1)
+   Anlam: başlı başına, birbirini etkilemeden, müstakilen
+   Örnek: Tom is independently wealthy.
+   Çeviri: Tom bağımsız olarak zengin.
+--------------------------------------------------
+315. indicative [sıfat] (C1)
+   Anlam: belirten, gösteren, haber kipi
+   Örnek: The initial results proved to be remarkably indicative.
+   Çeviri: İlk sonuçların son derece belirten olduğu kanıtlandı.
+--------------------------------------------------
+316. indispensable [sıfat] (C1)
+   Anlam: zaruri, zorunlu, vazgeçilmez
+   Örnek: None of us are indispensable.
+   Çeviri: Hiçbirimiz vazgeçilmez değiliz.
+--------------------------------------------------
+317. inefficient [sıfat] (C1)
+   Anlam: liyakatsiz, ehliyetsiz, zaman ve enerjiyi ekonomik bir şekilde kullanmayan
+   Örnek: I think Tom is inefficient.
+   Çeviri: Tom'un verimsiz olduğunu düşünüyorum.
+--------------------------------------------------
+318. infectious [sıfat] (C1)
+   Anlam: bulaşıcı, başkalarına kolay geçen, intani
+   Örnek: Mumps is an infectious disease.
+   Çeviri: Kabakulak bulaşıcı bir hastalıktır.
+--------------------------------------------------
+319. inflammatory [sıfat] (C1)
+   Anlam: iltihaplı, kışkırtıcı, yangılı
+   Örnek: Stop being so inflammatory.
+   Çeviri: Bu kadar kışkırtıcı olmayı bırak.
+--------------------------------------------------
+320. influential [sıfat] (C1)
+   Anlam: etkili, etkileyici, ağababa
+   Örnek: Tom is very influential.
+   Çeviri: Tom çok etkili.
+--------------------------------------------------
+321. influentially [zarf] (C1)
+   Anlam: güçlü bir şekilde, etkili bir biçimde
+   Örnek: The initial results proved to be remarkably influentially.
+   Çeviri: İlk sonuçların son derece güçlü bir şekilde olduğu kanıtlandı.
+--------------------------------------------------
+322. ingenious [sıfat] (B2)
+   Anlam: ustalık, becerikli, maharetli
+   Örnek: That's very ingenious.
+   Çeviri: Bu çok ustaca yapılmış.
+--------------------------------------------------
+323. inhabited [sıfat] (B2)
+   Anlam: meskun, iskan edilmiş, mekün
+   Örnek: The region has never been inhabited by people.
+   Çeviri: Bölgede insanlar hiç yaşamadı.
+--------------------------------------------------
+324. initial [sıfat] (B2)
+   Anlam: ilk harf, baş harf, baştaki
+   Örnek: Could you initial here?
+   Çeviri: Burayı parafe eder misin?
+--------------------------------------------------
+325. initially [zarf] (B2)
+   Anlam: başlangıçta, ilkin, baştan
+   Örnek: I initially hated it.
+   Çeviri: Başlangıçta ondan nefret ettim.
+--------------------------------------------------
+326. innovative [sıfat] (C1)
+   Anlam: yaratıcı, yenilikçi, yeniliklere açık
+   Örnek: I try to be innovative.
+   Çeviri: Yenilikçi olmaya çalışıyorum.
+--------------------------------------------------
+327. instant [sıfat] (B2)
+   Anlam: anlık, esna, dakika
+   Örnek: It changed in an instant.
+   Çeviri: Bir anda değişti.
+--------------------------------------------------
+328. insufficient [sıfat] (C1)
+   Anlam: kıt, yetersiz, yeterli değil
+   Örnek: His knowledge of geography is insufficient.
+   Çeviri: Onun coğrafya bilgisi yetersizdir.
+--------------------------------------------------
+329. intellectually [zarf] (C1)
+   Anlam: anlayarak, akıl ile, zeka ile
+   Örnek: The discussion was intellectually stimulating.
+   Çeviri: Münazara entelektüel olarak aydınlatıcıydı.
+--------------------------------------------------
+330. intense [sıfat] (B2)
+   Anlam: yoğun, gergin, istekli
+   Örnek: You're so intense.
+   Çeviri: Çok yoğunsun.
+--------------------------------------------------
+331. intensive [sıfat] (B2)
+   Anlam: yoğun, şiddetli, aşırı
+   Örnek: Tom is in intensive care.
+   Çeviri: Tom yoğun bakımda.
+--------------------------------------------------
+332. intentionally [zarf] (C1)
+   Anlam: kasten, kasıtlı olarak, taammüden
+   Örnek: Tom did that intentionally.
+   Çeviri: Tom onu kasıtlı olarak yaptı.
+--------------------------------------------------
+333. international [sıfat] (C1)
+   Anlam: devletlerarası, enternasyonal, milletlerarası
+   Örnek: Tom is an international student.
+   Çeviri: Tom uluslararası bir öğrencidir.
+--------------------------------------------------
+334. invented [sıfat] (B2)
+   Anlam: icat edilmiş, uydurmasyon, icat edilen
+   Örnek: It was invented by Tom.
+   Çeviri: Bu Tom tarafından icat edildi.
+--------------------------------------------------
+335. investigated [sıfat] (C1)
+   Anlam: soruşturulmuş, incelenmiş, araştırılmış
+   Örnek: That must be investigated.
+   Çeviri: O araştırılmalıdır.
+--------------------------------------------------
+336. involved [sıfat] (B2)
+   Anlam: ilgili, karmaşık, girift
+   Örnek: I wasn't involved.
+   Çeviri: İlişkili değildim.
+--------------------------------------------------
+337. irritable [sıfat] (B2)
+   Anlam: asabi, titiz, barut gibi
+   Örnek: They're all irritable.
+   Çeviri: Onların hepsi asabi.
+--------------------------------------------------
+338. irritated [sıfat] (B2)
+   Anlam: sinirli, sinirlendirilmiş, öfkeli
+   Örnek: Tom must be irritated.
+   Çeviri: Tom tedirgin olmalı.
+--------------------------------------------------
+339. irritating [sıfat] (C1)
+   Anlam: rahatsız etme, sinirlendirme, sinir
+   Örnek: Irritating, isn't it?
+   Çeviri: Rahatsız edici, değil mi?
+--------------------------------------------------
+340. joyful [sıfat] (B1)
+   Anlam: sevinçli, şatır, sevindirici
+   Örnek: Christmas is a joyful time.
+   Çeviri: Noel neşeli bir zamandır.
+--------------------------------------------------
+341. kind [sıfat] (B1)
+   Anlam: tür, çeşit, cins
+   Örnek: Be kind to Tom.
+   Çeviri: Tom'a karşı nazik ol.
+--------------------------------------------------
+342. kindly [zarf] (B1)
+   Anlam: merhametli, iyi, içten
+   Örnek: You will be treated kindly.
+   Çeviri: Size nazikçe davranılacak.
+--------------------------------------------------
+343. knowing [sıfat] (B2)
+   Anlam: haberdar, haberi olan, bilen
+   Örnek: It was nice knowing you.
+   Çeviri: Seninle tanışmak güzeldi.
+--------------------------------------------------
+344. known [sıfat] (B1)
+   Anlam: bilinen, bilindik, malum
+   Örnek: I should've known.
+   Çeviri: Bilmeliydim.
+--------------------------------------------------
+345. large [sıfat] (B1)
+   Anlam: iri, geniş, büyük
+   Örnek: It's too large.
+   Çeviri: O çok büyük.
+--------------------------------------------------
+346. lasting [sıfat] (B2)
+   Anlam: kalıcı, sürme, sağlam ayakkabılık kumaş
+   Örnek: First impressions are the most lasting.
+   Çeviri: İlk izlenimler en kalıcı olanlardır.
+--------------------------------------------------
+347. late [sıfat] (B1)
+   Anlam: gecikmiş, geç, her zamanki
+   Örnek: I'll be late.
+   Çeviri: Geç kalacağım.
+--------------------------------------------------
+348. latest [sıfat] (B1)
+   Anlam: son, en son, yeni
+   Örnek: What's the latest?
+   Çeviri: Son model nedir?
+--------------------------------------------------
+349. least [sıfat] (B1)
+   Anlam: en az, asgari, en önemsiz kimse
+   Örnek: I can at least try.
+   Çeviri: En azından deneyebilirim.
+--------------------------------------------------
+350. less [sıfat] (B1)
+   Anlam: daha az, eksi, daha az şey
+   Örnek: I could care less.
+   Çeviri: Hiç umurumda değil.
+--------------------------------------------------
+351. likely [zarf] (B1)
+   Anlam: büyük ihtimalle, mantıklı, geleceği parlak
+   Örnek: That's likely true.
+   Çeviri: O muhtemelen doğru.
+--------------------------------------------------
+352. limited [sıfat] (B2)
+   Anlam: kısıtlı, sınırlı, belirlenmiş
+   Örnek: My time is limited.
+   Çeviri: Zamanım sınırlı.
+--------------------------------------------------
+353. little [sıfat] (B1)
+   Anlam: ufak, az, küçük
+   Örnek: Give me a little.
+   Çeviri: Bana biraz ver.
+--------------------------------------------------
+354. living [sıfat] (B1)
+   Anlam: canlı, geçinmek, geçim
+   Örnek: He earns a living.
+   Çeviri: O, hayatını kazanıyor.
+--------------------------------------------------
+355. loaded [sıfat] (B1)
+   Anlam: yüklü, yüklenmiş, hileli
+   Örnek: I loaded the van.
+   Çeviri: Kamyoneti yükledim.
+--------------------------------------------------
+356. local [sıfat] (B1)
+   Anlam: lokal, yerel, yerli
+   Örnek: You're local, right?
+   Çeviri: Sen yerlisin, değil mi?
+--------------------------------------------------
+357. located [sıfat] (B2)
+   Anlam: tespit edilmiş, yeri tayin edilmiş, kain
+   Örnek: I've located Tom.
+   Çeviri: Tom'u buldum.
+--------------------------------------------------
+358. logical [sıfat] (B2)
+   Anlam: mantıklı, makul, mantığa uygun
+   Örnek: It's not logical.
+   Çeviri: O herhangi bir anlam ifade etmiyor.
+--------------------------------------------------
+359. losing [sıfat] (B1)
+   Anlam: kaybediş, kaybetme, zarar gören
+   Örnek: I'm losing it.
+   Çeviri: Onu kaybediyorum.
+--------------------------------------------------
+360. lost [sıfat] (B1)
+   Anlam: kayıp, kaybolmuş, kaybetmek
+   Örnek: I lost a bet.
+   Çeviri: Bir bahis kaybettim.
+--------------------------------------------------
+361. loud [sıfat] (B1)
+   Anlam: yüksek, yüksek sesle, kaba
+   Örnek: It's so loud.
+   Çeviri: Çok gürültülü.
+--------------------------------------------------
+362. luckily [zarf] (B2)
+   Anlam: çok şükür, talihine, şans eseri
+   Örnek: Luckily, I was wrong.
+   Çeviri: Neyse ki yanılmışım.
+--------------------------------------------------
+363. lunar [sıfat] (B1)
+   Anlam: ay ile ilgili, kameri, ay
+   Örnek: Lunar eclipses can be total or partial.
+   Çeviri: Ay tutulmaları tam ya da kısmi olabilir.
+--------------------------------------------------
+364. made [sıfat] (B1)
+   Anlam: yapılmış, yapmak  eyleminin ikinci hali, yapılı
+   Örnek: I made a bet.
+   Çeviri: Bir bahse girdim.
+--------------------------------------------------
+365. magic [sıfat] (B1)
+   Anlam: sihirbazlık, büyü, sihir
+   Örnek: I can do magic.
+   Çeviri: Büyü yapabilirim.
+--------------------------------------------------
+366. managing [sıfat] (B2)
+   Anlam: yönetme, idare etme, idari
+   Örnek: How are you managing?
+   Çeviri: Nasıl yönetiyorsun?
+--------------------------------------------------
+367. many [sıfat] (B1)
+   Anlam: birçok, çok, çoğu
+   Örnek: Is that too many?
+   Çeviri: Bu çok fazla mı?
+--------------------------------------------------
+368. marvelous [sıfat] (B2) | Eş Anlam: stunning, dazzling, wonderful
+   Anlam: harika, müthiş, nefis
+   Örnek: Isn't Tom marvelous?
+   Çeviri: Tom fevkalade değil mi?
+--------------------------------------------------
+369. massive [sıfat] (B2)
+   Anlam: cüsseli, iri, çok büyük
+   Örnek: The flood was massive.
+   Çeviri: Sel büyüktü.
+--------------------------------------------------
+370. material [sıfat] (B2)
+   Anlam: materyal, madde, malzeme
+   Örnek: Is this good material?
+   Çeviri: Bu iyi malzeme mi?
+--------------------------------------------------
+371. meaningless [sıfat] (C1)
+   Anlam: manasız, anlamsız, ipsiz sapsız
+   Örnek: It's totally meaningless.
+   Çeviri: Bu tamamen anlamsız.
+--------------------------------------------------
+372. medial [sıfat] (B1)
+   Anlam: ortada olan, medial, vasat
+   Örnek: The initial results proved to be remarkably medial.
+   Çeviri: İlk sonuçların son derece ortada olan olduğu kanıtlandı.
+--------------------------------------------------
+373. medic [sıfat] (B1)
+   Anlam: kabayonca, doktor, korunga
+   Örnek: I'm a medic.
+   Çeviri: Ben bir doktorum.
+--------------------------------------------------
+374. medical [sıfat] (B2)
+   Anlam: medikal, tıbbi, tıp
+   Örnek: I need medical help.
+   Çeviri: Tıbbi yardıma ihtiyacım var.
+--------------------------------------------------
+375. mental [sıfat] (B1)
+   Anlam: akli, zihinsel, ruhsal
+   Örnek: Tom has mental problems.
+   Çeviri: Tom'un zihinsel problemleri var.
+--------------------------------------------------
+376. met [sıfat] (B1)
+   Anlam: karşılaşılan
+   Örnek: I met a girl.
+   Çeviri: Bir kızla tanıştım.
+--------------------------------------------------
+377. meticulously [zarf] (C1)
+   Anlam: özenle, titizlikle, özenli biçimde
+   Örnek: The school was meticulously clean.
+   Çeviri: Okul özenle temizlendi.
+--------------------------------------------------
+378. missing [sıfat] (B2)
+   Anlam: özlem, özleme, noksan
+   Örnek: My gun's missing.
+   Çeviri: Benim silahım kayıp.
+--------------------------------------------------
+379. modern [sıfat] (B1)
+   Anlam: çağdaş, modern, modern kimse
+   Örnek: She's a modern girl.
+   Çeviri: O modern bir kızdır.
+--------------------------------------------------
+380. modernized [sıfat] (C1)
+   Anlam: modernize, modernleştirilmiş
+   Örnek: The initial results proved to be remarkably modernized.
+   Çeviri: İlk sonuçların son derece modernize olduğu kanıtlandı.
+--------------------------------------------------
+381. momentary [sıfat] (B2)
+   Anlam: bir anlık, sürekli olmayan, sadece bir an devam eden
+   Örnek: The initial results proved to be remarkably momentary.
+   Çeviri: İlk sonuçların son derece bir anlık olduğu kanıtlandı.
+--------------------------------------------------
+382. monitored [sıfat] (B2)
+   Anlam: izlenen, gözlenen
+   Örnek: The U.N. monitored the country's elections.
+   Çeviri: Birleşmiş Milletler ülkedeki seçimleri izledi.
+--------------------------------------------------
+383. monotonous [sıfat] (C1)
+   Anlam: monoton, monotonluk, yavan
+   Örnek: She says her life is monotonous.
+   Çeviri: Yaşantısının monoton olduğunu söylüyor.
+--------------------------------------------------
+384. most [sıfat] (B1)
+   Anlam: en, en çok, en fazlası
+   Örnek: I hate most people.
+   Çeviri: Çoğu insandan nefret ediyorum.
+--------------------------------------------------
+385. motionless [sıfat] (C1)
+   Anlam: hareketsiz, duruk, devinimsiz
+   Örnek: The man lay motionless.
+   Çeviri: Adam hareketsiz yatıyordu.
+--------------------------------------------------
+386. motive [sıfat] (B1)
+   Anlam: güdü, motif, motive etmek
+   Örnek: There was no motive.
+   Çeviri: Ortada bir sebep yoktu.
+--------------------------------------------------
+387. multi [sıfat] (B1)
+   Anlam: birden çok, çoklu, çok
+   Örnek: Tom is a multi-millionaire.
+   Çeviri: Tom bir multimilyoner.
+--------------------------------------------------
+388. multicultural [sıfat] (C1)
+   Anlam: multikültürel, çok kültürlü
+   Örnek: The initial results proved to be remarkably multicultural.
+   Çeviri: İlk sonuçların son derece multikültürel olduğu kanıtlandı.
+--------------------------------------------------
+389. multifunctional [sıfat] (C1)
+   Anlam: çok fonksiyonlu cihaz, çok fonksiyonlu yazıcı, multifonksiyonel peptid
+   Örnek: The initial results proved to be remarkably multifunctional.
+   Çeviri: İlk sonuçların son derece çok fonksiyonlu cihaz olduğu kanıtlandı.
+--------------------------------------------------
+390. musical [sıfat] (B2)
+   Anlam: müzikli, müziğe ait, müzikal
+   Örnek: This play is a musical.
+   Çeviri: Bu oyun bir müzikaldir.
+--------------------------------------------------
+391. mysterious [sıfat] (C1)
+   Anlam: esrarengiz, gizemli, anlaşılmaz
+   Örnek: You're so mysterious.
+   Çeviri: Çok gizemlisin.
+--------------------------------------------------
+392. mystical [sıfat] (B2)
+   Anlam: gizemli, gizemcil, esrarlı
+   Örnek: It was so mystical.
+   Çeviri: O çok gizemliydi.
+--------------------------------------------------
+393. natural [sıfat] (B2)
+   Anlam: tabii, doğuştan, natürel
+   Örnek: It isn't natural.
+   Çeviri: Doğal değil.
+--------------------------------------------------
+394. nearly [zarf] (B1)
+   Anlam: hemen hemen, neredeyse, az kaldı
+   Örnek: I'm nearly blind.
+   Çeviri: Ben neredeyse körüm.
+--------------------------------------------------
+395. necessary [sıfat] (B2)
+   Anlam: gereken, gerekli, gereken şey
+   Örnek: It isn't necessary.
+   Çeviri: Gerekli değil.
+--------------------------------------------------
+396. needed [sıfat] (B1)
+   Anlam: lazım, ihtiyaç duyulan, gerek
+   Örnek: I needed a bath.
+   Çeviri: Banyoya ihtiyacım vardı.
+--------------------------------------------------
+397. negative [sıfat] (B2)
+   Anlam: negatif, olumsuz, menetmek
+   Örnek: You're so negative.
+   Çeviri: Çok olumsuzsun.
+--------------------------------------------------
+398. new [sıfat] (B1)
+   Anlam: yeni, yeni olan şey, ilk evre
+   Örnek: I'm new here.
+   Çeviri: Ben burada yeniyim.
+--------------------------------------------------
+399. newly [zarf] (B1)
+   Anlam: yeni, yeni olarak, yakın zamanlarda
+   Örnek: Newly printed books smell good.
+   Çeviri: Yeni basılmış kitaplar güzel kokuyor.
+--------------------------------------------------
+400. next [sıfat] (B1)
+   Anlam: sonraki, bir sonra gelen şey, önümüzdeki
+   Örnek: I'll be next.
+   Çeviri: Sıradaki ben olacağım.
+--------------------------------------------------
+401. nicely [zarf] (B1)
+   Anlam: hoşça, hoş, iyi
+   Örnek: It's going nicely!
+   Çeviri: Güzel gidiyor!
+--------------------------------------------------
+402. noisy [sıfat] (B1)
+   Anlam: gürültücü, gürültülü, patırtılı
+   Örnek: Tom is too noisy.
+   Çeviri: Tom çok gürültücü.
+--------------------------------------------------
+403. normal [sıfat] (B1)
+   Anlam: olağan, normal, standart
+   Örnek: I'm not normal.
+   Çeviri: Ben normal değilim.
+--------------------------------------------------
+404. normally [zarf] (B2)
+   Anlam: normalde, normal bir şekilde, genelde
+   Örnek: I don't normally lie.
+   Çeviri: Normalde yalan söylemem.
+--------------------------------------------------
+405. notable [sıfat] (B2)
+   Anlam: göze çarpan, dikkate değer, tanınmış kimse
+   Örnek: Statues of Buddha are notable works of Japanese art.
+   Çeviri: Buda heykelleri Japon sanatının önemli eserleridirler.
+--------------------------------------------------
+406. nourishing [sıfat] (C1)
+   Anlam: besi, besleyici, besin değeri yüksek
+   Örnek: This food's not nourishing enough.
+   Çeviri: Bu yiyecek yeterince besleyici değil.
+--------------------------------------------------
+407. novel [sıfat] (B1)
+   Anlam: roman, acayip, yeni
+   Örnek: I like her novel.
+   Çeviri: Onun romanını seviyorum.
+--------------------------------------------------
+408. numerous [sıfat] (B2)
+   Anlam: sayısız, birçok, pek çok
+   Örnek: Tom broke numerous laws.
+   Çeviri: Tom sayısız kanunu çiğnedi.
+--------------------------------------------------
+409. nutritional [sıfat] (C1)
+   Anlam: beslenme ile ilgili, nutrisyonel, besin
+   Örnek: Sugary drinks have no nutritional value and contribute significantly to weight gain.
+   Çeviri: Şekerli içeceklerin hiçbir besin değeri yoktur ve kilo almaya önemli ölçüde etki ederler.
+--------------------------------------------------
+410. obligatory [sıfat] (C1)
+   Anlam: mecburi, zorunlu, vacip
+   Örnek: The initial results proved to be remarkably obligatory.
+   Çeviri: İlk sonuçların son derece mecburi olduğu kanıtlandı.
+--------------------------------------------------
+411. obscure [sıfat] (B2)
+   Anlam: saklamak, gizlemek, karartmak
+   Örnek: The meaning is still obscure to me.
+   Çeviri: Anlam benim için hâlâ anlaşılmaz.
+--------------------------------------------------
+412. observed [sıfat] (B2)
+   Anlam: gözlenmiş, gözlenen
+   Örnek: What have you observed?
+   Çeviri: Ne gözlemlediniz?
+--------------------------------------------------
+413. obtained [sıfat] (B2)
+   Anlam: elde edilen, elde edilmiş, elde edildi
+   Örnek: I obtained the painting at an auction.
+   Çeviri: Bir açık artırmada tablo satın aldım.
+--------------------------------------------------
+414. old [sıfat] (B1)
+   Anlam: eskimiş, eski, yaşlı
+   Örnek: I'm not old.
+   Çeviri: Yaşlı değilim.
+--------------------------------------------------
+415. olive [sıfat] (B1)
+   Anlam: zeytin, zeytin yeşili, zeytin rengi
+   Örnek: I like olive oil.
+   Çeviri: Zeytinyağını severim.
+--------------------------------------------------
+416. olympic [sıfat] (B2)
+   Anlam: olimpik
+   Örnek: Tom was an Olympic swimmer.
+   Çeviri: Tom bir Olimpiyat yüzücüsüydü.
+--------------------------------------------------
+417. ongoing [sıfat] (B2)
+   Anlam: süregiden, sürmekte olan, süregitmekte olan
+   Örnek: The process is ongoing.
+   Çeviri: Süreç devam ediyor.
+--------------------------------------------------
+418. openly [zarf] (B1) | Eş Anlam: clearly, frankly, candidly
+   Anlam: açıkça, resmen, açık
+   Örnek: He openly confessed his faults.
+   Çeviri: Hatalarını açıkça itiraf etti.
+--------------------------------------------------
+419. opposite [sıfat] (B2)
+   Anlam: zıt, aksi, karşıt
+   Örnek: He did the opposite.
+   Çeviri: O tersini yaptı.
+--------------------------------------------------
+420. optimal [sıfat] (B2)
+   Anlam: uygun, ideal, en uygun
+   Örnek: Finding an optimal solution will take some time.
+   Çeviri: En uygun çözümü bulmak biraz zaman alacak.
+--------------------------------------------------
+421. optimum [sıfat] (B2)
+   Anlam: en uygun durum, ideal, optimum
+   Örnek: The initial results proved to be remarkably optimum.
+   Çeviri: İlk sonuçların son derece en uygun durum olduğu kanıtlandı.
+--------------------------------------------------
+422. ordered [sıfat] (B2)
+   Anlam: sıralı, ısmarlama, düzgün
+   Örnek: I ordered a beer.
+   Çeviri: Ben bir bira ısmarladım.
+--------------------------------------------------
+423. orderly [zarf] (B2)
+   Anlam: yazıcı, hastane hademesi, emir eri
+   Örnek: The initial results proved to be remarkably orderly.
+   Çeviri: İlk sonuçların son derece yazıcı olduğu kanıtlandı.
+--------------------------------------------------
+424. organized [sıfat] (B2)
+   Anlam: teşkilatlı, organize olmuş, tertipli
+   Örnek: I wasn't organized.
+   Çeviri: Tertipli değildim.
+--------------------------------------------------
+425. outstanding [sıfat] (C1)
+   Anlam: üstün, göze çarpan, seçkin
+   Örnek: Tom did outstanding work.
+   Çeviri: Tom seçkin bir iş yaptı.
+--------------------------------------------------
+426. overall [sıfat] (B2)
+   Anlam: bir uçtan bir uca, etraflı, tüm
+   Örnek: Where can I buy overalls?
+   Çeviri: Tulumları nereden alabilirim?
+--------------------------------------------------
+427. owing [sıfat] (B1)
+   Anlam: ödenmemiş, borçlanma, borçlu
+   Örnek: The dam burst owing to the heavy rain.
+   Çeviri: Yoğun yağış sebebiyle baraj taştı.
+--------------------------------------------------
+428. parallel [sıfat] (B2)
+   Anlam: aynı doğrultuda olan, paralel, benzetmek
+   Örnek: It has no parallel.
+   Çeviri: Onun paralelliği yok.
+--------------------------------------------------
+429. particular [sıfat] (C1)
+   Anlam: özel, belirli, nokta
+   Örnek: We're very particular.
+   Çeviri: Biz çok özeliz.
+--------------------------------------------------
+430. passionately [zarf] (C1)
+   Anlam: hararetle, tutkuyla
+   Örnek: He kissed me passionately.
+   Çeviri: O beni tutkuyla öptü.
+--------------------------------------------------
+431. patient [sıfat] (B2)
+   Anlam: hasta, sabırlı, mütehammil
+   Örnek: I'll be patient.
+   Çeviri: Ben sabırlı olacağım.
+--------------------------------------------------
+432. paying [sıfat] (B1)
+   Anlam: tediye, ücret, paralı
+   Örnek: You're paying me.
+   Çeviri: Bana ödeme yapıyorsunuz.
+--------------------------------------------------
+433. perfect [sıfat] (B2)
+   Anlam: kusursuz, mükemmel, mükemmelleştirmek
+   Örnek: I'm not perfect.
+   Çeviri: Mükemmel değilim.
+--------------------------------------------------
+434. perilous [sıfat] (B2)
+   Anlam: vahim, korku, çok tehlikeli
+   Örnek: The initial results proved to be remarkably perilous.
+   Çeviri: İlk sonuçların son derece vahim olduğu kanıtlandı.
+--------------------------------------------------
+435. peripheral [sıfat] (C1)
+   Anlam: çevresel, periferik, çevre
+   Örnek: The initial results proved to be remarkably peripheral.
+   Çeviri: İlk sonuçların son derece çevresel olduğu kanıtlandı.
+--------------------------------------------------
+436. permanent [sıfat] (B2)
+   Anlam: daimi, kalıcı, perma
+   Örnek: A permanent is extra.
+   Çeviri: Süreklilik ekstra bir maliyettir.
+--------------------------------------------------
+437. persistent [sıfat] (C1) | Eş Anlam: constant, relentless, determined, tenacious
+   Anlam: ısrar eden, ısrarlı, ısrarcı
+   Örnek: Tom is very persistent.
+   Çeviri: Tom çok ısrarcı.
+--------------------------------------------------
+438. personal [sıfat] (B2)
+   Anlam: kişisel, özel, şahsi
+   Örnek: It's not personal.
+   Çeviri: Bu kişisel değil.
+--------------------------------------------------
+439. perspective [sıfat] (C1)
+   Anlam: bakış açısı, perspektif, derinlemesine inceleme yeteneği
+   Örnek: Tom has no perspective.
+   Çeviri: Tom'un perspektifi yok.
+--------------------------------------------------
+440. persuaded [sıfat] (B2)
+   Anlam: ikna edilen, ikna edilmiş
+   Örnek: I'm not persuaded.
+   Çeviri: Ben ikna edilmedim.
+--------------------------------------------------
+441. petty [sıfat] (B1)
+   Anlam: ehemmiyetsiz, cüzi, olağan
+   Örnek: I'm not petty.
+   Çeviri: Ben değersiz değilim.
+--------------------------------------------------
+442. physical [sıfat] (B2)
+   Anlam: bedensel, muayene, bedeni
+   Örnek: We never were physical.
+   Çeviri: Biz asla somut değildik.
+--------------------------------------------------
+443. physiological [sıfat] (C1)
+   Anlam: işlevbilimsel, diriksel, fizyolojik
+   Örnek: The initial results proved to be remarkably physiological.
+   Çeviri: İlk sonuçların son derece işlevbilimsel olduğu kanıtlandı.
+--------------------------------------------------
+444. pivotal [sıfat] (B2)
+   Anlam: eksensel, eksen, esas
+   Örnek: The initial results proved to be remarkably pivotal.
+   Çeviri: İlk sonuçların son derece eksensel olduğu kanıtlandı.
+--------------------------------------------------
+445. plausible [sıfat] (B2)
+   Anlam: makul, olası, akla yatkın
+   Örnek: I find it plausible.
+   Çeviri: Bunu makul buluyorum.
+--------------------------------------------------
+446. poisonous [sıfat] (B2)
+   Anlam: zehirli, kötü niyetli, ağılı
+   Örnek: That stuff is poisonous.
+   Çeviri: O şey zehirli.
+--------------------------------------------------
+447. polar [sıfat] (B1)
+   Anlam: ucay, zıt, kutup
+   Örnek: The polar bears are dying.
+   Çeviri: Kutup ayıları ölüyor.
+--------------------------------------------------
+448. politely [zarf] (B2)
+   Anlam: kibarca, nezaketle, nazikçe
+   Örnek: We'll ask politely.
+   Çeviri: Kibarca isteyeceğiz.
+--------------------------------------------------
+449. politic [sıfat] (B2)
+   Anlam: politik, basiretli, kurnaz
+   Örnek: Politics is a game.
+   Çeviri: Siyaset bir oyundur.
+--------------------------------------------------
+450. political [sıfat] (B2)
+   Anlam: politik, siyasi, siyasal
+   Örnek: I need political asylum.
+   Çeviri: Siyasi sığınmaya ihtiyacım var.
+--------------------------------------------------
+451. positive [sıfat] (B2)
+   Anlam: pozitif, artı, olumlu
+   Örnek: I'm still positive.
+   Çeviri: Hâlâ olumluyum.
+--------------------------------------------------
+452. possible [sıfat] (B2)
+   Anlam: olabilir, olanaklı, muhtemel
+   Örnek: Isn't it possible?
+   Çeviri: Mümkün değil mi?
+--------------------------------------------------
+453. potent [sıfat] (B1)
+   Anlam: cinsel gücü yüksek, inandırıcı, nüfuzlu
+   Örnek: The initial results proved to be remarkably potent.
+   Çeviri: İlk sonuçların son derece cinsel gücü yüksek olduğu kanıtlandı.
+--------------------------------------------------
+454. potential [sıfat] (B2)
+   Anlam: potansiyel, olası, güç
+   Örnek: The potential is there.
+   Çeviri: Potansiyel orada.
+--------------------------------------------------
+455. potently [zarf] (B2)
+   Anlam: yoğun bir şekilde, güçlü bir şekilde
+   Örnek: The initial results proved to be remarkably potently.
+   Çeviri: İlk sonuçların son derece yoğun bir şekilde olduğu kanıtlandı.
+--------------------------------------------------
+456. powered [sıfat] (B2)
+   Anlam: motorla tahrik edilen, tahrikli
+   Örnek: Tom owns a high-powered rifle.
+   Çeviri: Tom'un yüksek güçlü bir tüfeği var.
+--------------------------------------------------
+457. powerful [sıfat] (B2)
+   Anlam: güçlü, kuvvetli, muhteşem
+   Örnek: He has powerful arms.
+   Çeviri: Onun güçlü kolları var.
+--------------------------------------------------
+458. practical [sıfat] (B2)
+   Anlam: tatbiki, kullanışlı, pratik
+   Örnek: It's not practical.
+   Çeviri: Pratik değil.
+--------------------------------------------------
+459. precisely [zarf] (B2)
+   Anlam: açık olarak, tam, belli
+   Örnek: What precisely did you do?
+   Çeviri: Tam olarak ne yaptın?
+--------------------------------------------------
+460. prevalent [sıfat] (B2)
+   Anlam: yaygın, olagelen, etkili
+   Örnek: The problem is prevalent.
+   Çeviri: Sorun yaygındır.
+--------------------------------------------------
+461. preventing [sıfat] (C1)
+   Anlam: önleyen, engelleyen
+   Örnek: Nothing's preventing you from leaving.
+   Çeviri: Hiçbir şey sizin gitmenizi engellemiyor.
+--------------------------------------------------
+462. preventive [sıfat] (C1)
+   Anlam: önleyici, önleyici ilaç, önlem
+   Örnek: Preventive measures are much more effective than the actual treatment.
+   Çeviri: Önleyici tedbirler gerçek tedaviden çok daha etkilidir.
+--------------------------------------------------
+463. previously [zarf] (C1)
+   Anlam: önceden, daha önce, evvelce
+   Örnek: Tom dumped Mary's body into the hole he had dug previously.
+   Çeviri: Tom Mary'yi önceden kazdığı çukura indirdi.
+--------------------------------------------------
+464. probable [sıfat] (B2)
+   Anlam: olası, muhtemel, olasılı
+   Örnek: How probable is that to happen?
+   Çeviri: Onun olması ne kadar muhtemel?
+--------------------------------------------------
+465. produced [sıfat] (B2)
+   Anlam: üretmek, üretilen, üretilmiş
+   Örnek: Who produced this movie?
+   Çeviri: Bu filmi kim üretti?
+--------------------------------------------------
+466. productive [sıfat] (C1)
+   Anlam: üretken, verimli, kazançlı
+   Örnek: It wasn't productive.
+   Çeviri: Verimli değildi.
+--------------------------------------------------
+467. progressive [sıfat] (C1)
+   Anlam: ileri düşünceli kimse, müterakki, ilerleyici
+   Örnek: I'm pretty progressive.
+   Çeviri: Ben oldukça ilericiydim.
+--------------------------------------------------
+468. progressively [zarf] (C1)
+   Anlam: devamlı olarak, ilerledikçe, artan bir şekilde
+   Örnek: As the night wore on and Tom drank more and more, his jokes got progressively smuttier.
+   Çeviri: Gece ilerleyip Tom içkileri devirdikçe, esprileri de gittikçe daha müstehcenleşti.
+--------------------------------------------------
+469. prominent [sıfat] (B2)
+   Anlam: öne çıkan, çıkıntılı, önde gelen
+   Örnek: He felt ill at ease among prominent scholars.
+   Çeviri: Seçkin bilim adamları arasında huzursuz hissetti.
+--------------------------------------------------
+470. properly [zarf] (B2)
+   Anlam: uygun bir şekilde, doğru dürüst, düzgün bir şekilde
+   Örnek: I handled it properly.
+   Çeviri: Onu uygun şekilde idare ettim.
+--------------------------------------------------
+471. protective [sıfat] (C1)
+   Anlam: koruyucu, sahip çıkan, koruma
+   Örnek: He's very protective.
+   Çeviri: O çok koruyucu.
+--------------------------------------------------
+472. proven [sıfat] (B1)
+   Anlam: kanıtlanmış, kanıtlı, ispatlı
+   Örnek: It's a proven fact.
+   Çeviri: O kanıtlanmış bir gerçek.
+--------------------------------------------------
+473. psychological [sıfat] (C1)
+   Anlam: ruhbilimsel, ruhi, tinbilimsel
+   Örnek: Tom has psychological problems.
+   Çeviri: Tom'un psikolojik sorunları var.
+--------------------------------------------------
+474. punitive [sıfat] (B2)
+   Anlam: cezalandırıcı, ceza, cezayı gerektiren
+   Örnek: The initial results proved to be remarkably punitive.
+   Çeviri: İlk sonuçların son derece cezalandırıcı olduğu kanıtlandı.
+--------------------------------------------------
+475. purchasable [sıfat] (C1)
+   Anlam: alınabilir, satın alınabilir, satın alınır
+   Örnek: The initial results proved to be remarkably purchasable.
+   Çeviri: İlk sonuçların son derece alınabilir olduğu kanıtlandı.
+--------------------------------------------------
+476. purposely [zarf] (B2)
+   Anlam: kasti olarak, inadına, kasten
+   Örnek: Did you do that purposely?
+   Çeviri: Onu kasıtlı olarak mı yaptın?
+--------------------------------------------------
+477. puzzled [sıfat] (B2)
+   Anlam: şaşkın, şaşırmış, karışmış
+   Örnek: I was very puzzled.
+   Çeviri: Çok şaşkındım.
+--------------------------------------------------
+478. puzzling [sıfat] (B2)
+   Anlam: kafa karıştırıcı, muammalı, anlaşılmaz
+   Örnek: It's very puzzling.
+   Çeviri: Bu çok şaşırtıcı.
+--------------------------------------------------
+479. qualified [sıfat] (B2)
+   Anlam: nitelikli, vasıflı, kalifiye
+   Örnek: I'm fully qualified.
+   Çeviri: Tamamen vasıflıyım.
+--------------------------------------------------
+480. quick [sıfat] (B1)
+   Anlam: süratli, hızlı, çabuk
+   Örnek: I'll be quick.
+   Çeviri: Hızlı olacağım.
+--------------------------------------------------
+481. quickly [zarf] (B2)
+   Anlam: hızla, aceleyle, süratle
+   Örnek: I did it quickly.
+   Çeviri: Ben onu çabucak yaptım.
+--------------------------------------------------
+482. rainy [sıfat] (B1)
+   Anlam: yağmurlu, yağışlı
+   Örnek: It's a rainy day.
+   Çeviri: Yağmurlu bir gün.
+--------------------------------------------------
+483. rapid [sıfat] (B1)
+   Anlam: ani, hızlı, kuduruk
+   Örnek: He has made rapid progress in English.
+   Çeviri: O, İngilizcede hızlı bir gelişme yaptı.
+--------------------------------------------------
+484. rapidly [zarf] (B2)
+   Anlam: hızla, süratle, çarçabuk
+   Örnek: The fire spread rapidly.
+   Çeviri: Yangın hızla yayıldı.
+--------------------------------------------------
+485. reachable [sıfat] (B2)
+   Anlam: ulaşılabilir, erişebilir, varılabilir
+   Örnek: The initial results proved to be remarkably reachable.
+   Çeviri: İlk sonuçların son derece ulaşılabilir olduğu kanıtlandı.
+--------------------------------------------------
+486. readily [zarf] (B2)
+   Anlam: kolaylıkla, rahatlıkla, hemen anında
+   Örnek: He readily agreed to it.
+   Çeviri: O onu kolayca kabul etti.
+--------------------------------------------------
+487. ready [sıfat] (B1)
+   Anlam: hazır, hazırlamak, peşin para
+   Örnek: I'll be ready.
+   Çeviri: Hazır olacağım.
+--------------------------------------------------
+488. really [zarf] (B1)
+   Anlam: hakikaten, gerçekten, cidden
+   Örnek: I'm really mad.
+   Çeviri: Gerçekten deliyim.
+--------------------------------------------------
+489. receive [sıfat] (B2)
+   Anlam: teslim almak, almak, anlamak
+   Örnek: I receive food stamps.
+   Çeviri: Yemek pulları alıyorum.
+--------------------------------------------------
+490. recent [sıfat] (B1)
+   Anlam: son, yeni, taze
+   Örnek: Is it a recent picture?
+   Çeviri: O yeni bir resim mi?
+--------------------------------------------------
+491. recommended [sıfat] (C1)
+   Anlam: tavsiye edilmiş, tavsiye edilen, önerilen
+   Örnek: That's not recommended.
+   Çeviri: Bu tavsiye edilmez.
+--------------------------------------------------
+492. recurrent [sıfat] (B2)
+   Anlam: reküren, devirli, geri dönen
+   Örnek: The initial results proved to be remarkably recurrent.
+   Çeviri: İlk sonuçların son derece reküren olduğu kanıtlandı.
+--------------------------------------------------
+493. regional [sıfat] (B2)
+   Anlam: bölgesel, bölgesel kurum, mevzii
+   Örnek: Fried spiders are a regional delicacy in Cambodia.
+   Çeviri: Kızarmış örümcek, Kamboçya'da bölgesel bir yiyecektir.
+--------------------------------------------------
+494. regular [sıfat] (B2)
+   Anlam: müdavim, muntazam, düzenli
+   Örnek: I'm a regular.
+   Çeviri: Ben düzenliyim.
+--------------------------------------------------
+495. regularly [zarf] (B2)
+   Anlam: düzenli olarak, sürekli, devamlı olarak
+   Örnek: We use it regularly.
+   Çeviri: Biz bunu düzenli olarak kullanırız.
+--------------------------------------------------
+496. relaxed [sıfat] (B2)
+   Anlam: rahatlamış, gevşemiş, rahat
+   Örnek: I'm very relaxed.
+   Çeviri: Çok rahatım.
+--------------------------------------------------
+497. relaxing [sıfat] (B2)
+   Anlam: dinlendirici, rahatlatıcı, gevşetici
+   Örnek: I'm still relaxing.
+   Çeviri: Ben hâlâ dinleniyorum.
+--------------------------------------------------
+498. reliable [sıfat] (B2)
+   Anlam: güvenilir, itimat edilir, güven telkin eden
+   Örnek: Tom isn't reliable.
+   Çeviri: Tom güvenilir değil.
+--------------------------------------------------
+499. religious [sıfat] (B2)
+   Anlam: dinsel, dini, dindar
+   Örnek: I'm not religious.
+   Çeviri: Ben dindar değilim.
+--------------------------------------------------
+500. remarkable [sıfat] (C1)
+   Anlam: dikkat çekici, göze çarpan, dikkate değer
+   Örnek: Isn't it remarkable?
+   Çeviri: Bu dikkat çekici değil mi?
+--------------------------------------------------
+501. remote [sıfat] (B1)
+   Anlam: uzak, naklen yayın, uzakta olan şey
+   Örnek: Hand me the remote.
+   Çeviri: Bana uzaktan kumandayı uzat.
+--------------------------------------------------
+502. renewable [sıfat] (B2)
+   Anlam: yenilenebilir, temdit edilebilir, uzatılabilir
+   Örnek: We must develop renewable energy sources.
+   Çeviri: Yenilenebilir enerji kaynaklarımızı geliştirmeliyiz.
+--------------------------------------------------
+503. repetitious [sıfat] (C1)
+   Anlam: tekrarlayan, tekrarlayıp duran, tekrarlarla dolu
+   Örnek: The initial results proved to be remarkably repetitious.
+   Çeviri: İlk sonuçların son derece tekrarlayan olduğu kanıtlandı.
+--------------------------------------------------
+504. repetitive [sıfat] (C1)
+   Anlam: tekrarlayıp duran, tekrarlı, tekrarlanan
+   Örnek: His work is repetitive.
+   Çeviri: Onun işi tekrarlı.
+--------------------------------------------------
+505. reply [zarf] (B1)
+   Anlam: yanıtlamak, cevap, yanıt
+   Örnek: I didn't reply.
+   Çeviri: Cevap vermedim.
+--------------------------------------------------
+506. reported [sıfat] (B2)
+   Anlam: rapor edilmiş, rapor edilen
+   Örnek: Has Tom reported it?
+   Çeviri: Tom bunu rapor etti mi?
+--------------------------------------------------
+507. required [sıfat] (B2)
+   Anlam: gerekli, lazım, lüzumlu
+   Örnek: A permit is required.
+   Çeviri: Bir izin gereklidir.
+--------------------------------------------------
+508. requisite [sıfat] (B2)
+   Anlam: zorunlu, gerekli şey, gereç
+   Örnek: The initial results proved to be remarkably requisite.
+   Çeviri: İlk sonuçların son derece zorunlu olduğu kanıtlandı.
+--------------------------------------------------
+509. responsible [sıfat] (C1)
+   Anlam: mesul, sorumlu, yükümlü
+   Örnek: I'll be responsible.
+   Çeviri: Sorumlu olacağım.
+--------------------------------------------------
+510. restricted [sıfat] (C1)
+   Anlam: sınırlı, kısıtlı, gizli
+   Örnek: This is a restricted area.
+   Çeviri: Bu yasak bir alandır.
+--------------------------------------------------
+511. retired [sıfat] (B2) | Eş Anlam: former, emeritus
+   Anlam: emekli, kuytu, münzevi
+   Örnek: I'm now retired.
+   Çeviri: Ben şimdi emekliyim.
+--------------------------------------------------
+512. retributive [sıfat] (C1)
+   Anlam: intikamcı, kinci, cezalandırıcı
+   Örnek: The initial results proved to be remarkably retributive.
+   Çeviri: İlk sonuçların son derece intikamcı olduğu kanıtlandı.
+--------------------------------------------------
+513. right [sıfat] (B1)
+   Anlam: sağ, hak, haklı
+   Örnek: I'm all right.
+   Çeviri: Ben iyiyim.
+--------------------------------------------------
+514. risky [sıfat] (B1)
+   Anlam: riskli, sakat, terbiyesiz
+   Örnek: It'll be risky.
+   Çeviri: Riskli olacak.
+--------------------------------------------------
+515. rival [sıfat] (B1)
+   Anlam: rakip, ... kadar ... olmak, çekişmek
+   Örnek: I'm Tom's rival.
+   Çeviri: Tom'un rakibiyim.
+--------------------------------------------------
+516. robust [sıfat] (B1)
+   Anlam: güçlü, dirençli, çetin
+   Örnek: He has a robust constitution.
+   Çeviri: Onun sağlam bir yapısı var.
+--------------------------------------------------
+517. rough [sıfat] (B1)
+   Anlam: kaba saba, kaba, sert
+   Örnek: The sea is rough.
+   Çeviri: Deniz haşindir.
+--------------------------------------------------
+518. roughly [zarf] (B2)
+   Anlam: yaklaşık olarak, tahminen, kabaca
+   Örnek: I'm roughly the same age as Tom.
+   Çeviri: Ben aşağı yukarı Tom'la aynı yaştayım.
+--------------------------------------------------
+519. running [sıfat] (B2)
+   Anlam: çalışma, işletme, koşma
+   Örnek: I'm running late.
+   Çeviri: Geç kalıyorum.
+--------------------------------------------------
+520. rural [sıfat] (B1)
+   Anlam: kırsal, taşra, köye ait
+   Örnek: I live in a rural area.
+   Çeviri: Kırsal bir alanda yaşıyorum.
+--------------------------------------------------
+521. said [sıfat] (B1)
+   Anlam: söz konusu, adı geçen, söylenmiş
+   Örnek: I said I'd go.
+   Çeviri: Gideceğimi söyledim.
+--------------------------------------------------
+522. scared [sıfat] (B1)
+   Anlam: korkmuş
+   Örnek: I'm so scared.
+   Çeviri: Çok korkuyorum.
+--------------------------------------------------
+523. scary [sıfat] (B1)
+   Anlam: ürkütücü, korkunç, korkutucu
+   Örnek: Isn't it scary?
+   Çeviri: O korkutucu değil mi?
+--------------------------------------------------
+524. scholarly [zarf] (B2)
+   Anlam: ilmi, bilgili, bilimsel
+   Örnek: The initial results proved to be remarkably scholarly.
+   Çeviri: İlk sonuçların son derece ilmi olduğu kanıtlandı.
+--------------------------------------------------
+525. scientific [sıfat] (C1)
+   Anlam: ilmi, bilimsel, fenni
+   Örnek: Is that a scientific fact?
+   Çeviri: O bilimsel bir gerçek mi?
+--------------------------------------------------
+526. seasoned [sıfat] (B2)
+   Anlam: lezzet verilmiş, baharatlı, deneyimli
+   Örnek: Tom isn't a seasoned performer.
+   Çeviri: Tom deneyimli bir oyuncu değildir.
+--------------------------------------------------
+527. secret [sıfat] (B1)
+   Anlam: sır, gizli, gizem
+   Örnek: It's a secret.
+   Çeviri: O bir sır.
+--------------------------------------------------
+528. sedative [sıfat] (B2)
+   Anlam: yatıştırıcı, yatıştırıcı ilaç, teskin edici
+   Örnek: I gave Tom a sedative.
+   Çeviri: Tom'a bir yatıştırıcı verdim.
+--------------------------------------------------
+529. sedentary [sıfat] (B2)
+   Anlam: oturarak yapılan, sakin, sedanter
+   Örnek: The initial results proved to be remarkably sedentary.
+   Çeviri: İlk sonuçların son derece oturarak yapılan olduğu kanıtlandı.
+--------------------------------------------------
+530. seen [sıfat] (B1)
+   Anlam: görülen
+   Örnek: I've seen it.
+   Çeviri: Onu gördüm.
+--------------------------------------------------
+531. select [sıfat] (B1)
+   Anlam: seçmek, ayıklamak, elemek
+   Örnek: These are select peaches.
+   Çeviri: Bunlar seçilmiş şeftaliler.
+--------------------------------------------------
+532. sensible [sıfat] (B2)
+   Anlam: mantıklı, akla uygun, halden anlayan
+   Örnek: I'm being sensible.
+   Çeviri: Mantıklı oluyorum.
+--------------------------------------------------
+533. sensitive [sıfat] (B2) | Eş Anlam: delicate
+   Anlam: içli, hassas, duyarlı
+   Örnek: He is too sensitive.
+   Çeviri: O, çok duyarlıdır.
+--------------------------------------------------
+534. sensual [sıfat] (B2)
+   Anlam: duygusal, şehvetli, kösnül
+   Örnek: The initial results proved to be remarkably sensual.
+   Çeviri: İlk sonuçların son derece duygusal olduğu kanıtlandı.
+--------------------------------------------------
+535. sentimental [sıfat] (C1)
+   Anlam: duygusal, içli, hassas
+   Örnek: Don't get sentimental.
+   Çeviri: Duygusal olma.
+--------------------------------------------------
+536. serious [sıfat] (B2)
+   Anlam: ciddi, ağır, ağırbaşlı
+   Örnek: I'm not serious.
+   Çeviri: Ciddi değilim.
+--------------------------------------------------
+537. several [sıfat] (B2)
+   Anlam: birçok, çeşitli, ayrı
+   Örnek: I have several caps.
+   Çeviri: Birkaç şapkam var.
+--------------------------------------------------
+538. severe [sıfat] (B1)
+   Anlam: haşin, sert, şiddetli
+   Örnek: Tom is in severe pain.
+   Çeviri: Tom şiddetli ağrı içinde.
+--------------------------------------------------
+539. shallow [sıfat] (B2)
+   Anlam: sığ, sığlaşmak, düzlemek
+   Örnek: You're so shallow.
+   Çeviri: Sen çok sığsın.
+--------------------------------------------------
+540. short [sıfat] (B1)
+   Anlam: az, alçak, kısa
+   Örnek: I'm not short.
+   Çeviri: Ben kısa değilim.
+--------------------------------------------------
+541. shown [sıfat] (B1)
+   Anlam: gösterilen
+   Örnek: Tom hasn't shown up yet.
+   Çeviri: Tom henüz görünmedi.
+--------------------------------------------------
+542. sick [sıfat] (B1)
+   Anlam: hasta, yakalatmak, kusmak
+   Örnek: I am so sick.
+   Çeviri: Çok hastayım.
+--------------------------------------------------
+543. significant [sıfat] (C1)
+   Anlam: dikkate değer, kayda değer, belirli
+   Örnek: Why is that significant?
+   Çeviri: O neden önemli?
+--------------------------------------------------
+544. significantly [zarf] (C1)
+   Anlam: önemli ölçüde, anlamlı, önemli
+   Örnek: It shocked me significantly.
+   Çeviri: O beni önemli ölçüde şaşırttı.
+--------------------------------------------------
+545. simple [sıfat] (B1)
+   Anlam: sade, yalın, basit
+   Örnek: It's so simple.
+   Çeviri: Çok basit.
+--------------------------------------------------
+546. simply [zarf] (B1)
+   Anlam: basit bir şekilde, basitçe, bayağı
+   Örnek: I'm simply looking.
+   Çeviri: Sadece bakıyorum.
+--------------------------------------------------
+547. single [sıfat] (B1)
+   Anlam: bekar, tek, ayırmak
+   Örnek: I'm a single mom.
+   Çeviri: Ben tek bir anneyim.
+--------------------------------------------------
+548. smartly [zarf] (B2)
+   Anlam: ustalıkla, zekice, sert/sıkı bir şekilde
+   Örnek: She's smartly dressed.
+   Çeviri: O, şık bir şekilde giyinmişti.
+--------------------------------------------------
+549. snowy [sıfat] (B1)
+   Anlam: karlı, bembeyaz, yağışlı
+   Örnek: My grandfather has snowy white hair.
+   Çeviri: Büyükbabamın kar beyazı saçı var.
+--------------------------------------------------
+550. social [sıfat] (B1)
+   Anlam: sosyal, sokulgan, toplumsal
+   Örnek: I'm a social worker.
+   Çeviri: Ben bir sosyal hizmet görevlisiyim.
+--------------------------------------------------
+551. societal [sıfat] (B2)
+   Anlam: toplumsal
+   Örnek: The initial results proved to be remarkably societal.
+   Çeviri: İlk sonuçların son derece toplumsal olduğu kanıtlandı.
+--------------------------------------------------
+552. solar [sıfat] (B1)
+   Anlam: güneş, güneşsel, güneşle ilgili
+   Örnek: It uses solar power.
+   Çeviri: O, güneş enerjisi kullanır.
+--------------------------------------------------
+553. somatic [sıfat] (B2)
+   Anlam: somatik, bedeni, tensel
+   Örnek: The initial results proved to be remarkably somatic.
+   Çeviri: İlk sonuçların son derece somatik olduğu kanıtlandı.
+--------------------------------------------------
+554. some [sıfat] (B1)
+   Anlam: biraz, bazı, birkaç
+   Örnek: I'll get some.
+   Çeviri: Biraz alacağım.
+--------------------------------------------------
+555. sound [sıfat] (B1)
+   Anlam: ses, söylemek, derine dalmak
+   Örnek: I heard a sound.
+   Çeviri: Bir ses duydum.
+--------------------------------------------------
+556. sour [sıfat] (B1)
+   Anlam: ekşi, zehir olmak, bozulmak
+   Örnek: The milk is sour.
+   Çeviri: Süt ekşi.
+--------------------------------------------------
+557. spare [sıfat] (B1)
+   Anlam: kıymamak, ayırmak, boş
+   Örnek: I have a spare key.
+   Çeviri: Yedek anahtarım var.
+--------------------------------------------------
+558. special [sıfat] (B2)
+   Anlam: özel, özel bir program, yemek
+   Örnek: I'm not special.
+   Çeviri: Ben özel değilim.
+--------------------------------------------------
+559. specific [sıfat] (B2)
+   Anlam: belirli, özgül, özel
+   Örnek: He has no specific aim.
+   Çeviri: Özel bir amacı yok.
+--------------------------------------------------
+560. specified [sıfat] (B2)
+   Anlam: belirlenmiş, belirtilmiş, belirtilen
+   Örnek: The initial results proved to be remarkably specified.
+   Çeviri: İlk sonuçların son derece belirlenmiş olduğu kanıtlandı.
+--------------------------------------------------
+561. spiced [sıfat] (B1)
+   Anlam: baharlı, baharatlı, baharatlanmış
+   Örnek: The initial results proved to be remarkably spiced.
+   Çeviri: İlk sonuçların son derece baharlı olduğu kanıtlandı.
+--------------------------------------------------
+562. spicy [sıfat] (B1)
+   Anlam: baharatlı, şık, hoş
+   Örnek: Is it too spicy?
+   Çeviri: Çok baharatlı mı?
+--------------------------------------------------
+563. spoiled [sıfat] (B2)
+   Anlam: şımarık, el bebek gül bebek, acımış
+   Örnek: I guess I'm spoiled.
+   Çeviri: Şımarık olduğumu düşünüyorum.
+--------------------------------------------------
+564. sporting [sıfat] (B2)
+   Anlam: spor, av, avcılık
+   Örnek: They sell sporting goods.
+   Çeviri: Onlar spor malzemeleri satıyorlar.
+--------------------------------------------------
+565. stable [sıfat] (B1)
+   Anlam: ahır, istikrarlı, durağan
+   Örnek: Tom isn't stable.
+   Çeviri: Tom istikrarlı değil.
+--------------------------------------------------
+566. started [sıfat] (B2)
+   Anlam: başlatılan, başlamış, başlatılmış
+   Örnek: I started to cry.
+   Çeviri: Ağlamaya başladım.
+--------------------------------------------------
+567. steadily [zarf] (B2)
+   Anlam: durmadan, sabit şekilde, boyuna
+   Örnek: The economy steadily worsened.
+   Çeviri: Ekonomi giderek kötüleşti.
+--------------------------------------------------
+568. steady [sıfat] (B1)
+   Anlam: sabit durum, istikrarlı, oynamaz
+   Örnek: We were going steady.
+   Çeviri: Biz sürekli gidiyorduk.
+--------------------------------------------------
+569. stolen [sıfat] (B1)
+   Anlam: çalınan, çalıntı, çalınmış
+   Örnek: It's been stolen.
+   Çeviri: O çalındı.
+--------------------------------------------------
+570. stormy [sıfat] (B1)
+   Anlam: fırtınalı, heyecanlı, çekişmeli
+   Örnek: It was a dark and stormy night.
+   Çeviri: Karanlık ve fırtınalı bir geceydi.
+--------------------------------------------------
+571. striking [sıfat] (B2)
+   Anlam: çarpıcı, vurma, geçici desteklerin alınması
+   Örnek: The workers are striking.
+   Çeviri: İşçiler grev yapıyorlar.
+--------------------------------------------------
+572. strong [sıfat] (B1)
+   Anlam: güçlü, kuvvetli, domuz gibi
+   Örnek: I'm not strong.
+   Çeviri: Güçlü değilim.
+--------------------------------------------------
+573. stunning [sıfat] (B2) | Eş Anlam: marvelous, dazzling, breathtaking, magnificent
+   Anlam: sersemletme, çekici, müstesna
+   Örnek: Isn't it stunning?
+   Çeviri: Çekici değil mi?
+--------------------------------------------------
+574. substantial [sıfat] (C1)
+   Anlam: varlıklı, önemli, azımsanmayacak
+   Örnek: The difference is substantial.
+   Çeviri: Fark önemlidir.
+--------------------------------------------------
+575. successful [sıfat] (C1)
+   Anlam: başarılı, başarıya ulaşan şey, muvaffak
+   Örnek: I'm very successful.
+   Çeviri: Çok başarılıyım.
+--------------------------------------------------
+576. such [sıfat] (B1)
+   Anlam: çok, böylesine, bu gibi
+   Örnek: I'm such a klutz.
+   Çeviri: Sakar Şakir'in tekiyim.
+--------------------------------------------------
+577. sudden [sıfat] (B1)
+   Anlam: ani, ansızın olan, apansız
+   Örnek: He felt a sudden pain.
+   Çeviri: O, ani bir ağrı hissetti.
+--------------------------------------------------
+578. sufficient [sıfat] (C1)
+   Anlam: kafi, yeterli, elverişli
+   Örnek: It wasn't sufficient.
+   Çeviri: O yeterli değildi.
+--------------------------------------------------
+579. suitable [sıfat] (B2)
+   Anlam: münasip, uygun, elverişli
+   Örnek: Would that be suitable?
+   Çeviri: Uygun olur muydu?
+--------------------------------------------------
+580. sunny [sıfat] (B1)
+   Anlam: güneşli, günlük güneşlik, neşeli
+   Örnek: It'll be sunny.
+   Çeviri: Güneşli olacak.
+--------------------------------------------------
+581. supply [zarf] (B1)
+   Anlam: tedarik etmek, sağlamak, tedarik
+   Örnek: Cows supply us with milk.
+   Çeviri: İnekler bize süt sağlar.
+--------------------------------------------------
+582. surgical [sıfat] (B2)
+   Anlam: cerrahi, ameliyatlarda kullanılan, ameliyatla yapılan
+   Örnek: How common are surgical errors?
+   Çeviri: Cerrahi hatalar ne kadar yaygındır?
+--------------------------------------------------
+583. surprised [sıfat] (B2)
+   Anlam: şaşırmış, hayret etmiş, şaşmış
+   Örnek: I'm not surprised.
+   Çeviri: Ben şaşırmadım.
+--------------------------------------------------
+584. surprising [sıfat] (C1)
+   Anlam: şaşırtıcı, şaşılası, hayret verici
+   Örnek: It's not surprising.
+   Çeviri: O şaşırtıcı değil.
+--------------------------------------------------
+585. surrounding [sıfat] (C1)
+   Anlam: çevre, sarma, kuşatma
+   Örnek: They're surrounding us.
+   Çeviri: Onlar bizi kuşatıyor.
+--------------------------------------------------
+586. survival [sıfat] (B2)
+   Anlam: hayatta kalma, kalıntı, daha uzun yaşama
+   Örnek: It's a matter of survival.
+   Çeviri: Bu bir ölüm kalım meselesi.
+--------------------------------------------------
+587. survive [sıfat] (B2)
+   Anlam: uzun yaşamak, baki kalmak, daha uzun yaşamak
+   Örnek: I hope I survive.
+   Çeviri: Umarım hayatta kalırım.
+--------------------------------------------------
+588. susceptible [sıfat] (C1) | Eş Anlam: vulnerable
+   Anlam: duyarlı, duygulu, duygularına kolaylıkla kapılan
+   Örnek: She was susceptible to colds.
+   Çeviri: O, soğuk algınlığına duyarlıydı.
+--------------------------------------------------
+589. swift [sıfat] (B1)
+   Anlam: süratli, kara sağan, kılıç kırlangıcı
+   Örnek: The stream is not very swift.
+   Çeviri: Dere çok hızlı değil.
+--------------------------------------------------
+590. swiftly [zarf] (B2)
+   Anlam: süratle, hızla, fişek gibi
+   Örnek: His fingers ran swiftly over the keys.
+   Çeviri: Parmakları klavyenin üzerinde hızla hareket etti.
+--------------------------------------------------
+591. systematically [zarf] (C1)
+   Anlam: sistematik olarak, sistemli olarak
+   Örnek: Her sewing basket, dresser drawers and pantry shelves are all systematically arranged in apple-pie order.
+   Çeviri: Onun dikiş sepeti, şifonyer çekmeceleri ve külotlu çorap rafları hepsi sistemli olarak yerli yerinde düzenlenir.
+--------------------------------------------------
+592. systemic [sıfat] (B2)
+   Anlam: vücuda ait, sistemik, dizgesel
+   Örnek: The initial results proved to be remarkably systemic.
+   Çeviri: İlk sonuçların son derece vücuda ait olduğu kanıtlandı.
+--------------------------------------------------
+593. tedious [sıfat] (B2)
+   Anlam: sıkıcı, bıktırıcı, meşakkatli
+   Örnek: It can be tedious.
+   Çeviri: O sıkıcı olabilir.
+--------------------------------------------------
+594. teenage [sıfat] (B2)
+   Anlam: 13 19 yaş arası, on üç ile on dokuz yaşlar arasındaki devreye ait, gençlere ait
+   Örnek: I have two teenage sons.
+   Çeviri: İki tane ergen oğlum var.
+--------------------------------------------------
+595. tentative [sıfat] (B2)
+   Anlam: deneme ve tecrübe nevinden, geçici/belirsiz, geçici girişim
+   Örnek: All dates are tentative.
+   Çeviri: Tüm tarihler geçicidir.
+--------------------------------------------------
+596. terrible [sıfat] (B2)
+   Anlam: berbat, korkunç, berbat kimse
+   Örnek: It was so terrible.
+   Çeviri: O çok korkunçtu.
+--------------------------------------------------
+597. territorial [sıfat] (C1)
+   Anlam: gönüllü asker, kara, belirli bir bölgeye ait
+   Örnek: The initial results proved to be remarkably territorial.
+   Çeviri: İlk sonuçların son derece gönüllü asker olduğu kanıtlandı.
+--------------------------------------------------
+598. that [sıfat] (B1)
+   Anlam: şu, o, oradaki
+   Örnek: I'd do that.
+   Çeviri: Ben bunu yapardım.
+--------------------------------------------------
+599. these [sıfat] (B1)
+   Anlam: böyle bir miktarda, bunlar
+   Örnek: I'll get these.
+   Çeviri: Bunları alacağım.
+--------------------------------------------------
+600. thrive [sıfat] (B1) | Eş Anlam: flourish, prosper, succeed
+   Anlam: thrived/throve - thrived/thriven, serpilmek, gelişmek
+   Örnek: The initial results proved to be remarkably thrive.
+   Çeviri: İlk sonuçların son derece thrived/throve - thrived/thriven olduğu kanıtlandı.
+--------------------------------------------------
+601. thriving [sıfat] (B2)
+   Anlam: kuvvetli, büyüyen, mamur
+   Örnek: The initial results proved to be remarkably thriving.
+   Çeviri: İlk sonuçların son derece kuvvetli olduğu kanıtlandı.
+--------------------------------------------------
+602. tidy [sıfat] (B1)
+   Anlam: düzenli, derli toplu, temizlemek
+   Örnek: Tom isn't tidy.
+   Çeviri: Tom düzenli değildir.
+--------------------------------------------------
+603. tiny [sıfat] (B1)
+   Anlam: mini mini, ufacık, minicik
+   Örnek: My house is tiny.
+   Çeviri: Benim evim küçücük.
+--------------------------------------------------
+604. tired [sıfat] (B1) | Eş Anlam: exhausted, weary, fatigued
+   Anlam: argın, yorgun, yorgun düşmüş
+   Örnek: I'm so tired!
+   Çeviri: Öyle yorgunum ki!
+--------------------------------------------------
+605. tirelessly [zarf] (C1)
+   Anlam: yorgunluk nedir bilmeden, hiç yorulmaksızın, usanmadan
+   Örnek: The initial results proved to be remarkably tirelessly.
+   Çeviri: İlk sonuçların son derece yorgunluk nedir bilmeden olduğu kanıtlandı.
+--------------------------------------------------
+606. tiring [sıfat] (B1)
+   Anlam: yorucu, eziyetli, yorulmuş
+   Örnek: It's a tiring job.
+   Çeviri: Bu yorucu bir iş.
+--------------------------------------------------
+607. topic [sıfat] (B1)
+   Anlam: konu, başlık, bahis
+   Örnek: What's the topic?
+   Çeviri: Konu nedir?
+--------------------------------------------------
+608. torn [sıfat] (B1)
+   Anlam: yırtık, kopuk, ayrılmış
+   Örnek: Her dress was torn.
+   Çeviri: Elbisesinin yırtıktı.
+--------------------------------------------------
+609. total [sıfat] (B1)
+   Anlam: toplam, tutar, bulmak
+   Örnek: What's the total?
+   Çeviri: Toplam nedir?
+--------------------------------------------------
+610. totally [zarf] (B2)
+   Anlam: bütünüyle, tamamen, tamamıyla
+   Örnek: I'm totally free.
+   Çeviri: Tamamen özgürüm.
+--------------------------------------------------
+611. touching [sıfat] (B2)
+   Anlam: dokunaklı, acıklı, yanık
+   Örnek: You're touching me.
+   Çeviri: Bana dokunuyorsun.
+--------------------------------------------------
+612. tough [sıfat] (B1)
+   Anlam: zorlu, çetin, zor
+   Örnek: I'm not tough.
+   Çeviri: Sert değilim.
+--------------------------------------------------
+613. toxic [sıfat] (B1)
+   Anlam: zehirli, toksik, çok zararlı
+   Örnek: Lead is a toxic metal.
+   Çeviri: Kurşun toksik bir metaldir.
+--------------------------------------------------
+614. traditional [sıfat] (C1)
+   Anlam: geleneksel, ananevi, göreneksel
+   Örnek: Sing me a traditional song.
+   Çeviri: Bana geleneksel bir şarkı söyle.
+--------------------------------------------------
+615. transforming [sıfat] (C1)
+   Anlam: dönüştürücü, dönüşmekte olan, dönüşen
+   Örnek: The initial results proved to be remarkably transforming.
+   Çeviri: İlk sonuçların son derece dönüştürücü olduğu kanıtlandı.
+--------------------------------------------------
+616. transnational [sıfat] (C1)
+   Anlam: uluslaraşırı, transnasyonal, uluslararası
+   Örnek: The initial results proved to be remarkably transnational.
+   Çeviri: İlk sonuçların son derece uluslaraşırı olduğu kanıtlandı.
+--------------------------------------------------
+617. treated [sıfat] (B2)
+   Anlam: işlem görmüş, arıtılmış, davranılmış
+   Örnek: He treated me badly.
+   Çeviri: O bana kötü davrandı.
+--------------------------------------------------
+618. trial [sıfat] (B1)
+   Anlam: yargılama, duruşma, deneme
+   Örnek: There was a trial.
+   Çeviri: Bir duruşma vardı.
+--------------------------------------------------
+619. tried [sıfat] (B1)
+   Anlam: mücerrep, saf, sınanmış
+   Örnek: I've tried it.
+   Çeviri: Onu denedim.
+--------------------------------------------------
+620. triggered [sıfat] (B2)
+   Anlam: tetiklenmiş, ateşlenmiş, tetikli
+   Örnek: What triggered the sensor?
+   Çeviri: Sensörü ne tetikledi?
+--------------------------------------------------
+621. trustworthy [sıfat] (C1)
+   Anlam: güvenilir, harbi, sağlam
+   Örnek: Tom isn't trustworthy.
+   Çeviri: Tom güvenilir değil.
+--------------------------------------------------
+622. trying [sıfat] (B1)
+   Anlam: deneme, zor, sıkıntılı
+   Örnek: I'll die trying.
+   Çeviri: Deneyerek öleceğim.
+--------------------------------------------------
+623. ultra [sıfat] (B1)
+   Anlam: aşırı, uç görüşlü kimse, son derece
+   Örnek: The initial results proved to be remarkably ultra.
+   Çeviri: İlk sonuçların son derece aşırı olduğu kanıtlandı.
+--------------------------------------------------
+624. uncertain [sıfat] (B2)
+   Anlam: belirsiz, bilinmez, şüpheli
+   Örnek: I'm still uncertain.
+   Çeviri: Ben hâlâ kuşkuluyum.
+--------------------------------------------------
+625. unchanged [sıfat] (B2)
+   Anlam: değiştirilmemiş, değişmemiş, değiştirilemez
+   Örnek: The situation remains unchanged.
+   Çeviri: Durum değişmeden kalır.
+--------------------------------------------------
+626. unclear [sıfat] (B2)
+   Anlam: belirsiz, zor anlaşılır, açık olmayan
+   Örnek: Its origin is unclear.
+   Çeviri: Onun kökeni belirsizdir.
+--------------------------------------------------
+627. undergoing [sıfat] (C1)
+   Anlam: süregelen, süren
+   Örnek: The website was undergoing maintenance.
+   Çeviri: Web sitesi bakım geçiriyor.
+--------------------------------------------------
+628. undesired [sıfat] (B2)
+   Anlam: istenmeyen, arzu edilmeyen, istenmedik
+   Örnek: The initial results proved to be remarkably undesired.
+   Çeviri: İlk sonuçların son derece istenmeyen olduğu kanıtlandı.
+--------------------------------------------------
+629. unequal [sıfat] (B2)
+   Anlam: eşitsiz, eşit olamayan, oransız
+   Örnek: The initial results proved to be remarkably unequal.
+   Çeviri: İlk sonuçların son derece eşitsiz olduğu kanıtlandı.
+--------------------------------------------------
+630. unexpected [sıfat] (C1)
+   Anlam: beklenmedik, beklenmeyen, ummadık
+   Örnek: It was not unexpected.
+   Çeviri: Beklenmedik değildi.
+--------------------------------------------------
+631. unfavorable [sıfat] (C1)
+   Anlam: elverişsiz, olumsuz, ters
+   Örnek: The verdict was unfavorable.
+   Çeviri: Karar olumsuzdu.
+--------------------------------------------------
+632. unfinished [sıfat] (C1)
+   Anlam: işlenmemiş, yarım kalmış, yarım
+   Örnek: I hate unfinished business.
+   Çeviri: Yarım kalmış işten nefret ederim.
+--------------------------------------------------
+633. unfortunately [zarf] (C1)
+   Anlam: maalesef, aksi gibi, ne yazık ki
+   Örnek: It's unfortunately true.
+   Çeviri: Bu ne yazık ki doğrudur.
+--------------------------------------------------
+634. unique [sıfat] (B1)
+   Anlam: emsalsiz, benzersiz, kendine mahsus
+   Örnek: We're all unique.
+   Çeviri: Biz hepimiz benzersiziz.
+--------------------------------------------------
+635. unlike [sıfat] (B1)
+   Anlam: farklı, benzemez, birbirine benzemeyen
+   Örnek: That's so unlike you.
+   Çeviri: O sana çok benzemiyor.
+--------------------------------------------------
+636. unluckily [zarf] (B2)
+   Anlam: şanssızlık eseri, aksi tesadüf, maalesef
+   Örnek: The initial results proved to be remarkably unluckily.
+   Çeviri: İlk sonuçların son derece şanssızlık eseri olduğu kanıtlandı.
+--------------------------------------------------
+637. unparallel [sıfat] (C1)
+   Anlam: eğri, paralel olmayan
+   Örnek: The initial results proved to be remarkably unparallel.
+   Çeviri: İlk sonuçların son derece eğri olduğu kanıtlandı.
+--------------------------------------------------
+638. unprecedented [sıfat] (C1)
+   Anlam: eşi benzeri görülmemiş, eşi görülmemiş, yeni
+   Örnek: It's not unprecedented.
+   Çeviri: Bu, eşi görülmemiş değil.
+--------------------------------------------------
+639. unsafe [sıfat] (B1)
+   Anlam: güvenli olmayan, emin olmayan, güvenilmez
+   Örnek: I don't feel unsafe.
+   Çeviri: Emniyetsiz hissetmiyorum.
+--------------------------------------------------
+640. unsuitable [sıfat] (C1)
+   Anlam: uygunsuz, olmayacak, uymaz
+   Örnek: In my opinion, it's quite unsuitable.
+   Çeviri: Bence, o oldukça uygunsuz.
+--------------------------------------------------
+641. untreatable [sıfat] (C1)
+   Anlam: tedavisiz, tedavisi imkansız, tedavi edilemez
+   Örnek: The initial results proved to be remarkably untreatable.
+   Çeviri: İlk sonuçların son derece tedavisiz olduğu kanıtlandı.
+--------------------------------------------------
+642. unwanted [sıfat] (B2)
+   Anlam: istenilmeyen, istenmemiş, istenmeyen
+   Örnek: I keep receiving unwanted emails.
+   Çeviri: İstemediğim e-postaları almaya devam ediyorum.
+--------------------------------------------------
+643. updated [sıfat] (B2)
+   Anlam: günümüze en yakın tarihte hazırlanmış, yenilenmiş, güncellenen
+   Örnek: Please keep me updated.
+   Çeviri: Lütfen beni gelişmelerden haberdar et.
+--------------------------------------------------
+644. upheaval [sıfat] (B2)
+   Anlam: yükselme, devrim, kabarma
+   Örnek: The initial results proved to be remarkably upheaval.
+   Çeviri: İlk sonuçların son derece yükselme olduğu kanıtlandı.
+--------------------------------------------------
+645. urban [sıfat] (B1)
+   Anlam: şehirsel, kentsel, şehir
+   Örnek: Isn't that just an urban legend?
+   Çeviri: Bu sadece bir şehir efsanesi değil mi?
+--------------------------------------------------
+646. useful [sıfat] (B1)
+   Anlam: faydalı, yararlı, kullanışlı
+   Örnek: I hope it's useful.
+   Çeviri: Umarım yararlıdır.
+--------------------------------------------------
+647. using [sıfat] (B1)
+   Anlam: kullanma, kullanan, kullanılan
+   Örnek: I'm using this.
+   Çeviri: Ben bunu kullanıyorum.
+--------------------------------------------------
+648. usually [zarf] (B2)
+   Anlam: genellikle, çoğunlukla, çoğu zaman
+   Örnek: I usually do vote.
+   Çeviri: Genellikle oy kullanırım.
+--------------------------------------------------
+649. utterly [zarf] (B2)
+   Anlam: tümüyle, tamamen, düpedüz
+   Örnek: He was utterly perplexed.
+   Çeviri: O son derece şaşırmıştı.
+--------------------------------------------------
+650. vague [sıfat] (B1)
+   Anlam: şüpheli, kararsız, anlaşılmaz
+   Örnek: Tom wasn't vague.
+   Çeviri: Tom kararsız değildi.
+--------------------------------------------------
+651. vanish [sıfat] (B1)
+   Anlam: ortadan kaybolmak, yitmek, kayıplara karışmak
+   Örnek: Tom's smile vanished.
+   Çeviri: Tom'un gülümsemesi kayboldu.
+--------------------------------------------------
+652. variable [sıfat] (B2)
+   Anlam: değişken, uyuşmazlık, değişken şey
+   Örnek: Variable names in C are case sensitive.
+   Çeviri: C'deki değişken isimler büyük küçük harfe duyarlıdır.
+--------------------------------------------------
+653. various [sıfat] (B2)
+   Anlam: çeşitli, muhtelif, birkaç
+   Örnek: I heard various opinions.
+   Çeviri: Çeşitli görüşler duydum.
+--------------------------------------------------
+654. venomous [sıfat] (B2)
+   Anlam: haince, düşman, ağılı
+   Örnek: This snake isn't venomous.
+   Çeviri: Bu yılan zehirli değil.
+--------------------------------------------------
+655. very [sıfat] (B1)
+   Anlam: çok, hatta, bile
+   Örnek: I'm very fat.
+   Çeviri: Ben çok şişmanım.
+--------------------------------------------------
+656. vital [sıfat] (B1)
+   Anlam: yaşamsal, çok önemli, hayati
+   Örnek: Exercise is vital for a dog.
+   Çeviri: Egzersiz, bir köpek için hayatidir.
+--------------------------------------------------
+657. wanted [sıfat] (B1)
+   Anlam: lazım, gerekli, aranılan
+   Örnek: I wanted a job.
+   Çeviri: Ben bir iş istedim.
+--------------------------------------------------
+658. wealthy [sıfat] (B2)
+   Anlam: varlıklı, zengin, servet sahibi
+   Örnek: I'm not wealthy.
+   Çeviri: Ben zengin değilim.
+--------------------------------------------------
+659. wet [sıfat] (B1)
+   Anlam: ıslatmak, ıslak, yaş
+   Örnek: It's all wet.
+   Çeviri: Onun hepsi ıslak.
+--------------------------------------------------
+660. whole [sıfat] (B1)
+   Anlam: tam, bütün, tüm
+   Örnek: My whole body hurts.
+   Çeviri: Her yerim ağrıyor.
+--------------------------------------------------
+661. wide [sıfat] (B1)
+   Anlam: geniş, bol, engin
+   Örnek: How wide is it?
+   Çeviri: O, ne kadar geniştir?
+--------------------------------------------------
+662. widespread [sıfat] (C1)
+   Anlam: yaygın, alabildiğine açılmış, geniş alana yayılmış
+   Örnek: How widespread is it?
+   Çeviri: Bu ne kadar yaygın?
+--------------------------------------------------
+663. wild [sıfat] (B1)
+   Anlam: yaban, vahşi, yabani
+   Örnek: Isn't it wild?
+   Çeviri: Vahşi değil mi?
+--------------------------------------------------
+664. windy [sıfat] (B1)
+   Anlam: rüzgarlı, hızlı, lafı uzatan
+   Örnek: It's a windy day.
+   Çeviri: Rüzgarlı bir gün.
+--------------------------------------------------
+665. wisely [zarf] (B1)
+   Anlam: akıllıca, bilgece
+   Örnek: He has acted wisely.
+   Çeviri: O akıllıca davrandı.
+--------------------------------------------------
+666. witnessed [sıfat] (B2)
+   Anlam: meşhut, şahit olunmuş
+   Örnek: He witnessed the murder.
+   Çeviri: O cinayete tanıklık etti.
+--------------------------------------------------
+667. worldwide [sıfat] (B2)
+   Anlam: dünya çapındaki, dünyadaki her ulusu kapsayan, yaygın
+   Örnek: It's a worldwide problem.
+   Çeviri: Dünya çapında bir sorun.
+--------------------------------------------------
+668. worried [sıfat] (B2)
+   Anlam: endişeli, kaygılı, endişelenmiş
+   Örnek: I'm not worried.
+   Çeviri: Endişeli değilim.
+--------------------------------------------------
+669. worrying [sıfat] (B2)
+   Anlam: endişe verici, üzücü, rahatsız edici
+   Örnek: What's worrying you?
+   Çeviri: Seni ne endişelendiriyor?
+--------------------------------------------------
+670. worthy [sıfat] (B1)
+   Anlam: önemli kimse, ileri gelenlerden biri, saygın kişi
+   Örnek: What a worthy cause!
+   Çeviri: Ne önemli bir sebep!
+--------------------------------------------------
+671. wounded [sıfat] (B2)
+   Anlam: yaralı, yaralanmış, mecruh
+   Örnek: Tom wasn't wounded.
+   Çeviri: Tom yaralanmadı.
+--------------------------------------------------
+672. xx [sıfat] (B1)
+   Anlam: yirminci
+   Örnek: The initial results proved to be remarkably xx.
+   Çeviri: İlk sonuçların son derece yirminci olduğu kanıtlandı.
+--------------------------------------------------
+673. young [sıfat] (B1)
+   Anlam: genç, hayvan yavrusu, döl
+   Örnek: He's so young.
+   Çeviri: O çok genç.
+--------------------------------------------------
+674. youthful [sıfat] (B2)
+   Anlam: dinç, genç bir havaya sahip, genç
+   Örnek: Tom is very youthful, isn't he?
+   Çeviri: Tom çok genç, değil mi?
+--------------------------------------------------

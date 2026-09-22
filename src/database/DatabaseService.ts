@@ -1194,7 +1194,7 @@ class DatabaseService {
         } else {
           matchingWords = allWords.filter((w) => w.subcategory === f.name);
         }
-        const learned = matchingWords.filter((w) => w.box !== null && w.box > 1).length;
+        const learned = matchingWords.filter((w) => w.box !== null && w.box >= 1).length;
         const isCompleted = matchingWords.length > 0 && learned >= matchingWords.length;
         return {
           ...f,
@@ -1249,7 +1249,7 @@ class DatabaseService {
       } else {
         matchingWords = allWords.filter((w) => w.subcategory === folder.name);
       }
-      const learned = matchingWords.filter((w) => w.box !== null && w.box > 1).length;
+      const learned = matchingWords.filter((w) => w.box !== null && w.box >= 1).length;
       const isCompleted = matchingWords.length > 0 && learned >= matchingWords.length;
 
       return {
@@ -1913,7 +1913,7 @@ class DatabaseService {
         weeklyBoxCount: b2,
         monthlyBoxCount: b3,
         totalWords: total,
-        learnedWords: b2 + b3,
+        learnedWords: b1 + b2 + b3,
       };
     }
 
@@ -1934,7 +1934,7 @@ class DatabaseService {
       weeklyBoxCount: map[2] || 0,
       monthlyBoxCount: map[3] || 0,
       totalWords: totalRes?.cnt || 0,
-      learnedWords: (map[2] || 0) + (map[3] || 0),
+      learnedWords: (map[1] || 0) + (map[2] || 0) + (map[3] || 0),
     };
   }
 
@@ -1981,7 +1981,7 @@ class DatabaseService {
 
     const currentBox = currentProgress ? currentProgress.box : 0;
 
-    // Randevu saatini sabah 06:00'ya sabitler; böylece sabah 09:00 bildirimi geldiğinde tüm kelimeler hazır olur!
+    // Randevu saatini sabah 06:00'ya sabitler; gece 20:00 sonrası çalışmalarda hafızaya en az 24 saat dinlenme tanır
     const getMorningReviewDate = (daysAhead: number): Date => {
       const target = new Date();
       // Gece yarısı ile 06:00 arasında çalışılıyorsa 1 gün sonrası kastedilen aynı günün sabahı 06:00'dır
@@ -1989,7 +1989,9 @@ class DatabaseService {
         target.setHours(6, 0, 0, 0);
         return target;
       }
-      target.setDate(target.getDate() + daysAhead);
+      // Akşam 20:00 ve sonrasında çalışılıyorsa 1 gün sonrası hemen 6-9 saat sonraki sabah olmasın; +1 gün dinlenme eklensin
+      const extraDay = (target.getHours() >= 20 && daysAhead === 1) ? 1 : 0;
+      target.setDate(target.getDate() + daysAhead + extraDay);
       target.setHours(6, 0, 0, 0);
       return target;
     };
@@ -2169,10 +2171,14 @@ class DatabaseService {
         isCooldown: false,
       }));
 
-      // Tekrar kelimeleri ile yeni kelimeler ayrılır: newWordsLimit KADAR YENİ KELİME ALINIR
+      // Tekrarlar ile yeni kelimeler dengelenir: Toplam oturum boyutu newWordsLimit ile sınırlıdır
+      const maxTotal = Math.max(5, newWordsLimit);
       const targetFolderWords = allWords.filter(isMatchingFolder);
+      const unstudiedTarget = targetFolderWords.filter((w) => !this.memoryDb.progress.get(w.id));
+      const reviewCap = unstudiedTarget.length === 0 ? maxTotal : Math.min(reviewWords.length, Math.floor(maxTotal * 0.5));
+      const selectedReviews = reviewWords.slice(0, reviewCap);
+      const newWordsTarget = Math.max(0, maxTotal - selectedReviews.length);
       const newWords: CardWord[] = [];
-      const newWordsTarget = newWordsLimit;
 
       if (newWordsTarget > 0) {
         // 1. Önce kullanıcının yeni eklediği ve henüz çalışmadığı özel kelimeleri ekle
@@ -2217,8 +2223,14 @@ class DatabaseService {
         }
       }
 
-      // Tekrarlar + Tam Yeni Kelime Paketi (Tekrarlar yeni kelimelerden çalmaz)
-      return [...reviewWords, ...newWords];
+      // Kalan boşluk varsa daha fazla tekrar kelimesiyle tamamla
+      let finalBatch = [...selectedReviews, ...newWords];
+      if (finalBatch.length < maxTotal && reviewWords.length > selectedReviews.length) {
+        const extraReviews = reviewWords.slice(selectedReviews.length, selectedReviews.length + (maxTotal - finalBatch.length));
+        finalBatch = [...finalBatch, ...extraReviews];
+      }
+
+      return finalBatch.slice(0, maxTotal);
     }
 
     // Native SQLite implementation
@@ -2296,11 +2308,11 @@ class DatabaseService {
       };
     });
 
-    // 2. Yeni kelimeler için KOTA TAM ALINIR (Tekrarlar kotayı düşürmez! Örn: 30 yeni + 5 tekrar = 35)
-    // ADIM A: Önce kullanıcının yeni eklediği ve henüz çalışmadığı özel kelimeleri (is_custom = 1) en başa al!
-    // ADIM B: Aktif klasörden doldur
-    // ADIM C: Hâlâ yer varsa genel kelimelerden tamamla
-    const remainingSlots = newWordsLimit;
+    // 2. Günlük oturum boyutu kullanıcının ayarladığı limit ile sınırlıdır (örn: 20 kelime)
+    const maxTotal = Math.max(5, newWordsLimit);
+    const reviewCap = Math.min(reviewWords.length, Math.floor(maxTotal * 0.5));
+    const selectedReviews = reviewWords.slice(0, reviewCap);
+    const remainingSlots = Math.max(0, maxTotal - selectedReviews.length);
     let newWords: CardWord[] = [];
 
     if (remainingSlots > 0) {
@@ -2404,7 +2416,13 @@ class DatabaseService {
       }
     }
 
-    return [...reviewWords, ...newWords];
+    let finalBatch = [...selectedReviews, ...newWords];
+    if (finalBatch.length < maxTotal && reviewWords.length > selectedReviews.length) {
+      const extraReviews = reviewWords.slice(selectedReviews.length, selectedReviews.length + (maxTotal - finalBatch.length));
+      finalBatch = [...finalBatch, ...extraReviews];
+    }
+
+    return finalBatch.slice(0, maxTotal);
   }
 
   // ==========================================

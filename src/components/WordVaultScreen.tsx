@@ -257,6 +257,8 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     deleteWord,
     updateWordMeaning,
     vocabFolders,
+    activeStudyFolderId,
+    setActiveStudyFolder,
   } = useLearningStore();
 
   // Single Folder state: null = Folder View, 'custom_default' = Inside Folder
@@ -306,14 +308,26 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     return KUTUPHANE_THEMATIC_FOLDERS.find((f) => f.id === selectedKutuphaneSubFolderId) || null;
   }, [selectedKutuphaneSubFolderId]);
 
-  // Kütüphane: Kelime sayılarını vocabFolders üzerinden eşleştir
+  // Kütüphane: Kelime sayılarını vocabFolders üzerinden eşleştir (veya dictionaryWords'ten hesapla)
   const getKutuphaneFolderWordCount = useCallback((folderId: string): { wordCount: number; learnedCount: number } => {
     const match = (vocabFolders || []).find((vf) => vf.id === folderId);
+    if (match && match.word_count > 0) {
+      return {
+        wordCount: match.word_count,
+        learnedCount: match.learned_count,
+      };
+    }
+    const target = KUTUPHANE_THEMATIC_FOLDERS.find((f) => f.id === folderId);
+    if (!target || !dictionaryWords) return { wordCount: 0, learnedCount: 0 };
+    const matching = dictionaryWords.filter(
+      (w) => w.subcategory === target.name || w.folder_name === target.name
+    );
+    const learned = matching.filter((w) => w.box !== null && w.box >= 1).length;
     return {
-      wordCount: match?.word_count || 0,
-      learnedCount: match?.learned_count || 0,
+      wordCount: matching.length,
+      learnedCount: learned,
     };
-  }, [vocabFolders]);
+  }, [vocabFolders, dictionaryWords]);
 
   // Kütüphane: Seçili alt klasöre veya ana klasöre ait kelimeler
   const kutuphaneWordsList = useMemo(() => {
@@ -891,6 +905,34 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     setIsPracticeActive(false);
   };
 
+  // Kütüphane alt klasöründeki kelimeler için alıştırma başlatma
+  const handleStartKutuphanePractice = () => {
+    const activePool = kutuphaneWordsList.filter(isWordActiveForPractice);
+
+    if (activePool.length === 0) {
+      const allMastered = kutuphaneWordsList.length > 0 && kutuphaneWordsList.every((w) => w.status === 'MASTERED' || (w.box || 0) >= 3);
+      if (allMastered) {
+        Alert.alert(
+          'Tüm Kelimeler Tamamlandı 🏆',
+          'Tebrikler! Bu klasördeki tüm kelimeleri başarıyla öğrendiniz ve kalıcı hafızaya aldınız.',
+          [{ text: 'Tamam', style: 'default' }]
+        );
+      } else {
+        Alert.alert(
+          'Bugünkü Çalışma Tamamlandı 🎉',
+          'Bu klasördeki tüm kelimeler aralıklı tekrar kutularına aktarıldı.\n\nKelimelerin hafızada kalıcı hale gelmesi için bekleme süresi dolana kadar yeni bir çalışma gerekmemektedir. Tekrar randevu günü geldiğinde buton otomatik olarak tekrar aktifleşecektir.',
+          [{ text: 'Tamam', style: 'default' }]
+        );
+      }
+      return;
+    }
+
+    startSessionWithWords(activePool);
+    setStudyCardIndex(0);
+    setIsStudySliderActive(true);
+    setIsPracticeActive(false);
+  };
+
   // =========================================================================
   // VIEW 0: STUDY SLIDER PHASE (Kelimeleri Tanıma / Çalışma Aşaması)
   // =========================================================================
@@ -1025,6 +1067,11 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     if (selectedKutuphaneSubFolderId && kutuphaneWordsList.length >= 0) {
       const subFolder = selectedKutuphaneSubFolder;
       const subStats = getKutuphaneFolderWordCount(selectedKutuphaneSubFolderId);
+      const currentTargetId = selectedKutuphaneSubFolderId === 'all' ? selectedKutuphaneFolderId : selectedKutuphaneSubFolderId;
+      const isCurrentTargetActive = Boolean(currentTargetId && activeStudyFolderId === currentTargetId);
+      const activeKutuphaneCount = kutuphaneWordsList.filter(isWordActiveForPractice).length;
+      const folderDisplayName = subFolder?.name || (selectedKutuphaneSubFolderId === 'all' ? `Tüm ${selectedKutuphaneFolder.name.replace('Kütüphane: ', '')}` : 'Alt Klasör');
+
       return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
           {/* Header */}
@@ -1041,12 +1088,41 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
             </TouchableOpacity>
             <View style={styles.folderTitleWrap}>
               <Text style={[styles.folderTitleText, { color: colors.text }]} numberOfLines={1}>
-                {subFolder?.name || (selectedKutuphaneSubFolderId === 'all' ? `Tüm ${selectedKutuphaneFolder.name.replace('Kütüphane: ', '')}` : 'Alt Klasör')}
+                {folderDisplayName}
               </Text>
               <Text style={[styles.folderSubtitleText, { color: colors.textSecondary }]}>
-                {kutuphaneWordsList.length} kelime
+                {kutuphaneWordsList.length} kelime • {subStats.learnedCount} çalışıldı
               </Text>
             </View>
+
+            {/* Target Folder Quick Action */}
+            <TouchableOpacity
+              style={[
+                styles.headerPracticeBtn,
+                isCurrentTargetActive
+                  ? { backgroundColor: colors.accentWarmLight, borderColor: colors.accentWarm }
+                  : { backgroundColor: colors.brandLight, borderColor: colors.brand },
+              ]}
+              onPress={async () => {
+                if (currentTargetId) {
+                  await setActiveStudyFolder(currentTargetId);
+                  Alert.alert(
+                    'Hedef Klasör Belirlendi 🎯',
+                    `"${folderDisplayName}" günlük çalışma hedefiniz olarak ayarlandı. Görevler ekranındaki kelime pratiği bu klasörden gelecektir.`
+                  );
+                }
+              }}
+              activeOpacity={0.75}
+            >
+              <Text
+                style={[
+                  styles.headerPracticeBtnText,
+                  { color: isCurrentTargetActive ? colors.accentWarm : colors.brand },
+                ]}
+              >
+                {isCurrentTargetActive ? '🎯 Aktif' : '🎯 Hedef Yap'}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           {/* Kelime Listesi */}
@@ -1083,6 +1159,28 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               </View>
             }
           />
+
+          {/* Bottom Action Bar: Alıştırmaya Başla */}
+          {kutuphaneWordsList.length > 0 && (
+            <View style={[styles.bottomBar, { backgroundColor: colors.cardBackground, borderTopColor: colors.border }]}>
+              <TouchableOpacity
+                style={[
+                  styles.startPracticeBtn,
+                  activeKutuphaneCount > 0
+                    ? { backgroundColor: colors.brand }
+                    : { backgroundColor: colors.border, opacity: 0.65 },
+                ]}
+                onPress={handleStartKutuphanePractice}
+                activeOpacity={0.88}
+              >
+                <Text style={styles.startPracticeBtnText}>
+                  {activeKutuphaneCount > 0
+                    ? `Alıştırmaya Başla (${activeKutuphaneCount} Kelime)`
+                    : 'Bugünkü Çalışma Tamamlandı'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
 
           {renderWordDetailModal()}
         </View>
@@ -1270,36 +1368,32 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
             </Text>
           </TouchableOpacity>
 
-          {filteredFolderWords.length > 0 && (
-            <TouchableOpacity
+          {/* Target Folder Quick Action */}
+          <TouchableOpacity
+            style={[
+              styles.headerPracticeBtn,
+              activeStudyFolderId === selectedFolderId
+                ? { backgroundColor: colors.accentWarmLight, borderColor: colors.accentWarm }
+                : { backgroundColor: colors.brandLight, borderColor: colors.brand },
+            ]}
+            onPress={async () => {
+              await setActiveStudyFolder(selectedFolderId);
+              Alert.alert(
+                'Hedef Klasör Belirlendi 🎯',
+                `"${currentFolderName}" günlük çalışma hedefiniz olarak ayarlandı. Görevler ekranındaki kelime pratiği bu klasörden gelecektir.`
+              );
+            }}
+            activeOpacity={0.75}
+          >
+            <Text
               style={[
-                styles.headerPracticeBtn,
-                activeFilteredCount > 0
-                  ? {
-                      backgroundColor: colors.brandLight,
-                      borderColor: colors.brand,
-                    }
-                  : {
-                      backgroundColor: colors.cardBackground,
-                      borderColor: colors.border,
-                      opacity: 0.65,
-                    },
+                styles.headerPracticeBtnText,
+                { color: activeStudyFolderId === selectedFolderId ? colors.accentWarm : colors.brand },
               ]}
-              onPress={handleStartPractice}
-              activeOpacity={0.75}
             >
-              <Text
-                style={[
-                  styles.headerPracticeBtnText,
-                  { color: activeFilteredCount > 0 ? colors.brand : colors.textSecondary },
-                ]}
-              >
-                {activeFilteredCount > 0
-                  ? (monthlyCount === totalCount && totalCount > 0 ? `Tekrar Et (${activeFilteredCount})` : `Çalış (${activeFilteredCount})`)
-                  : (monthlyCount === totalCount && totalCount > 0 ? 'Tamamlandı' : 'Yarın Tekrar')}
-              </Text>
-            </TouchableOpacity>
-          )}
+              {activeStudyFolderId === selectedFolderId ? '🎯 Aktif' : '🎯 Hedef Yap'}
+            </Text>
+          </TouchableOpacity>
         </View>
 
         {/* High Performance Unlagged Search Bar inside Folder */}
@@ -1403,6 +1497,28 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
             </View>
           }
         />
+
+        {/* Bottom Action Bar */}
+        {filteredFolderWords.length > 0 && (
+          <View style={[styles.bottomBar, { backgroundColor: colors.cardBackground, borderTopColor: colors.border }]}>
+            <TouchableOpacity
+              style={[
+                styles.startPracticeBtn,
+                activeFilteredCount > 0
+                  ? { backgroundColor: colors.brand }
+                  : { backgroundColor: colors.border, opacity: 0.65 },
+              ]}
+              onPress={handleStartPractice}
+              activeOpacity={0.88}
+            >
+              <Text style={styles.startPracticeBtnText}>
+                {activeFilteredCount > 0
+                  ? `Alıştırmaya Başla (${activeFilteredCount} Kelime)`
+                  : 'Bugünkü Çalışma Tamamlandı'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         {/* Word Detail Modal */}
         {renderWordDetailModal()}
@@ -2434,6 +2550,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#10B981',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  bottomBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: Platform.OS === 'ios' ? 28 : 14,
+    borderTopWidth: 1,
+    gap: 12,
   },
   // Sticky Bottom Bar
   stickyBottomBar: {

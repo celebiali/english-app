@@ -53,6 +53,8 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
     currentVocabIndex,
     answerCurrentVocabCard,
     dictionaryWords,
+    activeStudyFolderId,
+    vocabFolders,
   } = useLearningStore();
 
   const { colors } = useThemeStore();
@@ -187,9 +189,8 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
     ? Math.min(dailyLimit || 25, totalVaultWords)
     : (dailyLimit || 25);
 
-  // Günün toplam kelime hedefi: Yeni kelime hedefi + dünden kalan/vadesi gelen tekrarlar
-  const activeVocabCount = (sessionWords || []).length;
-  const vocabGoal = Math.max(baseVocabGoal, activeVocabCount);
+  // Günün kelime hedefi kullanıcının belirlediği dinamik hedef üzerinden sabit kalır (hedef ileri kaçmaz)
+  const vocabGoal = baseVocabGoal;
 
   // Authoritative completed count from SQLite and store
   const actualVocabDone = Math.max(
@@ -198,6 +199,13 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
   );
   const vocabCompleted = Math.min(vocabGoal, actualVocabDone);
   const vocabCompletionPercentage = vocabGoal > 0 ? Math.min(100, Math.round((vocabCompleted / vocabGoal) * 100)) : 0;
+
+  // Aktif çalışma klasörü adı
+  const activeFolderName = useMemo(() => {
+    if (!activeStudyFolderId) return 'Özel Kelime Defterim';
+    const folder = (vocabFolders || []).find((f) => f.id === activeStudyFolderId);
+    return folder?.name?.replace('Kütüphane: ', '') || 'Özel Kelime Defterim';
+  }, [activeStudyFolderId, vocabFolders]);
 
   const tasksList = [
     {
@@ -617,7 +625,20 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
                         </View>
                       )}
                     </View>
-                    <Text style={[styles.mCount, { color: colors.textSecondary }]}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2, gap: 4, flexWrap: 'wrap' }}>
+                      <Text style={{ fontSize: 11, fontWeight: '700', color: colors.brand }} numberOfLines={1}>
+                        🎯 {activeFolderName}
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => setActiveTab('VOCAB')}
+                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                      >
+                        <Text style={{ fontSize: 10, color: colors.textSecondary, textDecorationLine: 'underline' }}>
+                          (Değiştir)
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    <Text style={[styles.mCount, { color: colors.textSecondary, marginTop: 2 }]}>
                       {isDone ? `${task.goal} / ${task.goal} kelime hafızaya alındı` : `${task.completed} / ${task.goal} kelime çalışıldı`}
                     </Text>
                   </View>

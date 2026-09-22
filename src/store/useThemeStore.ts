@@ -128,6 +128,7 @@ interface ThemeState {
   isSystemFontSize: boolean;
   fontFamily: FontFamilyValue;
   autoNightMode: boolean;
+  soundEffectsEnabled: boolean;
   lastSyncTime: string;
 
   setTheme: (theme: AppTheme) => void;
@@ -135,6 +136,7 @@ interface ThemeState {
   setIsSystemFontSize: (useSystem: boolean) => void;
   setFontFamily: (font: FontFamilyValue) => void;
   setAutoNightMode: (enabled: boolean) => void;
+  setSoundEffectsEnabled: (enabled: boolean) => void;
   updateLastSyncTime: () => void;
   getColors: () => ThemeColors;
 }
@@ -146,6 +148,7 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
   isSystemFontSize: false,
   fontFamily: 'system',
   autoNightMode: false,
+  soundEffectsEnabled: true,
   lastSyncTime: '1 Dakika Önce',
 
   setTheme: (_theme: AppTheme) =>
@@ -157,6 +160,7 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
   setIsSystemFontSize: (isSystemFontSize: boolean) => set({ isSystemFontSize }),
   setFontFamily: (fontFamily: FontFamilyValue) => set({ fontFamily }),
   setAutoNightMode: (autoNightMode: boolean) => set({ autoNightMode }),
+  setSoundEffectsEnabled: (soundEffectsEnabled: boolean) => set({ soundEffectsEnabled }),
   updateLastSyncTime: () => set({ lastSyncTime: 'Az Önce' }),
   getColors: () => THEME_PALETTES.light,
 }));

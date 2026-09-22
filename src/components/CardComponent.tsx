@@ -17,6 +17,7 @@ import { AIService } from '../services/AIService';
 import { useThemeStore } from '../store/useThemeStore';
 import { getValidExampleSentence, isBoilerplateSentence } from '../utils/sentenceUtils';
 import { dbService } from '../database/DatabaseService';
+import { SoundService } from '../services/SoundService';
 
 // Safe dynamic native module resolution to prevent launch crashes on binaries without ExpoSpeech linked
 let SpeechModule: any = null;
@@ -115,6 +116,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
       setIsEvaluated(true);
       setIsCorrectAnswer(false);
       setMatchedWith('');
+      SoundService.playWrong();
     }
     setIsFlipped(true);
   };
@@ -139,6 +141,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
         setMatchedWith(aiResult.matchedMeaning || userInput.trim());
         setIsFlipped(true);
         setIsChecking(false);
+        SoundService.playCorrect();
         return;
       }
     } catch (err) {
@@ -160,6 +163,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
       setMatchedWith(localResult.matchedWith || '');
       setIsFlipped(true);
       setIsChecking(false);
+      SoundService.playCorrect();
       return;
     }
 
@@ -169,6 +173,7 @@ export const CardComponent: React.FC<CardComponentProps> = ({
     setMatchedWith('');
     setIsFlipped(true);
     setIsChecking(false);
+    SoundService.playWrong();
   };
 
   const handleProceed = async () => {

@@ -1830,6 +1830,7 @@ class DatabaseService {
       meaning: r.meaning,
       category: r.category,
       subcategory: r.subcategory,
+      folder_name: r.folder_name,
       level: r.level,
       synonyms: this.safeParseJson(r.synonyms, []),
       example_sentence: r.example_sentence,

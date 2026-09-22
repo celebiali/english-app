@@ -32,7 +32,10 @@ import {
   Trash2,
   Edit3,
   Clock,
+  Library,
+  Lock,
 } from 'lucide-react-native';
+import { KUTUPHANE_THEMATIC_FOLDERS } from '../services/KutuphaneThematicDataset';
 import * as Speech from 'expo-speech';
 import { useThemeStore } from '../store/useThemeStore';
 import { useLearningStore } from '../store/useLearningStore';
@@ -263,11 +266,65 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState<string>('custom_default');
 
+  // Kütüphane Serisi navigasyon state'leri
+  const [isInsideKutuphaneFolder, setIsInsideKutuphaneFolder] = useState(false);
+  const [selectedKutuphaneFolderId, setSelectedKutuphaneFolderId] = useState<string | null>(null);
+  const [selectedKutuphaneSubFolderId, setSelectedKutuphaneSubFolderId] = useState<string | null>(null);
+
   // All custom user folders
   const userFolders = useMemo(() => {
     if (!vocabFolders || vocabFolders.length === 0) return [];
     return vocabFolders.filter((f) => !f.is_system);
   }, [vocabFolders]);
+
+  // Kütüphane Serisi: 6 ana klasör (FolderArchive ikonlu, kutuphane_0X_ formatında)
+  const kutuphaneMainFolders = useMemo(() => {
+    return KUTUPHANE_THEMATIC_FOLDERS.filter(
+      (f) => f.icon === 'FolderArchive' && f.id.startsWith('kutuphane_')
+    );
+  }, []);
+
+  // Kütüphane: Seçili ana klasörün alt klasörleri
+  const kutuphaneSubFolders = useMemo(() => {
+    if (!selectedKutuphaneFolderId) return [];
+    // Alt klasörler: id'si ana klasör id'si ile başlayıp daha uzun olanlar (ve FolderArchive olmayan)
+    return KUTUPHANE_THEMATIC_FOLDERS.filter(
+      (f) =>
+        f.id.startsWith(selectedKutuphaneFolderId + '_') &&
+        f.icon !== 'FolderArchive'
+    );
+  }, [selectedKutuphaneFolderId]);
+
+  // Kütüphane: Seçili ana klasör objesi
+  const selectedKutuphaneFolder = useMemo(() => {
+    if (!selectedKutuphaneFolderId) return null;
+    return KUTUPHANE_THEMATIC_FOLDERS.find((f) => f.id === selectedKutuphaneFolderId) || null;
+  }, [selectedKutuphaneFolderId]);
+
+  // Kütüphane: Seçili alt klasör objesi
+  const selectedKutuphaneSubFolder = useMemo(() => {
+    if (!selectedKutuphaneSubFolderId) return null;
+    return KUTUPHANE_THEMATIC_FOLDERS.find((f) => f.id === selectedKutuphaneSubFolderId) || null;
+  }, [selectedKutuphaneSubFolderId]);
+
+  // Kütüphane: Kelime sayılarını vocabFolders üzerinden eşleştir
+  const getKutuphaneFolderWordCount = useCallback((folderId: string): { wordCount: number; learnedCount: number } => {
+    const match = (vocabFolders || []).find((vf) => vf.id === folderId);
+    return {
+      wordCount: match?.word_count || 0,
+      learnedCount: match?.learned_count || 0,
+    };
+  }, [vocabFolders]);
+
+  // Kütüphane: Seçili alt klasöre veya ana klasöre ait kelimeler
+  const kutuphaneWordsList = useMemo(() => {
+    if (!dictionaryWords) return [];
+    const targetFolder = selectedKutuphaneSubFolder || selectedKutuphaneFolder;
+    if (!targetFolder) return [];
+    return dictionaryWords.filter(
+      (w) => w.subcategory === targetFolder.name || w.folder_name === targetFolder.name
+    );
+  }, [dictionaryWords, selectedKutuphaneFolder, selectedKutuphaneSubFolder]);
 
   // Active folder name and object
   const currentFolder = useMemo(() => {
@@ -754,7 +811,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     return allUserCustomWords.filter(
       (w) =>
         (w.subcategory && w.subcategory.toLowerCase() === currentFolder.name.toLowerCase()) ||
-        ((w as any).folder_name && (w as any).folder_name.toLowerCase() === currentFolder.name.toLowerCase())
+        (w.folder_name && w.folder_name.toLowerCase() === currentFolder.name.toLowerCase())
     );
   }, [allUserCustomWords, currentFolder, userFolders]);
 
@@ -957,6 +1014,199 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
             </TouchableOpacity>
           </View>
         )}
+      </View>
+    );
+  }
+
+  // =========================================================================
+  // VIEW 3: INSIDE KÜTÜPHANE FOLDER (READONLY - Alt klasörler + Kelime Listesi)
+  // =========================================================================
+  if (isInsideKutuphaneFolder && selectedKutuphaneFolder) {
+    // Alt klasör seçildiyse -> kelime listesi göster
+    if (selectedKutuphaneSubFolderId && kutuphaneWordsList.length >= 0) {
+      const subFolder = selectedKutuphaneSubFolder;
+      const subStats = getKutuphaneFolderWordCount(selectedKutuphaneSubFolderId);
+      return (
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
+          {/* Header */}
+          <View style={[styles.folderHeaderBar, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
+            <TouchableOpacity
+              style={styles.folderBackBtn}
+              onPress={() => {
+                setSelectedKutuphaneSubFolderId(null);
+              }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <ArrowLeft size={20} color={colors.brand} />
+              <Text style={[styles.folderBackBtnText, { color: colors.brand }]}>Geri</Text>
+            </TouchableOpacity>
+            <View style={styles.folderTitleWrap}>
+              <Text style={[styles.folderTitleText, { color: colors.text }]} numberOfLines={1}>
+                {subFolder?.name || 'Alt Klasör'}
+              </Text>
+              <Text style={[styles.folderSubtitleText, { color: colors.textSecondary }]}>
+                {kutuphaneWordsList.length} kelime • Salt okunur
+              </Text>
+            </View>
+            <View style={[styles.kutuphaneLockBadge, { backgroundColor: colors.subtleBackground }]}>
+              <Lock size={14} color={colors.textSecondary} />
+            </View>
+          </View>
+
+          {/* Kelime Listesi */}
+          <FlatList
+            data={kutuphaneWordsList}
+            keyExtractor={(item) => String(item.id || item.word)}
+            contentContainerStyle={[
+              styles.listContent,
+              kutuphaneWordsList.length === 0 && styles.listContentEmpty,
+            ]}
+            showsVerticalScrollIndicator={false}
+            initialNumToRender={12}
+            maxToRenderPerBatch={10}
+            windowSize={5}
+            renderItem={({ item }) => {
+              const progress = getBoxProgressInfo(item);
+              return (
+                <SwipeableWordRow
+                  item={item}
+                  colors={colors}
+                  progress={progress}
+                  canDelete={false}
+                  onPress={() => setSelectedWord(item)}
+                  onSpeak={() => handleSpeak(item.word)}
+                />
+              );
+            }}
+            ListEmptyComponent={
+              <View style={styles.emptyCenter}>
+                <Text style={[styles.emptyTitle, { color: colors.text }]}>Kelime Bulunamadı</Text>
+                <Text style={[styles.emptySub, { color: colors.textSecondary }]}>
+                  Bu alt klasörde henüz kelime bulunmuyor.
+                </Text>
+              </View>
+            }
+          />
+
+          {renderWordDetailModal()}
+        </View>
+      );
+    }
+
+    // Ana klasör -> alt klasörleri listele
+    const mainStats = getKutuphaneFolderWordCount(selectedKutuphaneFolderId!);
+    const mainPct = mainStats.wordCount > 0 ? Math.round((mainStats.learnedCount / mainStats.wordCount) * 100) : 0;
+
+    return (
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        {/* Header */}
+        <View style={[styles.folderHeaderBar, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
+          <TouchableOpacity
+            style={styles.folderBackBtn}
+            onPress={() => {
+              setIsInsideKutuphaneFolder(false);
+              setSelectedKutuphaneFolderId(null);
+              setSelectedKutuphaneSubFolderId(null);
+            }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <ArrowLeft size={20} color={colors.brand} />
+            <Text style={[styles.folderBackBtnText, { color: colors.brand }]}>Klasörler</Text>
+          </TouchableOpacity>
+          <View style={styles.folderTitleWrap}>
+            <Text style={[styles.folderTitleText, { color: colors.text }]} numberOfLines={1}>
+              {selectedKutuphaneFolder.name}
+            </Text>
+            <Text style={[styles.folderSubtitleText, { color: colors.textSecondary }]}>
+              {mainStats.wordCount} kelime • {mainStats.learnedCount} öğrenildi
+            </Text>
+          </View>
+          <View style={[styles.kutuphaneLockBadge, { backgroundColor: colors.subtleBackground }]}>
+            <Lock size={14} color={colors.textSecondary} />
+          </View>
+        </View>
+
+        {/* Alt Klasör Listesi */}
+        <ScrollView
+          style={styles.folderScrollView}
+          contentContainerStyle={styles.folderScrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Toplam İlerleme */}
+          <View style={[styles.statsOverviewCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+            <View style={styles.statsCol}>
+              <Text style={[styles.statsNum, { color: colors.text }]}>{mainStats.wordCount}</Text>
+              <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>Toplam</Text>
+            </View>
+            <View style={[styles.statsDivider, { backgroundColor: colors.border }]} />
+            <View style={styles.statsCol}>
+              <Text style={[styles.statsNum, { color: '#10B981' }]}>{mainStats.learnedCount}</Text>
+              <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>Öğrenildi</Text>
+            </View>
+            <View style={[styles.statsDivider, { backgroundColor: colors.border }]} />
+            <View style={styles.statsCol}>
+              <Text style={[styles.statsNum, { color: colors.brand }]}>%{mainPct}</Text>
+              <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>İlerleme</Text>
+            </View>
+          </View>
+
+          {/* Alt Klasörler */}
+          <View style={styles.sectionGroup}>
+            <Text style={[styles.sectionHeading, { color: colors.textSecondary, marginBottom: 8 }]}>ALT KLASÖRLER</Text>
+            {kutuphaneSubFolders.map((sub) => {
+              const subStats = getKutuphaneFolderWordCount(sub.id);
+              const subPct = subStats.wordCount > 0 ? Math.round((subStats.learnedCount / subStats.wordCount) * 100) : 0;
+              return (
+                <TouchableOpacity
+                  key={sub.id}
+                  style={[styles.singleFolderCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}
+                  onPress={() => setSelectedKutuphaneSubFolderId(sub.id)}
+                  activeOpacity={0.75}
+                >
+                  <View style={[styles.folderIconBadge, { backgroundColor: `${selectedKutuphaneFolder.color}15` }]}>
+                    <Folder size={22} color={selectedKutuphaneFolder.color} />
+                  </View>
+                  <View style={styles.folderInfo}>
+                    <View style={styles.folderTitleLine}>
+                      <Text style={[styles.folderItemTitle, { color: colors.text }]} numberOfLines={1}>
+                        {sub.name}
+                      </Text>
+                      <View style={[styles.badgePill, { backgroundColor: `${selectedKutuphaneFolder.color}15` }]}>
+                        <Text style={[styles.badgePillText, { color: selectedKutuphaneFolder.color }]}>
+                          {subStats.wordCount} KELİME
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.folderProgressRow}>
+                      <View style={[styles.folderProgressBar, { backgroundColor: colors.subtleBackground }]}>
+                        <View
+                          style={[
+                            styles.folderProgressFill,
+                            { width: `${subPct}%`, backgroundColor: subPct === 100 ? '#10B981' : selectedKutuphaneFolder.color },
+                          ]}
+                        />
+                      </View>
+                      <Text style={[styles.folderProgressText, { color: colors.textSecondary }]}>
+                        {subStats.learnedCount}/{subStats.wordCount} (%{subPct})
+                      </Text>
+                    </View>
+                  </View>
+                  <ChevronRight size={18} color={colors.textSecondary} />
+                </TouchableOpacity>
+              );
+            })}
+
+            {kutuphaneSubFolders.length === 0 && (
+              <View style={styles.emptyCenter}>
+                <Text style={[styles.emptySub, { color: colors.textSecondary }]}>
+                  Bu klasörde alt klasör bulunmuyor.
+                </Text>
+              </View>
+            )}
+          </View>
+        </ScrollView>
+
+        {renderWordDetailModal()}
       </View>
     );
   }
@@ -1386,6 +1636,74 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               );
             })}
           </View>
+
+          {/* KÜTÜPHANE SERİSİ */}
+          {kutuphaneMainFolders.length > 0 && (
+            <View style={styles.sectionGroup}>
+              <View style={styles.sectionHeaderRow}>
+                <View style={styles.kutuphaneSectionTitleRow}>
+                  <Library size={14} color={colors.textSecondary} />
+                  <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
+                    KÜTÜPHANE SERİSİ
+                  </Text>
+                </View>
+                <View style={[styles.kutuphaneLockBadge, { backgroundColor: colors.subtleBackground }]}>
+                  <Lock size={12} color={colors.textSecondary} />
+                </View>
+              </View>
+
+              {kutuphaneMainFolders.map((folder) => {
+                const kStats = getKutuphaneFolderWordCount(folder.id);
+                const kPct = kStats.wordCount > 0 ? Math.round((kStats.learnedCount / kStats.wordCount) * 100) : 0;
+
+                return (
+                  <TouchableOpacity
+                    key={folder.id}
+                    style={[styles.singleFolderCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}
+                    onPress={() => {
+                      setSelectedKutuphaneFolderId(folder.id);
+                      setSelectedKutuphaneSubFolderId(null);
+                      setIsInsideKutuphaneFolder(true);
+                    }}
+                    activeOpacity={0.75}
+                  >
+                    <View style={[styles.folderIconBadge, { backgroundColor: `${folder.color}15` }]}>
+                      <Library size={22} color={folder.color} />
+                    </View>
+
+                    <View style={styles.folderInfo}>
+                      <View style={styles.folderTitleLine}>
+                        <Text style={[styles.folderItemTitle, { color: colors.text }]} numberOfLines={1}>
+                          {folder.name.replace('Kütüphane: ', '')}
+                        </Text>
+                        <View style={[styles.badgePill, { backgroundColor: `${folder.color}15` }]}>
+                          <Text style={[styles.badgePillText, { color: folder.color }]}>
+                            {kStats.wordCount} KELİME
+                          </Text>
+                        </View>
+                      </View>
+
+                      <View style={styles.folderProgressRow}>
+                        <View style={[styles.folderProgressBar, { backgroundColor: colors.subtleBackground }]}>
+                          <View
+                            style={[
+                              styles.folderProgressFill,
+                              { width: `${kPct}%`, backgroundColor: kPct === 100 ? '#10B981' : folder.color },
+                            ]}
+                          />
+                        </View>
+                        <Text style={[styles.folderProgressText, { color: colors.textSecondary }]}>
+                          {kStats.learnedCount}/{kStats.wordCount} (%{kPct})
+                        </Text>
+                      </View>
+                    </View>
+
+                    <ChevronRight size={18} color={colors.textSecondary} />
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          )}
         </ScrollView>
       )}
 
@@ -2549,5 +2867,18 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 13,
     fontWeight: '700',
+  },
+  // Kütüphane Serisi Styles
+  kutuphaneSectionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  kutuphaneLockBadge: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

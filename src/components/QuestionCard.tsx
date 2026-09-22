@@ -17,6 +17,7 @@ import { CustomWordModal } from './CustomWordModal';
 import { SubscriptionModal } from './SubscriptionModal';
 import { useThemeStore } from '../store/useThemeStore';
 import { useLearningStore } from '../store/useLearningStore';
+import { SoundService } from '../services/SoundService';
 
 interface Props {
   question: QuestionItem;
@@ -69,6 +70,12 @@ export const QuestionCard: React.FC<Props> = ({
       if (hasAnsweredRef.current || localAnswered !== null) return;
       hasAnsweredRef.current = true;
       setLocalAnswered(key);
+      const isCorrect = key === question.correct_option;
+      if (isCorrect) {
+        SoundService.playCorrect();
+      } else {
+        SoundService.playWrong();
+      }
       onSelectOption?.(key);
     } else {
       onSelectOption?.(key);

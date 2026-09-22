@@ -58,6 +58,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
     setIsSystemFontSize,
     fontFamily,
     setFontFamily,
+    soundEffectsEnabled,
+    setSoundEffectsEnabled,
     colors,
   } = useThemeStore();
 
@@ -504,11 +506,27 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
           </TouchableOpacity>
         </View>
 
-        {/* SECTION: BİLDİRİMLER */}
+        {/* SECTION: SES VE BİLDİRİMLER */}
         <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
-          BİLDİRİMLER
+          SES VE BİLDİRİMLER
         </Text>
         <View style={[styles.groupedCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+          {/* Ses Efektleri Aç/Kapa */}
+          <View style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}>
+            <View style={{ flex: 1, paddingRight: 8 }}>
+              <Text style={[styles.rowLabel, { color: colors.text }]}>Ses Efektleri</Text>
+              <Text style={{ color: colors.textSecondary, fontSize: 12, marginTop: 2 }}>
+                Doğru ve yanlış cevap ses efektleri
+              </Text>
+            </View>
+            <Switch
+              value={soundEffectsEnabled}
+              onValueChange={setSoundEffectsEnabled}
+              trackColor={{ false: colors.border, true: colors.brand }}
+              thumbColor="#FFFFFF"
+            />
+          </View>
+
           {/* Hatırlatıcılar Aç/Kapa */}
           <View style={[styles.rowItem, { borderBottomWidth: 1, borderBottomColor: colors.border }]}>
             <Text style={[styles.rowLabel, { color: colors.text }]}>Çalışma Hatırlatıcıları</Text>

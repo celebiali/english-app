@@ -60,6 +60,7 @@ class MemoryDatabase {
   vocabStreak: { count: number; lastDate: string } = { count: 0, lastDate: '' };
   streak: { count: number; lastDate: string } = { count: 0, lastDate: '' };
   activeStudyFolderId: string = 'sys_conn';
+  goalsWordsLoweredAt: string | null = null;
   autoWordId = 1;
   autoQuestionId = 1;
   autoMistakeId = 1;
@@ -278,6 +279,9 @@ class DatabaseService {
 
     try {
       await this.dbInstance.execAsync(`ALTER TABLE user_settings ADD COLUMN active_study_folder_id TEXT DEFAULT 'sys_conn';`);
+    } catch (_) {}
+    try {
+      await this.dbInstance.execAsync(`ALTER TABLE user_settings ADD COLUMN goals_words_lowered_at TEXT;`);
     } catch (_) {}
     try {
       await this.dbInstance.execAsync(`ALTER TABLE vocab_folders ADD COLUMN level_filter TEXT;`);
@@ -511,6 +515,96 @@ class DatabaseService {
   }
 
   /**
+   * Sıradaki tematik klasörü tespit eder (Zincirleme ve konu bütünlüğü akışı)
+   */
+  getNextThematicFolder(currentFolderId: string): VocabFolder | null {
+    // 1. Kütüphane alt klasörleri (icon === 'Folder')
+    const kutuphaneSubfolders = KUTUPHANE_THEMATIC_FOLDERS.filter((f) => f.icon === 'Folder');
+    const kutuphaneIdx = kutuphaneSubfolders.findIndex((f) => f.id === currentFolderId);
+    if (kutuphaneIdx !== -1) {
+      if (kutuphaneIdx + 1 < kutuphaneSubfolders.length) {
+        return kutuphaneSubfolders[kutuphaneIdx + 1];
+      } else {
+        // Tüm kütüphane alt klasörleri bittiyse ilk alt klasöre döner
+        return kutuphaneSubfolders[0];
+      }
+    }
+
+    // 2. Kütüphane ana klasörü seçildiyse (icon === 'FolderArchive')
+    const kutuphaneMainFolders = KUTUPHANE_THEMATIC_FOLDERS.filter((f) => f.icon === 'FolderArchive');
+    const mainIdx = kutuphaneMainFolders.findIndex((f) => f.id === currentFolderId);
+    if (mainIdx !== -1) {
+      const firstSub = kutuphaneSubfolders.find((f) => f.id.startsWith(currentFolderId));
+      if (firstSub) return firstSub;
+      if (mainIdx + 1 < kutuphaneMainFolders.length) {
+        return kutuphaneMainFolders[mainIdx + 1];
+      }
+    }
+
+    // 3. Sistem seviye klasörleri zinciri (sys_conn -> sys_vocab_a -> sys_vocab_b -> sys_root -> sys_idiom)
+    const systemLevels = ['sys_conn', 'sys_vocab_a', 'sys_vocab_b', 'sys_root', 'sys_idiom'];
+    const sysIdx = systemLevels.indexOf(currentFolderId);
+    if (sysIdx !== -1 && sysIdx + 1 < systemLevels.length) {
+      const nextSysId = systemLevels[sysIdx + 1];
+      return {
+        id: nextSysId,
+        name: nextSysId.toUpperCase(),
+        description: '',
+        color: '#2563EB',
+        icon: 'Folder',
+        is_system: true,
+        category_type: 'VOCABULARY',
+      };
+    }
+
+    return null;
+  }
+
+  /**
+   * Hedef düşürme kontrolü (Haftalık kısıtlama / Goal Commitment Rule)
+   * Hedefi artırmak veya aynı tutmak her zaman serbesttir.
+   * Hedefi düşürmek haftada en fazla 1 kez yapılabilir.
+   */
+  async canLowerVocabGoal(targetWords: number): Promise<{ allowed: boolean; daysRemaining: number }> {
+    const goals = await this.getUserTaskGoals();
+    const currentWords = goals.words || 25;
+
+    // Hedef artırılıyorsa veya aynı kalıyorsa serbest
+    if (targetWords >= currentWords) {
+      return { allowed: true, daysRemaining: 0 };
+    }
+
+    let lastLowered: string | null = null;
+    if (!this.isNative) {
+      lastLowered = this.memoryDb.goalsWordsLoweredAt;
+    } else {
+      try {
+        const row: any = await this.dbInstance.getFirstAsync(
+          `SELECT goals_words_lowered_at FROM user_settings WHERE id = 1`
+        );
+        lastLowered = row?.goals_words_lowered_at || null;
+      } catch (e) {
+        lastLowered = null;
+      }
+    }
+
+    if (!lastLowered) {
+      return { allowed: true, daysRemaining: 0 };
+    }
+
+    const lastTime = new Date(lastLowered).getTime();
+    const now = Date.now();
+    const diffDays = (now - lastTime) / (1000 * 60 * 60 * 24);
+
+    if (diffDays >= 7) {
+      return { allowed: true, daysRemaining: 0 };
+    }
+
+    const daysRemaining = Math.max(1, Math.ceil(7 - diffDays));
+    return { allowed: false, daysRemaining };
+  }
+
+  /**
    * Reads user's dynamic daily question & vocabulary task goals
    */
   async getUserTaskGoals(): Promise<TaskGoalsConfig> {
@@ -542,17 +636,32 @@ class DatabaseService {
    * Saves user's dynamic daily question & vocabulary task goals
    */
   async saveUserTaskGoals(goals: TaskGoalsConfig): Promise<void> {
-    const wordsGoal = goals.words !== undefined ? goals.words : (this.memoryDb.taskGoals?.words || 25);
+    const currentGoals = await this.getUserTaskGoals();
+    const currentWords = currentGoals.words || 25;
+    const wordsGoal = goals.words !== undefined ? goals.words : currentWords;
+    const isLowering = wordsGoal < currentWords;
+    const nowIso = new Date().toISOString();
+
     if (!this.isNative) {
       this.memoryDb.taskGoals = { ...goals, words: wordsGoal };
+      if (isLowering) {
+        this.memoryDb.goalsWordsLoweredAt = nowIso;
+      }
       return;
     }
 
     try {
-      await this.dbInstance.runAsync(
-        `UPDATE user_settings SET paragraph_goal = ?, cloze_goal = ?, sentence_goal = ?, skills_goal = ?, daily_limit = ? WHERE id = 1`,
-        [goals.paragraph, goals.cloze, goals.sentence, goals.skills, wordsGoal]
-      );
+      if (isLowering) {
+        await this.dbInstance.runAsync(
+          `UPDATE user_settings SET paragraph_goal = ?, cloze_goal = ?, sentence_goal = ?, skills_goal = ?, daily_limit = ?, goals_words_lowered_at = ? WHERE id = 1`,
+          [goals.paragraph, goals.cloze, goals.sentence, goals.skills, wordsGoal, nowIso]
+        );
+      } else {
+        await this.dbInstance.runAsync(
+          `UPDATE user_settings SET paragraph_goal = ?, cloze_goal = ?, sentence_goal = ?, skills_goal = ?, daily_limit = ? WHERE id = 1`,
+          [goals.paragraph, goals.cloze, goals.sentence, goals.skills, wordsGoal]
+        );
+      }
     } catch (e) {
       console.warn('Failed to save user task goals in SQLite:', e);
     }
@@ -2179,12 +2288,14 @@ class DatabaseService {
       const selectedReviews = reviewWords.slice(0, reviewCap);
       const newWordsTarget = Math.max(0, maxTotal - selectedReviews.length);
       const newWords: CardWord[] = [];
+      const fetchedIds = new Set<number>();
 
       if (newWordsTarget > 0) {
         // 1. Önce kullanıcının yeni eklediği ve henüz çalışmadığı özel kelimeleri ekle
         const customUnstudied = allWords.filter((w) => w.is_custom && !this.memoryDb.progress.get(w.id));
         for (const w of customUnstudied) {
-          if (newWords.length < newWordsTarget) {
+          if (newWords.length < newWordsTarget && !fetchedIds.has(w.id)) {
+            fetchedIds.add(w.id);
             newWords.push({
               ...w,
               cardType: 'NEW',
@@ -2195,10 +2306,13 @@ class DatabaseService {
         }
 
         // 2. Kalan yer varsa aktif klasörden ekle
+        let activeAddedCount = 0;
         for (const w of targetFolderWords) {
           if (newWords.length >= newWordsTarget) break;
           const prog = this.memoryDb.progress.get(w.id);
-          if (!prog && !newWords.some((nw) => nw.id === w.id)) {
+          if (!prog && !fetchedIds.has(w.id)) {
+            fetchedIds.add(w.id);
+            activeAddedCount++;
             newWords.push({
               ...w,
               cardType: 'NEW',
@@ -2208,17 +2322,61 @@ class DatabaseService {
           }
         }
 
-        // 3. Hâlâ yer varsa genel kelime havuzundan tamamla
+        // 3. Kalan yer varsa AYNI TEMATİK SERİNİN SIRADAKİ ALT KLASÖRÜNDEN ÇEK (Thematic Chaining)
+        let currentChainFolderId = targetFolderId;
+        const visitedChainIds = new Set<string>([targetFolderId]);
+        while (newWords.length < newWordsTarget) {
+          const nextFolder = this.getNextThematicFolder(currentChainFolderId);
+          if (!nextFolder || visitedChainIds.has(nextFolder.id)) break;
+          visitedChainIds.add(nextFolder.id);
+          currentChainFolderId = nextFolder.id;
+
+          const isNextFolderWord = (w: WordItem): boolean => {
+            if (nextFolder.id.startsWith('kutuphane_')) {
+              return w.subcategory === nextFolder.name || w.folder_name === nextFolder.name;
+            }
+            if (nextFolder.is_system && nextFolder.category_type) {
+              return w.category === nextFolder.category_type;
+            }
+            return w.subcategory === nextFolder.name;
+          };
+
+          const nextFolderWords = allWords.filter(isNextFolderWord);
+          for (const w of nextFolderWords) {
+            if (newWords.length >= newWordsTarget) break;
+            const prog = this.memoryDb.progress.get(w.id);
+            if (!prog && !fetchedIds.has(w.id)) {
+              fetchedIds.add(w.id);
+              newWords.push({
+                ...w,
+                cardType: 'NEW',
+                reviewBadgeText: `✨ ${nextFolder.name}`,
+                isCooldown: false,
+              });
+            }
+          }
+        }
+
+        // 4. Tüm tematik zincir taranmasına rağmen hâlâ yer varsa genel kelimelerden tamamla (Fallback)
         for (const w of allWords) {
           if (newWords.length >= newWordsTarget) break;
           const prog = this.memoryDb.progress.get(w.id);
-          if (!prog && !newWords.some((nw) => nw.id === w.id)) {
+          if (!prog && !fetchedIds.has(w.id)) {
+            fetchedIds.add(w.id);
             newWords.push({
               ...w,
               cardType: 'NEW',
               reviewBadgeText: '✨ Günün Yeni Kelimesi',
               isCooldown: false,
             });
+          }
+        }
+
+        // 5. Smart Fallthrough: Aktif klasörde hiç yeni kelime kalmadıysa sıradaki alt klasöre otomatik ilerlet
+        if (activeAddedCount === 0 && unstudiedTarget.length === 0) {
+          const nextStudyFolder = this.getNextThematicFolder(targetFolderId);
+          if (nextStudyFolder && nextStudyFolder.id !== targetFolderId) {
+            await this.setActiveStudyFolderId(nextStudyFolder.id);
           }
         }
       }
@@ -2344,9 +2502,10 @@ class DatabaseService {
       newWords.push(...customWords);
 
       const afterCustomSlots = Math.max(0, remainingSlots - customWords.length);
+      const allFetchedIds = new Set<number>([...customRows.map((r: any) => r.id)]);
+
       if (afterCustomSlots > 0) {
-        const customIds = customRows.map((r: any) => r.id);
-        const excludeCustomClause = customIds.length > 0 ? `AND w.id NOT IN (${customIds.join(',')})` : '';
+        const excludeCustomClause = allFetchedIds.size > 0 ? `AND w.id NOT IN (${Array.from(allFetchedIds).join(',')})` : '';
 
         // ADIM B: Aktif klasördeki yeni kelimeler
         const newSql = folderFilterSql
@@ -2364,38 +2523,9 @@ class DatabaseService {
         const newParams = [...folderParams, afterCustomSlots];
         const newRows = await this.dbInstance.getAllAsync(newSql, newParams);
 
-        const folderBatch: CardWord[] = newRows.map((r: any) => ({
-          id: r.id,
-          word: r.word,
-          meaning: r.meaning,
-          category: r.category,
-          subcategory: r.subcategory,
-          level: r.level,
-          synonyms: this.safeParseJson(r.synonyms, []),
-          example_sentence: r.example_sentence,
-          example_translation: r.example_translation,
-          etymology_note: r.etymology_note,
-          is_custom: r.is_custom === 1,
-          cardType: 'NEW',
-          reviewBadgeText: '✨ Günün Yeni Kelimesi',
-          isCooldown: false,
-        }));
-        newWords.push(...folderBatch);
-
-        // ADIM C: Hâlâ kontenjan kaldıysa genel kelimelerden tamamla
-        const afterFolderSlots = Math.max(0, afterCustomSlots - folderBatch.length);
-        if (afterFolderSlots > 0) {
-          const allFetchedIds = [...customIds, ...newRows.map((r: any) => r.id)];
-          const excludeAllClause = allFetchedIds.length > 0 ? `AND w.id NOT IN (${allFetchedIds.join(',')})` : '';
-          const fallbackSql = `
-            SELECT w.* FROM words w
-            LEFT JOIN user_word_progress p ON w.id = p.word_id
-            WHERE p.id IS NULL ${excludeAllClause}
-            ORDER BY w.id ASC
-            LIMIT ?
-          `;
-          const fallbackRows = await this.dbInstance.getAllAsync(fallbackSql, [afterFolderSlots]);
-          const fallbackBatch: CardWord[] = fallbackRows.map((r: any) => ({
+        const folderBatch: CardWord[] = newRows.map((r: any) => {
+          allFetchedIds.add(r.id);
+          return {
             id: r.id,
             word: r.word,
             meaning: r.meaning,
@@ -2410,8 +2540,117 @@ class DatabaseService {
             cardType: 'NEW',
             reviewBadgeText: '✨ Günün Yeni Kelimesi',
             isCooldown: false,
-          }));
-          newWords.push(...fallbackBatch);
+          };
+        });
+        newWords.push(...folderBatch);
+
+        // ADIM C: Hâlâ kontenjan kaldıysa genel sözlükten DEĞİL, AYNI TEMATİK SERİNİN SIRADAKİ ALT KLASÖRÜNDEN ÇEK (Thematic Chaining)
+        let afterFolderSlots = Math.max(0, afterCustomSlots - folderBatch.length);
+
+        if (afterFolderSlots > 0) {
+          let currentChainFolderId = targetFolderId;
+          const visitedChainIds = new Set<string>([targetFolderId]);
+
+          while (afterFolderSlots > 0) {
+            const nextFolder = this.getNextThematicFolder(currentChainFolderId);
+            if (!nextFolder || visitedChainIds.has(nextFolder.id)) {
+              break;
+            }
+            visitedChainIds.add(nextFolder.id);
+            currentChainFolderId = nextFolder.id;
+
+            let chainFilterSql = '';
+            let chainParams: any[] = [];
+            if (nextFolder.id.startsWith('kutuphane_')) {
+              chainFilterSql = `(w.subcategory = ? OR w.folder_name = ?)`;
+              chainParams = [nextFolder.name, nextFolder.name];
+            } else if (nextFolder.is_system && nextFolder.category_type) {
+              if (nextFolder.level_filter) {
+                const levels = nextFolder.level_filter.split(',').map((s: string) => s.trim());
+                const placeholders = levels.map(() => '?').join(',');
+                chainFilterSql = `w.category = ? AND w.level IN (${placeholders})`;
+                chainParams = [nextFolder.category_type, ...levels];
+              } else {
+                chainFilterSql = `w.category = ?`;
+                chainParams = [nextFolder.category_type];
+              }
+            } else {
+              chainFilterSql = `w.subcategory = ?`;
+              chainParams = [nextFolder.name];
+            }
+
+            const excludeChainClause = allFetchedIds.size > 0 ? `AND w.id NOT IN (${Array.from(allFetchedIds).join(',')})` : '';
+            const chainSql = `
+              SELECT w.* FROM words w
+              LEFT JOIN user_word_progress p ON w.id = p.word_id
+              WHERE p.id IS NULL AND (${chainFilterSql}) ${excludeChainClause}
+              ORDER BY w.id ASC
+              LIMIT ?
+            `;
+            const chainRows = await this.dbInstance.getAllAsync(chainSql, [...chainParams, afterFolderSlots]);
+            if (chainRows && chainRows.length > 0) {
+              for (const r of chainRows) {
+                allFetchedIds.add(r.id);
+                newWords.push({
+                  id: r.id,
+                  word: r.word,
+                  meaning: r.meaning,
+                  category: r.category,
+                  subcategory: r.subcategory,
+                  level: r.level,
+                  synonyms: this.safeParseJson(r.synonyms, []),
+                  example_sentence: r.example_sentence,
+                  example_translation: r.example_translation,
+                  etymology_note: r.etymology_note,
+                  is_custom: r.is_custom === 1,
+                  cardType: 'NEW',
+                  reviewBadgeText: `✨ ${nextFolder.name}`,
+                  isCooldown: false,
+                });
+              }
+              afterFolderSlots = Math.max(0, afterFolderSlots - chainRows.length);
+            }
+          }
+
+          // ADIM D: Tüm tematik klasörler tarandığı halde hâlâ açık kaldıysa genel kelimelerden tamamla (Fallback)
+          if (afterFolderSlots > 0) {
+            const excludeAllClause = allFetchedIds.size > 0 ? `AND w.id NOT IN (${Array.from(allFetchedIds).join(',')})` : '';
+            const fallbackSql = `
+              SELECT w.* FROM words w
+              LEFT JOIN user_word_progress p ON w.id = p.word_id
+              WHERE p.id IS NULL ${excludeAllClause}
+              ORDER BY w.id ASC
+              LIMIT ?
+            `;
+            const fallbackRows = await this.dbInstance.getAllAsync(fallbackSql, [afterFolderSlots]);
+            for (const r of fallbackRows) {
+              allFetchedIds.add(r.id);
+              newWords.push({
+                id: r.id,
+                word: r.word,
+                meaning: r.meaning,
+                category: r.category,
+                subcategory: r.subcategory,
+                level: r.level,
+                synonyms: this.safeParseJson(r.synonyms, []),
+                example_sentence: r.example_sentence,
+                example_translation: r.example_translation,
+                etymology_note: r.etymology_note,
+                is_custom: r.is_custom === 1,
+                cardType: 'NEW',
+                reviewBadgeText: '✨ Günün Yeni Kelimesi',
+                isCooldown: false,
+              });
+            }
+          }
+        }
+
+        // ADIM E: Smart Fallthrough - Aktif klasörde hiç yeni kelime kalmadıysa sıradaki klasöre otomatik ilerlet
+        if (folderBatch.length === 0) {
+          const nextStudyFolder = this.getNextThematicFolder(targetFolderId);
+          if (nextStudyFolder && nextStudyFolder.id !== targetFolderId) {
+            await this.setActiveStudyFolderId(nextStudyFolder.id);
+          }
         }
       }
     }

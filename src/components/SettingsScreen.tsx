@@ -1140,7 +1140,13 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
                 <View style={styles.goalStepperContainer}>
                   <TouchableOpacity
                     style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
-                    onPress={() => setTaskGoals({ words: Math.max(5, (taskGoals?.words || 25) - 5) })}
+                    onPress={async () => {
+                      const nextTarget = Math.max(5, (taskGoals?.words || 25) - 5);
+                      const res = await setTaskGoals({ words: nextTarget });
+                      if (res && !res.success) {
+                        Alert.alert('Hedef Kısıtlaması 🔒', res.message || 'Günlük kelime hedefinizi haftada en fazla 1 kez düşürebilirsiniz.');
+                      }
+                    }}
                     activeOpacity={0.7}
                   >
                     <Minus size={15} color={colors.text} />
@@ -1154,6 +1160,13 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
                     <Plus size={15} color={colors.text} />
                   </TouchableOpacity>
                 </View>
+              </View>
+
+              {/* Hedef İstikrarı & Disiplin Bilgilendirme Notu */}
+              <View style={{ marginTop: 10, paddingHorizontal: 12, paddingVertical: 8, backgroundColor: colors.brandLight, borderRadius: 10, borderWidth: 1, borderColor: colors.border }}>
+                <Text style={{ fontSize: 11, color: colors.brand, lineHeight: 16 }}>
+                  🔒 <Text style={{ fontWeight: '700' }}>Disiplin Kuralı:</Text> Günlük çalışma istikrarınızı korumak için kelime hedefinizi haftada en fazla 1 kez düşürebilirsiniz. Hedefinizi artırmak ise dilediğiniz an serbesttir.
+                </Text>
               </View>
             </View>
 

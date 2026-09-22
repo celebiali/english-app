@@ -95,7 +95,7 @@ interface LearningState {
   updateUserTargetScore: (score: number) => Promise<void>;
   updateUserFullName: (name: string) => Promise<void>;
   setDailyQuestionTarget: (target: number) => void;
-  setTaskGoals: (goals: Partial<TaskGoalsConfig>) => Promise<void>;
+  setTaskGoals: (goals: Partial<TaskGoalsConfig>) => Promise<{ success: boolean; message?: string }>;
 
   // Daily Tasks Actions
   checkAndReplenishDailyAIQuestions: (userId?: string) => Promise<void>;
@@ -147,7 +147,7 @@ interface LearningState {
   isFeatureLocked: (feature: GatedFeature) => boolean;
   isExamAccessible: (examId: string) => boolean;
   syncSubscriptionWithApple: () => Promise<void>;
-  setDailyLimit: (limit: number) => Promise<void>;
+  setDailyLimit: (limit: number) => Promise<{ success: boolean; message?: string }>;
 }
 
 export const useLearningStore = create<LearningState>((set, get) => ({
@@ -436,15 +436,28 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     dbService.saveUserTaskGoals(goals);
   },
 
-  setTaskGoals: async (newGoals: Partial<TaskGoalsConfig>) => {
+  setTaskGoals: async (newGoals: Partial<TaskGoalsConfig>): Promise<{ success: boolean; message?: string }> => {
     const current = get().taskGoals;
     const currentWords = current.words || get().dailyLimit || 25;
+    const targetWords = newGoals.words !== undefined ? Math.max(5, Math.min(100, newGoals.words)) : currentWords;
+
+    // Tembellik & Hile Önleme Kuralı: Günlük hedefi düşürme haftada en fazla 1 kez yapılabilir
+    if (newGoals.words !== undefined && targetWords < currentWords) {
+      const check = await dbService.canLowerVocabGoal(targetWords);
+      if (!check.allowed) {
+        return {
+          success: false,
+          message: `Çalışma disiplininizi korumak için günlük kelime hedefinizi haftada en fazla 1 kez düşürebilirsiniz.\n\nKalan süre: ${check.daysRemaining} gün.\n\nKendinize güvenin, hedefinizi başarabilirsiniz! (Hedefinizi dilediğiniz zaman artırabilirsiniz)`,
+        };
+      }
+    }
+
     const merged: TaskGoalsConfig = {
       paragraph: Math.max(1, Math.min(30, newGoals.paragraph ?? current.paragraph)),
       cloze: Math.max(1, Math.min(30, newGoals.cloze ?? current.cloze)),
       sentence: Math.max(1, Math.min(30, newGoals.sentence ?? current.sentence)),
       skills: Math.max(1, Math.min(30, newGoals.skills ?? current.skills)),
-      words: Math.max(5, Math.min(100, newGoals.words ?? currentWords)),
+      words: targetWords,
     };
     const total = merged.paragraph + merged.cloze + merged.sentence + merged.skills;
     await dbService.saveUserTaskGoals(merged);
@@ -454,20 +467,12 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       dailyLimit: merged.words || 25,
     });
     await get().loadDailyTasks(true);
+    await get().loadVocabSession(true);
+    return { success: true };
   },
 
-  setDailyLimit: async (limit: number) => {
-    const clamped = Math.max(5, Math.min(100, limit));
-    const currentGoals = get().taskGoals;
-    const updatedGoals: TaskGoalsConfig = {
-      ...currentGoals,
-      words: clamped,
-    };
-    await dbService.saveUserTaskGoals(updatedGoals);
-    set({
-      dailyLimit: clamped,
-      taskGoals: updatedGoals,
-    });
+  setDailyLimit: async (limit: number): Promise<{ success: boolean; message?: string }> => {
+    return await get().setTaskGoals({ words: limit });
   },
 
   // ==========================================

@@ -15,7 +15,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.celebi.ydspratik",
-      "buildNumber": "16",
+      "buildNumber": "34",
       "supportsTablet": true,
       "requireFullScreen": true,
       "infoPlist": {

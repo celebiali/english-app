@@ -77,7 +77,7 @@ export class SupabaseService {
       const localUser: UserProfile = {
         id: `local_user_${Date.now()}`,
         email: cleanEmail,
-        fullName: fullName.trim() || 'Ali Çelebi',
+        fullName: fullName.trim() || cleanEmail.split('@')[0],
         targetScore,
         isGuest: false,
         createdAt: nowIso,
@@ -133,7 +133,7 @@ export class SupabaseService {
       const user: UserProfile = {
         id: data.user?.id || `user_${Date.now()}`,
         email: data.user?.email || cleanEmail,
-        fullName: data.user?.user_metadata?.full_name || fullName.trim() || 'Ali Çelebi',
+        fullName: data.user?.user_metadata?.full_name || fullName.trim() || cleanEmail.split('@')[0],
         targetScore: data.user?.user_metadata?.target_score || targetScore,
         isGuest: false,
         createdAt: nowIso,
@@ -214,7 +214,7 @@ export class SupabaseService {
       const user: UserProfile = {
         id: data.user?.id || `user_${Date.now()}`,
         email: data.user?.email || cleanEmail,
-        fullName: data.user?.user_metadata?.full_name || 'Ali Çelebi',
+        fullName: data.user?.user_metadata?.full_name || cleanEmail.split('@')[0],
         targetScore: data.user?.user_metadata?.target_score || 85,
         isGuest: false,
         createdAt: new Date().toISOString(),

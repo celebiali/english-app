@@ -156,12 +156,24 @@ class MemoryDatabase {
 }
 
 class DatabaseService {
-  private memoryDb: MemoryDatabase = new MemoryDatabase();
+  private userMemoryDbs: Map<string, MemoryDatabase> = new Map();
   private isNative: boolean = false;
   private dbInstance: any = null;
   private sessionDbInstance: any = null;
   private currentDbName: string = 'yds_vocab.db';
-  private currentUserId: string = 'local_user';
+  private currentUserId: string = 'guest';
+
+  /**
+   * Returns isolated in-memory database instance for current user
+   */
+  private get memoryDb(): MemoryDatabase {
+    const key = this.currentUserId || 'guest';
+    if (!this.userMemoryDbs.has(key)) {
+      const newMem = new MemoryDatabase();
+      this.userMemoryDbs.set(key, newMem);
+    }
+    return this.userMemoryDbs.get(key)!;
+  }
 
   /**
    * Dedicated SQLite database for persisting global active session
@@ -196,7 +208,7 @@ class DatabaseService {
       return 'pratik_guest.db';
     }
     const clean = userId.trim().toLowerCase();
-    if (clean === 'user_ali_celebi' || clean === 'apple.review@ydspratik.com' || clean === 'ali@ydspratik.com' || clean === 'local_user') {
+    if (clean === 'user_ali_celebi' || clean === 'apple.review@ydspratik.com' || clean === 'ali@ydspratik.com') {
       return 'yds_vocab.db';
     }
     const sanitized = clean.replace(/[^a-zA-Z0-9_-]/g, '_');
@@ -267,11 +279,23 @@ class DatabaseService {
     let initialUserId = userId;
     if (!initialUserId) {
       try {
-        const saved = await this.getUserSession();
-        if (saved?.id) {
-          initialUserId = saved.id;
+        const sDb = await this.getSessionDb();
+        if (sDb) {
+          const row: any = await sDb.getFirstAsync(`SELECT user_json FROM active_session LIMIT 1`);
+          if (row?.user_json) {
+            const parsed = JSON.parse(row.user_json);
+            if (parsed?.id) {
+              initialUserId = parsed.id;
+            }
+          }
         }
       } catch (_) {}
+    }
+    if (!initialUserId) {
+      const memUser = this.memoryDb.userSession;
+      if (memUser?.id) {
+        initialUserId = memUser.id;
+      }
     }
     await this.switchUser(initialUserId);
   }
@@ -3350,10 +3374,6 @@ class DatabaseService {
   }
 
   async getUserSession(): Promise<UserProfile | null> {
-    if (!this.isNative) {
-      return this.memoryDb.userSession;
-    }
-
     try {
       // 1. Try global session db first
       const sDb = await this.getSessionDb();
@@ -3376,23 +3396,23 @@ class DatabaseService {
             isGuest: row.is_guest === 1,
             isPro: row.is_pro === 1,
             proExpiresAt: row.pro_expires_at || undefined,
+            trialExpiresAt: row.trial_expires_at || undefined,
+            subscriptionPlanId: row.subscription_plan_id || undefined,
             appliedPromoCode: row.applied_promo_code || undefined,
             createdAt: row.created_at,
           };
         }
       }
-      return null;
     } catch (err) {
       console.warn('Failed to load user session from SQLite:', err);
-      return null;
     }
+
+    return this.memoryDb.userSession;
   }
 
   async clearUserSession(): Promise<void> {
-    if (!this.isNative) {
-      this.memoryDb.userSession = null;
-      return;
-    }
+    this.memoryDb.userSession = null;
+    this.userMemoryDbs.delete('guest');
 
     try {
       const sDb = await this.getSessionDb();
@@ -3411,8 +3431,10 @@ class DatabaseService {
    * Delete current user's local study data (Apple App Store Guideline 5.1.1)
    */
   async deleteCurrentUserData(): Promise<void> {
+    const key = this.currentUserId || 'guest';
+    this.userMemoryDbs.delete(key);
+
     if (!this.isNative) {
-      this.memoryDb = new MemoryDatabase();
       await this.memoryDb.init();
       return;
     }

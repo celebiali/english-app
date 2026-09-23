@@ -256,19 +256,10 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     set({ isLoading: true });
     try {
       await dbService.initDatabase();
-      await dbService.seedQuestionsIfEmpty();
 
-      const overallStreak = await dbService.getStreakCount();
-      const qStreak = await dbService.getQuestionStreakCount();
-      const vStreak = await dbService.getVocabStreakCount();
-      const effectiveStreak = Math.max(overallStreak, qStreak, vStreak);
-      const examHist = await dbService.getExamHistory();
       const savedUser = await dbService.getUserSession();
-      const userGoals = await dbService.getUserTaskGoals();
-      const activeFolderId = await dbService.getActiveStudyFolderId();
-      const totalTarget = userGoals.paragraph + userGoals.cloze + userGoals.sentence + userGoals.skills;
-
-      if (savedUser) {
+      if (savedUser?.id) {
+        await dbService.switchUser(savedUser.id);
         // Ensure 7-day trial timestamp exists
         if (!savedUser.trialExpiresAt) {
           const createdTime = new Date(savedUser.createdAt || Date.now()).getTime();
@@ -277,6 +268,17 @@ export const useLearningStore = create<LearningState>((set, get) => ({
         }
         SupabaseService.setCurrentUser(savedUser);
       }
+
+      await dbService.seedQuestionsIfEmpty();
+
+      const overallStreak = await dbService.getStreakCount();
+      const qStreak = await dbService.getQuestionStreakCount();
+      const vStreak = await dbService.getVocabStreakCount();
+      const effectiveStreak = Math.max(overallStreak, qStreak, vStreak);
+      const examHist = await dbService.getExamHistory();
+      const userGoals = await dbService.getUserTaskGoals();
+      const activeFolderId = await dbService.getActiveStudyFolderId();
+      const totalTarget = userGoals.paragraph + userGoals.cloze + userGoals.sentence + userGoals.skills;
 
       set({
         streakCount: effectiveStreak,
@@ -398,6 +400,9 @@ export const useLearningStore = create<LearningState>((set, get) => ({
         ...getInitialUserState(),
         userProfile: null,
       });
+      await get().loadDailyTasks(true);
+      await get().loadMistakes();
+      await get().loadVocabSession(true);
     }
   },
 

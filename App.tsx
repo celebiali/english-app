@@ -36,7 +36,6 @@ import { AppLogo } from './src/components/AppLogo';
 import { LearningHeader } from './src/components/LearningHeader';
 
 import * as SplashScreen from 'expo-splash-screen';
-import { SoundService } from './src/services/SoundService';
 
 // Prevent native splash screen from auto-hiding before store initialization completes
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -74,7 +73,6 @@ export default function App() {
 
   useEffect(() => {
     initStore();
-    SoundService.preloadSounds().catch(() => {});
   }, []);
 
   useEffect(() => {

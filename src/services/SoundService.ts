@@ -1,56 +1,80 @@
 import { Vibration } from 'react-native';
-import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from 'expo-av';
 import { useThemeStore } from '../store/useThemeStore';
 
-// Safe dynamic imports for native haptics module per AGENTS.md rule 3.1
+// Safe dynamic imports for native modules per AGENTS.md rule 3.1
+let AudioModule: any = null;
+let InterruptionModeIOS: any = null;
+let InterruptionModeAndroid: any = null;
+let isAudioChecked = false;
+
+function getAudio() {
+  if (isAudioChecked) return AudioModule;
+  isAudioChecked = true;
+  try {
+    const av = require('expo-av');
+    if (av && av.Audio) {
+      AudioModule = av.Audio;
+      InterruptionModeIOS = av.InterruptionModeIOS;
+      InterruptionModeAndroid = av.InterruptionModeAndroid;
+    }
+  } catch (e) {
+    // Native binary does not contain expo-av module yet
+    AudioModule = null;
+  }
+  return AudioModule;
+}
+
 let HapticsModule: any = null;
-try {
-  HapticsModule = require('expo-haptics');
-} catch (e) {
-  // Safe fallback if native module is not available
+let isHapticsChecked = false;
+
+function getHaptics() {
+  if (isHapticsChecked) return HapticsModule;
+  isHapticsChecked = true;
+  try {
+    HapticsModule = require('expo-haptics');
+  } catch (e) {
+    HapticsModule = null;
+  }
+  return HapticsModule;
 }
 
 class SoundServiceImpl {
   private isConfigured = false;
-  private correctSound: Audio.Sound | null = null;
-  private wrongSound: Audio.Sound | null = null;
+  private correctSound: any = null;
+  private wrongSound: any = null;
   private isPreloading = false;
-
-  constructor() {
-    // Automatically initialize audio mode and preload sounds
-    this.preloadSounds().catch(() => {});
-  }
 
   /**
    * Configure audio session so it plays even if iOS device has silent switch active.
    */
   public async configureAudio() {
-    if (this.isConfigured) return;
+    const audio = getAudio();
+    if (this.isConfigured || !audio) return;
+
     try {
-      if (Audio && typeof Audio.setAudioModeAsync === 'function') {
-        await Audio.setAudioModeAsync({
+      if (typeof audio.setAudioModeAsync === 'function') {
+        await audio.setAudioModeAsync({
           allowsRecordingIOS: false,
           playsInSilentModeIOS: true, // Essential for iOS silent switch
           staysActiveInBackground: false,
-          interruptionModeIOS: InterruptionModeIOS.DuckOthers,
+          interruptionModeIOS: InterruptionModeIOS?.DuckOthers ?? 2,
           shouldDuckAndroid: true,
-          interruptionModeAndroid: InterruptionModeAndroid.DuckOthers,
+          interruptionModeAndroid: InterruptionModeAndroid?.DuckOthers ?? 2,
           playThroughEarpieceAndroid: false,
         });
         this.isConfigured = true;
       }
     } catch (err) {
-      console.warn('[SoundService] Full audio mode config warning, falling back to minimal mode:', err);
       try {
-        if (Audio && typeof Audio.setAudioModeAsync === 'function') {
-          await Audio.setAudioModeAsync({
+        if (typeof audio.setAudioModeAsync === 'function') {
+          await audio.setAudioModeAsync({
             playsInSilentModeIOS: true,
             staysActiveInBackground: false,
           });
           this.isConfigured = true;
         }
-      } catch (fallbackErr) {
-        console.warn('[SoundService] Minimal audio config fallback error:', fallbackErr);
+      } catch (_) {
+        this.isConfigured = true;
       }
     }
   }
@@ -59,43 +83,46 @@ class SoundServiceImpl {
    * Preload audio files so there is 0ms latency when user answers a question.
    */
   public async preloadSounds() {
-    if (this.isPreloading) return;
+    const audio = getAudio();
+    if (this.isPreloading || !audio?.Sound) return;
     this.isPreloading = true;
+
     try {
       await this.configureAudio();
 
-      if (!this.correctSound && Audio?.Sound) {
-        const { sound } = await Audio.Sound.createAsync(
+      if (!this.correctSound) {
+        const { sound } = await audio.Sound.createAsync(
           require('../../assets/sounds/correct.wav'),
           { shouldPlay: false, volume: 1.0 }
         );
         this.correctSound = sound;
       }
 
-      if (!this.wrongSound && Audio?.Sound) {
-        const { sound } = await Audio.Sound.createAsync(
+      if (!this.wrongSound) {
+        const { sound } = await audio.Sound.createAsync(
           require('../../assets/sounds/wrong.wav'),
           { shouldPlay: false, volume: 1.0 }
         );
         this.wrongSound = sound;
       }
     } catch (err) {
-      console.warn('[SoundService] Sound preload warning:', err);
+      // Non-fatal safe fallback
     } finally {
       this.isPreloading = false;
     }
   }
 
   /**
-   * Play cheerful, encouraging chime for a correct answer.
+   * Play cheerful chime for a correct answer.
    */
   public async playCorrect() {
     // 1. Tactile Haptic Feedback
     this.triggerHaptic(true);
 
-    // 2. Audio Playback
+    // 2. Audio Playback Check
     const soundEnabled = useThemeStore.getState().soundEffectsEnabled;
-    if (!soundEnabled || !Audio?.Sound) return;
+    const audio = getAudio();
+    if (!soundEnabled || !audio?.Sound) return;
 
     try {
       if (!this.isConfigured) {
@@ -112,16 +139,15 @@ class SoundServiceImpl {
       }
 
       // If preloaded sound wasn't ready, create and play directly
-      const { sound } = await Audio.Sound.createAsync(
+      const { sound } = await audio.Sound.createAsync(
         require('../../assets/sounds/correct.wav'),
         { shouldPlay: true, volume: 1.0 }
       );
       this.correctSound = sound;
       await sound.playAsync().catch(() => {});
     } catch (err) {
-      console.warn('[SoundService] playCorrect error:', err);
       try {
-        const { sound } = await Audio.Sound.createAsync(
+        const { sound } = await audio.Sound.createAsync(
           require('../../assets/sounds/correct.wav'),
           { shouldPlay: true, volume: 1.0 }
         );
@@ -132,15 +158,16 @@ class SoundServiceImpl {
   }
 
   /**
-   * Play soft, non-intrusive sound for an incorrect answer.
+   * Play soft sound for an incorrect answer.
    */
   public async playWrong() {
     // 1. Tactile Haptic Feedback
     this.triggerHaptic(false);
 
-    // 2. Audio Playback
+    // 2. Audio Playback Check
     const soundEnabled = useThemeStore.getState().soundEffectsEnabled;
-    if (!soundEnabled || !Audio?.Sound) return;
+    const audio = getAudio();
+    if (!soundEnabled || !audio?.Sound) return;
 
     try {
       if (!this.isConfigured) {
@@ -157,16 +184,15 @@ class SoundServiceImpl {
       }
 
       // If preloaded sound wasn't ready, create and play directly
-      const { sound } = await Audio.Sound.createAsync(
+      const { sound } = await audio.Sound.createAsync(
         require('../../assets/sounds/wrong.wav'),
         { shouldPlay: true, volume: 1.0 }
       );
       this.wrongSound = sound;
       await sound.playAsync().catch(() => {});
     } catch (err) {
-      console.warn('[SoundService] playWrong error:', err);
       try {
-        const { sound } = await Audio.Sound.createAsync(
+        const { sound } = await audio.Sound.createAsync(
           require('../../assets/sounds/wrong.wav'),
           { shouldPlay: true, volume: 1.0 }
         );
@@ -181,16 +207,17 @@ class SoundServiceImpl {
    */
   private triggerHaptic(isSuccess: boolean) {
     try {
-      if (HapticsModule?.notificationAsync && HapticsModule?.NotificationFeedbackType) {
+      const haptics = getHaptics();
+      if (haptics?.notificationAsync && haptics?.NotificationFeedbackType) {
         const type = isSuccess
-          ? HapticsModule.NotificationFeedbackType.Success
-          : HapticsModule.NotificationFeedbackType.Error;
-        HapticsModule.notificationAsync(type).catch(() => {});
-      } else if (HapticsModule?.impactAsync && HapticsModule?.ImpactFeedbackStyle) {
+          ? haptics.NotificationFeedbackType.Success
+          : haptics.NotificationFeedbackType.Error;
+        haptics.notificationAsync(type).catch(() => {});
+      } else if (haptics?.impactAsync && haptics?.ImpactFeedbackStyle) {
         const style = isSuccess
-          ? HapticsModule.ImpactFeedbackStyle.Light
-          : HapticsModule.ImpactFeedbackStyle.Medium;
-        HapticsModule.impactAsync(style).catch(() => {});
+          ? haptics.ImpactFeedbackStyle.Light
+          : haptics.ImpactFeedbackStyle.Medium;
+        haptics.impactAsync(style).catch(() => {});
       } else {
         // Fallback to React Native Vibration
         Vibration.vibrate(isSuccess ? 30 : 60);

@@ -3226,7 +3226,7 @@ class DatabaseService {
     skillsCompleted: number;
     vocabCompleted: number;
   }> {
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = this.getLocalDateStr();
 
     if (!this.isNative) {
       let p_done = 0, c_done = 0, s_done = 0, sk_done = 0;
@@ -3270,11 +3270,11 @@ class DatabaseService {
          FROM user_word_progress
          WHERE (correct_count > 0 OR incorrect_count > 0)
            AND (
-             DATE(last_reviewed_at) = DATE('now')
-             OR DATE(last_reviewed_at) = DATE('now', 'localtime')
+             DATE(last_reviewed_at) = ?
+             OR DATE(last_reviewed_at, 'localtime') = ?
              OR last_reviewed_at LIKE ? || '%'
            )`,
-        [todayStr]
+        [todayStr, todayStr, todayStr]
       );
 
       const pDone = Math.min(goals.paragraph, qRow?.p_done || 0);

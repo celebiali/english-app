@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -38,11 +38,21 @@ export const ProfileModal: React.FC<Props> = ({ visible, onClose, onOpenAuth }) 
   const [supabaseUrl, setSupabaseUrl] = useState(SupabaseService.getCredentials().url);
   const [supabaseKey, setSupabaseKey] = useState(SupabaseService.getCredentials().key);
   const [isSaved, setIsSaved] = useState(false);
+  const isSavedTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (isSavedTimerRef.current) {
+        clearTimeout(isSavedTimerRef.current);
+      }
+    };
+  }, []);
 
   const handleSaveKeys = () => {
     SupabaseService.configure(supabaseUrl, supabaseKey);
     setIsSaved(true);
-    setTimeout(() => setIsSaved(false), 2500);
+    if (isSavedTimerRef.current) clearTimeout(isSavedTimerRef.current);
+    isSavedTimerRef.current = setTimeout(() => setIsSaved(false), 2500);
     Alert.alert('Başarılı', 'Supabase bağlantı anahtarları güncellendi.');
   };
 

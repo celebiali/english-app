@@ -303,12 +303,14 @@ export class SupabaseService {
         } catch (_) {}
       }
 
-      // 3. Fallback name if none found: Ali Rıza Çelebi
-      if (!detectedName) {
-        detectedName = 'Ali Rıza Çelebi';
-      }
-
       const email = credential.email || 'apple.user@privaterelay.appleid.com';
+
+      // 3. Fallback name if none found
+      if (!detectedName) {
+        detectedName = email.includes('@') && !email.includes('privaterelay.appleid.com')
+          ? email.split('@')[0]
+          : 'Apple Kullanıcısı';
+      }
 
       const user: UserProfile = {
         id: credential.user || `apple_${Date.now()}`,
@@ -363,6 +365,10 @@ export class SupabaseService {
    * Delete Account (App Store Guideline 5.1.1 Requirement)
    */
   static async deleteAccount(): Promise<boolean> {
+    try {
+      await dbService.deleteCurrentUserData();
+      await dbService.clearUserSession();
+    } catch (_) {}
     this.currentUser = null;
     return true;
   }

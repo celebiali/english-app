@@ -396,6 +396,20 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                   ))}
                 </View>
               )}
+
+              {/* Example Sentence Context Box */}
+              {effectiveExampleEn ? (
+                <View style={[styles.fbEx, { backgroundColor: colors.subtleBackground, borderLeftColor: colors.brand }]}>
+                  <Text style={[styles.fbExEn, { color: colors.text, fontFamily: dynamicFontFamily }]}>
+                    {effectiveExampleEn}
+                  </Text>
+                  {effectiveExampleTr ? (
+                    <Text style={[styles.fbExTr, { color: colors.textSecondary }]}>
+                      {effectiveExampleTr}
+                    </Text>
+                  ) : null}
+                </View>
+              ) : null}
             </View>
           )}
         </Pressable>
@@ -437,24 +451,37 @@ export const CardComponent: React.FC<CardComponentProps> = ({
           </View>
         </View>
       ) : (
-        /* EVALUATION FEEDBACK & NEXT BUTTON */
+        /* EVALUATION FEEDBACK & NEXT BUTTON (Duolingo Style Cohesive Result Sheet) */
         <View style={styles.feedbackContainer}>
           {isCorrectAnswer ? (
-            <View style={[styles.feedbackSuccess, { backgroundColor: colors.successLight, borderColor: colors.successLight }]}>
-              <CheckCircle2 size={22} color={colors.success} />
+            <View style={[styles.feedbackSuccess, { backgroundColor: colors.successLight, borderColor: colors.success }]}>
+              <View style={[styles.feedbackIconBadge, { backgroundColor: colors.success }]}>
+                <CheckCircle2 size={20} color={colors.textOnBrand} />
+              </View>
               <View style={{ flex: 1 }}>
-                <Text style={[styles.feedbackSuccessTitle, { color: colors.success }]}>Tebrikler! Doğru Bildiniz</Text>
+                <Text style={[styles.feedbackSuccessTitle, { color: colors.success }]}>Harika! Doğru Bildiniz 🎉</Text>
                 {matchedWith ? (
-                  <Text style={[styles.feedbackSub, { color: colors.textSecondary }]}>Eşleşen anlam: {matchedWith}</Text>
+                  <Text style={[styles.feedbackSub, { color: colors.textSecondary }]}>
+                    Eşleşen karşılık: <Text style={{ fontWeight: '700', color: colors.text }}>{matchedWith}</Text>
+                  </Text>
                 ) : null}
               </View>
             </View>
           ) : (
-            <View style={[styles.feedbackFail, { backgroundColor: colors.errorLight, borderColor: colors.errorLight }]}>
-              <XCircle size={22} color={colors.error} />
+            <View style={[styles.feedbackFail, { backgroundColor: colors.errorLight, borderColor: colors.error }]}>
+              <View style={[styles.feedbackIconBadge, { backgroundColor: colors.error }]}>
+                <XCircle size={20} color={colors.textOnBrand} />
+              </View>
               <View style={{ flex: 1 }}>
-                <Text style={[styles.feedbackFailTitle, { color: colors.error }]}>Tekrar Edilecek</Text>
-                <Text style={[styles.feedbackSub, { color: colors.textSecondary }]}>Doğru anlam: {cardWord.meaning}</Text>
+                <Text style={[styles.feedbackFailTitle, { color: colors.error }]}>Tekrar Havuzuna Eklendi</Text>
+                {userInput.trim() ? (
+                  <Text style={[styles.feedbackUserAnswer, { color: colors.textSecondary }]}>
+                    Yazdığın: <Text style={{ textDecorationLine: 'line-through' }}>{userInput.trim()}</Text>
+                  </Text>
+                ) : null}
+                <Text style={[styles.feedbackSub, { color: colors.text }]}>
+                  Doğru karşılık: <Text style={{ fontWeight: '800', color: colors.text }}>{cardWord.meaning}</Text>
+                </Text>
               </View>
             </View>
           )}
@@ -502,42 +529,42 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   flashWrapCompact: {
-    minHeight: 130,
-    marginBottom: 10,
+    minHeight: 120,
+    marginBottom: 8,
   },
   flashWrapStandard: {
-    minHeight: 260,
-    marginBottom: 16,
+    minHeight: 180,
+    marginBottom: 14,
   },
   flashWrapFlipped: {
-    minHeight: 250,
-    marginBottom: 16,
+    minHeight: 160,
+    marginBottom: 14,
   },
   flashCard: {
     width: '100%',
-    borderRadius: Platform.select({ ios: 24, android: 16 }),
+    borderRadius: Platform.select({ ios: 22, android: 16 }),
     borderWidth: 1.2,
     overflow: 'hidden',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 14,
+    shadowOpacity: 0.07,
+    shadowRadius: 12,
     elevation: 3,
   },
   flashCardCompact: {
-    minHeight: 130,
+    minHeight: 120,
   },
   flashCardStandard: {
-    minHeight: 260,
+    minHeight: 180,
   },
   flashCardFlipped: {
-    minHeight: 250,
+    minHeight: 160,
   },
   flashFront: {
-    paddingHorizontal: 22,
-    paddingVertical: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 18,
     alignItems: 'center',
     justifyContent: 'space-between',
-    minHeight: 260,
+    minHeight: 180,
   },
   flashFrontCompact: {
     minHeight: 130,
@@ -619,10 +646,10 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
   flashBack: {
-    padding: 22,
+    padding: 18,
     justifyContent: 'flex-start',
-    gap: 10,
-    minHeight: 250,
+    gap: 8,
+    minHeight: 160,
   },
   fbHeaderRow: {
     flexDirection: 'row',
@@ -647,9 +674,9 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   fbTr: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '800',
-    lineHeight: 28,
+    lineHeight: 26,
     marginVertical: 4,
   },
   categoriesWrap: {
@@ -764,9 +791,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    borderWidth: 1.4,
-    padding: 16,
-    borderRadius: 16,
+    borderWidth: 1.2,
+    padding: 14,
+    borderRadius: Platform.select({ ios: 16, android: 12 }),
   },
   feedbackSuccessTitle: {
     fontSize: 15.5,
@@ -776,13 +803,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    borderWidth: 1.4,
-    padding: 16,
+    borderWidth: 1.2,
+    padding: 14,
+    borderRadius: Platform.select({ ios: 16, android: 12 }),
+  },
+  feedbackIconBadge: {
+    width: 32,
+    height: 32,
     borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   feedbackFailTitle: {
     fontSize: 15.5,
     fontWeight: '800',
+  },
+  feedbackUserAnswer: {
+    fontSize: 12.5,
+    marginTop: 2,
+    marginBottom: 2,
   },
   feedbackSub: {
     fontSize: 13,
@@ -793,10 +832,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    height: 56,
+    height: 54,
     borderRadius: Platform.select({ ios: 18, android: 14 }),
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.16,
     shadowRadius: 8,
     elevation: 3,
   },

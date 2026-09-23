@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   StyleSheet,
   View,
@@ -114,6 +114,15 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
   const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
   const [isSubscriptionDetailOpen, setIsSubscriptionDetailOpen] = useState(false);
   const [legalSheetTab, setLegalSheetTab] = useState<'PRIVACY' | 'TERMS' | null>(null);
+  const syncTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (syncTimerRef.current) {
+        clearTimeout(syncTimerRef.current);
+      }
+    };
+  }, []);
 
   // Android hardware back button handler
   useEffect(() => {
@@ -221,7 +230,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
 
   const handleSyncData = async () => {
     setIsSyncing(true);
-    setTimeout(() => {
+    if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
+    syncTimerRef.current = setTimeout(() => {
       updateLastSyncTime();
       setIsSyncing(false);
       Alert.alert('Senkronizasyon Başarılı ☁️', 'Tüm ilerleme ve kelime kartlarınız güncellendi.');
@@ -413,7 +423,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
                   >
                     <Text
                       style={{
-                        color: '#FFFFFF',
+                        color: colors.textOnBrand,
                         fontSize: 9.5,
                         fontWeight: '800',
                         letterSpacing: 0.3,

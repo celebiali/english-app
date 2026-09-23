@@ -54,11 +54,11 @@ export class AIService {
     const activeKey = this.getApiKey();
     if (!activeKey) return null;
 
-    // Ultra-fast active Gemini models (2026) - 700ms latency
+    // Ultra-fast active Gemini models (2026) - official Google AI endpoints
     const modelsToTry = [
-      'gemini-3.5-flash-lite',
-      'gemini-flash-lite-latest',
-      'gemini-3.6-flash',
+      'gemini-2.0-flash',
+      'gemini-1.5-flash',
+      'gemini-1.5-flash-8b',
     ];
 
     for (const model of modelsToTry) {
@@ -117,6 +117,73 @@ export class AIService {
     }
 
     return null;
+  }
+
+  /**
+   * Generates a pedagogical rule-based mistake analysis based on question type
+   */
+  private static generateCuratedMistakeAnalysis(
+    question: QuestionItem,
+    userSelectedOption: OptionKey,
+    correctText: string,
+    userText: string
+  ): AIMistakeAnalysis {
+    let trapType: YdsTrapType = 'Kapsam Aşımı';
+    let whyWrong = `İşaretlediğiniz (${userSelectedOption}) seçeneği: "${userText}" ifadesi metinde veya soru kökünde doğrudan yer almayan aşırı genelleme içermektedir.`;
+    let grammarRule = question.subtopic || 'ÖSYM Akademik Çeldirici Tuzağı';
+
+    switch (question.type) {
+      case 'PARAGRAPH':
+        trapType = 'Kapsam Aşımı';
+        whyWrong = `Paragraf sorularında en sık düşülen tuzaklardan biri seçilmiştir: (${userSelectedOption}) şıkkı metinde ima edilmeyen veya aşırı iddialı (all, never, exclusively vb.) genellemeler içermektedir.`;
+        grammarRule = 'Paragrafta Ana Fikir & Doğrudan Çıkarım';
+        break;
+      case 'CLOZE_TEST':
+      case 'SENTENCE_COMPLETION':
+        trapType = 'Tense Uyuşmazlığı';
+        whyWrong = `Cümle tamamlama ve bağlaç yapılarında zaman uyumu esastır: (${userSelectedOption}) şıkkındaki zaman kipi (tense) veya zıtlık/sebep bağlacı yan cümlecikle mantıksal uyumsuzluk yaratmaktadır.`;
+        grammarRule = 'Zaman Uyumu (Tense Harmony) & Bağlaç Kuralları';
+        break;
+      case 'RESTATEMENT':
+        trapType = 'Anlamca Yakın Kelime Tuzağı';
+        whyWrong = `Anlamca en yakın cümleyi bulurken (${userSelectedOption}) şıkkı orijinal cümlenin derecelendirme zarflarını (partially, mostly, rarely) veya kesinlik derecesini bozmaktadır.`;
+        grammarRule = 'Cümle Anlamı ve Vurgu Dengesi';
+        break;
+      case 'TRANSLATION':
+        trapType = 'Diğer';
+        whyWrong = `Çeviri sorularında cümlenin ana fiili (yüklemi) ve öznesi belirleyicidir: (${userSelectedOption}) şıkkında ana yüklem veya yan cümle bağlacı yanlış aktarılmıştır.`;
+        grammarRule = 'İngilizce - Türkçe Cümle Yapısı ve Yüklem Analizi';
+        break;
+      case 'SKILL_DIALOGUE':
+        trapType = 'Referans (Zamir) Hatası';
+        whyWrong = `Diyalog tamamlama sorularında konuşmanın akışı ve bir önceki cümlenin bıraktığı boşluk esastır: (${userSelectedOption}) şıkkı diyalogdaki soruya doğrudan ve doğal bir yanıt oluşturmamaktadır.`;
+        grammarRule = 'Karşılıklı Konuşma Akışı ve Nezaket/Ton Uyumu';
+        break;
+      default:
+        trapType = 'Bağlaç/Bağlaç Anlamı Hatası';
+        whyWrong = `İşaretlediğiniz (${userSelectedOption}) şıkkı akademik bağlamda çeldirici tuzak içermektedir.`;
+        grammarRule = question.subtopic || 'Akademik İngilizce Gramer & Kelime Bilgisi';
+    }
+
+    return {
+      no_mistake: false,
+      trap_types: [trapType],
+      trap_type: trapType,
+      why_wrong: whyWrong,
+      correct_evidence: `Doğru cevap olan (${question.correct_option}) şıkkı: "${correctText}" ifadesi ${grammarRule.toLowerCase()} kuralıyla tam örtüşmektedir.`,
+      evidence_source: 'text_quote',
+      confidence: 'high',
+      summary: `Bu soru ${grammarRule} konusunu test etmektedir.`,
+      why_correct: `Doğru cevap (${question.correct_option}): "${correctText}"`,
+      why_distractor_failed: whyWrong,
+      key_vocabulary: [
+        'subsequent (ardından gelen, sonraki)',
+        'precedent (emsal, geçmiş örnek)',
+        'deteriorate (kötüleşmek, gerilemek)',
+        'mitigate (hafifletmek, azaltmak)',
+      ],
+      grammar_rule: grammarRule,
+    };
   }
 
   /**
@@ -250,25 +317,7 @@ DİL KURALI: JSON anahtarları İngilizce kalacak, tüm değerler Türkçe yazı
     }
 
     // High-precision curated fallback if API is unreachable
-    return {
-      no_mistake: false,
-      trap_types: ['Kapsam Aşımı'],
-      trap_type: 'Kapsam Aşımı',
-      why_wrong: `İşaretlediğiniz (${userSelectedOption}) şıkkı: "${userText}" ifadesi ÖSYM'nin klasik çeldirici tuzaklarındandır. Bağlaç anlam uyumsuzluğu, zaman kayması ya da metinde doğrulanmayan aşırı genelleme içermektedir.`,
-      correct_evidence: `Doğru cevap olan (${question.correct_option}) şıkkı: "${correctText}" ifadesi, cümledeki zaman uyumu (tense harmony) ve akademik bağlam ile tam örtüşmektedir.`,
-      evidence_source: 'text_quote',
-      confidence: 'high',
-      summary: `Bu soru ${question.subtopic || 'Akademik Bağlam ve Gramer'} kuralını test etmektedir.`,
-      why_correct: `Doğru cevap olan (${question.correct_option}) şıkkı: "${correctText}" ifadesi tam örtüşmektedir.`,
-      why_distractor_failed: `İşaretlediğiniz (${userSelectedOption}) şıkkı çeldirici tuzak içermektedir.`,
-      key_vocabulary: [
-        'deteriorate (kötüleşmek, gerilemek)',
-        'preemptive (önleyici, önceden tedbir alan)',
-        'precedent (emsal, geçmiş örnek)',
-        'subsequent (ardından gelen, sonraki)',
-      ],
-      grammar_rule: question.subtopic || 'Zaman Uyumu, Zıtlık/Sebep Bağlaçları ve Akademik Bağlam',
-    };
+    return this.generateCuratedMistakeAnalysis(question, userSelectedOption, correctText, userText);
   }
 
   /**

@@ -556,7 +556,8 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   checkAndReplenishDailyAIQuestions: async (userId?: string) => {
     try {
       const currentUserId = userId || SupabaseService.getCurrentUser()?.id || 'local_user';
-      const todayStr = new Date().toISOString().split('T')[0];
+      const d = new Date();
+      const todayStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
       const hasGeneratedToday = await dbService.hasGeneratedQuestionsForToday(currentUserId, todayStr);
 
       if (!hasGeneratedToday) {
@@ -602,7 +603,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
 
   answerDailyQuestion: async (question: QuestionItem, selectedOption: OptionKey) => {
     const isCorrect = selectedOption === question.correct_option;
-    const { taskGoals } = get();
+    const { taskGoals, activeDailyQuestions } = get();
 
     // Record in DB: correct -> 'SOLVED_CORRECT' (graduates/disappears), wrong -> 'MISTAKE' (moves to mistake vault)
     await dbService.completeQuestion(question.id, selectedOption, isCorrect);
@@ -613,10 +614,14 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     // Update real consecutive day question streak
     const updatedStreak = await dbService.checkAndUpdateQuestionStreak();
 
+    // Filter out answered question from active daily questions in memory for instant UI reactivity
+    const updatedActiveQuestions = activeDailyQuestions.filter((q) => q.id !== question.id);
+
     set({
       dailyTasksProgress: updatedProg,
       questionStreakCount: updatedStreak,
       streakCount: updatedStreak,
+      activeDailyQuestions: updatedActiveQuestions,
     });
 
     if (!isCorrect) {
@@ -943,13 +948,18 @@ export const useLearningStore = create<LearningState>((set, get) => ({
         console.warn('srEngine.processAnswer error (handled):', err);
       }
 
-      // 2. Vocab streak update (must always run and never be blocked)
+      // 2. Vocab streak update (ONLY when the daily target is reached or session ends)
+      const currentTarget = get().taskGoals?.words || dailyLimit || 25;
+      const isTargetReached = (get().completedTodayCount + 1) >= currentTarget || (nextIdx >= sessionWords.length);
+
       let updatedVocabStreak = get().vocabStreakCount;
-      try {
-        updatedVocabStreak = await dbService.checkAndUpdateVocabStreak();
-      } catch (err) {
-        console.warn('dbService.checkAndUpdateVocabStreak error (handled):', err);
-        updatedVocabStreak = Math.max(1, updatedVocabStreak);
+      if (isTargetReached) {
+        try {
+          updatedVocabStreak = await dbService.checkAndUpdateVocabStreak();
+        } catch (err) {
+          console.warn('dbService.checkAndUpdateVocabStreak error (handled):', err);
+          updatedVocabStreak = Math.max(1, updatedVocabStreak);
+        }
       }
 
       // 3. Spaced repetition box summary
@@ -973,56 +983,13 @@ export const useLearningStore = create<LearningState>((set, get) => ({
           : w
       );
 
-      // If this is a custom folder session, we DO NOT auto-fetch infinite words when finished
-      if (isCustomSession) {
-        set((state) => ({
-          dictionaryWords: updatedDictionary,
-          currentVocabIndex: nextIdx,
-          boxSummary: summary,
-          vocabStreakCount: updatedVocabStreak,
-          streakCount: Math.max(state.streakCount, updatedVocabStreak),
-          completedTodayCount: state.completedTodayCount + 1,
-          dailyTasksProgress: {
-            ...state.dailyTasksProgress,
-            vocabCompleted: state.dailyTasksProgress.vocabCompleted + 1,
-          },
-        }));
-        return;
-      }
-
-      // Seamless continuous learning for global daily queue:
-      if (nextIdx >= sessionWords.length) {
-        const moreWords = await srEngine.loadDailyBatch(dailyLimit || 30, activeStudyFolderId);
-        if (moreWords && moreWords.length > 0) {
-          // Filter out already seen in this session to prevent duplicate immediate loops
-          const existingIds = new Set(sessionWords.map((w) => w.id));
-          const freshWords = moreWords.filter((w) => !existingIds.has(w.id));
-
-          if (freshWords.length > 0) {
-            set((state) => ({
-              dictionaryWords: updatedDictionary,
-              sessionWords: [...state.sessionWords, ...freshWords],
-              currentVocabIndex: nextIdx,
-              boxSummary: summary,
-              vocabStreakCount: updatedVocabStreak,
-              streakCount: Math.max(state.streakCount, updatedVocabStreak),
-              completedTodayCount: state.completedTodayCount + 1,
-              dailyTasksProgress: {
-                ...state.dailyTasksProgress,
-                vocabCompleted: state.dailyTasksProgress.vocabCompleted + 1,
-              },
-            }));
-            return;
-          }
-        }
-      }
-
+      // Session finishes when all words in batch are completed (NO infinite loop appending)
       set((state) => ({
         dictionaryWords: updatedDictionary,
         currentVocabIndex: nextIdx,
         boxSummary: summary,
-        vocabStreakCount: updatedVocabStreak,
-        streakCount: Math.max(state.streakCount, updatedVocabStreak),
+        vocabStreakCount: isTargetReached ? updatedVocabStreak : state.vocabStreakCount,
+        streakCount: isTargetReached ? Math.max(state.streakCount, updatedVocabStreak) : state.streakCount,
         completedTodayCount: state.completedTodayCount + 1,
         dailyTasksProgress: {
           ...state.dailyTasksProgress,

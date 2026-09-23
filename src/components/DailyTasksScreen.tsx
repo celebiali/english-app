@@ -411,10 +411,12 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
     }
 
     // Phase 2: Practice Quiz Phase (Aktif Hatırlama & Tureng / AI Kontrolü)
-    const currentCard = dailyBatchWords[currentVocabIndex] || null;
-    const isFinished = currentVocabIndex >= dailyBatchWords.length;
-    const totalCount = dailyBatchWords.length;
-    const progressPercent = totalCount > 0 ? Math.min(100, Math.round(((currentVocabIndex + 1) / totalCount) * 100)) : 0;
+    const targetLimit = taskGoals?.words || dailyLimit || 25;
+    const isFinished = currentVocabIndex >= dailyBatchWords.length || currentVocabIndex >= targetLimit;
+    const totalCount = Math.min(dailyBatchWords.length, targetLimit);
+    const displayIndex = Math.min(currentVocabIndex + 1, totalCount);
+    const progressPercent = totalCount > 0 ? Math.min(100, Math.round((displayIndex / totalCount) * 100)) : 0;
+    const currentCard = !isFinished ? (dailyBatchWords[currentVocabIndex] || null) : null;
 
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -436,7 +438,7 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
             </Text>
             {totalCount > 0 && !isFinished && (
               <Text style={[styles.practiceCounterText, { color: colors.textSecondary }]}>
-                {currentVocabIndex + 1} / {totalCount}
+                {displayIndex} / {totalCount}
               </Text>
             )}
           </View>
@@ -479,7 +481,7 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
           </KeyboardAvoidingView>
         ) : (
           <View style={styles.sessionFinishedCenter}>
-            <CheckCircle2 size={54} color="#10B981" />
+            <CheckCircle2 size={54} color={colors.success} />
             <Text style={[styles.finishedTitleText, { color: colors.text }]}>
               Harika! Günün Kelime Hedefi Tamamlandı 🎉
             </Text>

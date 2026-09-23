@@ -1,14 +1,8 @@
 import { Vibration } from 'react-native';
+import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from 'expo-av';
 import { useThemeStore } from '../store/useThemeStore';
 
-// Safe dynamic imports for native modules per AGENTS.md rule 3.1
-let AudioModule: any = null;
-try {
-  AudioModule = require('expo-av')?.Audio;
-} catch (e) {
-  // Safe fallback if native module is not available in binary
-}
-
+// Safe dynamic imports for native haptics module per AGENTS.md rule 3.1
 let HapticsModule: any = null;
 try {
   HapticsModule = require('expo-haptics');
@@ -18,26 +12,77 @@ try {
 
 class SoundServiceImpl {
   private isConfigured = false;
-  private activeSounds: any[] = [];
+  private correctSound: Audio.Sound | null = null;
+  private wrongSound: Audio.Sound | null = null;
+  private isPreloading = false;
+
+  constructor() {
+    // Automatically initialize audio mode and preload sounds
+    this.preloadSounds().catch(() => {});
+  }
 
   /**
    * Configure audio session so it plays even if iOS device has silent switch active.
    */
-  private async configureAudio() {
-    if (this.isConfigured || !AudioModule) return;
+  public async configureAudio() {
+    if (this.isConfigured) return;
     try {
-      if (typeof AudioModule.setAudioModeAsync === 'function') {
-        await AudioModule.setAudioModeAsync({
-          playsInSilentModeIOS: true,
+      if (Audio && typeof Audio.setAudioModeAsync === 'function') {
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: false,
+          playsInSilentModeIOS: true, // Essential for iOS silent switch
           staysActiveInBackground: false,
+          interruptionModeIOS: InterruptionModeIOS.DuckOthers,
           shouldDuckAndroid: true,
+          interruptionModeAndroid: InterruptionModeAndroid.DuckOthers,
           playThroughEarpieceAndroid: false,
         });
+        this.isConfigured = true;
       }
-      this.isConfigured = true;
     } catch (err) {
-      // Non-fatal, fallback to default audio mode
-      this.isConfigured = true;
+      console.warn('[SoundService] Full audio mode config warning, falling back to minimal mode:', err);
+      try {
+        if (Audio && typeof Audio.setAudioModeAsync === 'function') {
+          await Audio.setAudioModeAsync({
+            playsInSilentModeIOS: true,
+            staysActiveInBackground: false,
+          });
+          this.isConfigured = true;
+        }
+      } catch (fallbackErr) {
+        console.warn('[SoundService] Minimal audio config fallback error:', fallbackErr);
+      }
+    }
+  }
+
+  /**
+   * Preload audio files so there is 0ms latency when user answers a question.
+   */
+  public async preloadSounds() {
+    if (this.isPreloading) return;
+    this.isPreloading = true;
+    try {
+      await this.configureAudio();
+
+      if (!this.correctSound && Audio?.Sound) {
+        const { sound } = await Audio.Sound.createAsync(
+          require('../../assets/sounds/correct.wav'),
+          { shouldPlay: false, volume: 1.0 }
+        );
+        this.correctSound = sound;
+      }
+
+      if (!this.wrongSound && Audio?.Sound) {
+        const { sound } = await Audio.Sound.createAsync(
+          require('../../assets/sounds/wrong.wav'),
+          { shouldPlay: false, volume: 1.0 }
+        );
+        this.wrongSound = sound;
+      }
+    } catch (err) {
+      console.warn('[SoundService] Sound preload warning:', err);
+    } finally {
+      this.isPreloading = false;
     }
   }
 
@@ -50,26 +95,39 @@ class SoundServiceImpl {
 
     // 2. Audio Playback
     const soundEnabled = useThemeStore.getState().soundEffectsEnabled;
-    if (!soundEnabled || !AudioModule?.Sound) return;
+    if (!soundEnabled || !Audio?.Sound) return;
 
     try {
-      await this.configureAudio();
-      const soundSource = require('../../assets/sounds/correct.wav');
-      const { sound } = await AudioModule.Sound.createAsync(
-        soundSource,
-        { shouldPlay: true, volume: 0.85 }
-      );
+      if (!this.isConfigured) {
+        await this.configureAudio();
+      }
 
-      this.activeSounds.push(sound);
-
-      sound.setOnPlaybackStatusUpdate((status: any) => {
-        if (status.isLoaded && status.didJustFinish) {
-          this.activeSounds = this.activeSounds.filter((s) => s !== sound);
-          sound.unloadAsync().catch(() => {});
+      if (this.correctSound) {
+        const status = await this.correctSound.getStatusAsync();
+        if (status.isLoaded) {
+          await this.correctSound.setPositionAsync(0);
+          await this.correctSound.playAsync();
+          return;
         }
-      });
+      }
+
+      // If preloaded sound wasn't ready, create and play directly
+      const { sound } = await Audio.Sound.createAsync(
+        require('../../assets/sounds/correct.wav'),
+        { shouldPlay: true, volume: 1.0 }
+      );
+      this.correctSound = sound;
+      await sound.playAsync().catch(() => {});
     } catch (err) {
-      // Fails gracefully without breaking the UI
+      console.warn('[SoundService] playCorrect error:', err);
+      try {
+        const { sound } = await Audio.Sound.createAsync(
+          require('../../assets/sounds/correct.wav'),
+          { shouldPlay: true, volume: 1.0 }
+        );
+        this.correctSound = sound;
+        await sound.playAsync().catch(() => {});
+      } catch (_) {}
     }
   }
 
@@ -82,26 +140,39 @@ class SoundServiceImpl {
 
     // 2. Audio Playback
     const soundEnabled = useThemeStore.getState().soundEffectsEnabled;
-    if (!soundEnabled || !AudioModule?.Sound) return;
+    if (!soundEnabled || !Audio?.Sound) return;
 
     try {
-      await this.configureAudio();
-      const soundSource = require('../../assets/sounds/wrong.wav');
-      const { sound } = await AudioModule.Sound.createAsync(
-        soundSource,
-        { shouldPlay: true, volume: 0.85 }
-      );
+      if (!this.isConfigured) {
+        await this.configureAudio();
+      }
 
-      this.activeSounds.push(sound);
-
-      sound.setOnPlaybackStatusUpdate((status: any) => {
-        if (status.isLoaded && status.didJustFinish) {
-          this.activeSounds = this.activeSounds.filter((s) => s !== sound);
-          sound.unloadAsync().catch(() => {});
+      if (this.wrongSound) {
+        const status = await this.wrongSound.getStatusAsync();
+        if (status.isLoaded) {
+          await this.wrongSound.setPositionAsync(0);
+          await this.wrongSound.playAsync();
+          return;
         }
-      });
+      }
+
+      // If preloaded sound wasn't ready, create and play directly
+      const { sound } = await Audio.Sound.createAsync(
+        require('../../assets/sounds/wrong.wav'),
+        { shouldPlay: true, volume: 1.0 }
+      );
+      this.wrongSound = sound;
+      await sound.playAsync().catch(() => {});
     } catch (err) {
-      // Fails gracefully without breaking the UI
+      console.warn('[SoundService] playWrong error:', err);
+      try {
+        const { sound } = await Audio.Sound.createAsync(
+          require('../../assets/sounds/wrong.wav'),
+          { shouldPlay: true, volume: 1.0 }
+        );
+        this.wrongSound = sound;
+        await sound.playAsync().catch(() => {});
+      } catch (_) {}
     }
   }
 
@@ -132,16 +203,18 @@ class SoundServiceImpl {
   }
 
   /**
-   * Clean up any running sounds (e.g. screen unmount)
+   * Clean up any running sounds
    */
   public async cleanup() {
     try {
-      for (const sound of this.activeSounds) {
-        if (sound) {
-          await sound.unloadAsync().catch(() => {});
-        }
+      if (this.correctSound) {
+        await this.correctSound.unloadAsync().catch(() => {});
+        this.correctSound = null;
       }
-      this.activeSounds = [];
+      if (this.wrongSound) {
+        await this.wrongSound.unloadAsync().catch(() => {});
+        this.wrongSound = null;
+      }
     } catch (_) {}
   }
 }

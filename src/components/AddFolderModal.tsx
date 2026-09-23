@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { Folder, FolderPlus, Trash2 } from 'lucide-react-native';
+import { Folder, FolderPlus } from 'lucide-react-native';
 import { useLearningStore } from '../store/useLearningStore';
 import { useThemeStore } from '../store/useThemeStore';
 import { SmoothBottomSheet } from './SmoothBottomSheet';
-import { VocabFolder } from '../types';
+import { VocabFolder, isReadOnlyFolder } from '../types';
 
 interface AddFolderModalProps {
   visible: boolean;
@@ -79,6 +79,9 @@ export const AddFolderModal: React.FC<AddFolderModalProps> = ({
     onClose();
   };
 
+  const isReadOnly = Boolean(folderToEdit && isReadOnlyFolder(folderToEdit));
+  const canDelete = Boolean(folderToEdit && !isReadOnly);
+
   const handleDelete = () => {
     if (!folderToEdit) return;
     Alert.alert(
@@ -99,10 +102,8 @@ export const AddFolderModal: React.FC<AddFolderModalProps> = ({
     );
   };
 
-  const canDelete = Boolean(folderToEdit && !folderToEdit.is_system);
-
   return (
-    <SmoothBottomSheet visible={visible} onClose={onClose} height={canDelete ? 340 : 280}>
+    <SmoothBottomSheet visible={visible} onClose={onClose} height={canDelete ? 350 : 280}>
       <View style={[styles.container, { backgroundColor: colors.cardBackground }]}>
         {/* Header */}
         <View style={styles.headerRow}>
@@ -145,14 +146,14 @@ export const AddFolderModal: React.FC<AddFolderModalProps> = ({
         {/* Delete button if editing user custom folder */}
         {canDelete && (
           <TouchableOpacity
-            style={[styles.deleteBtn, { backgroundColor: colors.errorLight, borderColor: colors.error }]}
+            style={[styles.deleteBtn, { backgroundColor: colors.cardBackground, borderColor: colors.error }]}
             onPress={handleDelete}
-            activeOpacity={0.8}
+            activeOpacity={0.75}
           >
-            <Trash2 size={16} color={colors.error} />
-            <Text style={[styles.deleteBtnText, { color: colors.error }]}>Bu Klasörü Sil</Text>
+            <Text style={[styles.deleteBtnText, { color: colors.error }]}>Klasörü Sil</Text>
           </TouchableOpacity>
         )}
+
 
         {/* Action Buttons */}
         <View style={[styles.footerRow, { borderTopColor: colors.border }]}>
@@ -259,17 +260,16 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   deleteBtn: {
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-    paddingVertical: 11,
-    borderRadius: 12,
-    borderWidth: 1,
+    paddingVertical: 12,
+    borderRadius: 14,
+    borderWidth: 1.2,
     marginBottom: 8,
   },
   deleteBtnText: {
-    fontSize: 13.5,
+    fontSize: 14,
     fontWeight: '700',
+    letterSpacing: 0.2,
   },
 });

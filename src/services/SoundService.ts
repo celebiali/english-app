@@ -130,12 +130,18 @@ class SoundServiceImpl {
       }
 
       if (this.correctSound) {
-        const status = await this.correctSound.getStatusAsync();
-        if (status.isLoaded) {
-          await this.correctSound.setPositionAsync(0);
-          await this.correctSound.playAsync();
-          return;
-        }
+        try {
+          const status = await this.correctSound.getStatusAsync();
+          if (status.isLoaded) {
+            if (typeof this.correctSound.replayAsync === 'function') {
+              await this.correctSound.replayAsync();
+              return;
+            }
+            await this.correctSound.setPositionAsync(0);
+            await this.correctSound.playAsync();
+            return;
+          }
+        } catch (_) {}
       }
 
       // If preloaded sound wasn't ready, create and play directly
@@ -175,12 +181,18 @@ class SoundServiceImpl {
       }
 
       if (this.wrongSound) {
-        const status = await this.wrongSound.getStatusAsync();
-        if (status.isLoaded) {
-          await this.wrongSound.setPositionAsync(0);
-          await this.wrongSound.playAsync();
-          return;
-        }
+        try {
+          const status = await this.wrongSound.getStatusAsync();
+          if (status.isLoaded) {
+            if (typeof this.wrongSound.replayAsync === 'function') {
+              await this.wrongSound.replayAsync();
+              return;
+            }
+            await this.wrongSound.setPositionAsync(0);
+            await this.wrongSound.playAsync();
+            return;
+          }
+        } catch (_) {}
       }
 
       // If preloaded sound wasn't ready, create and play directly

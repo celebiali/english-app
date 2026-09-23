@@ -20,6 +20,7 @@ import {
 } from 'lucide-react-native';
 import { SUBSCRIPTION_PLANS, PromoCodeService, PromoCodeInfo } from '../services/PromoCodeService';
 import { ApplePurchaseService } from '../services/ApplePurchaseService';
+import { InstructorVocabService } from '../services/InstructorVocabService';
 import { useLearningStore } from '../store/useLearningStore';
 import { useThemeStore } from '../store/useThemeStore';
 import { ENV_CONFIG } from '../config/env';
@@ -64,7 +65,22 @@ export const SubscriptionDetailScreen: React.FC<Props> = ({ onBack }) => {
         setAppliedPromo(match);
         setPromoError(null);
         setIsPromoExpanded(false);
-        Alert.alert('Harika! 🎉', `%${match.discountPercent} indirim uygulandı (${match.code})`);
+
+        // Sync instructor exclusive vocabulary if available
+        let vocabMessage = '';
+        if (match.hasInstructorVocab) {
+          try {
+            const syncResult = await InstructorVocabService.syncPromoCodeInstructorPacks(match.code);
+            if (syncResult.success && syncResult.totalWords > 0) {
+              vocabMessage = `\n\n🎓 ${match.teacherName} özel ${syncResult.totalWords} kelimelik çalışma paketi Kelime Havuzunuza eklendi!`;
+            }
+          } catch (_) {}
+        }
+
+        Alert.alert(
+          'Harika! 🎉',
+          `%${match.discountPercent} indirim uygulandı (${match.code}).${vocabMessage}`
+        );
       } else {
         setPromoError('Geçersiz veya süresi dolmuş kupon kodu.');
       }

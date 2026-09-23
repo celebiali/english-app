@@ -1,5 +1,6 @@
 import { PromoCodeInfo, SubscriptionPlan } from '../types';
 import { ENV_CONFIG } from '../config/env';
+import { InstructorVocabService } from './InstructorVocabService';
 
 export { PromoCodeInfo, SubscriptionPlan };
 
@@ -128,25 +129,37 @@ export class PromoCodeService {
   static async validateCodeAsync(inputCode: string): Promise<PromoCodeInfo | null> {
     if (!inputCode) return null;
     const clean = inputCode.trim().toUpperCase();
+    let matchResult: PromoCodeInfo | null = null;
 
     // 1. Check in-memory / registered cache first
     if (this.dynamicCache.has(clean)) {
       const cached = this.dynamicCache.get(clean)!;
-      if (cached.isValid) return cached;
+      if (cached.isValid) matchResult = { ...cached };
     }
 
     // 2. Query Supabase Cloud Database for dynamically created teacher codes
-    const cloudMatch = await this.fetchPromoFromCloud(clean);
-    if (cloudMatch) {
-      this.registerPromoCode(cloudMatch);
-      return cloudMatch;
+    if (!matchResult) {
+      matchResult = await this.fetchPromoFromCloud(clean);
     }
 
     // 3. Smart Dynamic Pattern Matching (Allows any new teacher code like CANAN20, MURAT20, etc.)
-    const patternMatch = this.detectDynamicPatternCode(clean);
-    if (patternMatch) {
-      this.registerPromoCode(patternMatch);
-      return patternMatch;
+    if (!matchResult) {
+      matchResult = this.detectDynamicPatternCode(clean);
+    }
+
+    if (matchResult) {
+      // Check if instructor has exclusive vocabulary pack(s)
+      try {
+        const packs = await InstructorVocabService.fetchInstructorWordPacks(clean);
+        if (packs && packs.length > 0) {
+          matchResult.hasInstructorVocab = true;
+          matchResult.instructorVocabTitle = packs[0].title;
+          matchResult.instructorVocabCount = packs.reduce((acc, p) => acc + (p.words?.length || 0), 0);
+        }
+      } catch (_) {}
+
+      this.registerPromoCode(matchResult);
+      return matchResult;
     }
 
     return null;

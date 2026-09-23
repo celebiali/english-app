@@ -20,6 +20,9 @@ export interface VocabFolder {
   color: string;
   icon: string;
   is_system?: boolean;
+  is_instructor?: boolean;
+  instructor_name?: string;
+  badge_text?: string;
   category_type?: CategoryType;
   level_filter?: string;
   word_count?: number;
@@ -27,6 +30,13 @@ export interface VocabFolder {
   is_completed?: boolean;
   created_at?: string;
 }
+
+export const isReadOnlyFolder = (folder?: { id?: string; is_system?: boolean | number } | null): boolean => {
+  if (!folder || !folder.id) return false;
+  if (folder.id.startsWith('kutuphane_') || folder.id.startsWith('sys_')) return true;
+  if (folder.id.startsWith('folder_') || folder.id === 'custom_default') return false;
+  return Boolean(folder.is_system);
+};
 
 export interface WordItem {
   id: number;
@@ -323,6 +333,37 @@ export interface PromoCodeInfo {
   channelName?: string;
   commissionPercent: number; // e.g. 20 for 20%
   isValid: boolean;
+  hasInstructorVocab?: boolean;
+  instructorVocabTitle?: string;
+  instructorVocabCount?: number;
+}
+
+export interface InstructorWordList {
+  id: string;
+  promo_code: string;
+  instructor_name: string;
+  title: string;
+  description?: string;
+  badge_text?: string;
+  color?: string;
+  icon?: string;
+  is_active: boolean;
+  words?: InstructorWord[];
+  created_at?: string;
+}
+
+export interface InstructorWord {
+  id?: number;
+  list_id?: string;
+  word: string;
+  meaning: string;
+  category?: CategoryType;
+  level?: WordLevel;
+  example_sentence?: string;
+  example_translation?: string;
+  synonyms?: string[];
+  etymology_note?: string;
+  part_of_speech?: string;
 }
 
 export interface SubscriptionPlan {

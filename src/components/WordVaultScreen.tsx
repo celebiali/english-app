@@ -33,12 +33,14 @@ import {
   Edit3,
   Clock,
   Library,
+  GraduationCap,
 } from 'lucide-react-native';
 import { KUTUPHANE_THEMATIC_FOLDERS } from '../services/KutuphaneThematicDataset';
+import { InstructorVocabService } from '../services/InstructorVocabService';
 import * as Speech from 'expo-speech';
 import { useThemeStore } from '../store/useThemeStore';
 import { useLearningStore } from '../store/useLearningStore';
-import { VocabFolder } from '../types';
+import { VocabFolder, isReadOnlyFolder } from '../types';
 import { WordWithProgress, dbService } from '../database/DatabaseService';
 import {
   DictionaryApiService,
@@ -261,6 +263,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     activeStudyFolderId,
     setActiveStudyFolder,
     deleteVocabFolder,
+    userProfile,
   } = useLearningStore();
 
   // Single Folder state: null = Folder View, 'custom_default' = Inside Folder
@@ -278,6 +281,14 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
   const userFolders = useMemo(() => {
     if (!vocabFolders || vocabFolders.length === 0) return [];
     return vocabFolders.filter((f) => !f.is_system);
+  }, [vocabFolders]);
+
+  // Instructor Word Packs
+  const instructorFolders = useMemo(() => {
+    if (!vocabFolders || vocabFolders.length === 0) return [];
+    return vocabFolders.filter(
+      (f) => f.is_instructor || f.id.startsWith('instructor_') || f.instructor_name
+    );
   }, [vocabFolders]);
 
   // Kütüphane Serisi: 6 ana klasör (FolderArchive ikonlu, kutuphane_0X_ formatında)
@@ -353,10 +364,10 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
   const currentFolderName = currentFolder?.name || 'Özel Kelime Defterim';
 
   const handleDeleteFolder = (folder: VocabFolder | null) => {
-    if (!folder || folder.is_system) return;
+    if (!folder || isReadOnlyFolder(folder)) return;
     Alert.alert(
       'Klasörü Sil',
-      `"${folder.name}" klasörünü ve içerisindeki kelimeleri silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`,
+      `"${folder.name}" klasörünü ve içerisindeki kelimeleri kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`,
       [
         { text: 'Vazgeç', style: 'cancel' },
         {
@@ -364,10 +375,8 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
           style: 'destructive',
           onPress: async () => {
             await deleteVocabFolder(folder.id);
-            if (isInsideFolder && selectedFolderId === folder.id) {
-              setIsInsideFolder(false);
-              setSelectedFolderId('custom_default');
-            }
+            setIsInsideFolder(false);
+            setSelectedFolderId('custom_default');
           },
         },
       ]
@@ -419,6 +428,12 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
   useEffect(() => {
     loadVocabSession();
     loadVocabFolders();
+
+    // Auto-sync instructor packs if user has an applied promo code
+    const appliedCode = userProfile?.appliedPromoCode;
+    if (appliedCode) {
+      InstructorVocabService.syncPromoCodeInstructorPacks(appliedCode).catch(() => {});
+    }
   }, []);
 
   // Dictionary API search with 120ms debounce & abortable controller
@@ -1386,6 +1401,11 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               <Text style={[styles.folderTitleText, { color: colors.text }]} numberOfLines={1}>
                 {currentFolderName}
               </Text>
+              {!isReadOnlyFolder(currentFolder) && (
+                <View style={[styles.editPillBadge, { backgroundColor: colors.brandLight }]}>
+                  <Text style={[styles.editPillText, { color: colors.brand }]}>Düzenle / Sil</Text>
+                </View>
+              )}
             </View>
             <Text style={[styles.folderSubtitleText, { color: colors.textSecondary }]}>
               {totalCount} kelime • {monthlyCount} tamamlandı
@@ -1518,6 +1538,22 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
                   ? `"${folderSearchQuery}" aramasına uygun kelime bulunamadı.`
                   : 'Arama çubuğundan kelime arayıp ekleyebilirsiniz.'}
               </Text>
+
+              {/* Clean Professional Delete Folder Button if empty and not readonly */}
+              {!isReadOnlyFolder(currentFolder) && !folderSearchQuery && (
+                <TouchableOpacity
+                  style={[
+                    styles.emptyDeleteFolderBtn,
+                    { borderColor: colors.error, backgroundColor: colors.cardBackground },
+                  ]}
+                  onPress={() => handleDeleteFolder(currentFolder)}
+                  activeOpacity={0.75}
+                >
+                  <Text style={[styles.emptyDeleteFolderBtnText, { color: colors.error }]}>
+                    Klasörü Sil
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           }
         />
@@ -1723,86 +1759,76 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
             </View>
           </View>
 
-          {/* KELİME KLASÖRLERİ */}
-          <View style={styles.sectionGroup}>
-            <View style={styles.sectionHeaderRow}>
-              <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
-                {userFolders.length > 1 ? 'KELİME KLASÖRLERİ' : 'KELİME KLASÖRÜ'}
-              </Text>
-              <TouchableOpacity
-                style={[
-                  styles.addFolderHeaderBtn,
-                  { backgroundColor: colors.brandLight },
-                ]}
-                onPress={handleOpenCreateFolder}
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                activeOpacity={0.7}
-              >
-                <Plus size={16} color={colors.brand} strokeWidth={2.8} />
-              </TouchableOpacity>
-            </View>
+          {/* EĞİTMEN ÖZEL LİSTELERİ (Promosyon Kodu ile Açılan Paketler) */}
+          {instructorFolders.length > 0 && (
+            <View style={styles.sectionGroup}>
+              <View style={styles.sectionHeaderRow}>
+                <View style={styles.kutuphaneSectionTitleRow}>
+                  <GraduationCap size={16} color="#8B5CF6" />
+                  <Text style={[styles.sectionHeading, { color: '#8B5CF6' }]}>
+                    EĞİTMEN ÖZEL LİSTELERİ
+                  </Text>
+                </View>
+              </View>
 
-            {userFolders.map((folder) => {
-              const fCount = folder.word_count || 0;
-              const fLearned = folder.learned_count || 0;
-              const fPct = fCount > 0 ? Math.round((fLearned / fCount) * 100) : 0;
+              {instructorFolders.map((folder) => {
+                const fCount = folder.word_count || 0;
+                const fLearned = folder.learned_count || 0;
+                const fPct = fCount > 0 ? Math.round((fLearned / fCount) * 100) : 0;
 
-              return (
-                <TouchableOpacity
-                  key={folder.id}
-                  style={[styles.singleFolderCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}
-                  onPress={() => {
-                    setSelectedFolderId(folder.id);
-                    setIsInsideFolder(true);
-                    setFolderSearchQuery('');
-                    setFilterMode('ALL');
-                  }}
-                  activeOpacity={0.75}
-                >
-                  {/* Folder Icon */}
-                  <View style={[styles.folderIconBadge, { backgroundColor: colors.brandLight }]}>
-                    <Folder size={24} color={colors.brand} />
-                  </View>
+                return (
+                  <TouchableOpacity
+                    key={folder.id}
+                    style={[styles.singleFolderCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}
+                    onPress={() => {
+                      setSelectedFolderId(folder.id);
+                      setIsInsideFolder(true);
+                      setFolderSearchQuery('');
+                      setFilterMode('ALL');
+                    }}
+                    activeOpacity={0.75}
+                  >
+                    <View style={[styles.folderIconBadge, { backgroundColor: `${folder.color || '#8B5CF6'}18` }]}>
+                      <GraduationCap size={22} color={folder.color || '#8B5CF6'} />
+                    </View>
 
-                  {/* Folder Info */}
-                  <View style={styles.folderInfo}>
-                    <View style={styles.folderTitleLine}>
-                      <Text style={[styles.folderItemTitle, { color: colors.text }]} numberOfLines={1}>
-                        {folder.name}
+                    <View style={styles.folderInfo}>
+                      <View style={styles.folderTitleLine}>
+                        <Text style={[styles.folderItemTitle, { color: colors.text }]} numberOfLines={1}>
+                          {folder.name}
+                        </Text>
+                        <View style={[styles.badgePill, { backgroundColor: `${folder.color || '#8B5CF6'}18` }]}>
+                          <Text style={[styles.badgePillText, { color: folder.color || '#8B5CF6' }]}>
+                            {folder.badge_text || '🎓 EĞİTMEN'}
+                          </Text>
+                        </View>
+                      </View>
+
+                      <Text style={[styles.folderItemSubtitle, { color: colors.textSecondary }]} numberOfLines={1}>
+                        {folder.description || `${folder.instructor_name || 'Eğitmen'} Özel Kelime Paketi`}
                       </Text>
-                      <View style={[styles.badgePill, { backgroundColor: colors.brandLight }]}>
-                        <Text style={[styles.badgePillText, { color: colors.brand }]}>
-                          {fCount} KELİME
+
+                      <View style={styles.folderProgressRow}>
+                        <View style={[styles.folderProgressBar, { backgroundColor: colors.subtleBackground }]}>
+                          <View
+                            style={[
+                              styles.folderProgressFill,
+                              { width: `${fPct}%`, backgroundColor: fPct === 100 ? '#10B981' : (folder.color || '#8B5CF6') },
+                            ]}
+                          />
+                        </View>
+                        <Text style={[styles.folderProgressText, { color: colors.textSecondary }]}>
+                          {fLearned}/{fCount} (%{fPct})
                         </Text>
                       </View>
                     </View>
 
-                    <Text style={[styles.folderItemSubtitle, { color: colors.textSecondary }]}>
-                      {folder.description || 'Özel Eklenen Kelimeler Listesi'}
-                    </Text>
-
-                    {/* Progress bar inside folder row */}
-                    <View style={styles.folderProgressRow}>
-                      <View style={[styles.folderProgressBar, { backgroundColor: colors.subtleBackground }]}>
-                        <View
-                          style={[
-                            styles.folderProgressFill,
-                            { width: `${fPct}%`, backgroundColor: fPct === 100 ? '#10B981' : colors.brand },
-                          ]}
-                        />
-                      </View>
-                      <Text style={[styles.folderProgressText, { color: colors.textSecondary }]}>
-                        {fLearned}/{fCount} (%{fPct})
-                      </Text>
-                    </View>
-                  </View>
-
-                  {/* Right Arrow */}
-                  <ChevronRight size={20} color={colors.textSecondary} style={styles.folderChevron} />
-                </TouchableOpacity>
-              );
-            })}
-          </View>
+                    <ChevronRight size={18} color={colors.textSecondary} />
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          )}
 
           {/* KÜTÜPHANE SERİSİ */}
           {kutuphaneMainFolders.length > 0 && (
@@ -3064,5 +3090,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
+  },
+  emptyDeleteFolderBtn: {
+    marginTop: 18,
+    paddingHorizontal: 22,
+    paddingVertical: 11,
+    borderRadius: 12,
+    borderWidth: 1.2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyDeleteFolderBtnText: {
+    fontSize: 13.5,
+    fontWeight: '700',
+  },
+  editPillBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+    marginLeft: 6,
+  },
+  editPillText: {
+    fontSize: 11,
+    fontWeight: '700',
   },
 });

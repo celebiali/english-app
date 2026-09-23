@@ -150,6 +150,42 @@ interface LearningState {
   setDailyLimit: (limit: number) => Promise<{ success: boolean; message?: string }>;
 }
 
+const getInitialUserState = () => ({
+  streakCount: 0,
+  questionStreakCount: 0,
+  vocabStreakCount: 0,
+  completedTodayCount: 0,
+  currentVocabIndex: 0,
+  currentDailyIndex: 0,
+  dailyTasksProgress: {
+    paragraphCompleted: 0,
+    clozeCompleted: 0,
+    sentenceCompleted: 0,
+    skillsCompleted: 0,
+    vocabCompleted: 0,
+  },
+  activeDailyQuestions: [] as QuestionItem[],
+  sessionWords: [] as CardWord[],
+  dictionaryWords: [] as WordWithProgress[],
+  weeklyWords: [] as WordWithProgress[],
+  monthlyWords: [] as WordWithProgress[],
+  boxSummary: {
+    specialPoolCount: 0,
+    dailyBoxCount: 0,
+    weeklyBoxCount: 0,
+    monthlyBoxCount: 0,
+    totalWords: 0,
+    learnedWords: 0,
+  } as BoxCountSummary,
+  mistakes: [] as MistakeItem[],
+  selectedMistake: null,
+  examHistory: [] as ExamScoreCard[],
+  currentExam: null,
+  examState: null,
+  examScoreCard: null,
+  selectedCatalogExam: null,
+});
+
 export const useLearningStore = create<LearningState>((set, get) => ({
   activeTab: 'TASKS',
   isLoading: true,
@@ -318,20 +354,51 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     }
 
     SupabaseService.setCurrentUser(enrichedProfile);
-    set({ userProfile: enrichedProfile });
 
     if (enrichedProfile) {
+      // 1. Switch active database to this user's isolated storage
+      await dbService.switchUser(enrichedProfile.id);
       await dbService.saveUserSession(enrichedProfile);
-      // Schedule study reminders for user
-      const streak = get().streakCount;
-      const target = get().dailyQuestionTarget;
-      NotificationService.scheduleAllReminders(20, 0, target, streak).catch(() => {});
-    } else {
-      await dbService.clearUserSession();
-    }
 
-    // Refresh daily questions for the current active user
-    await get().loadDailyTasks(true);
+      // 2. Load fresh user-specific settings and streaks from their isolated database
+      const overallStreak = await dbService.getStreakCount();
+      const qStreak = await dbService.getQuestionStreakCount();
+      const vStreak = await dbService.getVocabStreakCount();
+      const effectiveStreak = Math.max(overallStreak, qStreak, vStreak);
+      const examHist = await dbService.getExamHistory();
+      const userGoals = await dbService.getUserTaskGoals();
+      const activeFolderId = await dbService.getActiveStudyFolderId();
+      const totalTarget = userGoals.paragraph + userGoals.cloze + userGoals.sentence + userGoals.skills;
+
+      // 3. Reset in-memory state and load this user's data
+      set({
+        ...getInitialUserState(),
+        userProfile: enrichedProfile,
+        streakCount: effectiveStreak,
+        questionStreakCount: Math.max(qStreak, effectiveStreak),
+        vocabStreakCount: Math.max(vStreak, effectiveStreak),
+        examHistory: examHist,
+        taskGoals: userGoals,
+        dailyQuestionTarget: totalTarget,
+        dailyLimit: userGoals.words || 25,
+        activeStudyFolderId: activeFolderId || 'sys_conn',
+      });
+
+      // 4. Reload tasks, mistakes and vocabulary for this specific user
+      await get().loadDailyTasks(true);
+      await get().loadMistakes();
+      await get().loadVocabSession(true);
+
+      NotificationService.scheduleAllReminders(20, 0, totalTarget, effectiveStreak).catch(() => {});
+    } else {
+      // User is logging out -> Clear active session, switch to guest DB and purge store
+      await dbService.clearUserSession();
+      await dbService.switchUser('guest');
+      set({
+        ...getInitialUserState(),
+        userProfile: null,
+      });
+    }
   },
 
   getUserAccessStatus: (): UserAccessStatus => {
@@ -513,13 +580,14 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       const activeQs = await dbService.getDailyTaskQuestions(taskGoals, userId);
       const qStreak = await dbService.getQuestionStreakCount();
       const vStreak = await dbService.getVocabStreakCount();
+      const currentCombinedStreak = Math.max(qStreak, vStreak);
       set({
         dailyTasksProgress: todayProg,
         completedTodayCount: todayProg.vocabCompleted,
         activeDailyQuestions: activeQs,
         questionStreakCount: qStreak,
         vocabStreakCount: vStreak,
-        streakCount: qStreak,
+        streakCount: currentCombinedStreak,
         currentDailyIndex: 0,
       });
     } catch (err) {
@@ -862,20 +930,39 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     const nextIdx = currentVocabIndex + 1;
 
     try {
-      const updatedProg = await srEngine.processAnswer(currentWord.id, isCorrect);
-      const updatedVocabStreak = await dbService.checkAndUpdateVocabStreak();
-      const summary = await srEngine.fetchBoxSummary();
+      // 1. Spaced Repetition progress update
+      let updatedProg: any = null;
+      try {
+        updatedProg = await srEngine.processAnswer(currentWord.id, isCorrect);
+      } catch (err) {
+        console.warn('srEngine.processAnswer error (handled):', err);
+      }
+
+      // 2. Vocab streak update (must always run and never be blocked)
+      let updatedVocabStreak = get().vocabStreakCount;
+      try {
+        updatedVocabStreak = await dbService.checkAndUpdateVocabStreak();
+      } catch (err) {
+        console.warn('dbService.checkAndUpdateVocabStreak error (handled):', err);
+        updatedVocabStreak = Math.max(1, updatedVocabStreak);
+      }
+
+      // 3. Spaced repetition box summary
+      let summary = get().boxSummary;
+      try {
+        summary = await srEngine.fetchBoxSummary();
+      } catch (_) {}
 
       // In-memory update for dictionaryWords so UI & filters update immediately
       const updatedDictionary = (get().dictionaryWords || []).map((w) =>
         w.id === currentWord.id
           ? {
               ...w,
-              box: updatedProg.box,
-              status: updatedProg.status,
-              correctCount: updatedProg.correct_count,
-              incorrectCount: updatedProg.incorrect_count,
-              nextReviewAt: updatedProg.next_review_at,
+              box: updatedProg?.box ?? w.box,
+              status: updatedProg?.status ?? w.status,
+              correctCount: updatedProg?.correct_count ?? (w.correctCount || 0) + (isCorrect ? 1 : 0),
+              incorrectCount: updatedProg?.incorrect_count ?? (w.incorrectCount || 0) + (isCorrect ? 0 : 1),
+              nextReviewAt: updatedProg?.next_review_at ?? w.nextReviewAt,
               isStudied: true,
             }
           : w
@@ -939,9 +1026,12 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       }));
     } catch (err) {
       console.warn('answerCurrentVocabCard safe fallback on error:', err);
-      // DEFENSIVE: Always increment index so the card ALWAYS advances smoothly!
+      // DEFENSIVE: Always increment index and ensure streak is at least 1 for today!
+      const fallbackStreak = Math.max(1, get().vocabStreakCount);
       set((state) => ({
         currentVocabIndex: nextIdx,
+        vocabStreakCount: fallbackStreak,
+        streakCount: Math.max(state.streakCount, fallbackStreak),
         completedTodayCount: state.completedTodayCount + 1,
         dailyTasksProgress: {
           ...state.dailyTasksProgress,
@@ -995,7 +1085,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       await dbService.deleteVocabFolder(id);
       set((state) => ({
         ...(state.activeFolderId === id ? { activeFolderId: null } : {}),
-        ...(state.activeStudyFolderId === id ? { activeStudyFolderId: 'sys_conn' } : {}),
+        ...(state.activeStudyFolderId === id ? { activeStudyFolderId: 'kutuphane_01' } : {}),
       }));
       await get().loadVocabFolders();
       await get().loadVocabSession();
@@ -1055,25 +1145,11 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     set({ isLoading: true });
     try {
       await SupabaseService.deleteAccount();
-      await dbService.resetAllUserProgress();
-      await dbService.clearUserSession();
-      await dbService.seedQuestionsIfEmpty();
+      await dbService.deleteCurrentUserData();
       await get().setUserProfile(null);
-      await get().loadDailyTasks(true);
-      await get().loadVocabSession(true);
-      await get().loadMistakes();
-      const qStreak = await dbService.getQuestionStreakCount();
-      const vStreak = await dbService.getVocabStreakCount();
-      const examHist = await dbService.getExamHistory();
       set({
-        streakCount: qStreak,
-        questionStreakCount: qStreak,
-        vocabStreakCount: vStreak,
-        examHistory: examHist,
+        ...getInitialUserState(),
         userProfile: null,
-        currentDailyIndex: 0,
-        currentVocabIndex: 0,
-        completedTodayCount: 0,
         isLoading: false,
       });
     } catch (err) {

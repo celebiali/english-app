@@ -159,13 +159,92 @@ class DatabaseService {
   private memoryDb: MemoryDatabase = new MemoryDatabase();
   private isNative: boolean = false;
   private dbInstance: any = null;
+  private sessionDbInstance: any = null;
+  private currentDbName: string = 'yds_vocab.db';
+  private currentUserId: string = 'local_user';
 
-  async initDatabase(): Promise<void> {
+  /**
+   * Dedicated SQLite database for persisting global active session
+   */
+  private async getSessionDb(): Promise<any> {
+    if (this.sessionDbInstance) return this.sessionDbInstance;
     try {
       const SQLite: any = await import('expo-sqlite');
       if (SQLite && SQLite.openDatabaseAsync) {
-        this.dbInstance = await SQLite.openDatabaseAsync('yds_vocab.db');
+        this.sessionDbInstance = await SQLite.openDatabaseAsync('pratik_session.db');
+        await this.sessionDbInstance.execAsync(`
+          CREATE TABLE IF NOT EXISTS active_session (
+            id TEXT PRIMARY KEY,
+            user_json TEXT NOT NULL,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+        `);
+      }
+    } catch (e) {
+      console.warn('Failed to open pratik_session.db:', e);
+    }
+    return this.sessionDbInstance;
+  }
+
+  /**
+   * Deterministic, safe SQLite database filename per user
+   * Ali / Primary user retains the existing 'yds_vocab.db' so 0 data is lost.
+   * New users and guest get their own clean, isolated databases.
+   */
+  public getDatabaseNameForUser(userId?: string): string {
+    if (!userId || userId === 'guest' || userId === 'guest_user') {
+      return 'pratik_guest.db';
+    }
+    const clean = userId.trim().toLowerCase();
+    if (clean === 'user_ali_celebi' || clean === 'apple.review@ydspratik.com' || clean === 'ali@ydspratik.com' || clean === 'local_user') {
+      return 'yds_vocab.db';
+    }
+    const sanitized = clean.replace(/[^a-zA-Z0-9_-]/g, '_');
+    return `pratik_${sanitized}.db`;
+  }
+
+  private switchUserLock: Promise<void> | null = null;
+
+  /**
+   * Dynamically switch active SQLite database to the specified user with mutex lock
+   */
+  async switchUser(userId?: string): Promise<void> {
+    while (this.switchUserLock) {
+      await this.switchUserLock;
+    }
+    const currentPromise = this._switchUserInternal(userId);
+    this.switchUserLock = currentPromise;
+    try {
+      await currentPromise;
+    } finally {
+      if (this.switchUserLock === currentPromise) {
+        this.switchUserLock = null;
+      }
+    }
+  }
+
+  private async _switchUserInternal(userId?: string): Promise<void> {
+    const targetDbName = this.getDatabaseNameForUser(userId);
+    this.currentUserId = userId || 'guest';
+
+    if (this.currentDbName === targetDbName && this.dbInstance) {
+      return;
+    }
+
+    try {
+      const SQLite: any = await import('expo-sqlite');
+      if (SQLite && SQLite.openDatabaseAsync) {
+        if (this.dbInstance && typeof this.dbInstance.closeAsync === 'function') {
+          try {
+            await this.dbInstance.closeAsync();
+          } catch (_) {}
+          this.dbInstance = null;
+        }
+
+        this.dbInstance = await SQLite.openDatabaseAsync(targetDbName);
+        this.currentDbName = targetDbName;
         this.isNative = true;
+
         await this.execNativeSchema();
         await this.seedQuestionsIfEmpty();
         await this.seedWordsIfEmpty();
@@ -173,13 +252,28 @@ class DatabaseService {
         return;
       }
     } catch (e) {
-      console.warn('Native SQLite unavailable. Falling back to Memory Database Layer.', e);
+      console.warn('Native SQLite switchUser unavailable. Falling back to Memory Database Layer.', e);
     }
+
     this.isNative = false;
+    this.currentDbName = targetDbName;
     await this.memoryDb.init();
     await this.seedQuestionsIfEmpty();
     await this.seedWordsIfEmpty();
     await this.seedKutuphaneWordsIfMissing();
+  }
+
+  async initDatabase(userId?: string): Promise<void> {
+    let initialUserId = userId;
+    if (!initialUserId) {
+      try {
+        const saved = await this.getUserSession();
+        if (saved?.id) {
+          initialUserId = saved.id;
+        }
+      } catch (_) {}
+    }
+    await this.switchUser(initialUserId);
   }
 
   private async execNativeSchema(): Promise<void> {
@@ -352,6 +446,11 @@ class DatabaseService {
     // Update default folder color from green to blue
     try {
       await this.dbInstance.execAsync(`UPDATE vocab_folders SET color = '#2563EB' WHERE id = 'sys_vocab_a' AND color = '#10B981';`);
+    } catch (_) {}
+
+    // Ensure all custom/user folders are not marked as system
+    try {
+      await this.dbInstance.execAsync(`UPDATE vocab_folders SET is_system = 0 WHERE id NOT LIKE 'kutuphane_%' AND id NOT LIKE 'sys_%';`);
     } catch (_) {}
 
     // Seed default folders
@@ -1403,6 +1502,73 @@ class DatabaseService {
     return newFolder;
   }
 
+  async getVocabFolderById(id: string): Promise<VocabFolder | null> {
+    if (!this.isNative) {
+      return this.memoryDb.folders.get(id) || null;
+    }
+    const row: any = await this.dbInstance.getFirstAsync(
+      `SELECT * FROM vocab_folders WHERE id = ?`,
+      [id]
+    );
+    if (!row) return null;
+    return {
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      color: row.color,
+      icon: row.icon,
+      is_system: row.is_system === 1,
+      category_type: row.category_type,
+      level_filter: row.level_filter || undefined,
+      created_at: row.created_at,
+    };
+  }
+
+  async createVocabFolderWithId(folder: VocabFolder): Promise<void> {
+    if (!this.isNative) {
+      this.memoryDb.folders.set(folder.id, folder);
+      return;
+    }
+    await this.dbInstance.runAsync(
+      `INSERT OR REPLACE INTO vocab_folders (id, name, description, color, icon, is_system, category_type)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [
+        folder.id,
+        folder.name,
+        folder.description || '',
+        folder.color || '#8B5CF6',
+        folder.icon || 'GraduationCap',
+        folder.is_system ? 1 : 0,
+        folder.category_type || 'CUSTOM',
+      ]
+    );
+  }
+
+  async insertInstructorWordIfMissing(word: Partial<WordItem>): Promise<boolean> {
+    const cleanWord = (word.word || '').trim().toLowerCase();
+    const folderName = (word.subcategory || word.folder_name || '').trim();
+    if (!cleanWord) return false;
+
+    if (!this.isNative) {
+      for (const w of this.memoryDb.words.values()) {
+        if (w.word.toLowerCase() === cleanWord && (w.subcategory === folderName || w.folder_name === folderName)) {
+          return false;
+        }
+      }
+      await this.insertCustomWord(word);
+      return true;
+    }
+
+    const existing: any = await this.dbInstance.getFirstAsync(
+      `SELECT id FROM words WHERE LOWER(word) = ? AND (subcategory = ? OR folder_name = ?)`,
+      [cleanWord, folderName, folderName]
+    );
+    if (existing) return false;
+
+    await this.insertCustomWord(word);
+    return true;
+  }
+
   async updateVocabFolder(
     id: string,
     updates: { name?: string; description?: string; color?: string; icon?: string }
@@ -1464,7 +1630,7 @@ class DatabaseService {
     }
     await this.dbInstance.runAsync(`DELETE FROM vocab_folders WHERE id = ?`, [id]);
     await this.dbInstance.runAsync(
-      `UPDATE user_settings SET active_study_folder_id = 'sys_conn' WHERE active_study_folder_id = ?`,
+      `UPDATE user_settings SET active_study_folder_id = 'kutuphane_01' WHERE active_study_folder_id = ?`,
       [id]
     );
   }
@@ -2196,12 +2362,10 @@ class DatabaseService {
 
       // Record to daily_stats for words_reviewed
       await this.dbInstance.runAsync(
-        `INSERT INTO daily_stats (date, words_reviewed, updated_at)
-         VALUES (date('now'), 1, datetime('now'))
-         ON CONFLICT(date) DO UPDATE SET
-          words_reviewed = words_reviewed + 1,
-          updated_at = datetime('now')`
-      );
+        `INSERT INTO daily_stats (study_date, words_reviewed)
+         VALUES (date('now'), 1)
+         ON CONFLICT(study_date) DO UPDATE SET words_reviewed = words_reviewed + 1`
+      ).catch(() => {});
     } else {
       this.memoryDb.progress.set(wordId, updatedProg);
     }
@@ -2424,8 +2588,8 @@ class DatabaseService {
           folderParams = [targetFolder.category_type];
         }
       } else {
-        folderFilterSql = `w.subcategory = ?`;
-        folderParams = [targetFolder.name];
+        folderFilterSql = `(w.subcategory = ? OR w.folder_name = ?)`;
+        folderParams = [targetFolder.name, targetFolder.name];
       }
     }
 
@@ -2794,8 +2958,30 @@ class DatabaseService {
       const count = Number(row?.vocab_streak_count) || Number(row?.streak_count) || 0;
 
       if (lastVocabDate === todayStr || lastVocabDate === yesterdayStr) {
-        return count;
+        return Math.max(1, count);
       }
+
+      // Live fallback: check if user studied words today in user_word_progress or daily_stats
+      const todayReviews: any = await this.dbInstance.getFirstAsync(
+        `SELECT COUNT(*) as cnt FROM user_word_progress 
+         WHERE (correct_count > 0 OR incorrect_count > 0)
+           AND (last_reviewed_at LIKE ? || '%' OR DATE(last_reviewed_at) = DATE('now') OR DATE(last_reviewed_at) = DATE('now', 'localtime'))`,
+        [todayStr]
+      ).catch(() => null);
+
+      if (todayReviews && Number(todayReviews.cnt) > 0) {
+        return await this.checkAndUpdateVocabStreak();
+      }
+
+      const todayStats: any = await this.dbInstance.getFirstAsync(
+        `SELECT words_reviewed FROM daily_stats WHERE study_date = ? AND words_reviewed > 0`,
+        [todayStr]
+      ).catch(() => null);
+
+      if (todayStats && Number(todayStats.words_reviewed) > 0) {
+        return await this.checkAndUpdateVocabStreak();
+      }
+
       return 0;
     } catch (e) {
       console.warn('Failed to get vocab streak from SQLite:', e);
@@ -2828,7 +3014,16 @@ class DatabaseService {
       let count = Math.max(Number(row?.vocab_streak_count) || 0, Number(row?.streak_count) || 0);
       const lastDate = row?.last_vocab_date || row?.last_active_date;
 
-      const studiedYesterday = lastDate === yesterdayStr || row?.last_vocab_date === yesterdayStr || row?.last_active_date === yesterdayStr;
+      let studiedYesterday = lastDate === yesterdayStr || row?.last_vocab_date === yesterdayStr || row?.last_active_date === yesterdayStr;
+      if (!studiedYesterday) {
+        const yestStat: any = await this.dbInstance.getFirstAsync(
+          `SELECT words_reviewed FROM daily_stats WHERE study_date = ? AND words_reviewed > 0`,
+          [yesterdayStr]
+        ).catch(() => null);
+        if (yestStat && Number(yestStat.words_reviewed) > 0) {
+          studiedYesterday = true;
+        }
+      }
 
       if (lastDate === todayStr || row?.last_active_date === todayStr) {
         count = Math.max(1, count);
@@ -3120,23 +3315,35 @@ class DatabaseService {
     }
 
     try {
-      // Clear any previous single session
-      await this.dbInstance.runAsync(`DELETE FROM user_session`);
-      await this.dbInstance.runAsync(
-        `INSERT INTO user_session (id, email, full_name, target_score, is_guest, is_pro, pro_expires_at, applied_promo_code, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-          user.id,
-          user.email,
-          user.fullName,
-          user.targetScore || 80,
-          user.isGuest ? 1 : 0,
-          user.isPro ? 1 : 0,
-          user.proExpiresAt || null,
-          user.appliedPromoCode || null,
-          user.createdAt || new Date().toISOString(),
-        ]
-      );
+      // 1. Save in global session DB so app remembers active user on launch
+      const sDb = await this.getSessionDb();
+      if (sDb) {
+        await sDb.runAsync(`DELETE FROM active_session`);
+        await sDb.runAsync(
+          `INSERT INTO active_session (id, user_json) VALUES (?, ?)`,
+          [user.id, JSON.stringify(user)]
+        );
+      }
+
+      // 2. Also save in current user database
+      if (this.dbInstance) {
+        await this.dbInstance.runAsync(`DELETE FROM user_session`).catch(() => {});
+        await this.dbInstance.runAsync(
+          `INSERT INTO user_session (id, email, full_name, target_score, is_guest, is_pro, pro_expires_at, applied_promo_code, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            user.id,
+            user.email,
+            user.fullName,
+            user.targetScore || 80,
+            user.isGuest ? 1 : 0,
+            user.isPro ? 1 : 0,
+            user.proExpiresAt || null,
+            user.appliedPromoCode || null,
+            user.createdAt || new Date().toISOString(),
+          ]
+        ).catch(() => {});
+      }
     } catch (err) {
       console.warn('Failed to save user session in SQLite:', err);
     }
@@ -3148,20 +3355,33 @@ class DatabaseService {
     }
 
     try {
-      const row = await this.dbInstance.getFirstAsync(`SELECT * FROM user_session LIMIT 1`);
-      if (!row) return null;
+      // 1. Try global session db first
+      const sDb = await this.getSessionDb();
+      if (sDb) {
+        const row: any = await sDb.getFirstAsync(`SELECT user_json FROM active_session LIMIT 1`);
+        if (row?.user_json) {
+          return JSON.parse(row.user_json);
+        }
+      }
 
-      return {
-        id: row.id,
-        email: row.email,
-        fullName: row.full_name,
-        targetScore: row.target_score || 80,
-        isGuest: row.is_guest === 1,
-        isPro: row.is_pro === 1,
-        proExpiresAt: row.pro_expires_at || undefined,
-        appliedPromoCode: row.applied_promo_code || undefined,
-        createdAt: row.created_at,
-      };
+      // 2. Fallback to current database user_session
+      if (this.dbInstance) {
+        const row: any = await this.dbInstance.getFirstAsync(`SELECT * FROM user_session LIMIT 1`);
+        if (row) {
+          return {
+            id: row.id,
+            email: row.email,
+            fullName: row.full_name,
+            targetScore: row.target_score || 80,
+            isGuest: row.is_guest === 1,
+            isPro: row.is_pro === 1,
+            proExpiresAt: row.pro_expires_at || undefined,
+            appliedPromoCode: row.applied_promo_code || undefined,
+            createdAt: row.created_at,
+          };
+        }
+      }
+      return null;
     } catch (err) {
       console.warn('Failed to load user session from SQLite:', err);
       return null;
@@ -3175,9 +3395,42 @@ class DatabaseService {
     }
 
     try {
-      await this.dbInstance.runAsync(`DELETE FROM user_session`);
+      const sDb = await this.getSessionDb();
+      if (sDb) {
+        await sDb.runAsync(`DELETE FROM active_session`).catch(() => {});
+      }
+      if (this.dbInstance) {
+        await this.dbInstance.runAsync(`DELETE FROM user_session`).catch(() => {});
+      }
     } catch (err) {
       console.warn('Failed to clear user session in SQLite:', err);
+    }
+  }
+
+  /**
+   * Delete current user's local study data (Apple App Store Guideline 5.1.1)
+   */
+  async deleteCurrentUserData(): Promise<void> {
+    if (!this.isNative) {
+      this.memoryDb = new MemoryDatabase();
+      await this.memoryDb.init();
+      return;
+    }
+
+    try {
+      if (this.dbInstance) {
+        await this.dbInstance.runAsync(`DELETE FROM user_word_progress`).catch(() => {});
+        await this.dbInstance.runAsync(`DELETE FROM daily_stats`).catch(() => {});
+        await this.dbInstance.runAsync(`DELETE FROM mistake_vault`).catch(() => {});
+        await this.dbInstance.runAsync(`DELETE FROM exam_history`).catch(() => {});
+        await this.dbInstance.runAsync(`DELETE FROM user_session`).catch(() => {});
+        await this.dbInstance.runAsync(`DELETE FROM words WHERE is_custom = 1`).catch(() => {});
+        await this.dbInstance.runAsync(`DELETE FROM vocab_folders WHERE is_system = 0`).catch(() => {});
+        await this.dbInstance.runAsync(`UPDATE user_settings SET streak_count = 0, question_streak_count = 0, vocab_streak_count = 0, last_active_date = NULL, last_question_date = NULL, last_vocab_date = NULL WHERE id = 1`).catch(() => {});
+      }
+      await this.clearUserSession();
+    } catch (err) {
+      console.warn('Failed to delete current user data:', err);
     }
   }
 

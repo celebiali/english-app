@@ -1419,8 +1419,8 @@ class DatabaseService {
       const old = await this.dbInstance.getFirstAsync(`SELECT name FROM vocab_folders WHERE id = ?`, [id]);
       if (old && old.name) {
         await this.dbInstance.runAsync(
-          `UPDATE words SET subcategory = ? WHERE subcategory = ?`,
-          [updates.name, old.name]
+          `UPDATE words SET subcategory = ?, folder_name = ? WHERE subcategory = ? OR folder_name = ?`,
+          [updates.name, updates.name, old.name, old.name]
         );
       }
     }
@@ -1441,7 +1441,7 @@ class DatabaseService {
       const f = this.memoryDb.folders.get(id);
       if (f) {
         for (const [wId, w] of this.memoryDb.words.entries()) {
-          if (w.subcategory === f.name) {
+          if (w.subcategory === f.name || w.folder_name === f.name) {
             this.memoryDb.words.delete(wId);
             this.memoryDb.progress.delete(wId);
           }
@@ -1454,12 +1454,19 @@ class DatabaseService {
     const old = await this.dbInstance.getFirstAsync(`SELECT name FROM vocab_folders WHERE id = ?`, [id]);
     if (old && old.name) {
       await this.dbInstance.runAsync(
-        `DELETE FROM user_word_progress WHERE word_id IN (SELECT id FROM words WHERE subcategory = ?)`,
-        [old.name]
+        `DELETE FROM user_word_progress WHERE word_id IN (SELECT id FROM words WHERE subcategory = ? OR folder_name = ?)`,
+        [old.name, old.name]
       );
-      await this.dbInstance.runAsync(`DELETE FROM words WHERE subcategory = ?`, [old.name]);
+      await this.dbInstance.runAsync(
+        `DELETE FROM words WHERE subcategory = ? OR folder_name = ?`,
+        [old.name, old.name]
+      );
     }
     await this.dbInstance.runAsync(`DELETE FROM vocab_folders WHERE id = ?`, [id]);
+    await this.dbInstance.runAsync(
+      `UPDATE user_settings SET active_study_folder_id = 'sys_conn' WHERE active_study_folder_id = ?`,
+      [id]
+    );
   }
 
   async insertCustomWord(word: Partial<WordItem>): Promise<number> {
@@ -2668,10 +2675,28 @@ class DatabaseService {
   // SEPARATE QUESTION & VOCAB STREAKS
   // ==========================================
 
+  /**
+   * Helper: returns YYYY-MM-DD string in the device's local calendar timezone
+   */
+  private getLocalDateStr(d: Date = new Date()): string {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * Helper: returns yesterday's YYYY-MM-DD string in local timezone
+   */
+  private getYesterdayLocalDateStr(): string {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    return this.getLocalDateStr(d);
+  }
+
   async getQuestionStreakCount(): Promise<number> {
-    const todayStr = new Date().toISOString().split('T')[0];
-    const yesterday = new Date(Date.now() - 86400000);
-    const yesterdayStr = yesterday.toISOString().split('T')[0];
+    const todayStr = this.getLocalDateStr();
+    const yesterdayStr = this.getYesterdayLocalDateStr();
 
     if (!this.isNative) {
       if (!this.memoryDb.questionStreak || this.memoryDb.questionStreak.count <= 0) return 0;
@@ -2683,24 +2708,13 @@ class DatabaseService {
     }
 
     try {
-      // Check if user has answered any questions
-      const qRow: any = await this.dbInstance.getFirstAsync(
-        `SELECT COUNT(*) as answered_count FROM questions WHERE status != 'ACTIVE'`
-      );
-      if (!qRow || qRow.answered_count === 0) {
-        await this.dbInstance.runAsync(
-          `UPDATE user_settings SET question_streak_count = 0, last_question_date = NULL WHERE id = 1`
-        ).catch(() => {});
-        return 0;
-      }
-
       const row: any = await this.dbInstance.getFirstAsync(
-        `SELECT last_question_date, question_streak_count FROM user_settings WHERE id = 1`
+        `SELECT last_question_date, question_streak_count, last_active_date, streak_count FROM user_settings WHERE id = 1`
       );
-      const lastQuestionDate = row?.last_question_date;
-      const count = Number(row?.question_streak_count) || 0;
+      const lastDate = row?.last_question_date || row?.last_active_date;
+      const count = Number(row?.question_streak_count) || Number(row?.streak_count) || 0;
 
-      if (lastQuestionDate === todayStr || lastQuestionDate === yesterdayStr) {
+      if (lastDate === todayStr || lastDate === yesterdayStr) {
         return count;
       }
       return 0;
@@ -2711,9 +2725,8 @@ class DatabaseService {
   }
 
   async checkAndUpdateQuestionStreak(): Promise<number> {
-    const todayStr = new Date().toISOString().split('T')[0];
-    const yesterday = new Date(Date.now() - 86400000);
-    const yesterdayStr = yesterday.toISOString().split('T')[0];
+    const todayStr = this.getLocalDateStr();
+    const yesterdayStr = this.getYesterdayLocalDateStr();
 
     if (!this.isNative) {
       const lastDate = this.memoryDb.questionStreak.lastDate;
@@ -2732,14 +2745,17 @@ class DatabaseService {
 
     try {
       const row: any = await this.dbInstance.getFirstAsync(
-        `SELECT last_question_date, question_streak_count FROM user_settings WHERE id = 1`
+        `SELECT last_question_date, question_streak_count, last_active_date, streak_count FROM user_settings WHERE id = 1`
       );
-      let count = Number(row?.question_streak_count) || 0;
-      const lastDate = row?.last_question_date;
+      let count = Math.max(Number(row?.question_streak_count) || 0, Number(row?.streak_count) || 0);
+      const lastDate = row?.last_question_date || row?.last_active_date;
 
-      if (lastDate === todayStr) {
+      // Check if user studied yesterday
+      const studiedYesterday = lastDate === yesterdayStr || row?.last_question_date === yesterdayStr || row?.last_active_date === yesterdayStr;
+
+      if (lastDate === todayStr || row?.last_active_date === todayStr) {
         count = Math.max(1, count);
-      } else if (lastDate === yesterdayStr) {
+      } else if (studiedYesterday) {
         count = (count > 0 ? count : 0) + 1;
       } else {
         count = 1;
@@ -2758,9 +2774,8 @@ class DatabaseService {
   }
 
   async getVocabStreakCount(): Promise<number> {
-    const todayStr = new Date().toISOString().split('T')[0];
-    const yesterday = new Date(Date.now() - 86400000);
-    const yesterdayStr = yesterday.toISOString().split('T')[0];
+    const todayStr = this.getLocalDateStr();
+    const yesterdayStr = this.getYesterdayLocalDateStr();
 
     if (!this.isNative) {
       if (!this.memoryDb.vocabStreak || this.memoryDb.vocabStreak.count <= 0) return 0;
@@ -2772,22 +2787,11 @@ class DatabaseService {
     }
 
     try {
-      // Check if user has practiced any words
-      const vRow: any = await this.dbInstance.getFirstAsync(
-        `SELECT COUNT(*) as practiced_count FROM user_word_progress WHERE correct_count > 0 OR incorrect_count > 0`
-      );
-      if (!vRow || vRow.practiced_count === 0) {
-        await this.dbInstance.runAsync(
-          `UPDATE user_settings SET vocab_streak_count = 0, last_vocab_date = NULL WHERE id = 1`
-        ).catch(() => {});
-        return 0;
-      }
-
       const row: any = await this.dbInstance.getFirstAsync(
-        `SELECT last_vocab_date, vocab_streak_count FROM user_settings WHERE id = 1`
+        `SELECT last_vocab_date, vocab_streak_count, last_active_date, streak_count FROM user_settings WHERE id = 1`
       );
-      const lastVocabDate = row?.last_vocab_date;
-      const count = Number(row?.vocab_streak_count) || 0;
+      const lastVocabDate = row?.last_vocab_date || row?.last_active_date;
+      const count = Number(row?.vocab_streak_count) || Number(row?.streak_count) || 0;
 
       if (lastVocabDate === todayStr || lastVocabDate === yesterdayStr) {
         return count;
@@ -2800,9 +2804,8 @@ class DatabaseService {
   }
 
   async checkAndUpdateVocabStreak(): Promise<number> {
-    const todayStr = new Date().toISOString().split('T')[0];
-    const yesterday = new Date(Date.now() - 86400000);
-    const yesterdayStr = yesterday.toISOString().split('T')[0];
+    const todayStr = this.getLocalDateStr();
+    const yesterdayStr = this.getYesterdayLocalDateStr();
 
     if (!this.isNative) {
       const lastDate = this.memoryDb.vocabStreak.lastDate;
@@ -2820,22 +2823,24 @@ class DatabaseService {
 
     try {
       const row: any = await this.dbInstance.getFirstAsync(
-        `SELECT last_vocab_date, vocab_streak_count FROM user_settings WHERE id = 1`
+        `SELECT last_vocab_date, vocab_streak_count, last_active_date, streak_count FROM user_settings WHERE id = 1`
       );
-      let count = Number(row?.vocab_streak_count) || 0;
-      const lastDate = row?.last_vocab_date;
+      let count = Math.max(Number(row?.vocab_streak_count) || 0, Number(row?.streak_count) || 0);
+      const lastDate = row?.last_vocab_date || row?.last_active_date;
 
-      if (lastDate === todayStr) {
+      const studiedYesterday = lastDate === yesterdayStr || row?.last_vocab_date === yesterdayStr || row?.last_active_date === yesterdayStr;
+
+      if (lastDate === todayStr || row?.last_active_date === todayStr) {
         count = Math.max(1, count);
-      } else if (lastDate === yesterdayStr) {
+      } else if (studiedYesterday) {
         count = (count > 0 ? count : 0) + 1;
       } else {
         count = 1;
       }
 
       await this.dbInstance.runAsync(
-        `UPDATE user_settings SET last_vocab_date = ?, vocab_streak_count = ? WHERE id = 1`,
-        [todayStr, count]
+        `UPDATE user_settings SET last_vocab_date = ?, vocab_streak_count = ?, last_active_date = ?, streak_count = ? WHERE id = 1`,
+        [todayStr, count, todayStr, count]
       );
 
       // Also record to daily_stats for words_reviewed
@@ -2853,11 +2858,142 @@ class DatabaseService {
   }
 
   async getStreakCount(): Promise<number> {
-    return await this.getQuestionStreakCount();
+    const todayStr = this.getLocalDateStr();
+    const yesterdayStr = this.getYesterdayLocalDateStr();
+
+    if (!this.isNative) {
+      const lastDate = this.memoryDb.streak?.lastDate || this.memoryDb.questionStreak?.lastDate || this.memoryDb.vocabStreak?.lastDate;
+      const count = Math.max(
+        this.memoryDb.streak?.count || 0,
+        this.memoryDb.questionStreak?.count || 0,
+        this.memoryDb.vocabStreak?.count || 0
+      );
+      if (lastDate === todayStr || lastDate === yesterdayStr) {
+        return Math.max(1, count);
+      }
+      return 0;
+    }
+
+    try {
+      const row: any = await this.dbInstance.getFirstAsync(
+        `SELECT last_active_date, streak_count, last_question_date, question_streak_count, last_vocab_date, vocab_streak_count FROM user_settings WHERE id = 1`
+      );
+
+      const count = Math.max(
+        Number(row?.streak_count) || 0,
+        Number(row?.question_streak_count) || 0,
+        Number(row?.vocab_streak_count) || 0
+      );
+
+      const lastActive = row?.last_active_date || row?.last_question_date || row?.last_vocab_date;
+
+      if (
+        lastActive === todayStr ||
+        lastActive === yesterdayStr ||
+        row?.last_active_date === todayStr ||
+        row?.last_active_date === yesterdayStr ||
+        row?.last_question_date === todayStr ||
+        row?.last_question_date === yesterdayStr ||
+        row?.last_vocab_date === todayStr ||
+        row?.last_vocab_date === yesterdayStr
+      ) {
+        return Math.max(1, count);
+      }
+
+      // Check daily_stats for study activity today or yesterday
+      const recentStats: any = await this.dbInstance.getFirstAsync(
+        `SELECT study_date FROM daily_stats 
+         WHERE (study_date = ? OR study_date = ?) 
+           AND (COALESCE(paragraph_completed, 0) + COALESCE(cloze_completed, 0) + COALESCE(sentence_completed, 0) + COALESCE(skills_completed, 0) + COALESCE(words_reviewed, 0) + COALESCE(new_words_learned, 0)) > 0`,
+        [todayStr, yesterdayStr]
+      );
+      if (recentStats) {
+        return Math.max(1, count);
+      }
+
+      return 0;
+    } catch (e) {
+      console.warn('Failed to get streak count from SQLite:', e);
+      return 0;
+    }
   }
 
   async checkAndUpdateDailyStreak(): Promise<number> {
-    return await this.checkAndUpdateQuestionStreak();
+    const todayStr = this.getLocalDateStr();
+    const yesterdayStr = this.getYesterdayLocalDateStr();
+
+    if (!this.isNative) {
+      const lastDate = this.memoryDb.streak?.lastDate || this.memoryDb.questionStreak?.lastDate || this.memoryDb.vocabStreak?.lastDate;
+      let count = Math.max(
+        this.memoryDb.streak?.count || 0,
+        this.memoryDb.questionStreak?.count || 0,
+        this.memoryDb.vocabStreak?.count || 0
+      );
+
+      if (lastDate === todayStr) {
+        count = Math.max(1, count);
+      } else if (lastDate === yesterdayStr) {
+        count = (count > 0 ? count : 0) + 1;
+      } else {
+        count = 1;
+      }
+
+      this.memoryDb.streak = { count, lastDate: todayStr };
+      this.memoryDb.questionStreak = { count, lastDate: todayStr };
+      this.memoryDb.vocabStreak = { count, lastDate: todayStr };
+      return count;
+    }
+
+    try {
+      const row: any = await this.dbInstance.getFirstAsync(
+        `SELECT last_active_date, streak_count, last_question_date, question_streak_count, last_vocab_date, vocab_streak_count FROM user_settings WHERE id = 1`
+      );
+
+      let currentStreak = Math.max(
+        Number(row?.streak_count) || 0,
+        Number(row?.question_streak_count) || 0,
+        Number(row?.vocab_streak_count) || 0
+      );
+
+      const lastActive = row?.last_active_date || row?.last_question_date || row?.last_vocab_date;
+
+      // Also check daily_stats for yesterday in case settings date was not updated
+      const yesterdayStats: any = await this.dbInstance.getFirstAsync(
+        `SELECT (COALESCE(paragraph_completed, 0) + COALESCE(cloze_completed, 0) + COALESCE(sentence_completed, 0) + COALESCE(skills_completed, 0) + COALESCE(words_reviewed, 0) + COALESCE(new_words_learned, 0)) as total_work
+         FROM daily_stats WHERE study_date = ?`,
+        [yesterdayStr]
+      );
+      const studiedYesterday =
+        (yesterdayStats && yesterdayStats.total_work > 0) ||
+        lastActive === yesterdayStr ||
+        row?.last_active_date === yesterdayStr ||
+        row?.last_question_date === yesterdayStr ||
+        row?.last_vocab_date === yesterdayStr;
+
+      let newStreak = 1;
+      if (lastActive === todayStr || row?.last_active_date === todayStr) {
+        newStreak = Math.max(1, currentStreak);
+      } else if (studiedYesterday) {
+        newStreak = (currentStreak > 0 ? currentStreak : 0) + 1;
+      } else {
+        newStreak = 1;
+      }
+
+      await this.dbInstance.runAsync(
+        `UPDATE user_settings SET 
+          last_active_date = ?, 
+          streak_count = ?,
+          last_question_date = COALESCE(last_question_date, ?),
+          last_vocab_date = COALESCE(last_vocab_date, ?)
+         WHERE id = 1`,
+        [todayStr, newStreak, todayStr, todayStr]
+      );
+
+      return newStreak;
+    } catch (e) {
+      console.warn('Failed to update daily streak in SQLite:', e);
+      return 1;
+    }
   }
 
   // ==========================================

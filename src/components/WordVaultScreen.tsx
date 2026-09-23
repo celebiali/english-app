@@ -38,6 +38,7 @@ import { KUTUPHANE_THEMATIC_FOLDERS } from '../services/KutuphaneThematicDataset
 import * as Speech from 'expo-speech';
 import { useThemeStore } from '../store/useThemeStore';
 import { useLearningStore } from '../store/useLearningStore';
+import { VocabFolder } from '../types';
 import { WordWithProgress, dbService } from '../database/DatabaseService';
 import {
   DictionaryApiService,
@@ -259,6 +260,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     vocabFolders,
     activeStudyFolderId,
     setActiveStudyFolder,
+    deleteVocabFolder,
   } = useLearningStore();
 
   // Single Folder state: null = Folder View, 'custom_default' = Inside Folder
@@ -349,6 +351,28 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     );
   }, [userFolders, selectedFolderId]);
   const currentFolderName = currentFolder?.name || 'Özel Kelime Defterim';
+
+  const handleDeleteFolder = (folder: VocabFolder | null) => {
+    if (!folder || folder.is_system) return;
+    Alert.alert(
+      'Klasörü Sil',
+      `"${folder.name}" klasörünü ve içerisindeki kelimeleri silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`,
+      [
+        { text: 'Vazgeç', style: 'cancel' },
+        {
+          text: 'Klasörü Sil',
+          style: 'destructive',
+          onPress: async () => {
+            await deleteVocabFolder(folder.id);
+            if (isInsideFolder && selectedFolderId === folder.id) {
+              setIsInsideFolder(false);
+              setSelectedFolderId('custom_default');
+            }
+          },
+        },
+      ]
+    );
+  };
 
   // Search & Filter state
   const [searchQuery, setSearchQuery] = useState('');
@@ -1537,6 +1561,10 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
           visible={isEditFolderModalOpen}
           onClose={() => setIsEditFolderModalOpen(false)}
           folderToEdit={currentFolder}
+          onDeleted={() => {
+            setIsInsideFolder(false);
+            setSelectedFolderId('custom_default');
+          }}
         />
       </View>
     );
@@ -1873,6 +1901,10 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
           loadVocabFolders();
         }}
         folderToEdit={currentFolder}
+        onDeleted={() => {
+          setIsInsideFolder(false);
+          setSelectedFolderId('custom_default');
+        }}
       />
 
       {/* Toast Notification */}

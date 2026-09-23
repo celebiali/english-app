@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { Folder, FolderPlus } from 'lucide-react-native';
+import { Folder, FolderPlus, Trash2 } from 'lucide-react-native';
 import { useLearningStore } from '../store/useLearningStore';
 import { useThemeStore } from '../store/useThemeStore';
 import { SmoothBottomSheet } from './SmoothBottomSheet';
@@ -17,15 +17,17 @@ interface AddFolderModalProps {
   visible: boolean;
   onClose: () => void;
   folderToEdit?: VocabFolder | null;
+  onDeleted?: () => void;
 }
 
 export const AddFolderModal: React.FC<AddFolderModalProps> = ({
   visible,
   onClose,
   folderToEdit,
+  onDeleted,
 }) => {
   const { colors } = useThemeStore();
-  const { createVocabFolder, updateVocabFolder } = useLearningStore();
+  const { createVocabFolder, updateVocabFolder, deleteVocabFolder } = useLearningStore();
 
   const [name, setName] = useState('');
 
@@ -77,8 +79,30 @@ export const AddFolderModal: React.FC<AddFolderModalProps> = ({
     onClose();
   };
 
+  const handleDelete = () => {
+    if (!folderToEdit) return;
+    Alert.alert(
+      'Klasörü Sil',
+      `"${folderToEdit.name}" klasörünü ve içerisindeki kelimeleri silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`,
+      [
+        { text: 'Vazgeç', style: 'cancel' },
+        {
+          text: 'Klasörü Sil',
+          style: 'destructive',
+          onPress: async () => {
+            await deleteVocabFolder(folderToEdit.id);
+            onClose();
+            onDeleted?.();
+          },
+        },
+      ]
+    );
+  };
+
+  const canDelete = Boolean(folderToEdit && !folderToEdit.is_system);
+
   return (
-    <SmoothBottomSheet visible={visible} onClose={onClose} height={280}>
+    <SmoothBottomSheet visible={visible} onClose={onClose} height={canDelete ? 340 : 280}>
       <View style={[styles.container, { backgroundColor: colors.cardBackground }]}>
         {/* Header */}
         <View style={styles.headerRow}>
@@ -117,6 +141,18 @@ export const AddFolderModal: React.FC<AddFolderModalProps> = ({
             onSubmitEditing={handleSave}
           />
         </View>
+
+        {/* Delete button if editing user custom folder */}
+        {canDelete && (
+          <TouchableOpacity
+            style={[styles.deleteBtn, { backgroundColor: colors.errorLight, borderColor: colors.error }]}
+            onPress={handleDelete}
+            activeOpacity={0.8}
+          >
+            <Trash2 size={16} color={colors.error} />
+            <Text style={[styles.deleteBtnText, { color: colors.error }]}>Bu Klasörü Sil</Text>
+          </TouchableOpacity>
+        )}
 
         {/* Action Buttons */}
         <View style={[styles.footerRow, { borderTopColor: colors.border }]}>
@@ -221,5 +257,19 @@ const styles = StyleSheet.create({
   saveBtnText: {
     fontSize: 14,
     fontWeight: '800',
+  },
+  deleteBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 11,
+    borderRadius: 12,
+    borderWidth: 1,
+    marginBottom: 8,
+  },
+  deleteBtnText: {
+    fontSize: 13.5,
+    fontWeight: '700',
   },
 });

@@ -222,8 +222,10 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       await dbService.initDatabase();
       await dbService.seedQuestionsIfEmpty();
 
+      const overallStreak = await dbService.getStreakCount();
       const qStreak = await dbService.getQuestionStreakCount();
       const vStreak = await dbService.getVocabStreakCount();
+      const effectiveStreak = Math.max(overallStreak, qStreak, vStreak);
       const examHist = await dbService.getExamHistory();
       const savedUser = await dbService.getUserSession();
       const userGoals = await dbService.getUserTaskGoals();
@@ -241,9 +243,9 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       }
 
       set({
-        streakCount: qStreak,
-        questionStreakCount: qStreak,
-        vocabStreakCount: vStreak,
+        streakCount: effectiveStreak,
+        questionStreakCount: Math.max(qStreak, effectiveStreak),
+        vocabStreakCount: Math.max(vStreak, effectiveStreak),
         examHistory: examHist,
         userProfile: savedUser,
         taskGoals: userGoals,
@@ -718,10 +720,13 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     });
 
     const updatedHistory = await dbService.getExamHistory();
+    const updatedStreak = await dbService.checkAndUpdateDailyStreak();
 
     set((state) => ({
       examScoreCard: scoreCard,
       examHistory: updatedHistory,
+      streakCount: updatedStreak,
+      questionStreakCount: updatedStreak,
       examState: state.examState ? { ...state.examState, isFinished: true } : null,
     }));
   },
@@ -883,6 +888,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
           currentVocabIndex: nextIdx,
           boxSummary: summary,
           vocabStreakCount: updatedVocabStreak,
+          streakCount: Math.max(state.streakCount, updatedVocabStreak),
           completedTodayCount: state.completedTodayCount + 1,
           dailyTasksProgress: {
             ...state.dailyTasksProgress,
@@ -907,6 +913,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
               currentVocabIndex: nextIdx,
               boxSummary: summary,
               vocabStreakCount: updatedVocabStreak,
+              streakCount: Math.max(state.streakCount, updatedVocabStreak),
               completedTodayCount: state.completedTodayCount + 1,
               dailyTasksProgress: {
                 ...state.dailyTasksProgress,
@@ -923,6 +930,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
         currentVocabIndex: nextIdx,
         boxSummary: summary,
         vocabStreakCount: updatedVocabStreak,
+        streakCount: Math.max(state.streakCount, updatedVocabStreak),
         completedTodayCount: state.completedTodayCount + 1,
         dailyTasksProgress: {
           ...state.dailyTasksProgress,
@@ -985,7 +993,10 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   deleteVocabFolder: async (id: string) => {
     try {
       await dbService.deleteVocabFolder(id);
-      set((state) => (state.activeFolderId === id ? { activeFolderId: null } : {}));
+      set((state) => ({
+        ...(state.activeFolderId === id ? { activeFolderId: null } : {}),
+        ...(state.activeStudyFolderId === id ? { activeStudyFolderId: 'sys_conn' } : {}),
+      }));
       await get().loadVocabFolders();
       await get().loadVocabSession();
     } catch (err) {

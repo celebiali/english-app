@@ -37,7 +37,13 @@ import {
 } from 'lucide-react-native';
 import { KUTUPHANE_THEMATIC_FOLDERS } from '../services/KutuphaneThematicDataset';
 import { InstructorVocabService } from '../services/InstructorVocabService';
-import * as Speech from 'expo-speech';
+// Safe dynamic native module resolution to prevent launch crashes on binaries without expo-speech linked
+let SpeechModule: any = null;
+try {
+  SpeechModule = require('expo-speech');
+} catch (e) {
+  console.warn('expo-speech safe fallback:', e);
+}
 import { useThemeStore } from '../store/useThemeStore';
 import { useLearningStore } from '../store/useLearningStore';
 import { VocabFolder, isReadOnlyFolder } from '../types';
@@ -511,18 +517,22 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     };
   }, [selectedWord]);
 
-  // Audio pronunciation with expo-speech
+  // Audio pronunciation with expo-speech (defensive guard)
   const handleSpeak = (text: string) => {
     if (!text) return;
     try {
-      setIsSpeaking(true);
-      Speech.stop();
-      Speech.speak(text, {
-        language: 'en-US',
-        rate: 0.88,
-        onDone: () => setIsSpeaking(false),
-        onError: () => setIsSpeaking(false),
-      });
+      if (SpeechModule && typeof SpeechModule.speak === 'function') {
+        setIsSpeaking(true);
+        if (typeof SpeechModule.stop === 'function') {
+          SpeechModule.stop();
+        }
+        SpeechModule.speak(text, {
+          language: 'en-US',
+          rate: 0.88,
+          onDone: () => setIsSpeaking(false),
+          onError: () => setIsSpeaking(false),
+        });
+      }
     } catch {
       setIsSpeaking(false);
     }
@@ -1511,6 +1521,10 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
             filteredFolderWords.length === 0 && styles.listContentEmpty,
           ]}
           showsVerticalScrollIndicator={false}
+          initialNumToRender={12}
+          maxToRenderPerBatch={10}
+          windowSize={5}
+          removeClippedSubviews={Platform.OS === 'android'}
           renderItem={({ item }) => {
             const progress = getBoxProgressInfo(item);
 
@@ -1638,6 +1652,10 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
           keyExtractor={(item) => String(item.id || item.word)}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
+          initialNumToRender={12}
+          maxToRenderPerBatch={10}
+          windowSize={5}
+          removeClippedSubviews={Platform.OS === 'android'}
           ListHeaderComponent={
             // Canlı Sözlük Kartı (Kullanıcının kelimelerinde tam eşleşme yoksa)
             apiResult ? (

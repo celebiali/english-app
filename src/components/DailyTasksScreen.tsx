@@ -83,6 +83,7 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
   }, [isSolvingMode, isVocabSolvingMode, onSolvingModeChange]);
   const [solverIndex, setSolverIndex] = useState<number>(0);
   const [dailyAnswers, setDailyAnswers] = useState<Record<string, OptionKey>>({});
+  const [solverQuestions, setSolverQuestions] = useState<QuestionItem[]>([]);
 
   // Celebratory Completed Dialog state
   const [completedModalInfo, setCompletedModalInfo] = useState<{
@@ -93,41 +94,30 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
     isVocab?: boolean;
   } | null>(null);
 
-  // Filtered active questions based on category selection
-  const filteredActiveQuestions = useMemo(() => {
-    if (selectedCategory === 'ALL') return activeDailyQuestions;
-    if (selectedCategory === 'SKILL_DIALOGUE') {
-      return activeDailyQuestions.filter(
+  // Active question in solver uses isolated solverQuestions session to prevent array shift bugs
+  const totalSolverQuestions = solverQuestions.length;
+  const safeIndex = Math.min(solverIndex, Math.max(0, totalSolverQuestions - 1));
+  const currentQuestion = isSolvingMode ? (solverQuestions[safeIndex] || null) : null;
+  const isLastQuestion = safeIndex >= totalSolverQuestions - 1;
+  const isPrevDisabled = safeIndex === 0;
+
+  const handleStartCategory = (type: YdsQuestionType | 'ALL') => {
+    setSelectedCategory(type);
+    let qs: QuestionItem[] = [];
+    if (type === 'ALL') {
+      qs = [...activeDailyQuestions];
+    } else if (type === 'SKILL_DIALOGUE') {
+      qs = activeDailyQuestions.filter(
         (q) =>
           q.type === 'SKILL_DIALOGUE' ||
           q.type === 'RESTATEMENT' ||
           q.type === 'TRANSLATION' ||
           q.type === 'VOCABULARY_GRAMMAR'
       );
+    } else {
+      qs = activeDailyQuestions.filter((q) => q.type === type);
     }
-    return activeDailyQuestions.filter((q) => q.type === selectedCategory);
-  }, [activeDailyQuestions, selectedCategory]);
-
-  const currentQuestion = filteredActiveQuestions[solverIndex] || null;
-  const safeIndex = Math.min(solverIndex, Math.max(0, filteredActiveQuestions.length - 1));
-  const isLastQuestion = safeIndex >= filteredActiveQuestions.length - 1;
-
-  // Find nearest previous unanswered (blank) question index
-  const prevUnansweredIndex = useMemo(() => {
-    if (safeIndex === 0) return -1;
-    for (let i = safeIndex - 1; i >= 0; i--) {
-      const q = filteredActiveQuestions[i];
-      if (q && !dailyAnswers[q.id]) {
-        return i;
-      }
-    }
-    return -1;
-  }, [filteredActiveQuestions, safeIndex, dailyAnswers]);
-
-  const isPrevDisabled = prevUnansweredIndex === -1;
-
-  const handleStartCategory = (type: YdsQuestionType | 'ALL') => {
-    setSelectedCategory(type);
+    setSolverQuestions(qs);
     setSolverIndex(0);
     setIsSolvingMode(true);
   };
@@ -136,6 +126,7 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
     setIsSolvingMode(false);
     setSelectedCategory('ALL');
     setSolverIndex(0);
+    setSolverQuestions([]);
     loadDailyTasks();
   };
 
@@ -146,16 +137,35 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
   };
 
   const handleNextQuestion = () => {
-    if (safeIndex < filteredActiveQuestions.length - 1) {
+    if (safeIndex < totalSolverQuestions - 1) {
       setSolverIndex(safeIndex + 1);
     } else {
+      const cat = selectedCategory;
+      const count = totalSolverQuestions;
       handleExitSolver();
+      const categoryTitle =
+        cat === 'ALL'
+          ? 'Günlük Görevler'
+          : cat === 'PARAGRAPH'
+          ? 'Paragraf Soruları'
+          : cat === 'CLOZE_TEST'
+          ? 'Cloze Test Soruları'
+          : cat === 'SENTENCE_COMPLETION'
+          ? 'Cümle Tamamlama'
+          : 'Diyalog & Dil Bilgisi';
+      setCompletedModalInfo({
+        title: `${categoryTitle} Tamamlandı 🎉`,
+        description: `Bugünkü ${count} soruluk çalışma oturumunu başarıyla tamamladınız.`,
+        badgeEmoji: '🎯',
+        badgeCount: `${count} / ${count}`,
+        isVocab: false,
+      });
     }
   };
 
   const handlePrevQuestion = () => {
-    if (prevUnansweredIndex !== -1) {
-      setSolverIndex(prevUnansweredIndex);
+    if (safeIndex > 0) {
+      setSolverIndex(safeIndex - 1);
     }
   };
 
@@ -523,7 +533,7 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
 
           <View style={[styles.solverCounterBadge, { backgroundColor: colors.brandLight }]}>
             <Text style={[styles.solverCounterText, { color: colors.brand }]}>
-              {filteredActiveQuestions.length > 0 ? `${safeIndex + 1} / ${filteredActiveQuestions.length}` : '0 / 0'}
+              {totalSolverQuestions > 0 ? `${safeIndex + 1} / ${totalSolverQuestions}` : '0 / 0'}
             </Text>
           </View>
         </View>
@@ -533,12 +543,12 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
             key={currentQuestion.id}
             question={currentQuestion}
             questionIndex={safeIndex}
-            totalQuestions={filteredActiveQuestions.length}
+            totalQuestions={totalSolverQuestions}
             mode="PRACTICE"
             selectedOption={dailyAnswers[currentQuestion.id] || null}
             onSelectOption={(opt) => handleAnswerQuestion(currentQuestion, opt)}
             onNext={handleNextQuestion}
-            hasNext={safeIndex < filteredActiveQuestions.length - 1}
+            hasNext={safeIndex < totalSolverQuestions - 1}
           />
 
           {/* Bottom Next / Prev Navigation */}

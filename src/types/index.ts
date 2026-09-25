@@ -228,6 +228,7 @@ export interface ExamSessionState {
   examId: string;
   title: string;
   timeRemainingSeconds: number; // Starts at 180 * 60 = 10800
+  targetEndTimeMs?: number; // Absolute timestamp (ms) for drift-free timer across tabs & background
   isPaused: boolean;
   currentQuestionIndex: number;
   userAnswers: Record<number, OptionKey>; // questionIndex -> selected Option

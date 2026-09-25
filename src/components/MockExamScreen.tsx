@@ -77,10 +77,11 @@ export const MockExamScreen: React.FC<MockExamScreenProps> = ({
 
   const isExamPrevDisabled = prevUnansweredExamIndex === -1;
 
-  // Timer interval for active exam
+  // Timer interval for active exam (drift-free with targetEndTimeMs)
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
     if (examState && !examState.isPaused && !examState.isFinished) {
+      tickExamTimer();
       interval = setInterval(() => {
         tickExamTimer();
       }, 1000);

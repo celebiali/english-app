@@ -73,7 +73,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
     setTaskGoals,
     loadVocabSession,
     loadDailyTasks,
-    resetAllProgress,
     deleteUserAccount,
     getUserAccessStatus,
     updateUserFullName,
@@ -103,6 +102,39 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
     await updateUserFullName(editedName.trim());
     setIsEditNameModalOpen(false);
     Alert.alert('Başarılı ✨', 'Profil adınız başarıyla güncellendi.');
+  };
+
+  // Daily Goals Draft State
+  const [draftGoals, setDraftGoals] = useState({
+    paragraph: 8,
+    cloze: 5,
+    sentence: 8,
+    skills: 14,
+    words: 25,
+  });
+  const [isSavingGoals, setIsSavingGoals] = useState(false);
+
+  const handleOpenGoalsModal = () => {
+    setDraftGoals({
+      paragraph: taskGoals?.paragraph || 8,
+      cloze: taskGoals?.cloze || 5,
+      sentence: taskGoals?.sentence || 8,
+      skills: taskGoals?.skills || 14,
+      words: taskGoals?.words || 25,
+    });
+    setIsGoalsModalOpen(true);
+  };
+
+  const handleSaveGoals = async () => {
+    setIsSavingGoals(true);
+    const res = await setTaskGoals(draftGoals);
+    setIsSavingGoals(false);
+    if (res && !res.success) {
+      Alert.alert('Hedef Kısıtlaması 🔒', res.message || 'Günlük kelime hedefinizi haftada en fazla 1 kez düşürebilirsiniz.');
+      return;
+    }
+    setIsGoalsModalOpen(false);
+    Alert.alert('Hedefler Kaydedildi 🎯', 'Günlük soru ve kelime hedefleriniz başarıyla güncellendi.');
   };
 
   // Modals visibility
@@ -452,7 +484,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
         <View style={[styles.groupedCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
           <TouchableOpacity
             style={styles.rowItem}
-            onPress={() => setIsGoalsModalOpen(true)}
+            onPress={handleOpenGoalsModal}
             activeOpacity={0.7}
           >
             <View style={{ flex: 1 }}>
@@ -1016,10 +1048,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
             <View style={[styles.goalsSummaryCard, { backgroundColor: colors.brandLight, borderColor: colors.brandLightBorder }]}>
               <Text style={[styles.goalsSummaryLabel, { color: colors.brand }]}>GÜNLÜK HEDEFLER ÖZETİ</Text>
               <Text style={[styles.goalsSummaryNumber, { color: colors.brand }]}>
-                {(taskGoals?.paragraph || 8) + (taskGoals?.cloze || 5) + (taskGoals?.sentence || 8) + (taskGoals?.skills || 14)}
+                {draftGoals.paragraph + draftGoals.cloze + draftGoals.sentence + draftGoals.skills}
                 <Text style={{ fontSize: 16, fontWeight: '700' }}> Soru</Text>
                 <Text style={{ fontSize: 16, fontWeight: '400', color: colors.textSecondary }}> • </Text>
-                {taskGoals?.words || 25}
+                {draftGoals.words}
                 <Text style={{ fontSize: 16, fontWeight: '700' }}> Kelime</Text>
               </Text>
             </View>
@@ -1038,15 +1070,15 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
                 <View style={styles.goalStepperContainer}>
                   <TouchableOpacity
                     style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
-                    onPress={() => setTaskGoals({ paragraph: Math.max(1, (taskGoals?.paragraph || 8) - 1) })}
+                    onPress={() => setDraftGoals((prev) => ({ ...prev, paragraph: Math.max(1, prev.paragraph - 1) }))}
                     activeOpacity={0.7}
                   >
                     <Minus size={15} color={colors.text} />
                   </TouchableOpacity>
-                  <Text style={[styles.goalStepperValue, { color: colors.brand }]}>{taskGoals?.paragraph || 8}</Text>
+                  <Text style={[styles.goalStepperValue, { color: colors.brand }]}>{draftGoals.paragraph}</Text>
                   <TouchableOpacity
                     style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
-                    onPress={() => setTaskGoals({ paragraph: Math.min(30, (taskGoals?.paragraph || 8) + 1) })}
+                    onPress={() => setDraftGoals((prev) => ({ ...prev, paragraph: Math.min(30, prev.paragraph + 1) }))}
                     activeOpacity={0.7}
                   >
                     <Plus size={15} color={colors.text} />
@@ -1066,15 +1098,15 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
                 <View style={styles.goalStepperContainer}>
                   <TouchableOpacity
                     style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
-                    onPress={() => setTaskGoals({ cloze: Math.max(1, (taskGoals?.cloze || 5) - 1) })}
+                    onPress={() => setDraftGoals((prev) => ({ ...prev, cloze: Math.max(1, prev.cloze - 1) }))}
                     activeOpacity={0.7}
                   >
                     <Minus size={15} color={colors.text} />
                   </TouchableOpacity>
-                  <Text style={[styles.goalStepperValue, { color: colors.brand }]}>{taskGoals?.cloze || 5}</Text>
+                  <Text style={[styles.goalStepperValue, { color: colors.brand }]}>{draftGoals.cloze}</Text>
                   <TouchableOpacity
                     style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
-                    onPress={() => setTaskGoals({ cloze: Math.min(30, (taskGoals?.cloze || 5) + 1) })}
+                    onPress={() => setDraftGoals((prev) => ({ ...prev, cloze: Math.min(30, prev.cloze + 1) }))}
                     activeOpacity={0.7}
                   >
                     <Plus size={15} color={colors.text} />
@@ -1094,15 +1126,15 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
                 <View style={styles.goalStepperContainer}>
                   <TouchableOpacity
                     style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
-                    onPress={() => setTaskGoals({ sentence: Math.max(1, (taskGoals?.sentence || 8) - 1) })}
+                    onPress={() => setDraftGoals((prev) => ({ ...prev, sentence: Math.max(1, prev.sentence - 1) }))}
                     activeOpacity={0.7}
                   >
                     <Minus size={15} color={colors.text} />
                   </TouchableOpacity>
-                  <Text style={[styles.goalStepperValue, { color: colors.brand }]}>{taskGoals?.sentence || 8}</Text>
+                  <Text style={[styles.goalStepperValue, { color: colors.brand }]}>{draftGoals.sentence}</Text>
                   <TouchableOpacity
                     style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
-                    onPress={() => setTaskGoals({ sentence: Math.min(30, (taskGoals?.sentence || 8) + 1) })}
+                    onPress={() => setDraftGoals((prev) => ({ ...prev, sentence: Math.min(30, prev.sentence + 1) }))}
                     activeOpacity={0.7}
                   >
                     <Plus size={15} color={colors.text} />
@@ -1122,15 +1154,15 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
                 <View style={styles.goalStepperContainer}>
                   <TouchableOpacity
                     style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
-                    onPress={() => setTaskGoals({ skills: Math.max(1, (taskGoals?.skills || 14) - 1) })}
+                    onPress={() => setDraftGoals((prev) => ({ ...prev, skills: Math.max(1, prev.skills - 1) }))}
                     activeOpacity={0.7}
                   >
                     <Minus size={15} color={colors.text} />
                   </TouchableOpacity>
-                  <Text style={[styles.goalStepperValue, { color: colors.brand }]}>{taskGoals?.skills || 14}</Text>
+                  <Text style={[styles.goalStepperValue, { color: colors.brand }]}>{draftGoals.skills}</Text>
                   <TouchableOpacity
                     style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
-                    onPress={() => setTaskGoals({ skills: Math.min(30, (taskGoals?.skills || 14) + 1) })}
+                    onPress={() => setDraftGoals((prev) => ({ ...prev, skills: Math.min(30, prev.skills + 1) }))}
                     activeOpacity={0.7}
                   >
                     <Plus size={15} color={colors.text} />
@@ -1150,21 +1182,15 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
                 <View style={styles.goalStepperContainer}>
                   <TouchableOpacity
                     style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
-                    onPress={async () => {
-                      const nextTarget = Math.max(5, (taskGoals?.words || 25) - 5);
-                      const res = await setTaskGoals({ words: nextTarget });
-                      if (res && !res.success) {
-                        Alert.alert('Hedef Kısıtlaması 🔒', res.message || 'Günlük kelime hedefinizi haftada en fazla 1 kez düşürebilirsiniz.');
-                      }
-                    }}
+                    onPress={() => setDraftGoals((prev) => ({ ...prev, words: Math.max(5, prev.words - 5) }))}
                     activeOpacity={0.7}
                   >
                     <Minus size={15} color={colors.text} />
                   </TouchableOpacity>
-                  <Text style={[styles.goalStepperValue, { color: colors.brand }]}>{taskGoals?.words || 25}</Text>
+                  <Text style={[styles.goalStepperValue, { color: colors.brand }]}>{draftGoals.words}</Text>
                   <TouchableOpacity
                     style={[styles.goalStepperBtn, { backgroundColor: colors.subtleBackground, borderColor: colors.border }]}
-                    onPress={() => setTaskGoals({ words: Math.min(100, (taskGoals?.words || 25) + 5) })}
+                    onPress={() => setDraftGoals((prev) => ({ ...prev, words: Math.min(100, prev.words + 5) }))}
                     activeOpacity={0.7}
                   >
                     <Plus size={15} color={colors.text} />
@@ -1183,10 +1209,13 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onOpenAu
             {/* Kaydet & Tamamla Butonu */}
             <TouchableOpacity
               style={[styles.saveGoalsBtn, { backgroundColor: colors.brand }]}
-              onPress={() => setIsGoalsModalOpen(false)}
+              onPress={handleSaveGoals}
+              disabled={isSavingGoals}
               activeOpacity={0.85}
             >
-              <Text style={[styles.saveGoalsBtnText, { color: colors.textOnBrand }]}>Kaydet & Tamamla</Text>
+              <Text style={[styles.saveGoalsBtnText, { color: colors.textOnBrand }]}>
+                {isSavingGoals ? 'Kaydediliyor...' : 'Kaydet & Tamamla'}
+              </Text>
             </TouchableOpacity>
           </ScrollView>
         </SafeAreaView>
@@ -1302,102 +1331,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: 16,
     paddingBottom: 40,
-  },
-  themeCardContainer: {
-    borderRadius: 22,
-    padding: 16,
-    marginBottom: 24,
-    borderWidth: 1,
-  },
-  themeGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  themeOptionItem: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  deviceFrame: {
-    width: 76,
-    height: 104,
-    borderRadius: 14,
-    padding: 4,
-    borderWidth: 2,
-    marginBottom: 8,
-  },
-  deviceFrameLight: {},
-  deviceFrameDark: {},
-  deviceFrameSystem: {},
-  deviceScreen: {
-    flex: 1,
-    borderRadius: 8,
-    padding: 4,
-    justifyContent: 'center',
-    gap: 4,
-  },
-  deviceScreenSplit: {
-    flex: 1,
-    flexDirection: 'row',
-    borderRadius: 8,
-    overflow: 'hidden',
-  },
-  deviceHalfLight: {
-    flex: 1,
-    padding: 4,
-    gap: 4,
-    justifyContent: 'center',
-  },
-  deviceHalfDark: {
-    flex: 1,
-    padding: 4,
-    gap: 4,
-    justifyContent: 'center',
-  },
-  deviceHeaderBarLight: {
-    height: 8,
-    borderRadius: 3,
-    marginBottom: 4,
-  },
-  deviceHeaderBarDark: {
-    height: 8,
-    borderRadius: 3,
-    marginBottom: 4,
-  },
-  deviceHeaderBarSepia: {
-    height: 8,
-    borderRadius: 3,
-    marginBottom: 4,
-  },
-  deviceLineLight: {
-    height: 4,
-    borderRadius: 2,
-  },
-  deviceLineDark: {
-    height: 4,
-    borderRadius: 2,
-  },
-  deviceLineSepia: {
-    height: 4,
-    borderRadius: 2,
-  },
-  themeLabel: {
-    fontSize: 13,
-    fontWeight: '600',
-    marginBottom: 6,
-  },
-  radioOuter: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  radioInner: {
-    width: 9,
-    height: 9,
-    borderRadius: 4.5,
   },
   sectionHeading: {
     fontSize: 11.5,

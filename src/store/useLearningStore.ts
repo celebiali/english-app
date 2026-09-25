@@ -469,16 +469,28 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   syncSubscriptionWithApple: async () => {
     try {
       const status = await ApplePurchaseService.checkSubscriptionStatus();
+      const current = get().userProfile;
+      if (!current) return;
+
       if (status.isPro) {
-        const current = get().userProfile;
-        if (current) {
-          const updated: UserProfile = {
+        const updated: UserProfile = {
+          ...current,
+          isPro: true,
+          proExpiresAt: status.expiresAt || undefined,
+          subscriptionPlanId: status.planId || current.subscriptionPlanId,
+        };
+        await get().setUserProfile(updated);
+      } else if (current.isPro && !current.isGuest) {
+        // If Apple confirms no active entitlement, downgrade to free tier
+        // (Unless they have a valid local unexpired promo code)
+        const isPromoActive = current.proExpiresAt && new Date(current.proExpiresAt).getTime() > Date.now();
+        if (!isPromoActive) {
+          const downgraded: UserProfile = {
             ...current,
-            isPro: true,
-            proExpiresAt: status.expiresAt || undefined,
-            subscriptionPlanId: status.planId || current.subscriptionPlanId,
+            isPro: false,
+            subscriptionPlanId: undefined,
           };
-          await get().setUserProfile(updated);
+          await get().setUserProfile(downgraded);
         }
       }
     } catch (e) {
@@ -534,6 +546,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       words: targetWords,
     };
     const total = merged.paragraph + merged.cloze + merged.sentence + merged.skills;
+    const wordsChanged = targetWords !== currentWords;
     await dbService.saveUserTaskGoals(merged);
     set({
       taskGoals: merged,
@@ -541,7 +554,9 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       dailyLimit: merged.words || 25,
     });
     await get().loadDailyTasks(true);
-    await get().loadVocabSession(true);
+    if (wordsChanged) {
+      await get().loadVocabSession(false);
+    }
     return { success: true };
   },
 
@@ -617,12 +632,12 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     // Filter out answered question from active daily questions in memory for instant UI reactivity
     const updatedActiveQuestions = activeDailyQuestions.filter((q) => q.id !== question.id);
 
-    set({
+    set((state) => ({
       dailyTasksProgress: updatedProg,
       questionStreakCount: updatedStreak,
-      streakCount: updatedStreak,
+      streakCount: Math.max(state.streakCount, updatedStreak),
       activeDailyQuestions: updatedActiveQuestions,
-    });
+    }));
 
     if (!isCorrect) {
       // Refresh mistakes list in background
@@ -680,10 +695,12 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     }
 
     const exam = YdsExamCatalogService.getFullExam(examId);
+    const durationSeconds = exam.duration_minutes * 60;
     const examState: ExamSessionState = {
       examId: exam.id,
       title: exam.title,
-      timeRemainingSeconds: exam.duration_minutes * 60,
+      timeRemainingSeconds: durationSeconds,
+      targetEndTimeMs: Date.now() + durationSeconds * 1000,
       isPaused: false,
       currentQuestionIndex: 0,
       userAnswers: {},
@@ -710,10 +727,12 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       description: `${questions.length} Soruluk Yapay Zeka Özel Çalışma Testi`,
     };
 
+    const durationSeconds = exam.duration_minutes * 60;
     const examState: ExamSessionState = {
       examId: exam.id,
       title: exam.title,
-      timeRemainingSeconds: exam.duration_minutes * 60,
+      timeRemainingSeconds: durationSeconds,
+      targetEndTimeMs: Date.now() + durationSeconds * 1000,
       isPaused: false,
       currentQuestionIndex: 0,
       userAnswers: {},
@@ -731,10 +750,12 @@ export const useLearningStore = create<LearningState>((set, get) => ({
 
   startMockExam: async (examId: string = `yds_mock_${Date.now()}`) => {
     const exam = YdsQuestionBankService.generateMockExam(examId, 'YDS 2026 Gerçek Deneme Sınavı');
+    const durationSeconds = 180 * 60;
     const examState: ExamSessionState = {
       examId: exam.id,
       title: exam.title,
-      timeRemainingSeconds: 180 * 60,
+      timeRemainingSeconds: durationSeconds,
+      targetEndTimeMs: Date.now() + durationSeconds * 1000,
       isPaused: false,
       currentQuestionIndex: 0,
       userAnswers: {},
@@ -772,11 +793,22 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   },
 
   tickExamTimer: () => {
-    set((state) => {
-      if (!state.examState || state.examState.isPaused || state.examState.isFinished) return {};
-      const nextTime = Math.max(0, state.examState.timeRemainingSeconds - 1);
-      return { examState: { ...state.examState, timeRemainingSeconds: nextTime } };
-    });
+    const { examState, finishMockExam } = get();
+    if (!examState || examState.isPaused || examState.isFinished) return;
+
+    let nextTime = 0;
+    if (examState.targetEndTimeMs) {
+      nextTime = Math.max(0, Math.floor((examState.targetEndTimeMs - Date.now()) / 1000));
+    } else {
+      nextTime = Math.max(0, examState.timeRemainingSeconds - 1);
+    }
+
+    if (nextTime <= 0) {
+      set({ examState: { ...examState, timeRemainingSeconds: 0, isFinished: true } });
+      finishMockExam();
+    } else {
+      set({ examState: { ...examState, timeRemainingSeconds: nextTime } });
+    }
   },
 
   finishMockExam: async () => {
@@ -789,13 +821,15 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     // Save to SQLite
     await dbService.saveExamResult(scoreCard);
 
-    // Automatically send wrong answers to Mistake Vault
-    currentExam.questions.forEach(async (q, idx) => {
-      const userSelected = examState.userAnswers[idx];
-      if (userSelected && userSelected !== q.correct_option) {
-        await dbService.completeQuestion(q.id, userSelected, false);
-      }
-    });
+    // Automatically send wrong answers to Mistake Vault (await all writes)
+    await Promise.all(
+      currentExam.questions.map(async (q, idx) => {
+        const userSelected = examState.userAnswers[idx];
+        if (userSelected && userSelected !== q.correct_option) {
+          await dbService.completeQuestion(q.id, userSelected, false);
+        }
+      })
+    );
 
     const updatedHistory = await dbService.getExamHistory();
     const updatedStreak = await dbService.checkAndUpdateDailyStreak();
@@ -803,7 +837,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     set((state) => ({
       examScoreCard: scoreCard,
       examHistory: updatedHistory,
-      streakCount: updatedStreak,
+      streakCount: Math.max(state.streakCount, updatedStreak),
       questionStreakCount: updatedStreak,
       examState: state.examState ? { ...state.examState, isFinished: true } : null,
     }));
@@ -1098,7 +1132,7 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       const vStreak = await dbService.getVocabStreakCount();
       const examHist = await dbService.getExamHistory();
       set({
-        streakCount: qStreak,
+        streakCount: Math.max(qStreak, vStreak),
         questionStreakCount: qStreak,
         vocabStreakCount: vStreak,
         examHistory: examHist,

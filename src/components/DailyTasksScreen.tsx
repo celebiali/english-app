@@ -195,12 +195,13 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
 
   const totalVaultWords = (dictionaryWords || []).length;
   // If user has words in their vault, goal cannot exceed available words; otherwise fallback to dailyLimit
+  const cleanDailyLimit = (!dailyLimit || dailyLimit === 75) ? 25 : dailyLimit;
   const baseVocabGoal = totalVaultWords > 0
-    ? Math.min(dailyLimit || 25, totalVaultWords)
-    : (dailyLimit || 25);
+    ? Math.min(cleanDailyLimit, totalVaultWords)
+    : cleanDailyLimit;
 
-  // Günün kelime hedefi kullanıcının belirlediği dinamik hedef üzerinden sabit kalır (hedef ileri kaçmaz)
-  const vocabGoal = baseVocabGoal;
+  // Günün kelime hedefi kullanıcının belirlediği dinamik hedef üzerinden sabit kalır (en fazla 30)
+  const vocabGoal = Math.min(30, baseVocabGoal);
 
   // Authoritative completed count from SQLite and store
   const actualVocabDone = Math.max(
@@ -421,12 +422,17 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
     }
 
     // Phase 2: Practice Quiz Phase (Aktif Hatırlama & Tureng / AI Kontrolü)
-    const targetLimit = taskGoals?.words || dailyLimit || 25;
-    const isFinished = currentVocabIndex >= dailyBatchWords.length || currentVocabIndex >= targetLimit;
-    const totalCount = Math.min(dailyBatchWords.length, targetLimit);
+    const isFinished = currentVocabIndex >= dailyBatchWords.length;
+    const totalCount = dailyBatchWords.length;
     const displayIndex = Math.min(currentVocabIndex + 1, totalCount);
     const progressPercent = totalCount > 0 ? Math.min(100, Math.round((displayIndex / totalCount) * 100)) : 0;
     const currentCard = !isFinished ? (dailyBatchWords[currentVocabIndex] || null) : null;
+
+    // Oturumdaki tekrar ve yeni kelime dökümü
+    const reviewWordsCount = dailyBatchWords.filter(
+      (w) => w.cardType === 'REVIEW' || (w.progress && w.progress.box > 0) || w.isCooldown
+    ).length;
+    const newWordsCount = Math.max(0, totalCount - reviewWordsCount);
 
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -448,7 +454,7 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
             </Text>
             {totalCount > 0 && !isFinished && (
               <Text style={[styles.practiceCounterText, { color: colors.textSecondary }]}>
-                {displayIndex} / {totalCount}
+                {displayIndex} / {totalCount} {reviewWordsCount > 0 ? `(${newWordsCount} Yeni + ${reviewWordsCount} Tekrar)` : ''}
               </Text>
             )}
           </View>

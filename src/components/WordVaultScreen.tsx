@@ -282,6 +282,9 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
   const [isInsideKutuphaneFolder, setIsInsideKutuphaneFolder] = useState(false);
   const [selectedKutuphaneFolderId, setSelectedKutuphaneFolderId] = useState<string | null>(null);
   const [selectedKutuphaneSubFolderId, setSelectedKutuphaneSubFolderId] = useState<string | null>(null);
+  // Kütüphane alt klasör içi filtreleme ve arama state'leri
+  const [subFilterMode, setSubFilterMode] = useState<'ALL' | 'NEW' | 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'MASTERED'>('ALL');
+  const [subSearchQuery, setSubSearchQuery] = useState('');
 
   // All custom user folders
   const userFolders = useMemo(() => {
@@ -327,36 +330,125 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     return KUTUPHANE_THEMATIC_FOLDERS.find((f) => f.id === selectedKutuphaneSubFolderId) || null;
   }, [selectedKutuphaneSubFolderId]);
 
-  // Kütüphane: Kelime sayılarını vocabFolders üzerinden eşleştir (veya dictionaryWords'ten hesapla)
-  const getKutuphaneFolderWordCount = useCallback((folderId: string): { wordCount: number; learnedCount: number } => {
-    const match = (vocabFolders || []).find((vf) => vf.id === folderId);
-    if (match && match.word_count > 0) {
+  // Kütüphane: 1, 3, 7 Günlük Aralıklı Tekrar (Leitner) İstatistikleri
+  const getKutuphaneFolderStats = useCallback((folderId: string) => {
+    if (!dictionaryWords || dictionaryWords.length === 0) {
       return {
-        wordCount: match.word_count,
-        learnedCount: match.learned_count,
+        wordCount: 0,
+        newCount: 0,
+        dailyCount: 0,
+        weeklyCount: 0,
+        monthlyCount: 0,
+        masteredCount: 0,
+        learnedCount: 0,
+        progressPct: 0,
       };
     }
+
     const target = KUTUPHANE_THEMATIC_FOLDERS.find((f) => f.id === folderId);
-    if (!target || !dictionaryWords) return { wordCount: 0, learnedCount: 0 };
+    const targetName = target ? target.name : folderId;
+
     const matching = dictionaryWords.filter(
-      (w) => w.subcategory === target.name || w.folder_name === target.name
+      (w) => w.subcategory === targetName || w.folder_name === targetName
     );
-    const learned = matching.filter((w) => w.box !== null && w.box >= 1).length;
+
+    const wordCount = matching.length;
+    if (wordCount === 0) {
+      return {
+        wordCount: 0,
+        newCount: 0,
+        dailyCount: 0,
+        weeklyCount: 0,
+        monthlyCount: 0,
+        masteredCount: 0,
+        learnedCount: 0,
+        progressPct: 0,
+      };
+    }
+
+    let newCount = 0;
+    let dailyCount = 0;
+    let weeklyCount = 0;
+    let monthlyCount = 0;
+    let masteredCount = 0;
+    let totalScore = 0;
+
+    for (const w of matching) {
+      const box = w.box || 0;
+      const isMastered = w.status === 'MASTERED' || (box >= 3 && (w.correctCount || 0) >= 2);
+
+      if (isMastered) {
+        masteredCount++;
+        totalScore += 100;
+      } else if (box === 3) {
+        monthlyCount++;
+        totalScore += 75;
+      } else if (box === 2) {
+        weeklyCount++;
+        totalScore += 50;
+      } else if (box === 1) {
+        dailyCount++;
+        totalScore += 25;
+      } else {
+        newCount++;
+        totalScore += 0;
+      }
+    }
+
+    const progressPct = Math.round(totalScore / wordCount);
+
     return {
-      wordCount: matching.length,
-      learnedCount: learned,
+      wordCount,
+      newCount,
+      dailyCount,
+      weeklyCount,
+      monthlyCount,
+      masteredCount,
+      learnedCount: masteredCount,
+      progressPct,
     };
-  }, [vocabFolders, dictionaryWords]);
+  }, [dictionaryWords]);
 
   // Kütüphane: Seçili alt klasöre veya ana klasöre ait kelimeler
   const kutuphaneWordsList = useMemo(() => {
     if (!dictionaryWords) return [];
+    if (selectedKutuphaneSubFolderId === 'all') {
+      if (!selectedKutuphaneFolder) return [];
+      return dictionaryWords.filter(
+        (w) => w.folder_name === selectedKutuphaneFolder.name || w.subcategory === selectedKutuphaneFolder.name
+      );
+    }
     const targetFolder = selectedKutuphaneSubFolder || selectedKutuphaneFolder;
     if (!targetFolder) return [];
     return dictionaryWords.filter(
       (w) => w.subcategory === targetFolder.name || w.folder_name === targetFolder.name
     );
-  }, [dictionaryWords, selectedKutuphaneFolder, selectedKutuphaneSubFolder]);
+  }, [dictionaryWords, selectedKutuphaneFolder, selectedKutuphaneSubFolder, selectedKutuphaneSubFolderId]);
+
+  // Kütüphane alt klasörü içinde filtrelenmiş ve aranmış kelimeler
+  const filteredKutuphaneWords = useMemo(() => {
+    let list = kutuphaneWordsList;
+    if (subFilterMode === 'NEW') {
+      list = list.filter((w) => (!w.box || (w.box as number) === 0) && w.status !== 'MASTERED');
+    } else if (subFilterMode === 'DAILY') {
+      list = list.filter((w) => w.box === 1 && w.status !== 'MASTERED');
+    } else if (subFilterMode === 'WEEKLY') {
+      list = list.filter((w) => w.box === 2 && w.status !== 'MASTERED');
+    } else if (subFilterMode === 'MONTHLY') {
+      list = list.filter((w) => w.box === 3 && w.status !== 'MASTERED');
+    } else if (subFilterMode === 'MASTERED') {
+      list = list.filter((w) => w.status === 'MASTERED' || ((w.box || 0) >= 3 && (w.correctCount || 0) >= 2));
+    }
+    const clean = subSearchQuery.trim().toLowerCase();
+    if (clean) {
+      list = list.filter(
+        (w) =>
+          w.word.toLowerCase().includes(clean) ||
+          w.meaning.toLowerCase().includes(clean)
+      );
+    }
+    return list;
+  }, [kutuphaneWordsList, subFilterMode, subSearchQuery]);
 
   // Active folder name and object
   const currentFolder = useMemo(() => {
@@ -948,7 +1040,13 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
       return;
     }
 
-    startSessionWithWords(activePool);
+    // Oturum başına 25 yeni kelime + vadesi gelmiş tekrarlar (sağlıklı ve dengeli bir parti)
+    const dueReviews = activePool.filter((w) => (w.box || 0) > 0 || (w.incorrectCount || 0) > 0);
+    const newWords = activePool.filter((w) => (!w.box || (w.box as number) === 0) && (w.incorrectCount || 0) === 0);
+    const sessionBatch = [...dueReviews.slice(0, 15), ...newWords.slice(0, 25)];
+    const finalBatch = sessionBatch.length > 0 ? sessionBatch : activePool.slice(0, 25);
+
+    startSessionWithWords(finalBatch);
     setStudyCardIndex(0);
     setIsStudySliderActive(true);
     setIsPracticeActive(false);
@@ -956,27 +1054,34 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
 
   // Kütüphane alt klasöründeki kelimeler için alıştırma başlatma
   const handleStartKutuphanePractice = () => {
-    const activePool = kutuphaneWordsList.filter(isWordActiveForPractice);
+    const pool = filteredKutuphaneWords.length > 0 ? filteredKutuphaneWords : kutuphaneWordsList;
+    const activePool = pool.filter(isWordActiveForPractice);
 
     if (activePool.length === 0) {
       const allMastered = kutuphaneWordsList.length > 0 && kutuphaneWordsList.every((w) => w.status === 'MASTERED' || (w.box || 0) >= 3);
       if (allMastered) {
         Alert.alert(
-          'Tüm Kelimeler Tamamlandı 🏆',
-          'Tebrikler! Bu klasördeki tüm kelimeleri başarıyla öğrendiniz ve kalıcı hafızaya aldınız.',
+          'Tüm Kelimeler Kalıcı Hafızada 🏆',
+          'Tebrikler! Bu klasördeki tüm kelimeler 1, 3, 7 günlük öğrenme eğrisini başarıyla tamamlayıp kalıcı hafızaya alındı.',
           [{ text: 'Tamam', style: 'default' }]
         );
       } else {
         Alert.alert(
-          'Bugünkü Çalışma Tamamlandı 🎉',
-          'Bu klasördeki tüm kelimeler aralıklı tekrar kutularına aktarıldı.\n\nKelimelerin hafızada kalıcı hale gelmesi için bekleme süresi dolana kadar yeni bir çalışma gerekmemektedir. Tekrar randevu günü geldiğinde buton otomatik olarak tekrar aktifleşecektir.',
+          '1. Gün Tekrarı Bekleniyor ⏰',
+          'Bu klasördeki kelimeleri bugün başarıyla çalıştınız.\n\n1-3-7 Günlük Bilimsel Aralıklı Tekrar Sistemi (Leitner) gereği, kelimelerin kalıcı hafızaya geçmesi için ilk tekrar randevunuz YARIN sabah 06:00\'da açılacaktır.\n\nYarın doğru bildiğinizde kelimeler 3. Gün kutusuna yükselecektir.',
           [{ text: 'Tamam', style: 'default' }]
         );
       }
       return;
     }
 
-    startSessionWithWords(activePool);
+    // Oturum başına 25 yeni kelime + vadesi gelmiş tekrarlar (sağlıklı ve dengeli bir parti)
+    const dueReviews = activePool.filter((w) => (w.box || 0) > 0 || (w.incorrectCount || 0) > 0);
+    const newWords = activePool.filter((w) => (!w.box || (w.box as number) === 0) && (w.incorrectCount || 0) === 0);
+    const sessionBatch = [...dueReviews.slice(0, 15), ...newWords.slice(0, 25)];
+    const finalBatch = sessionBatch.length > 0 ? sessionBatch : activePool.slice(0, 25);
+
+    startSessionWithWords(finalBatch);
     setStudyCardIndex(0);
     setIsStudySliderActive(true);
     setIsPracticeActive(false);
@@ -1115,10 +1220,10 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     // Alt klasör seçildiyse -> kelime listesi göster
     if (selectedKutuphaneSubFolderId && kutuphaneWordsList.length >= 0) {
       const subFolder = selectedKutuphaneSubFolder;
-      const subStats = getKutuphaneFolderWordCount(selectedKutuphaneSubFolderId);
+      const subStats = getKutuphaneFolderStats(selectedKutuphaneSubFolderId === 'all' ? selectedKutuphaneFolderId! : selectedKutuphaneSubFolderId);
       const currentTargetId = selectedKutuphaneSubFolderId === 'all' ? selectedKutuphaneFolderId : selectedKutuphaneSubFolderId;
       const isCurrentTargetActive = Boolean(currentTargetId && activeStudyFolderId === currentTargetId);
-      const activeKutuphaneCount = kutuphaneWordsList.filter(isWordActiveForPractice).length;
+      const activeKutuphaneCount = (filteredKutuphaneWords.length > 0 ? filteredKutuphaneWords : kutuphaneWordsList).filter(isWordActiveForPractice).length;
       const folderDisplayName = subFolder?.name || (selectedKutuphaneSubFolderId === 'all' ? `Tüm ${selectedKutuphaneFolder.name.replace('Kütüphane: ', '')}` : 'Alt Klasör');
 
       return (
@@ -1129,6 +1234,8 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               style={styles.folderBackBtn}
               onPress={() => {
                 setSelectedKutuphaneSubFolderId(null);
+                setSubFilterMode('ALL');
+                setSubSearchQuery('');
               }}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
@@ -1140,7 +1247,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
                 {folderDisplayName}
               </Text>
               <Text style={[styles.folderSubtitleText, { color: colors.textSecondary }]}>
-                {kutuphaneWordsList.length} kelime • {subStats.learnedCount} çalışıldı
+                {kutuphaneWordsList.length} kelime • {subStats.newCount > 0 ? `${subStats.newCount} yeni • ` : ''}{subStats.dailyCount > 0 ? `${subStats.dailyCount} 1. gün • ` : ''}%{subStats.progressPct} ilerleme
               </Text>
             </View>
 
@@ -1174,13 +1281,102 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
             </TouchableOpacity>
           </View>
 
+          {/* Search & Leitner Box Filter Pills inside Subfolder */}
+          <View style={[styles.searchRowWrap, { backgroundColor: colors.cardBackground, borderBottomColor: colors.border }]}>
+            <SearchInputBar
+              value={subSearchQuery}
+              placeholder="Bu alt klasörde ara..."
+              onSearch={setSubSearchQuery}
+              onSubmitEditing={setSubSearchQuery}
+              debounceMs={300}
+            />
+
+            <View style={styles.filterRow}>
+              <TouchableOpacity
+                style={[
+                  styles.filterPill,
+                  subFilterMode === 'ALL' && [styles.filterPillActive, { backgroundColor: colors.brandLight, borderColor: colors.brand }],
+                ]}
+                onPress={() => setSubFilterMode('ALL')}
+              >
+                <Text style={[styles.filterPillText, { color: subFilterMode === 'ALL' ? colors.brand : colors.textSecondary }]}>
+                  Tümü ({subStats.wordCount})
+                </Text>
+              </TouchableOpacity>
+
+              {subStats.newCount > 0 && (
+                <TouchableOpacity
+                  style={[
+                    styles.filterPill,
+                    subFilterMode === 'NEW' && [styles.filterPillActive, { backgroundColor: colors.brandLight, borderColor: colors.brand }],
+                  ]}
+                  onPress={() => setSubFilterMode('NEW')}
+                >
+                  <Text style={[styles.filterPillText, { color: subFilterMode === 'NEW' ? colors.brand : colors.textSecondary }]}>
+                    Yeni ({subStats.newCount})
+                  </Text>
+                </TouchableOpacity>
+              )}
+
+              <TouchableOpacity
+                style={[
+                  styles.filterPill,
+                  subFilterMode === 'DAILY' && [styles.filterPillActive, { backgroundColor: colors.brandLight, borderColor: colors.brand }],
+                ]}
+                onPress={() => setSubFilterMode('DAILY')}
+              >
+                <Text style={[styles.filterPillText, { color: subFilterMode === 'DAILY' ? colors.brand : colors.textSecondary }]}>
+                  1. Gün ({subStats.dailyCount})
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.filterPill,
+                  subFilterMode === 'WEEKLY' && [styles.filterPillActive, { backgroundColor: '#3B82F618', borderColor: '#3B82F6' }],
+                ]}
+                onPress={() => setSubFilterMode('WEEKLY')}
+              >
+                <Text style={[styles.filterPillText, { color: subFilterMode === 'WEEKLY' ? '#3B82F6' : colors.textSecondary }]}>
+                  3. Gün ({subStats.weeklyCount})
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.filterPill,
+                  subFilterMode === 'MONTHLY' && [styles.filterPillActive, { backgroundColor: '#10B98118', borderColor: '#10B981' }],
+                ]}
+                onPress={() => setSubFilterMode('MONTHLY')}
+              >
+                <Text style={[styles.filterPillText, { color: subFilterMode === 'MONTHLY' ? '#10B981' : colors.textSecondary }]}>
+                  7. Gün ({subStats.monthlyCount})
+                </Text>
+              </TouchableOpacity>
+
+              {subStats.masteredCount > 0 && (
+                <TouchableOpacity
+                  style={[
+                    styles.filterPill,
+                    subFilterMode === 'MASTERED' && [styles.filterPillActive, { backgroundColor: '#10B98118', borderColor: '#10B981' }],
+                  ]}
+                  onPress={() => setSubFilterMode('MASTERED')}
+                >
+                  <Text style={[styles.filterPillText, { color: subFilterMode === 'MASTERED' ? '#10B981' : colors.textSecondary }]}>
+                    Kalıcı ({subStats.masteredCount})
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+
           {/* Kelime Listesi */}
           <FlatList
-            data={kutuphaneWordsList}
+            data={filteredKutuphaneWords}
             keyExtractor={(item) => String(item.id || item.word)}
             contentContainerStyle={[
               styles.listContent,
-              kutuphaneWordsList.length === 0 && styles.listContentEmpty,
+              filteredKutuphaneWords.length === 0 && styles.listContentEmpty,
             ]}
             showsVerticalScrollIndicator={false}
             initialNumToRender={12}
@@ -1203,7 +1399,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               <View style={styles.emptyCenter}>
                 <Text style={[styles.emptyTitle, { color: colors.text }]}>Kelime Bulunamadı</Text>
                 <Text style={[styles.emptySub, { color: colors.textSecondary }]}>
-                  Bu alt klasörde henüz kelime bulunmuyor.
+                  Bu filtrede veya aramada gösterilecek kelime bulunmuyor.
                 </Text>
               </View>
             }
@@ -1217,15 +1413,22 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
                   styles.startPracticeBtn,
                   activeKutuphaneCount > 0
                     ? { backgroundColor: colors.brand }
-                    : { backgroundColor: colors.border, opacity: 0.65 },
+                    : { backgroundColor: colors.cardBackground, borderWidth: 1, borderColor: colors.border },
                 ]}
                 onPress={handleStartKutuphanePractice}
                 activeOpacity={0.88}
               >
-                <Text style={styles.startPracticeBtnText}>
+                <Text
+                  style={[
+                    styles.startPracticeBtnText,
+                    activeKutuphaneCount === 0 && { color: colors.textSecondary },
+                  ]}
+                >
                   {activeKutuphaneCount > 0
                     ? `Alıştırmaya Başla (${activeKutuphaneCount} Kelime)`
-                    : 'Bugünkü Çalışma Tamamlandı'}
+                    : subStats.masteredCount === subStats.wordCount && subStats.wordCount > 0
+                    ? 'Tüm Kelimeler Kalıcı Hafızada 🏆'
+                    : '⏰ Tekrar Bekleniyor (Yarın 06:00)'}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -1237,8 +1440,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
     }
 
     // Ana klasör -> alt klasörleri listele
-    const mainStats = getKutuphaneFolderWordCount(selectedKutuphaneFolderId!);
-    const mainPct = mainStats.wordCount > 0 ? Math.round((mainStats.learnedCount / mainStats.wordCount) * 100) : 0;
+    const mainStats = getKutuphaneFolderStats(selectedKutuphaneFolderId!);
 
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -1250,6 +1452,8 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               setIsInsideKutuphaneFolder(false);
               setSelectedKutuphaneFolderId(null);
               setSelectedKutuphaneSubFolderId(null);
+              setSubFilterMode('ALL');
+              setSubSearchQuery('');
             }}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
@@ -1261,7 +1465,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               {selectedKutuphaneFolder.name}
             </Text>
             <Text style={[styles.folderSubtitleText, { color: colors.textSecondary }]}>
-              {mainStats.wordCount} kelime • {mainStats.learnedCount} öğrenildi
+              {mainStats.wordCount} kelime • %{mainStats.progressPct} aralıklı tekrar ilerlemesi
             </Text>
           </View>
         </View>
@@ -1272,7 +1476,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
           contentContainerStyle={styles.folderScrollContent}
           showsVerticalScrollIndicator={false}
         >
-          {/* Toplam İlerleme */}
+          {/* 1, 3, 7 Günlük Öğrenme Eğrisi Kartı */}
           <View style={[styles.statsOverviewCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
             <View style={styles.statsCol}>
               <Text style={[styles.statsNum, { color: colors.text }]}>{mainStats.wordCount}</Text>
@@ -1280,13 +1484,54 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
             </View>
             <View style={[styles.statsDivider, { backgroundColor: colors.border }]} />
             <View style={styles.statsCol}>
-              <Text style={[styles.statsNum, { color: '#10B981' }]}>{mainStats.learnedCount}</Text>
-              <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>Öğrenildi</Text>
+              <Text style={[styles.statsNum, { color: colors.brand }]}>{mainStats.newCount}</Text>
+              <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>Yeni</Text>
             </View>
             <View style={[styles.statsDivider, { backgroundColor: colors.border }]} />
             <View style={styles.statsCol}>
-              <Text style={[styles.statsNum, { color: colors.brand }]}>%{mainPct}</Text>
-              <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>İlerleme</Text>
+              <Text style={[styles.statsNum, { color: '#F59E0B' }]}>{mainStats.dailyCount}</Text>
+              <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>1. Gün</Text>
+            </View>
+            <View style={[styles.statsDivider, { backgroundColor: colors.border }]} />
+            <View style={styles.statsCol}>
+              <Text style={[styles.statsNum, { color: '#3B82F6' }]}>{mainStats.weeklyCount}</Text>
+              <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>3. Gün</Text>
+            </View>
+            <View style={[styles.statsDivider, { backgroundColor: colors.border }]} />
+            <View style={styles.statsCol}>
+              <Text style={[styles.statsNum, { color: '#10B981' }]}>{mainStats.monthlyCount}</Text>
+              <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>7. Gün</Text>
+            </View>
+            {mainStats.masteredCount > 0 && (
+              <>
+                <View style={[styles.statsDivider, { backgroundColor: colors.border }]} />
+                <View style={styles.statsCol}>
+                  <Text style={[styles.statsNum, { color: '#059669' }]}>{mainStats.masteredCount}</Text>
+                  <Text style={[styles.statsLabel, { color: colors.textSecondary }]}>Kalıcı</Text>
+                </View>
+              </>
+            )}
+          </View>
+
+          {/* Aralıklı Tekrar İlerleme Çubuğu */}
+          <View style={[styles.leitnerBarCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+            <View style={styles.leitnerBarHeader}>
+              <View style={styles.leitnerBarTitleRow}>
+                <Clock size={13} color={colors.brand} />
+                <Text style={[styles.leitnerBarTitle, { color: colors.text }]}>Öğrenme Eğrisi İlerlemesi</Text>
+              </View>
+              <Text style={[styles.leitnerBarPct, { color: colors.brand }]}>%{mainStats.progressPct}</Text>
+            </View>
+            <View style={[styles.leitnerBarTrack, { backgroundColor: colors.subtleBackground }]}>
+              <View
+                style={[
+                  styles.leitnerBarFill,
+                  {
+                    width: `${mainStats.progressPct}%`,
+                    backgroundColor: mainStats.progressPct === 100 ? '#10B981' : colors.brand,
+                  },
+                ]}
+              />
             </View>
           </View>
 
@@ -1298,7 +1543,11 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
             {mainStats.wordCount > 0 && (
               <TouchableOpacity
                 style={[styles.singleFolderCard, { backgroundColor: colors.cardBackground, borderColor: colors.border, marginBottom: 8 }]}
-                onPress={() => setSelectedKutuphaneSubFolderId('all')}
+                onPress={() => {
+                  setSelectedKutuphaneSubFolderId('all');
+                  setSubFilterMode('ALL');
+                  setSubSearchQuery('');
+                }}
                 activeOpacity={0.75}
               >
                 <View style={[styles.folderIconBadge, { backgroundColor: `${selectedKutuphaneFolder.color}20` }]}>
@@ -1324,13 +1573,16 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
             )}
 
             {kutuphaneSubFolders.map((sub) => {
-              const subStats = getKutuphaneFolderWordCount(sub.id);
-              const subPct = subStats.wordCount > 0 ? Math.round((subStats.learnedCount / subStats.wordCount) * 100) : 0;
+              const subStats = getKutuphaneFolderStats(sub.id);
               return (
                 <TouchableOpacity
                   key={sub.id}
                   style={[styles.singleFolderCard, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}
-                  onPress={() => setSelectedKutuphaneSubFolderId(sub.id)}
+                  onPress={() => {
+                    setSelectedKutuphaneSubFolderId(sub.id);
+                    setSubFilterMode('ALL');
+                    setSubSearchQuery('');
+                  }}
                   activeOpacity={0.75}
                 >
                   <View style={[styles.folderIconBadge, { backgroundColor: `${selectedKutuphaneFolder.color}15` }]}>
@@ -1352,12 +1604,26 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
                         <View
                           style={[
                             styles.folderProgressFill,
-                            { width: `${subPct}%`, backgroundColor: subPct === 100 ? '#10B981' : selectedKutuphaneFolder.color },
+                            {
+                              width: `${subStats.progressPct}%`,
+                              backgroundColor:
+                                subStats.progressPct === 100
+                                  ? '#10B981'
+                                  : subStats.progressPct >= 75
+                                  ? '#10B981'
+                                  : subStats.progressPct >= 50
+                                  ? '#3B82F6'
+                                  : '#F59E0B',
+                            },
                           ]}
                         />
                       </View>
                       <Text style={[styles.folderProgressText, { color: colors.textSecondary }]}>
-                        {subStats.learnedCount}/{subStats.wordCount} (%{subPct})
+                        {subStats.masteredCount > 0
+                          ? `${subStats.masteredCount}/${subStats.wordCount} tamamlandı (%${subStats.progressPct})`
+                          : subStats.dailyCount > 0
+                          ? `%${subStats.progressPct} • 1. Gün (${subStats.dailyCount}/${subStats.wordCount})`
+                          : `%${subStats.progressPct} ilerleme`}
                       </Text>
                     </View>
                   </View>
@@ -1861,8 +2127,7 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
               </View>
 
               {kutuphaneMainFolders.map((folder) => {
-                const kStats = getKutuphaneFolderWordCount(folder.id);
-                const kPct = kStats.wordCount > 0 ? Math.round((kStats.learnedCount / kStats.wordCount) * 100) : 0;
+                const kStats = getKutuphaneFolderStats(folder.id);
 
                 return (
                   <TouchableOpacity
@@ -1872,6 +2137,8 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
                       setSelectedKutuphaneFolderId(folder.id);
                       setSelectedKutuphaneSubFolderId(null);
                       setIsInsideKutuphaneFolder(true);
+                      setSubFilterMode('ALL');
+                      setSubSearchQuery('');
                     }}
                     activeOpacity={0.75}
                   >
@@ -1896,12 +2163,26 @@ export const WordVaultScreen: React.FC<WordVaultScreenProps> = ({ onPracticeActi
                           <View
                             style={[
                               styles.folderProgressFill,
-                              { width: `${kPct}%`, backgroundColor: kPct === 100 ? '#10B981' : folder.color },
+                              {
+                                width: `${kStats.progressPct}%`,
+                                backgroundColor:
+                                  kStats.progressPct === 100
+                                    ? '#10B981'
+                                    : kStats.progressPct >= 75
+                                    ? '#10B981'
+                                    : kStats.progressPct >= 50
+                                    ? '#3B82F6'
+                                    : '#F59E0B',
+                              },
                             ]}
                           />
                         </View>
                         <Text style={[styles.folderProgressText, { color: colors.textSecondary }]}>
-                          {kStats.learnedCount}/{kStats.wordCount} (%{kPct})
+                          {kStats.masteredCount > 0
+                            ? `${kStats.masteredCount}/${kStats.wordCount} tamamlandı (%${kStats.progressPct})`
+                            : kStats.dailyCount > 0
+                            ? `%${kStats.progressPct} • 1. Gün (${kStats.dailyCount}/${kStats.wordCount})`
+                            : `%${kStats.progressPct} ilerleme`}
                         </Text>
                       </View>
                     </View>
@@ -2360,6 +2641,40 @@ const styles = StyleSheet.create({
   statsDivider: {
     width: 1,
     height: 28,
+  },
+  leitnerBarCard: {
+    padding: 12,
+    borderRadius: 14,
+    borderWidth: 1,
+    marginTop: -8,
+  },
+  leitnerBarHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 6,
+  },
+  leitnerBarTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  leitnerBarTitle: {
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  leitnerBarPct: {
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  leitnerBarTrack: {
+    height: 6,
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  leitnerBarFill: {
+    height: '100%',
+    borderRadius: 3,
   },
   // Section groups
   sectionGroup: {

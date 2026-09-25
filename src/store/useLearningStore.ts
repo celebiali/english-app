@@ -279,6 +279,8 @@ export const useLearningStore = create<LearningState>((set, get) => ({
       const userGoals = await dbService.getUserTaskGoals();
       const activeFolderId = await dbService.getActiveStudyFolderId();
       const totalTarget = userGoals.paragraph + userGoals.cloze + userGoals.sentence + userGoals.skills;
+      const cleanWords = userGoals.words === 75 ? 25 : (userGoals.words || 25);
+      const cleanGoals = { ...userGoals, words: cleanWords };
 
       set({
         streakCount: effectiveStreak,
@@ -286,9 +288,9 @@ export const useLearningStore = create<LearningState>((set, get) => ({
         vocabStreakCount: Math.max(vStreak, effectiveStreak),
         examHistory: examHist,
         userProfile: savedUser,
-        taskGoals: userGoals,
+        taskGoals: cleanGoals,
         dailyQuestionTarget: totalTarget,
-        dailyLimit: userGoals.words || 25,
+        dailyLimit: cleanWords,
         activeStudyFolderId: activeFolderId || 'sys_conn',
       });
 
@@ -380,9 +382,9 @@ export const useLearningStore = create<LearningState>((set, get) => ({
         questionStreakCount: Math.max(qStreak, effectiveStreak),
         vocabStreakCount: Math.max(vStreak, effectiveStreak),
         examHistory: examHist,
-        taskGoals: userGoals,
+        taskGoals: userGoals.words === 75 ? { ...userGoals, words: 25 } : userGoals,
         dailyQuestionTarget: totalTarget,
-        dailyLimit: userGoals.words || 25,
+        dailyLimit: userGoals.words === 75 ? 25 : (userGoals.words || 25),
         activeStudyFolderId: activeFolderId || 'sys_conn',
       });
 
@@ -527,8 +529,8 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     const currentWords = current.words || get().dailyLimit || 25;
     const targetWords = newGoals.words !== undefined ? Math.max(5, Math.min(100, newGoals.words)) : currentWords;
 
-    // Tembellik & Hile Önleme Kuralı: Günlük hedefi düşürme haftada en fazla 1 kez yapılabilir
-    if (newGoals.words !== undefined && targetWords < currentWords) {
+    // Tembellik & Hile Önleme Kuralı: Günlük hedefi düşürme haftada en fazla 1 kez yapılabilir (normal hedefler için)
+    if (newGoals.words !== undefined && targetWords < currentWords && currentWords <= 30) {
       const check = await dbService.canLowerVocabGoal(targetWords);
       if (!check.allowed) {
         return {
@@ -924,10 +926,11 @@ export const useLearningStore = create<LearningState>((set, get) => ({
 
   loadVocabSession: async (force = false) => {
     const { dailyLimit, sessionWords, currentVocabIndex, activeStudyFolderId } = get();
+    const cleanLimit = (!dailyLimit || dailyLimit === 75) ? 25 : dailyLimit;
 
     const [words, summary, weekly, monthly, dictionary] = await Promise.all([
       force || sessionWords.length === 0
-        ? srEngine.loadDailyBatch(dailyLimit, activeStudyFolderId)
+        ? srEngine.loadDailyBatch(cleanLimit, activeStudyFolderId)
         : Promise.resolve(sessionWords),
       srEngine.fetchBoxSummary(),
       dbService.getWordsForBoxReview(2),

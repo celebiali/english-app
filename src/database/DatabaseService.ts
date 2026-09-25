@@ -733,6 +733,9 @@ class DatabaseService {
   async getUserTaskGoals(): Promise<TaskGoalsConfig> {
     const defaultGoals: TaskGoalsConfig = { paragraph: 8, cloze: 5, sentence: 8, skills: 14, words: 25 };
     if (!this.isNative) {
+      if (this.memoryDb.taskGoals && this.memoryDb.taskGoals.words === 75) {
+        this.memoryDb.taskGoals.words = 25;
+      }
       return this.memoryDb.taskGoals || defaultGoals;
     }
 
@@ -741,12 +744,18 @@ class DatabaseService {
         `SELECT paragraph_goal, cloze_goal, sentence_goal, skills_goal, daily_limit FROM user_settings WHERE id = 1`
       );
       if (row) {
+        let words = Number(row.daily_limit) || 25;
+        // Eğer günlük limit geçmişte klasör boyutu nedeniyle 75'e fırladıysa 25'e normalize et
+        if (words === 75) {
+          words = 25;
+          await this.dbInstance.runAsync(`UPDATE user_settings SET daily_limit = 25 WHERE id = 1`).catch(() => {});
+        }
         return {
           paragraph: Number(row.paragraph_goal) || 8,
           cloze: Number(row.cloze_goal) || 5,
           sentence: Number(row.sentence_goal) || 8,
           skills: Number(row.skills_goal) || 14,
-          words: Number(row.daily_limit) || 25,
+          words,
         };
       }
     } catch (e) {
@@ -1426,12 +1435,12 @@ class DatabaseService {
         } else {
           matchingWords = allWords.filter((w) => w.subcategory === f.name);
         }
-        const learned = matchingWords.filter((w) => w.box !== null && w.box >= 1).length;
-        const isCompleted = matchingWords.length > 0 && learned >= matchingWords.length;
+        const mastered = matchingWords.filter((w) => w.status === 'MASTERED' || (w.box !== null && w.box >= 3 && (w.correctCount || 0) >= 2)).length;
+        const isCompleted = matchingWords.length > 0 && mastered >= matchingWords.length;
         return {
           ...f,
           word_count: matchingWords.length,
-          learned_count: learned,
+          learned_count: mastered,
           is_completed: isCompleted,
         };
       });
@@ -1481,13 +1490,13 @@ class DatabaseService {
       } else {
         matchingWords = allWords.filter((w) => w.subcategory === folder.name);
       }
-      const learned = matchingWords.filter((w) => w.box !== null && w.box >= 1).length;
-      const isCompleted = matchingWords.length > 0 && learned >= matchingWords.length;
+      const mastered = matchingWords.filter((w) => w.status === 'MASTERED' || (w.box !== null && w.box >= 3 && (w.correctCount || 0) >= 2)).length;
+      const isCompleted = matchingWords.length > 0 && mastered >= matchingWords.length;
 
       return {
         ...folder,
         word_count: matchingWords.length,
-        learned_count: learned,
+        learned_count: mastered,
         is_completed: isCompleted,
       };
     });
@@ -2410,6 +2419,9 @@ class DatabaseService {
         }
       }
 
+      if (progBox === 0) {
+        return { badgeText: '❌ Hatalı Kelime Tekrarı', daysOverdue: 0 };
+      }
       if (progBox === 1) {
         return { badgeText: '🔄 Dünden Tekrar (1 Gün)', daysOverdue };
       }
@@ -2447,14 +2459,18 @@ class DatabaseService {
       const reviewCandidates: { word: WordItem; prog: WordProgress; daysOverdue: number; badgeText: string }[] = [];
       const now = Date.now();
 
-      // Vadesi gelmiş kelimeleri TÜM klasörlerden tara
+      // Vadesi gelmiş ve hatalı kelimeleri TÜM klasörlerden tara
       for (const w of allWords) {
         const prog = this.memoryDb.progress.get(w.id);
-        if (prog && prog.next_review_at) {
-          const dueTime = new Date(prog.next_review_at).getTime();
-          if (dueTime <= now) {
-            const { badgeText, daysOverdue } = computeBadgeInfo(prog.box, prog.next_review_at);
-            reviewCandidates.push({ word: w, prog, daysOverdue, badgeText });
+        if (prog) {
+          if (prog.box === 0 && prog.status === 'LEARNING' && prog.incorrect_count > 0) {
+            reviewCandidates.push({ word: w, prog, daysOverdue: 0, badgeText: '❌ Hatalı Kelime Tekrarı' });
+          } else if (prog.next_review_at) {
+            const dueTime = new Date(prog.next_review_at).getTime();
+            if (dueTime <= now) {
+              const { badgeText, daysOverdue } = computeBadgeInfo(prog.box, prog.next_review_at);
+              reviewCandidates.push({ word: w, prog, daysOverdue, badgeText });
+            }
           }
         }
       }
@@ -2475,13 +2491,12 @@ class DatabaseService {
         isCooldown: false,
       }));
 
-      // Tekrarlar ile yeni kelimeler dengelenir: Toplam oturum boyutu newWordsLimit ile sınırlıdır
-      const maxTotal = Math.max(5, newWordsLimit);
+      // Kural: 25 Yeni Kelime (veya kullanıcının günlük hedefi) + Eski hatalı / vadesi gelmiş tekrarlar
+      const safeNewWordsTarget = Math.max(5, Math.min(30, newWordsLimit === 75 ? 25 : (newWordsLimit || 25)));
+      const selectedReviews = reviewWords.slice(0, 25);
       const targetFolderWords = allWords.filter(isMatchingFolder);
       const unstudiedTarget = targetFolderWords.filter((w) => !this.memoryDb.progress.get(w.id));
-      const reviewCap = unstudiedTarget.length === 0 ? maxTotal : Math.min(reviewWords.length, Math.floor(maxTotal * 0.5));
-      const selectedReviews = reviewWords.slice(0, reviewCap);
-      const newWordsTarget = Math.max(0, maxTotal - selectedReviews.length);
+      const newWordsTarget = safeNewWordsTarget;
       const newWords: CardWord[] = [];
       const fetchedIds = new Set<number>();
 
@@ -2576,14 +2591,7 @@ class DatabaseService {
         }
       }
 
-      // Kalan boşluk varsa daha fazla tekrar kelimesiyle tamamla
-      let finalBatch = [...selectedReviews, ...newWords];
-      if (finalBatch.length < maxTotal && reviewWords.length > selectedReviews.length) {
-        const extraReviews = reviewWords.slice(selectedReviews.length, selectedReviews.length + (maxTotal - finalBatch.length));
-        finalBatch = [...finalBatch, ...extraReviews];
-      }
-
-      return finalBatch.slice(0, maxTotal);
+      return [...selectedReviews, ...newWords];
     }
 
     // Native SQLite implementation
@@ -2617,14 +2625,15 @@ class DatabaseService {
       }
     }
 
-    // 1. Vadesi gelmiş kelimeleri TÜM klasörlerden çek (azami 100 adet tekrar)
+    // 1. Vadesi gelmiş ve hatalı kelimeleri TÜM klasörlerden çek (azami 25 adet tekrar)
     const nowIso = new Date().toISOString();
     const reviewSql = `SELECT w.*, p.box as prog_box, p.status as prog_status, p.correct_count as prog_correct, p.incorrect_count as prog_incorrect, p.last_reviewed_at as prog_last_reviewed, p.next_review_at as prog_next_review, p.box_entry_date as prog_entry_date
          FROM words w
          INNER JOIN user_word_progress p ON w.id = p.word_id
-         WHERE p.next_review_at IS NOT NULL AND (datetime(p.next_review_at) <= datetime('now') OR p.next_review_at <= ?)
-         ORDER BY p.next_review_at ASC
-         LIMIT 100`;
+         WHERE (p.next_review_at IS NOT NULL AND (datetime(p.next_review_at) <= datetime('now') OR p.next_review_at <= ?))
+            OR (p.box = 0 AND p.incorrect_count > 0)
+         ORDER BY p.box ASC, p.next_review_at ASC
+         LIMIT 25`;
 
     const reviewRows = await this.dbInstance.getAllAsync(reviewSql, [nowIso]);
 
@@ -2661,11 +2670,10 @@ class DatabaseService {
       };
     });
 
-    // 2. Günlük oturum boyutu kullanıcının ayarladığı limit ile sınırlıdır (örn: 20 kelime)
-    const maxTotal = Math.max(5, newWordsLimit);
-    const reviewCap = Math.min(reviewWords.length, Math.floor(maxTotal * 0.5));
-    const selectedReviews = reviewWords.slice(0, reviewCap);
-    const remainingSlots = Math.max(0, maxTotal - selectedReviews.length);
+    // 2. Kural: 25 Yeni Kelime (veya kullanıcının günlük hedefi) + Eski hatalı / vadesi gelmiş tekrarlar
+    const safeNewWordsTarget = Math.max(5, Math.min(30, newWordsLimit === 75 ? 25 : (newWordsLimit || 25)));
+    const selectedReviews = reviewWords;
+    const remainingSlots = safeNewWordsTarget;
     let newWords: CardWord[] = [];
 
     if (remainingSlots > 0) {
@@ -2850,13 +2858,7 @@ class DatabaseService {
       }
     }
 
-    let finalBatch = [...selectedReviews, ...newWords];
-    if (finalBatch.length < maxTotal && reviewWords.length > selectedReviews.length) {
-      const extraReviews = reviewWords.slice(selectedReviews.length, selectedReviews.length + (maxTotal - finalBatch.length));
-      finalBatch = [...finalBatch, ...extraReviews];
-    }
-
-    return finalBatch.slice(0, maxTotal);
+    return [...selectedReviews, ...newWords];
   }
 
   // ==========================================

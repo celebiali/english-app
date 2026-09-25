@@ -2491,8 +2491,8 @@ class DatabaseService {
         isCooldown: false,
       }));
 
-      // Kural: 25 Yeni Kelime (veya kullanıcının günlük hedefi) + Eski hatalı / vadesi gelmiş tekrarlar
-      const safeNewWordsTarget = Math.max(5, Math.min(30, newWordsLimit === 75 ? 25 : (newWordsLimit || 25)));
+      // Kural: Kullanıcının günlük yeni kelime hedefi (5-100) + Eski hatalı / vadesi gelmiş tekrarlar
+      const safeNewWordsTarget = Math.max(5, Math.min(100, newWordsLimit === 75 ? 25 : (newWordsLimit || 25)));
       const selectedReviews = reviewWords.slice(0, 25);
       const targetFolderWords = allWords.filter(isMatchingFolder);
       const unstudiedTarget = targetFolderWords.filter((w) => !this.memoryDb.progress.get(w.id));
@@ -2670,8 +2670,8 @@ class DatabaseService {
       };
     });
 
-    // 2. Kural: 25 Yeni Kelime (veya kullanıcının günlük hedefi) + Eski hatalı / vadesi gelmiş tekrarlar
-    const safeNewWordsTarget = Math.max(5, Math.min(30, newWordsLimit === 75 ? 25 : (newWordsLimit || 25)));
+    // 2. Kural: Kullanıcının günlük yeni kelime hedefi (5-100) + Eski hatalı / vadesi gelmiş tekrarlar
+    const safeNewWordsTarget = Math.max(5, Math.min(100, newWordsLimit === 75 ? 25 : (newWordsLimit || 25)));
     const selectedReviews = reviewWords;
     const remainingSlots = safeNewWordsTarget;
     let newWords: CardWord[] = [];

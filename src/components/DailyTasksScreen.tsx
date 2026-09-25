@@ -194,14 +194,15 @@ export const DailyTasksScreen: React.FC<DailyTasksScreenProps> = ({
   ).length;
 
   const totalVaultWords = (dictionaryWords || []).length;
-  // If user has words in their vault, goal cannot exceed available words; otherwise fallback to dailyLimit
-  const cleanDailyLimit = (!dailyLimit || dailyLimit === 75) ? 25 : dailyLimit;
+  // If user has words in their vault, goal cannot exceed available words; otherwise fallback to dynamic user goal
+  const userVocabTarget = taskGoals?.words || dailyLimit || 25;
+  const cleanDailyLimit = userVocabTarget === 75 ? 25 : userVocabTarget;
   const baseVocabGoal = totalVaultWords > 0
     ? Math.min(cleanDailyLimit, totalVaultWords)
     : cleanDailyLimit;
 
-  // Günün kelime hedefi kullanıcının belirlediği dinamik hedef üzerinden sabit kalır (en fazla 30)
-  const vocabGoal = Math.min(30, baseVocabGoal);
+  // Günün kelime hedefi kullanıcının belirlediği dinamik hedef üzerinden hesaplanır (5 - 100 arası)
+  const vocabGoal = Math.max(5, Math.min(100, baseVocabGoal));
 
   // Authoritative completed count from SQLite and store
   const actualVocabDone = Math.max(

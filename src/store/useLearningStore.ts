@@ -529,8 +529,8 @@ export const useLearningStore = create<LearningState>((set, get) => ({
     const currentWords = current.words || get().dailyLimit || 25;
     const targetWords = newGoals.words !== undefined ? Math.max(5, Math.min(100, newGoals.words)) : currentWords;
 
-    // Tembellik & Hile Önleme Kuralı: Günlük hedefi düşürme haftada en fazla 1 kez yapılabilir (normal hedefler için)
-    if (newGoals.words !== undefined && targetWords < currentWords && currentWords <= 30) {
+    // Tembellik & Hile Önleme Kuralı: Günlük hedefi düşürme haftada en fazla 1 kez yapılabilir (normal hedefler için, 75 bug'ı hariç)
+    if (newGoals.words !== undefined && targetWords < currentWords && currentWords !== 75) {
       const check = await dbService.canLowerVocabGoal(targetWords);
       if (!check.allowed) {
         return {
@@ -925,8 +925,9 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   },
 
   loadVocabSession: async (force = false) => {
-    const { dailyLimit, sessionWords, currentVocabIndex, activeStudyFolderId } = get();
-    const cleanLimit = (!dailyLimit || dailyLimit === 75) ? 25 : dailyLimit;
+    const { dailyLimit, taskGoals, sessionWords, currentVocabIndex, activeStudyFolderId } = get();
+    const effectiveLimit = taskGoals?.words || dailyLimit || 25;
+    const cleanLimit = effectiveLimit === 75 ? 25 : effectiveLimit;
 
     const [words, summary, weekly, monthly, dictionary] = await Promise.all([
       force || sessionWords.length === 0
